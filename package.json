@@ -1,9 +1,12 @@
 {
   "name": "Plitto",
   "version": "0.0.1",
-  "main": "server/server.js",
+  "main": "server/plitto-api.js",
   "scripts": {
-    "pretest": "jshint ."
+    "pretest": "jshint .",
+    "build-client": "cd client && npm install && bower install && grunt compress",
+    "start": "forever -a -l plitto.log -o out.log -e err.log start server/plitto-api.js",
+    "stop": "forever stop server/plitto-api.js"
   },
   "dependencies": {
     "compression": "^1.0.3",
