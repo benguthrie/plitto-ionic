@@ -1,1 +1,28 @@
 /* Your application styles go here */
+
+body {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 300;
+}
+
+.slider {
+  height: 85%;
+}
+.slider-slide {
+  padding-top: 80px;
+  color: #000;
+  background-color: #fff;
+  text-align: center;
+}
+
+#list {
+  width: 170px;
+  margin: 30px auto;
+  font-size: 20px;
+}
+#list ol {
+  margin-top: 30px;
+}
+#list ol li {
+  margin: 10px 0px;
+}

@@ -46,4 +46,11 @@ angular.module('Plitto.controllers', [])
 })
 
 .controller('PlaylistCtrl', function($scope, $stateParams) {
+})
+
+.controller('IntroCtrl', function($scope) {
+  console.log('Inside the intro ctrl!');
+  $scope.signIn = function () {
+    console.log('trigger FB sign in');
+  };
 });

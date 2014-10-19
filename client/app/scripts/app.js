@@ -25,6 +25,12 @@ angular.module('Plitto', ['ionic', 'config', 'Plitto.controllers'])
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
 
+    .state('intro', {
+      url: '/',
+      templateUrl: 'templates/intro.html',
+      controller: 'IntroCtrl'
+    })
+
     .state('app', {
       url: '/app',
       abstract: true,

@@ -1,0 +1,40 @@
+<ion-view title="">
+  <ion-slide-box on-slide-changed="slideChanged(index)">
+    <ion-slide>
+      <h3>Welcome to Plitto!</h3>
+      <p>
+        See what interests you share with your friends
+      </p>
+      <p>
+        or anonoymously browse and "ditto".
+      </p>
+    </ion-slide>
+
+    <ion-slide>
+      <h3>It's Easy</h3>
+      <div id="list">
+        <ol>
+          <li>Create Lists</li>
+          <li>Add Interests</li>
+          <li>Ditto Things</li>
+        </ol>
+      </div>
+    </ion-slide>
+
+    <ion-slide>
+      <h3>Go Ditto some things!</h3>
+      <p>
+        Login with Facebook using the button
+      </p>
+      <p>
+        below to get started.
+      </p>
+    </ion-slide>
+  </ion-slide-box>
+
+  <button class="button button-block button-positive"
+    ng-click="signIn()">
+    Sign in with Facebook
+  </button>
+
+</ion-view>
