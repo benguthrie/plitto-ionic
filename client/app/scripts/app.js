@@ -6,7 +6,14 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('Plitto', ['ionic', 'config', 'Plitto.controllers'])
+angular.module('Plitto', [
+  'ionic',
+  'config',
+  'ngResource',
+  'lbServices',
+  'Plitto.controllers',
+  'Plitto.services'
+])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
