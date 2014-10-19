@@ -365,6 +365,34 @@ module.exports = function (grunt) {
           dest: '.tmp/concat/<%= yeoman.scripts %>'
         }]
       }
+    },
+
+    // Configure the loopback angular sdk and associated documentation
+    loopback_sdk_angular: {
+      services: {
+        options: {
+          input: '../server/plitto-api.js',
+          output: '<%= yeoman.app %>/vendor/loopback/services.js'
+        }
+      }
+    },
+    docular: {
+      groups: [
+        {
+          groupTitle: 'LoopBack',
+          groupId: 'loopback',
+          sections: [
+            {
+              id: 'lbServices',
+              title: 'LoopBack Services',
+              scripts: [ '<%= yeoman.app %>/vendor/loopback/services.js' ]
+            }
+          ]
+        }
+      ]
+    },
+    docularserver: {
+      targetDir: 'docular_generated'
     }
 
   });
@@ -482,6 +510,7 @@ module.exports = function (grunt) {
   grunt.registerTask('init', [
     'clean',
     'ngconstant:development',
+    'loopback_sdk_angular',
     'wiredep',
     'concurrent:server',
     'autoprefixer',
@@ -493,6 +522,7 @@ module.exports = function (grunt) {
   grunt.registerTask('compress', [
     'clean',
     'ngconstant:production',
+    'loopback_sdk_angular',
     'wiredep',
     'useminPrepare',
     'concurrent:dist',
