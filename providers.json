@@ -12,7 +12,7 @@
     "module": "passport-facebook",
     "clientID": "207184820755",
     "clientSecret": "a3b57227479539ea7812d58d3ebc00fc",
-    "callbackURL": "http://localhost:3000/auth/facebook/callback",
+    "callbackURL": "http://localhost:3050/auth/facebook/callback",
     "authPath": "/auth/facebook",
     "callbackPath": "/auth/facebook/callback",
     "successRedirect": "/#/login/callback",
