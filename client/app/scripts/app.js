@@ -11,7 +11,6 @@ angular.module('Plitto', [
   'config',
   'ngResource',
   'lbServices',
-  'http-auth-interceptor',
   'Plitto.controllers',
   'Plitto.services'
 ])
@@ -30,7 +29,10 @@ angular.module('Plitto', [
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($httpProvider) {
+})
+
+.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
   $stateProvider
 
     .state('login', {
@@ -52,43 +54,38 @@ angular.module('Plitto', [
       controller: 'AppCtrl'
     })
 
-    .state('app.search', {
-      url: '/search',
+    .state('app.lists', {
+      url: '/lists',
       views: {
         'menuContent' :{
-          templateUrl: 'templates/search.html'
+          templateUrl: 'templates/lists.html',
+          controller: 'ListsCtrl'
         }
       }
     })
 
-    .state('app.browse', {
-      url: '/browse',
+    .state('app.list', {
+      url: '/lists/:listId',
       views: {
         'menuContent' :{
-          templateUrl: 'templates/browse.html'
-        }
-      }
-    })
-    .state('app.playlists', {
-      url: '/playlists',
-      views: {
-        'menuContent' :{
-          templateUrl: 'templates/playlists.html',
-          controller: 'PlaylistsCtrl'
-        }
-      }
-    })
-
-    .state('app.single', {
-      url: '/playlists/:playlistId',
-      views: {
-        'menuContent' :{
-          templateUrl: 'templates/playlist.html',
-          controller: 'PlaylistCtrl'
+          templateUrl: 'templates/list.html',
+          controller: 'ListCtrl'
         }
       }
     });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/playlists');
+  $urlRouterProvider.otherwise('/app/lists');
+
+  // Handle 401 Unauthorized responses
+  $httpProvider.interceptors.push(function($q, $location) {
+    return {
+      responseError: function(rejection) {
+        if (rejection.status == 401) {
+          $location.path('/login');
+        }
+        return $q.reject(rejection);
+      }
+    };
+  });
 });
 

@@ -12,27 +12,29 @@ angular.module('Plitto.controllers', [])
     console.log("fail", err);
   });
 
-  // Handle authService events from `angular-http-auth`
-  $scope.$on('event:auth-loginRequired', function (response) {
-    $state.go('login');
-  })
-  $scope.$on('event:auth-loginConfirmed', function (response, user) {
-    console.log('success');
-  });
+  // Global Logout Handler
+  $scope.logout = function () {
+    console.log('logging out');
+    User.logout(function(user) {
+      $state.go('login');
+    }, function (err) {
+      console.log("fail", err);
+    });
+  };
 })
 
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
+.controller('ListsCtrl', function($scope) {
+  $scope.lists = [
+    { title: 'Programming', id: 1 },
+    { title: 'Wakeboarding', id: 2 },
+    { title: 'Startups', id: 3 },
+    { title: 'Chasing $$ signs', id: 4 },
     { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
+    { title: 'Watching the Cowboys lose', id: 6 }
   ];
 })
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
+.controller('ListCtrl', function($scope, $stateParams) {
 })
 
 .controller('LoginCtrl', function($scope, $window) {
@@ -46,5 +48,5 @@ angular.module('Plitto.controllers', [])
   LoopBackAuth.currentUserId = $stateParams.userId;
   LoopBackAuth.rememberMe = true; // Force save to LocalStorage
   LoopBackAuth.save();
-  $state.go('app.playlists');
+  $state.go('app.lists');
 });

@@ -1,11 +1,11 @@
-<ion-view title="Playlists">
+<ion-view title="Interest Lists">
   <ion-nav-buttons side="left">
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
   <ion-content class="has-header">
     <ion-list>
-      <ion-item class="item-icon-right" ng-repeat="playlist in playlists" href="#/app/playlists/{{playlist.id}}">
-        {{playlist.title}}
+      <ion-item class="item-icon-right" ng-repeat="list in lists" href="#/app/lists/{{list.id}}">
+        {{list.title}}
         <i class="icon ion-chevron-right icon-accessory"></i>
       </ion-item>
     </ion-list>
