@@ -54,6 +54,16 @@ angular.module('Plitto', [
       controller: 'AppCtrl'
     })
 
+    .state('app.profile', {
+      url: '/profile',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/profile.html',
+          controller: 'ProfileCtrl'
+        }
+      }
+    })
+
     .state('app.lists', {
       url: '/lists',
       views: {

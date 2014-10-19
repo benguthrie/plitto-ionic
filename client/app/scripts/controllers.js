@@ -6,7 +6,10 @@ angular.module('Plitto.controllers', [])
   User.identities({id: LoopBackAuth.currentUserId},
   function(identities) {
     console.log("success", identities);
-    // TODO: Pick only `facebook-login`
+    // Only need facebook-login info
+    $scope.userIdentity = _.find(identities, function(identity) {
+      return identity.provider === 'facebook-login';
+    });
   },
   function(err) {
     console.log("fail", err);
@@ -21,6 +24,9 @@ angular.module('Plitto.controllers', [])
       console.log("fail", err);
     });
   };
+})
+
+.controller('ProfileCtrl', function($scope) {
 })
 
 .controller('ListsCtrl', function($scope) {
