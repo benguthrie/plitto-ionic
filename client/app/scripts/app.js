@@ -11,6 +11,7 @@ angular.module('Plitto', [
   'config',
   'ngResource',
   'lbServices',
+  'http-auth-interceptor',
   'Plitto.controllers',
   'Plitto.services'
 ])
@@ -32,10 +33,16 @@ angular.module('Plitto', [
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
 
-    .state('intro', {
-      url: '/',
-      templateUrl: 'templates/intro.html',
-      controller: 'IntroCtrl'
+    .state('login', {
+      url: '/login',
+      templateUrl: 'templates/login.html',
+      controller: 'LoginCtrl'
+    })
+
+    .state('authCallback', {
+      url: '/login/callback?access_token&userId',
+      templateUrl: 'templates/login-callback.html',
+      controller: 'LoginCallbackCtrl'
     })
 
     .state('app', {

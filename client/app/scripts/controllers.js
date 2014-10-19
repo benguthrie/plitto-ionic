@@ -1,7 +1,24 @@
 'use strict';
 angular.module('Plitto.controllers', [])
 
-.controller('AppCtrl', function($scope) {
+.controller('AppCtrl', function($scope, $state, LoopBackAuth, User) {
+  // Grab the user info here as soon as they login.
+  User.identities({id: LoopBackAuth.currentUserId},
+  function(identities) {
+    console.log("success", identities);
+    // TODO: Pick only `facebook-login`
+  },
+  function(err) {
+    console.log("fail", err);
+  });
+
+  // Handle authService events from `angular-http-auth`
+  $scope.$on('event:auth-loginRequired', function (response) {
+    $state.go('login');
+  })
+  $scope.$on('event:auth-loginConfirmed', function (response, user) {
+    console.log('success');
+  });
 })
 
 .controller('PlaylistsCtrl', function($scope) {
@@ -18,9 +35,16 @@ angular.module('Plitto.controllers', [])
 .controller('PlaylistCtrl', function($scope, $stateParams) {
 })
 
-.controller('IntroCtrl', function($scope) {
-  console.log('Inside the intro ctrl!');
-  $scope.signIn = function () {
-    console.log('trigger FB sign in');
+.controller('LoginCtrl', function($scope, $window) {
+  $scope.loginOAuth = function(provider) {
+    $window.location.href = '/auth/' + provider;
   };
+})
+
+.controller('LoginCallbackCtrl', function($scope, $state, $stateParams, LoopBackAuth) {
+  LoopBackAuth.accessTokenId = $stateParams.access_token;
+  LoopBackAuth.currentUserId = $stateParams.userId;
+  LoopBackAuth.rememberMe = true; // Force save to LocalStorage
+  LoopBackAuth.save();
+  $state.go('app.playlists');
 });
