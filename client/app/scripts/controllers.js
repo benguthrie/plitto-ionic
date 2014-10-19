@@ -49,10 +49,14 @@ angular.module('Plitto.controllers', [])
   };
 })
 
-.controller('LoginCallbackCtrl', function($scope, $state, $stateParams, LoopBackAuth) {
+.controller('LoginCallbackCtrl', function($scope, $state, $stateParams, $ionicViewService, LoopBackAuth) {
   LoopBackAuth.accessTokenId = $stateParams.access_token;
   LoopBackAuth.currentUserId = $stateParams.userId;
   LoopBackAuth.rememberMe = true; // Force save to LocalStorage
   LoopBackAuth.save();
+  $ionicViewService.nextViewOptions({
+    disableAnimate: true,
+    disableBack: true
+  });
   $state.go('app.lists');
 });
