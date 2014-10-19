@@ -9,12 +9,17 @@
     "stop": "forever stop server/plitto-api.js"
   },
   "dependencies": {
+    "body-parser": "^1.9.0",
     "compression": "^1.0.3",
     "errorhandler": "^1.1.1",
     "loopback": "^2.0.0",
     "loopback-boot": "^2.0.0",
+    "loopback-component-passport": "git://github.com/strongloop/loopback-component-passport.git#74b4d867430fc731e7ac84e97bbd52709710b79b",
     "loopback-connector-mongodb": "^1.4.4",
     "loopback-datasource-juggler": "^2.7.0",
+    "passport": "^0.2.1",
+    "passport-facebook": "^1.0.3",
+    "passport-local": "^1.0.0",
     "serve-favicon": "^2.0.1"
   },
   "optionalDependencies": {
