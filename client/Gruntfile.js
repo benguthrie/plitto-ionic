@@ -372,7 +372,7 @@ module.exports = function (grunt) {
       services: {
         options: {
           input: '../server/plitto-api.js',
-          output: '<%= yeoman.app %>/vendor/loopback/services.js'
+          output: '<%= yeoman.app %>/vendor/loopback/lb-services.js'
         }
       }
     },
@@ -385,7 +385,7 @@ module.exports = function (grunt) {
             {
               id: 'lbServices',
               title: 'LoopBack Services',
-              scripts: [ '<%= yeoman.app %>/vendor/loopback/services.js' ]
+              scripts: [ '<%= yeoman.app %>/vendor/loopback/lb-services.js' ]
             }
           ]
         }
