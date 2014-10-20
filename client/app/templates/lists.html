@@ -2,9 +2,17 @@
   <ion-nav-buttons side="left">
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <button class="button button-icon icon ion-ios7-plus-outline"
+      ng-click="addListModal()">
+    </button>
+  </ion-nav-buttons>
   <ion-content class="has-header">
-    <ion-list>
+    <p ng-show="!lists.length">Add a list using the + button</p>
+    <ion-list can-swipe="true">
       <ion-item class="item-icon-right" ng-repeat="list in lists" href="#/app/lists/{{list.id}}">
+          <ion-option-button class="button-assertive"
+            ng-click="deleteList(list)">Delete</ion-option-button>
         {{list.title}}
         <i class="icon ion-chevron-right icon-accessory"></i>
       </ion-item>
