@@ -1,0 +1,24 @@
+<ion-modal-view>
+  <ion-header-bar>
+  <button class="button button-clear" ng-click="closeModal()">Cancel</button>
+    <h1 class="title">Create List</h1>
+  </ion-header-bar>
+  <ion-content>
+    <div class="list list-inset">
+      <form name="listForm">
+        <label class="item item-input">
+          <input type="text" name="title"
+            placeholder="Title"
+            ng-model="newList.title"
+            required>
+        </label>
+
+        <button class="button button-block button-energized"
+          ng-disabled="listForm.$invalid"
+          ng-click="createList()">
+          Create
+        </button>
+      </form>
+    </div>
+  </ion-content>
+</ion-modal-view>
