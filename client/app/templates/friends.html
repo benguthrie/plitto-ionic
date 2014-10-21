@@ -4,12 +4,12 @@
   </ion-nav-buttons>
     
   <ion-content class="has-header">
-    <p ng-show="!friends.length">None of your Facebook friends have a Plitto account.</p>
+    <p ng-show="!$root.friendStore.length">None of your Facebook friends have a Plitto account.</p>
     <ion-list can-swipe="true">
-      <ion-item class="item-icon-right" ng-repeat="friend in friends" href="#/app/friend/{{friend.id}}">
+      <ion-item class="item-icon-right" ng-repeat="friend in $root.friendStore" href="#/app/friend/{{friend.id}}">
           <ion-option-button class="button-assertive"
             ng-click="deleteList(list)">Be Cool</ion-option-button>
-        {{list.title}}
+        {{friend.name}}
         <i class="icon ion-chevron-right icon-accessory"></i>
       </ion-item>
     </ion-list>
