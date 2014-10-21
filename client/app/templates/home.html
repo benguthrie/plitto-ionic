@@ -3,6 +3,20 @@
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
   <ion-content class="has-header">
-    TODO
+    <div class="list card" ng-repeat="user in $root.bite">
+      <a class="item item-avatar" href="#">
+        <img src="http://graph.facebook.com/{{user.fbuid}}/picture">
+        <h2>{{user.username}}</h2>
+        <p>Subtitle here</p>
+      </a>
+      <div class="list" ng-repeat="list in user.lists">
+        <div class="item item-divider">
+          {{list.listname}}
+        </div>
+        <div class="item" ng-repeat="items in list.items">
+          {{items.thingname}}
+        </div>
+      </div>
+    </div>
   </ion-content>
 </ion-view>
