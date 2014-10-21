@@ -6,12 +6,27 @@
   <ion-content class="has-header">
     <p ng-show="!friendStore.length">None of your Facebook friends have a Plitto account.</p>
     <ion-list can-swipe="true">
-      <ion-item class="item-icon-right" ng-repeat="friend in friendStore" href="#/app/friend/{{friend.id}}">
+      <ion-item class="item-icon-right" ng-repeat="friend in friendStore" href="#/app/profile/{{friend.id}}">
+          
+          <div style="display: block; max-width: 10em; clear: both; float: right;">
+            <div style="padding: 0.3em; float: left;  background-color: #b0b0b0; color: #fff;">Dittoable: {{friend.dittoable}}</div>
+              <div style="padding: 0.3em; float: left;  background-color: green; color: #fff;">Shared: {{friend.shared}}</div>
+              <div style="padding: 0.3em;">Lists: {{friend.lists}}</div>
+              <div style="padding: 0.3em;">Shared Lists: {{friend.sharedlists}}</div>
+              <div style="padding: 0.3em;">Things: {{friend.things}}</div>
+              
+          </div>
+          
           <ion-option-button class="button-assertive"
             ng-click="deleteList(list)">Be Cool</ion-option-button>
+          <img src="http://graph.facebook.com/{{friend.fbuid}}/picture" style="float: left; margin-right: 1em;">
+
+          
         {{friend.name}}
+          
         <i class="icon ion-chevron-right icon-accessory"></i>
       </ion-item>
+        
     </ion-list>
   </ion-content>
 </ion-view>

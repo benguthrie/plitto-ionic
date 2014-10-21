@@ -157,6 +157,7 @@ angular.module('Plitto', [
 
 .config(function($stateProvider, $urlRouterProvider, $httpProvider) {
   $stateProvider
+  
 
     .state('login', {
       url: '/login',
@@ -231,6 +232,8 @@ angular.module('Plitto', [
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/lists');
 
+    
+    
   // Handle 401 Unauthorized responses
   $httpProvider.interceptors.push(function($q, $location) {
     return {

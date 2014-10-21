@@ -530,7 +530,9 @@ var showUserLists = function (friendId){
   Get the list of lists for this user
 */
 var getUserListOfLists = function(friendId){
-  var params = $.param({users:friendId});
+    // TODO2 - load from local storage, if it's there 
+    
+  var params = $.param({userfilter:friendId, token: $rootScope.token });
   // console.log('listoflists params: ',params);
   $http({
         method:'POST',
@@ -541,8 +543,9 @@ var getUserListOfLists = function(friendId){
     .success(function(data,status,headers,config){
       // console.log("testlogin: ",data, data.puid);
       // Handle the users, lists and things.
-        // Update the rootScope.
-        $rootScope.modal.listOfLists = data.result;
+        // Update the rootScope lists.
+      // TODO - Come up with a strategy of where to store this better than Rootscope. Also, for each user, when navigating around, this could change.
+        $rootScope.lists = data.result;
 
         // Add / Update to local storage
         localStorageService.set('userLL_'+friendId, data.result);
@@ -694,8 +697,12 @@ var modalReset = function(){
 
 /* 9/3/2014 */
 var showAList = function(listnameid, listname, ownerid){
-  // console.log('showAList: ',listnameid, ownerid);
+  // 
+    console.log('showAList: ',listnameid, listname, ownerid);
     // user clicked on a list. Show all the items in that list without filtering. 
+    
+/* TODO1 - Navigate to the proper list.
+This was how Plitto Angular handled navigating to a list    
   $rootScope.nav.filterLists = null;
 
   // Prep the Modal:
@@ -745,18 +752,19 @@ var showAList = function(listnameid, listname, ownerid){
     
     }
 
-      // Make the request to the api to load more for this list.
-      var getMoreParams = $.param({
-        type: 'list',
-        id: listnameid ,
-        uid: ownerid,
-        existing: existing      
-      });
+  // Make the request to the api to load more for this list.
+  var getMoreParams = $.param({
+    type: 'list',
+    id: listnameid ,
+    uid: ownerid,
+    existing: []
+  });
+*/
+  // console.log('existing list params: ',existing,' getmoreparams: ',getMoreParams);
 
-      // console.log('existing list params: ',existing,' getmoreparams: ',getMoreParams);
-
-     getMore (getMoreParams, listnameid);
-   }
+var existing = [];    
+ getMore ('list',listnameid, ownerid, existing);
+   
   // console.log('rs modal',$rootScope.vars.modal.filter);
 };  
 
@@ -764,7 +772,14 @@ var showAList = function(listnameid, listname, ownerid){
 /* 9/3/2014 / 9.5.2014
   This function gets more content for a user or a list.
  */
-var getMore = function (params , id) {
+var getMore = function (type, id, ownerid, existing) {
+    var params = $.param({
+        type: type,
+        id: id,
+        uid: ownerid,
+        existing: existing,
+        token: $rootScope.token
+    });
   // 
   // 
   console.log('getMoreparams: ',params);
@@ -779,7 +794,7 @@ var getMore = function (params , id) {
     // Append the data to the proper place.
     // console.log('data.results size',data.results,data.results.length);
 
-    getMoreAppend('getMoreAppendSuccess',params,data.results, id);
+    // TODO1 - Add it to the correct store. getMoreAppend('getMoreAppendSuccess',params,data.results, id);
 
     // Put it in the listStore if we know what it is
     
@@ -978,8 +993,11 @@ var newList = function (thingName) {
         .success(function(data,status,headers,config){
           // 
           var newListId = data.results[0]['thingid'];
+            console.log("New List ID: ",newListId);
           // Call the showAList function.
 
+// TODO1 - Where do we put this?             
+            /* This was how plitto-angular handled navigation.
           $rootScope.vars.modal.list = {
             listname: thingName,
             id: newListId
@@ -990,9 +1008,9 @@ var newList = function (thingName) {
           $rootScope.vars.modal.type='list';
           $rootScope.nav.filter ='list';
           $rootScope.nav.modal = true;
-
+*/
           // This logic loads this list, and should show it in a new modal.
-          showAList(newListId,null);
+          showAList(newListId,thingName, null);
 
 
       });

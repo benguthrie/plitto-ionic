@@ -1,21 +1,24 @@
 'use strict';
 angular.module('Plitto.controllers', [])
 
-.controller('AppCtrl', function($scope, $state) {
+.controller('AppCtrl', function($scope, $state, dbFactory, $rootScope) {
   // Grab the user info here as soon as they login.
-  // TODO: Make database service call.
-
   // Global Logout Handler
   $scope.logout = function () {
     // TODO: Make database service call.
-    console.log('TODO: FB Logout call');
+    console.log('TODO2: FB Logout call');
   };
+    
+  $scope.loadLists = function(){
+    console.log("You want to load lists");
+    dbFactory.getUserListOfLists($rootScope.vars.user.userId);
+  };
+    
 })
 
 .controller('HomeCtrl',function($scope, $rootScope,dbFactory) {
-  // TODO: Make call and print it out here.
-  console.log($rootScope.bite);
-
+  
+    
     /* TODO This function must be available in may different locations throughout the app */
     $scope.ditto = function(mykey, uid, lid, tid, $event){
         console.log('your existing key is: ',mykey, ' from user: ',uid,' from list: ', lid,' and thing: ',tid);
@@ -65,15 +68,15 @@ angular.module('Plitto.controllers', [])
 })
 
 .controller('FriendsCtrl', function($scope, $rootScope) {
-  console.log("You have tried to controll your friends",$rootScope.friendStore);
+  console.log("You have tried to control your friends",$rootScope.friendStore);
 })
 
 .controller('FriendCtrl', function($scope, $rootScope) {
     console.log("You clicked on a friend.");  
 })
 
-
-.controller('ListsCtrl', function($scope, $ionicModal, $ionicActionSheet) {
+/* 10/21/2014 - Added RootScope to populate the list with? TODO1 - Build lists from $rootScope.lists */
+.controller('ListsCtrl', function($scope, $ionicModal, $ionicActionSheet,$rootScope, dbFactory) {
   // Initialize variablse
   $scope.newList = {};
   $scope.modal = null;
@@ -106,6 +109,9 @@ angular.module('Plitto.controllers', [])
   // Create a new list
   $scope.createList = function () {
     // TODO: Make database service call.
+    //
+      dbFactory.newList($scope.newList.title);
+      
   };
 
   // Delete a list
