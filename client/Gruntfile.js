@@ -510,7 +510,7 @@ module.exports = function (grunt) {
   grunt.registerTask('init', [
     'clean',
     'ngconstant:development',
-    'loopback_sdk_angular',
+    //'loopback_sdk_angular',
     'wiredep',
     'concurrent:server',
     'autoprefixer',
@@ -522,7 +522,7 @@ module.exports = function (grunt) {
   grunt.registerTask('compress', [
     'clean',
     'ngconstant:production',
-    'loopback_sdk_angular',
+    //'loopback_sdk_angular',
     'wiredep',
     'useminPrepare',
     'concurrent:dist',
