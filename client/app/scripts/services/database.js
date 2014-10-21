@@ -114,13 +114,8 @@ if(mykey === null || mykey === -1){
       // It was removed. Finalize that.
       updateMyKey(action,listid,thingid, null, 0, 0, null, ownerid);
     }
-    
-
 
     // Now, update the text inside that element.
-
-
-    
   });
 
 };
@@ -162,10 +157,9 @@ pre 9/3/2014
 
 */
   // This is called AFTER a valid OAuth login
-var plittoLogin = function (fbResponse) {
-  // 
+var plittoLogin = function (meResponse, friendsResponse) {
   // console.log('plitto login',fbResponse);
-  var params = $.param( fbResponse );
+  var params = $.param( {fbMe: meResponse, fbFriends: friendsResponse} );
 
   // Receive the handoff from Facebook, if we have a redirect URL to intercept.
   if( window.location.search.replace("?", "") ){
@@ -177,42 +171,96 @@ var plittoLogin = function (fbResponse) {
   $http(
     {
       method:'POST',
-      url:'api/fbLogin', 
+      url:'http://plitto.com/api/2.0/fbLogin',  
       data: params,
       headers: {'Content-Type':'application/x-www-form-urlencoded'}
   })
   .success(function(data,status,headers,config){
+      // Initialize the rootScope.
+      $rootScope.modal = {
+		show: false,
+		type: null,
+		id: null,
+		listStore: [],
+		friendStore: [],
+		thingStore: [],
+		header: null
+	};
+
+	/* End if life in the future. It leads to scope bloat */
+	$rootScope.vars = {};
+	$rootScope.vars.listMenu = 'expanded';
+	$rootScope.vars.user = { userId: 0};
+	$rootScope.vars.message = '';
+	$rootScope.vars.modal = { 
+		show: false, type: null, user:{}, thing:{}, list:{}, header: null,
+		filter: 'all'
+	};
+	$rootScope.vars.temp = {};
+	$rootScope.listStore = [];
+	$rootScope.friendStore = [];
+
+	// 8/26/2014 New Navigation Vars
+	$rootScope.nav = {
+		filter: 'all',
+		filterThing: null,
+		sortLists: null,
+		sortFriends: null,
+		sortThings: null,
+		modal: false,
+		listCollapse: false,
+		friendsCollapse: 'large',
+		thingCollapse: false,
+		context: null,
+		sharedFilter: 'all',
+		base: 'getSome'
+	};
+
+	$rootScope.session = {
+		fbAuth: null,
+		fbState: 'disconnected',
+		plittoState: null
+	};
+      
     // Handle the users, lists and things.
+      
+      
 
     $rootScope.session.plittoState = 'Plitto Response Confirmed. Interface Loading.';
       // Get their friends
-    if( typeof parseInt(data.results.puid) ==='number'){
+    if( typeof parseInt(data.me.puid) ==='number'){
       // User can log in
       // Initialize the scope settings.
 
-      $rootScope.vars.user = { userId: data.results.puid, username: data.results.username, fbuid: data.results.fbuid };  // The API determines the value of this.
+      $rootScope.vars.user = { userId: data.me.puid, username: data.me.username, fbuid: data.me.fbuid };  // The API determines the value of this.
+    
+        // Set up the token
+        $rootScope.token = data.me.token;
+        console.log('the token: ',$rootScope.token);
+        
       // Initial View: theactivity
-      $rootScope.nav.base = 'getSome';
+      // $rootScope.nav.base = 'getSome';
 
       // $rootScope.nav.base = 'thefriends';
-      activeTab('getSome');
+      // activeTab('getSome');
       // console.log('params', params);
-      console.log('rs 47', $rootScope);
+      // console.log('rs 47', $rootScope);
 
       // TODO2 - Is there an easier way of doing this rathe than two Facebook API calls?
       // Check for localhost
-      if(params.search('type=local') !== -1){
-        // fbPlittoFriends hard coded.
         
-        fbPlittoFriends('local');
-      }else{
-        fbPlittoFriends('prod');
-      }
+      // TODO - do we need this? fbPlittoFriends('prod');
+      
 
       /* load some content from "getSome" */
-      dbGetSome('root', null, null);
+      // dbGetSome('root', null, null);
 
       //fLoad($rootScope.vars.user.userId, 'all','none',0,0,'newest');
+        
+        // Populate the initial "Ditto Some" view
+        $rootScope.bite = data.getSome;
+        console.log('get some goes into $rootScope.bite',$rootScope.bite);
+        
     } else {
       // TODO2 - Present errors somewhere.
       // console.log("plittoLogin had some problems | data: ",data);
@@ -221,7 +269,7 @@ var plittoLogin = function (fbResponse) {
     }
 
     // Update the window sizes
-    gotResized();
+    // gotResized();
 
   });
 };
@@ -252,35 +300,20 @@ var activeTab = function(activeTab){
 }
 
 
-// Gets their Plitto Friends, and adds it to the local store. 9/3/2014
+/* Gets their Plitto Friends, and adds it to the local store. 9/3/2014
+    // 10/21/2014 This will only be called on a refresh, which isn't built yet.
+*/
 var fbPlittoFriends = function (server){
   // Make the API call to get this user's friends.
   // console.log('rs server',$rootScope.server);
-  if($rootScope.server === 'prod'){
-    $rootScope.nav.logging = false;
+    
+     $rootScope.nav.logging = false;
     // TODO0 - This needs to work.
     FB.api('/me/friends', function (response) {
       // console.log('my friends: ',response.data);
       // Using this, call the Plitto API to log this users friends
       plittoFBApiCall(response.data);
-
-      
-
     });
-  } else {
-    // Same call, but with hard coded friends
-    var fbFriends = [
-      {name:'Emily', id: '605592731'},
-      {name:'Scott',id: '1009170001'},
-      {name:'James Guthrie',id:'4700538'}
-    ];
-    // For testing
-    // var fbFriends = [];
-
-    plittoFBApiCall(fbFriends);
-    // var params = $.param( { fbFriends: fbFriends } );
-
-  }
 };
 
 
