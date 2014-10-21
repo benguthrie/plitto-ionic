@@ -188,6 +188,17 @@ angular.module('Plitto', [
       }
     })
 
+     .state('app.friends', {
+      url: '/friends',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/friends.html',
+          controller: 'FriendsCtrl'
+        }
+      }
+    })
+
+  
     .state('app.profile', {
       url: '/profile',
       views: {

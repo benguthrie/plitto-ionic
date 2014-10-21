@@ -19,6 +19,10 @@ angular.module('Plitto.controllers', [])
 .controller('ProfileCtrl', function($scope) {
 })
 
+.controller('FriendsCtrl', function($scope, $rootScope) {
+    console.log("You have tried to controll your friends",$rootScope.friendStore);  
+})
+
 .controller('ListsCtrl', function($scope, $ionicModal, $ionicActionSheet) {
   // Initialize variablse
   $scope.newList = {};

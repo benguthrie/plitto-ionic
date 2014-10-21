@@ -1,8 +1,6 @@
 'use strict';
 angular.module('Services.database', [])
 
-
-
 // This will handle storage within local databases.
 .factory ('dbFactory', ['$http','$rootScope','localStorageService'
   , function ($http, $rootScope, localStorageService) {
@@ -242,6 +240,7 @@ var plittoLogin = function (meResponse, friendsResponse) {
     
         // Set up the token
         $rootScope.token = data.me.token;
+        $rootScope.friendStore = data.friends;
         console.log('the token: ',$rootScope.token);
         
       // Initial View: theactivity
@@ -337,7 +336,7 @@ var plittoFBApiCall = function (friendsData){
       $http(
         {
           method:'POST',
-          url:'api/pFriends', 
+          url: apiPath+'pFriends', 
           data: params,
           headers: {'Content-Type':'application/x-www-form-urlencoded'}
       })
@@ -539,7 +538,7 @@ var getUserListOfLists = function(friendId){
   // console.log('listoflists params: ',params);
   $http({
         method:'POST',
-        url:'api/listOfLists', 
+        url: apiPath + 'listOfLists', 
         data: params,
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
     })
@@ -580,7 +579,7 @@ var addToList = function(addToListObj){
    $http(
       {
         method:'POST',
-        url:'api/addToList', 
+        url: apiPath + 'addToList', 
         data: addToListParams ,
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
     })
@@ -776,7 +775,7 @@ var getMore = function (params , id) {
   $http(
     {
       method:'POST',
-      url:'api/getMore', 
+      url: apiPath + 'getMore', 
       data: params ,
       headers: {'Content-Type':'application/x-www-form-urlencoded'}
   })
@@ -974,8 +973,12 @@ var getMoreAppend = function(caption,params,data, id) {
 var newList = function (thingName) {
   // Query the API and make the thing, if it needs to be made.
   var thingParams = $.param({thingName: thingName });
-        $http({method:'POST',url:'api/thingid',data: thingParams,
-          headers: {'Content-Type':'application/x-www-form-urlencoded'}})
+        $http({
+            method:'POST',
+            url:apiPath + 'thingid',
+            data: thingParams,
+            headers: {'Content-Type':'application/x-www-form-urlencoded'}
+        })
         .success(function(data,status,headers,config){
           // 
           var newListId = data.results[0]['thingid'];
