@@ -12,9 +12,14 @@ angular.module('Plitto.controllers', [])
   };
 })
 
-.controller('HomeCtrl', function($scope, $rootScope) {
+.controller('HomeCtrl',function($scope, $rootScope,dbFactory) {
   // TODO: Make call and print it out here.
   console.log($rootScope.bite);
+
+    $scope.getMore = function(){
+        dbFactory.dbGetSome($scope, '', '');
+    };
+    
 })
 
 .controller('ProfileCtrl', function($scope) {

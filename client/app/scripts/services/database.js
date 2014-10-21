@@ -5,7 +5,8 @@ angular.module('Services.database', [])
 .factory ('dbFactory', ['$http','$rootScope','localStorageService'
   , function ($http, $rootScope, localStorageService) {
       
-var apiPath = 'http://plitto.com/api/2.0/';
+// var apiPath = 'http://plitto.com/api/2.0/';
+  var apiPath = 'http://localhost/api/2.0/';
       
 /* 10/4/2014 */
 var showThing = function(thingid){
@@ -145,11 +146,13 @@ var dbGetSome = function(thescope, userfilter, listfilter){
     })
     .success(function(data,status,headers,config){
       // console.log('dbFactory.getActivity data: ',data);
+      /*
       if(thescope === 'root'){
         $rootScope.bite = data.results;
       } else {
         $rootScope.modal.bite = data.results;
-      }
+      }*/
+      $rootScope.bite = data.results;
     });
 };
 
