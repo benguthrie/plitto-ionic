@@ -52,31 +52,32 @@ var search = function(searchTerm){
 
 };
 
-/* 9/4/2014 - 9/3/2014 - Handle the ditto action */
+/* 9/4/2014 - 9/3/2014 - Handle the ditto action 
+    10/21/2014 - Vastly improved this.
+*/
 
-var dbDitto = function (mykey, ownerid, listid, thingid , event ){
-  //   
-  console.log('dbFactory.ditto | mykey: ', mykey,'| ownerid: ', ownerid, '| listid: ',listid, thingid);
-  // db{{list.lid}}_{{list.uid}}_{{list.tid}}
-
-
- // SET MY KEY TO PENDING by sending this.
-  // TODO2 - This could be done without traversung the scope 
-  updateMyKey('pending',listid, thingid, 0,0,0,null);
+// dbFactory.dbDitto('bite',i,j,k,mykey,uid,lid,tid);      
+      
+var dbDitto = function (scopeName, i,j,k, mykey, uid, lid, tid, event ){
+  //  console.log('dbFactory.dbDitto | mykey: ', mykey,'| ownerid: ', uid, '| listid: ',lid, tid,i,j,k);
 
 // Update the action, by whether or not the first item is null or not.
-if(mykey === null || mykey === -1){
+if(mykey === null){
   // My key is null, so this must be a ditto.
   // console.log('update action ditto', mykey, parseInt(mykey));
-  action = 'ditto';
+  var action = 'ditto';
   } else {
-  // console.log('update action remove',mykey, parseInt(mykey));
-  mykey = null;
-  action = 'remove';
+  // I have a key, and need to remove this item.
+  var action = 'remove';
 }
 
- var dittoParams = $.param({action: action ,
-      listid: listid, fromuserid: ownerid, thingid: thingid, token: $rootScope.token });
+ var dittoParams = $.param(
+     {
+        action: action ,
+        listid: lid, 
+         fromuserid: uid, 
+         thingid: tid, 
+         token: $rootScope.token });
 
   $http(
     {
@@ -86,39 +87,30 @@ if(mykey === null || mykey === -1){
       headers: {'Content-Type':'application/x-www-form-urlencoded'}
   })
   .success(function(data,status,headers,config){
-    // 
-    console.log("ditto response: ",data,'mykey',data.results[0]['thekey']);
-    // var thingid = data.results[0]['tid'];
-    // var listid = data.results[0]['lid'];
+    // console.log("ditto response: ",data,'mykey',data.results[0]['thekey']);
 
     if(action === 'ditto'){
-
+    /* NO NEED FOR THESE
       var thingname = data.results[0]['thingname'];
       var listname = data.results[0]['listname'];
-      var mykey  = data.results[0]['thekey'];
+    */
+      var mynewkey  = data.results[0]['thekey'];
       var friendsWith = data.results[0]['friendsWith'];
 
-      // $('span#db'+listid + '_' + ownerid + '_'+thingid).html('+' + friendsWith);
-      // console.log('api results logic: ',action,listid,thingid, mykey, listname, thingname, friendsWith);
-      // updateMyKey
-      updateMyKey(action,
-        listid,
-        thingid, 
-        mykey, 
-        listname, 
-        thingname, 
-        friendsWith,ownerid);
-
-      // Update the "Friends With"
+      // Update the "Friends With" 
       $(event.target).html(friendsWith);
 
       // For the user and the list, change the increments of dittoable and in common.
     } else {
       // It was removed. Finalize that.
-      updateMyKey(action,listid,thingid, null, 0, 0, null, ownerid);
+      var mynewkey = null;
+        $(event.target).html("");
     }
 
-    // Now, update the text inside that element.
+    // Update my key within the correct scope.
+      $rootScope[scopeName][i].lists[j].items[k].mykey = mynewkey;
+      
+      
   });
 
 };

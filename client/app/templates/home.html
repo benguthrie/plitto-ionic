@@ -17,8 +17,25 @@
         <div class="item item-divider">
           {{list.listname}}
         </div>
-        <div class="item" ng-repeat="items in list.items">
-          {{items.thingname}}
+        <div class="item" ng-repeat="item in list.items">
+            
+          {{item.thingname}}
+            
+            <!-- Style options: ios7-checkmark , ios7-checkmark-outline
+                Not working: icon fa fa-spinner, 
+            -->
+<!-- TODO:
+- Lock icon to the right
+- Ditto action - BEn
+- Change style of this item
+-->
+
+                
+            <div side="right" class="button" ng-class="{'ionicons ion-ios7-bolt' : item.mykey === 0 ,'ionicons ion-ios7-checkmark-outline' : item.mykey === null , 'ionicons ion-ios7-checkmark' : item.mykey > 0 }" ng-click="ditto(item.mykey, user.uid, list.lid, item.tid, $event);">
+               
+            </div>
+            
+            
         </div>
       </div>
     </div>
