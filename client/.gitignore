@@ -3,7 +3,6 @@ node_modules
 www
 .tmp
 .sass-cache
-app/lib
 coverage
 platforms
 plugins
