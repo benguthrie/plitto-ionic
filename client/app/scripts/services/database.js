@@ -1,18 +1,22 @@
 'use strict';
 angular.module('Services.database', [])
 
+
+
 // This will handle storage within local databases.
 .factory ('dbFactory', ['$http','$rootScope','localStorageService'
   , function ($http, $rootScope, localStorageService) {
-
+      
+var apiPath = 'http://plitto.com/api/2.0/';
+      
 /* 10/4/2014 */
 var showThing = function(thingid){
   $rootScope.vars.modal.filter = 'all';
-  var thingParams = $.param({thingid: thingid });
+  var thingParams = $.param({token: $rootScope.token, thingid: thingid });
    $http(
     {
       method:'POST',
-      url:'api/thingDetail', 
+      url: apiPath + 'thingDetail', 
       data: thingParams ,
       headers: {'Content-Type':'application/x-www-form-urlencoded'}
   })
@@ -29,13 +33,13 @@ var showThing = function(thingid){
 
 /* 10/3/2014 - Search */
 var search = function(searchTerm){
-  var searchParams = $.param({search: searchTerm });
+  var searchParams = $.param({token: $rootScope.token, search: searchTerm });
 
 
   $http(
     {
       method:'POST',
-      url:'api/search', 
+      url: apiPath + 'search', 
       data: searchParams ,
       headers: {'Content-Type':'application/x-www-form-urlencoded'}
   })
@@ -73,12 +77,12 @@ if(mykey === null || mykey === -1){
 }
 
  var dittoParams = $.param({action: action ,
-      listid: listid, fromuserid: ownerid, thingid: thingid });
+      listid: listid, fromuserid: ownerid, thingid: thingid, token: $rootScope.token });
 
   $http(
     {
       method:'POST',
-      url:'api/ditto', 
+      url: apiPath + 'ditto', 
       data: dittoParams ,
       headers: {'Content-Type':'application/x-www-form-urlencoded'}
   })
@@ -128,7 +132,8 @@ var dbGetSome = function(thescope, userfilter, listfilter){
 
   var params = {
     userfilter: userfilter,
-    listfilter: listfilter
+    listfilter: listfilter,
+      token: $rootScope.token
   };
 // Fails: dbGetSome params Object {userfilter: "", listfilter: ""} 
 
@@ -136,7 +141,7 @@ var dbGetSome = function(thescope, userfilter, listfilter){
 
   $http({
       method: 'POST',
-      url:'api/getSome',
+      url: apiPath + 'getSome',
       data: $.param(params),
       headers: {'Content-Type':'application/x-www-form-urlencoded'}
     })
@@ -154,6 +159,7 @@ var dbGetSome = function(thescope, userfilter, listfilter){
 /* 
 
 pre 9/3/2014 
+updated 10/21/2014  - 
 
 */
   // This is called AFTER a valid OAuth login
@@ -171,7 +177,7 @@ var plittoLogin = function (meResponse, friendsResponse) {
   $http(
     {
       method:'POST',
-      url:'http://plitto.com/api/2.0/fbLogin',  
+      url: apiPath + 'fbLogin',  
       data: params,
       headers: {'Content-Type':'application/x-www-form-urlencoded'}
   })
