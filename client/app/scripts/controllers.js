@@ -1,35 +1,21 @@
 'use strict';
 angular.module('Plitto.controllers', [])
 
-.controller('AppCtrl', function($scope, $state, LoopBackAuth, User) {
+.controller('AppCtrl', function($scope, $state) {
   // Grab the user info here as soon as they login.
-  User.identities({id: LoopBackAuth.currentUserId},
-  function(identities) {
-    console.log("success", identities);
-    // Only need facebook-login info
-    $scope.userIdentity = _.find(identities, function(identity) {
-      return identity.provider === 'facebook-login';
-    });
-  },
-  function(err) {
-    console.log("fail", err);
-  });
+  // TODO: Make database service call.
 
   // Global Logout Handler
   $scope.logout = function () {
-    console.log('logging out');
-    User.logout(function(user) {
-      $state.go('login');
-    }, function (err) {
-      console.log("fail", err);
-    });
+    // TODO: Make database service call.
+    console.log('TODO: FB Logout call');
   };
 })
 
 .controller('ProfileCtrl', function($scope) {
 })
 
-.controller('ListsCtrl', function($scope, $ionicModal, $ionicActionSheet, LoopBackAuth, User) {
+.controller('ListsCtrl', function($scope, $ionicModal, $ionicActionSheet) {
   // Initialize variablse
   $scope.newList = {};
   $scope.modal = null;
@@ -44,12 +30,10 @@ angular.module('Plitto.controllers', [])
   $scope.$on('$destroy', function() {
     $scope.modal.remove();
   });
-  User.lists({ id: LoopBackAuth.currentUserId },
-    function(lists) {
-      $scope.lists = lists;
-    }, function(err) {
-      console.log('fail', err);
-    });
+  // TODO: Make database service call to populate lists
+  $scope.lists = [
+    { title: 'Test', id: 2 }
+  ];
 
   // Launch add-list modal
   $scope.addListModal = function () {
@@ -63,15 +47,7 @@ angular.module('Plitto.controllers', [])
 
   // Create a new list
   $scope.createList = function () {
-    User.lists.create({ id: LoopBackAuth.currentUserId },
-      $scope.newList,
-      function(list) {
-      $scope.lists.push(list);
-      $scope.newList = {};
-      $scope.closeModal();
-    }, function (err) {
-      console.log('fail', err);
-    });
+    // TODO: Make database service call.
   };
 
   // Delete a list
@@ -84,14 +60,7 @@ angular.module('Plitto.controllers', [])
         console.log('Cancelled');
       },
       destructiveButtonClicked: function () {
-        User.lists.destroyById({
-          id: list.userId,
-          fk: list.id
-        }, function(deletedList) {
-          _.remove($scope.lists, list);
-        }, function(err) {
-          console.log('fail', err);
-        });
+        // TODO: Make database service call.
         return true;
       }
     });
@@ -107,6 +76,7 @@ angular.module('Plitto.controllers', [])
   };
 })
 
+/*
 .controller('LoginCallbackCtrl', function($scope, $state, $stateParams, $ionicViewService, LoopBackAuth) {
   LoopBackAuth.accessTokenId = $stateParams.access_token;
   LoopBackAuth.currentUserId = $stateParams.userId;
@@ -117,4 +87,4 @@ angular.module('Plitto.controllers', [])
     disableBack: true
   });
   $state.go('app.lists');
-});
+});*/
