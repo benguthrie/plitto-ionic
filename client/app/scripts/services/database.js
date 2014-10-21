@@ -241,7 +241,8 @@ var plittoLogin = function (meResponse, friendsResponse) {
         // Set up the token
         $rootScope.token = data.me.token;
         $rootScope.friendStore = data.friends;
-        console.log('the token: ',$rootScope.token);
+        
+        console.log('the token: ',$rootScope.token, 'friend store: ',$rootScope.friendStore);
         
       // Initial View: theactivity
       // $rootScope.nav.base = 'getSome';

@@ -24,6 +24,11 @@ angular.module('Plitto.controllers', [])
   console.log("You have tried to controll your friends",$rootScope.friendStore);
 })
 
+.controller('FriendCtrl', function($scope, $rootScope) {
+    console.log("You clicked on a friend.");  
+})
+
+
 .controller('ListsCtrl', function($scope, $ionicModal, $ionicActionSheet) {
   // Initialize variablse
   $scope.newList = {};
