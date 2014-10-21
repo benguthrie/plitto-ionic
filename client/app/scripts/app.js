@@ -8,7 +8,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('Plitto', [
   'ionic',
-  'config',
+  //'config',
   'ngResource',
   'Plitto.controllers',
   'Plitto.services',
