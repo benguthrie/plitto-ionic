@@ -12,6 +12,10 @@ angular.module('Plitto.controllers', [])
   };
 })
 
+.controller('HomeCtrl', function($scope) {
+  // TODO: Make call and print it out here.
+})
+
 .controller('ProfileCtrl', function($scope) {
 })
 
