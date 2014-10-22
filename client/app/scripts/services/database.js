@@ -607,8 +607,8 @@ var sharedStat = function(friendId){
 }
 // Add to a list.
 var addToList = function(addToListObj){
-  var addToListParams = $.param({thingName: addToListObj.name,
-      listnameid: addToListObj.listnameid } );
+  var addToListParams = $.param({thingName: addToListObj.thingName,
+      listnameid: addToListObj.lid , token: $rootScope.token } );
   // console.log('dbFactory.addToList | ',addToListParams);
    $http(
       {
@@ -644,13 +644,17 @@ var addToList = function(addToListObj){
     // Updated to the new data Context 9/16/2014
     // Find my list position within other user's lists.
     
-console.log('rs',$rootScope.modal.listStore);
-
-    for(i in $rootScope.modal.listStore){
-      if($rootScope.modal.listStore[i].uid === $rootScope.vars.user.userId){
+     
+     
+console.log('rs.list',$rootScope.list, $rootScope.list.items);
+var i = 0, j=0;
+    for(i in $rootScope.list.items){
+      // console.log('652 - rs.list.items',$rootScope.list.items[i],i);
+      if($rootScope.list.items[i].uid === $rootScope.vars.user.userId){
         myListPosition = i;
-        for(j in $rootScope.modal.listStore[i].lists[0].items){
-          if($rootScope.modal.listStore[i].lists[0].items[j].tid === item.thingid){
+        // We can assume that is the the first list, since there can only be one showing.
+        for(j in $rootScope.list.items[i].lists[0].items){
+          if($rootScope.list.items[i].lists[0].items[j].tid === item.thingid){
             myThingAlready = j;
           }
         }
@@ -671,16 +675,16 @@ console.log('rs',$rootScope.modal.listStore);
         lists: [ { items: [] } ]
       };
       // Make my list first
-      $rootScope.modal.listStore.unshift(myList);
+      $rootScope.list.items.unshift(myList);
 
     } 
     else {
       // Make my list first
       if(myListPosition !== 0){
-        var myList = $rootScope.modal.listStore[myListPosition];
+        var myList = $rootScope.list.items[myListPosition];
 
-        $rootScope.modal.listStore.splice(myListPosition, 1);
-        $rootScope.modal.listStore.unshift(myList);
+        $rootScope.list.items.splice(myListPosition, 1);
+        $rootScope.list.items.unshift(myList);
       } 
       // Add my item to my list at the top.
 
@@ -691,13 +695,13 @@ console.log('rs',$rootScope.modal.listStore);
     if(myThingAlready === -1){
       // console.log($rootScope.modal.listStore[0]);
 
-      console.log($rootScope.modal.listStore);
-      $rootScope.modal.listStore[0].lists[0].items.unshift(myNewItem);
+      console.log('RootStore before I build', $rootScope.list.items);
+      $rootScope.list.items[0].lists[0].items.unshift(myNewItem);
     } else {
       // Move my old item to the top of your list.
       console.log('move it from one place to first',myThingAlready);
-      $rootScope.modal.listStore[0].lists[0].items.splice(myThingAlready, 1);
-      $rootScope.modal.listStore[0].lists[0].items.unshift(myNewItem);
+      $rootScope.list.items[0].lists[0].items.splice(myThingAlready, 1);
+      $rootScope.list.items[0].lists[0].items.unshift(myNewItem);
     }
 
     // console.log('why are lists hiding after this?',$rootScope.vars,$rootScope.nav);
@@ -735,7 +739,7 @@ var showAList = function(listNameId, listName, userFilter){
   // 
     console.log('showAList: ',listNameId, listName , userFilter);
   
-  $rootScope.list = { listId: listNameId, listName: listName, myItems: 500 , dittoable: 500, shared: 500, items: [] };
+  $rootScope.list = { listId: listNameId, listName: listName, myItems: null , dittoable: null, shared: null, items: [] };
   
   var existing = [];    
   getMore ('list',listNameId, userFilter, existing);
@@ -837,10 +841,8 @@ var getMore = function (type, id, ownerid, existing) {
     // TODO1 - Add it to the correct store. getMoreAppend('getMoreAppendSuccess',params,data.results, id);
 
     // Put it in the listStore if we know what it is
-    // $rootScope.list = { listId: listNameId, listName: listName, myItems: 500 , dittoable: 500, shared: 500, items: [] };
-    
     if(type==="list"){
-      $rootScope.listItems = data.results;
+      $rootScope.list.items = data.results;
       // $rootScope.list.itemCount = data.results.length;
       
       console.log("rootScope.list built by getMore: ",$rootScope.list.items);

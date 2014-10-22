@@ -1,9 +1,15 @@
 <ion-view title="List: {{$root.list.listName}}">
   <ion-content class="has-header">
     <h1>{{$root.list.listName}}</h1>
+    <form name="newItemForm" ng-submit="addToList(newItem.theValue);">
+      <label class="item item-input">
+        
+        <input type="text" ng-model="newItem.theValue" placeholder="Add to {{$root.list.listName}}">
+      </label>
+    </form>
     
     
-    <div class="list card" ng-repeat="user in listItems">
+    <div class="list card" ng-repeat="user in list.items">
       <a class="item item-avatar" href="#/app/profile/{{$root.user.userId}}" ng-click="showUser(user.uid,user.username,'ditto' );">
         <img src="http://graph.facebook.com/{{user.fbuid}}/picture">
         <h2>{{user.username}}</h2>

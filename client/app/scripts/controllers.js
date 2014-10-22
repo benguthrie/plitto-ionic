@@ -150,7 +150,7 @@ angular.module('Plitto.controllers', [])
     // TODO: Make database service call.
     
       dbFactory.newList($scope.newList.title, function(newListId, listName){ 
-        console.log('the list creation was successful', newListId, listName);
+        // console.log('the list creation was successful', newListId, listName);
        /*
         $state.go('app.list', {
           url: '/list/:listId',
@@ -189,9 +189,22 @@ angular.module('Plitto.controllers', [])
 
 .controller('ListCtrl', function($scope, $stateParams, $rootScope, dbFactory) {
   $scope.listId = $stateParams.listId;
+
+  $scope.newItem = {theValue: null};
+  
+  $scope.addToList = function(newItem){
+    // console.log('submit to the list: ',newItem, 'newItemForm: ',$scope.newItemForm, ' scope: ',$scope,'Scope new Item: ',$scope.newItem);
+    
+    var itemObj = {lid: $stateParams.listId, thingName: newItem};
+    
+    $scope.newItem = {theValue: null};
+    
+    dbFactory.addToList(itemObj);
+  };
+  
   /* TODO This function must be available in may different locations throughout the app */
     $scope.ditto = function(mykey, uid, lid, tid, $event){
-        console.log('your existing key is: ',mykey, ' from user: ',uid,' from list: ', lid,' and thing: ',tid);
+        // console.log('your existing key is: ',mykey, ' from user: ',uid,' from list: ', lid,' and thing: ',tid);
         
         /* update the styles */
         
@@ -219,7 +232,7 @@ angular.module('Plitto.controllers', [])
             }
         }
         
-        console.log('final ijk: ',i,j,k);
+        // console.log('final ijk: ',i,j,k);
         
         // Call the ditto in the dbFactory. It will handle the key in the correct scope for styling purposes. 
         /* TODO3 - Review this whole process */
