@@ -6,7 +6,8 @@ angular.module('Services.database', [])
   , function ($http, $rootScope, localStorageService) {
       
 // var apiPath = 'http://plitto.com/api/2.0/';
-  var apiPath = 'http://localhost/api/2.0/';
+  // var apiPath = 'http://localhost/api/2.0/';
+    var apiPath = '/api/2.0/';
       
 /* 10/4/2014 */
 var showThing = function(thingid){
@@ -546,6 +547,8 @@ var getUserListOfLists = function(friendId){
         // Update the rootScope lists.
       // TODO - Come up with a strategy of where to store this better than Rootscope. Also, for each user, when navigating around, this could change.
         $rootScope.lists = data.result;
+    
+    console.log('rootscope.lists', $rootScope.lists);
 
         // Add / Update to local storage
         localStorageService.set('userLL_'+friendId, data.result);
@@ -696,9 +699,16 @@ var modalReset = function(){
 
 
 /* 9/3/2014 */
-var showAList = function(listnameid, listname, ownerid){
+var showAList = function(listNameId, listName, userFilter){
   // 
-    console.log('showAList: ',listnameid, listname, ownerid);
+    console.log('showAList: ',listNameId, listName , userFilter);
+  
+  $rootScope.list = { listId: listNameId, listName: listName, myItems: 500 , dittoable: 500, shared: 500, items: [] };
+  
+  var existing = [];    
+  getMore ('list',listNameId, userFilter, existing);
+
+  
     // user clicked on a list. Show all the items in that list without filtering. 
     
 /* TODO1 - Navigate to the proper list.
@@ -762,8 +772,6 @@ This was how Plitto Angular handled navigating to a list
 */
   // console.log('existing list params: ',existing,' getmoreparams: ',getMoreParams);
 
-var existing = [];    
- getMore ('list',listnameid, ownerid, existing);
    
   // console.log('rs modal',$rootScope.vars.modal.filter);
 };  
@@ -797,6 +805,17 @@ var getMore = function (type, id, ownerid, existing) {
     // TODO1 - Add it to the correct store. getMoreAppend('getMoreAppendSuccess',params,data.results, id);
 
     // Put it in the listStore if we know what it is
+    // $rootScope.list = { listId: listNameId, listName: listName, myItems: 500 , dittoable: 500, shared: 500, items: [] };
+    
+    if(type==="list"){
+      $rootScope.listItems = data.results;
+      // $rootScope.list.itemCount = data.results.length;
+      
+      console.log("rootScope.list built by getMore: ",$rootScope.list.items);
+      
+    } else if(type==="user"){
+      console.log("TODO1 - Build the place to store user information");
+    }
     
   });
 };
@@ -981,7 +1000,7 @@ var getMoreAppend = function(caption,params,data, id) {
 }
 
 
-var newList = function (thingName) {
+var newList = function (thingName, success, failure) {
   // Query the API and make the thing, if it needs to be made.
   var thingParams = $.param({thingName: thingName });
         $http({
@@ -994,6 +1013,12 @@ var newList = function (thingName) {
           // 
           var newListId = data.results[0]['thingid'];
             console.log("New List ID: ",newListId);
+          
+            success(newListId, thingName);
+              
+          // Callback - On creating the new list.
+          
+          
           // Call the showAList function.
 
 // TODO1 - Where do we put this?             
@@ -1010,9 +1035,16 @@ var newList = function (thingName) {
           $rootScope.nav.modal = true;
 */
           // This logic loads this list, and should show it in a new modal.
-          showAList(newListId,thingName, null);
-
-
+         //  showAList(newListId,thingName, null);
+          
+          /* TODO1 - Close the modal, navigate to the new list 
+            Implement a callback to the controller?
+            Needs to: 
+              Navigate to the proper list, by id.
+              Update the list store to include this new list?
+              
+          */
+          
       });
 
 };

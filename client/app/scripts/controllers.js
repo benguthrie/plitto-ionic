@@ -76,10 +76,19 @@ angular.module('Plitto.controllers', [])
 })
 
 /* 10/21/2014 - Added RootScope to populate the list with? TODO1 - Build lists from $rootScope.lists */
-.controller('ListsCtrl', function($scope, $ionicModal, $ionicActionSheet,$rootScope, dbFactory) {
+.controller('ListsCtrl', function($scope, $ionicModal, $ionicActionSheet,$rootScope, dbFactory,$state) {
   // Initialize variablse
   $scope.newList = {};
   $scope.modal = null;
+  
+  $scope.showAList = function(listId, listName, userFilter){
+    // 10/22/2014 -- Build the entries in the rootScope for the list.
+    
+    dbFactory.showAList(listId, listName, userFilter);
+    
+    $state.go('app.list',{listId: listId});
+  };
+  
   $ionicModal.fromTemplateUrl('templates/modals/add-list.html', {
     scope: $scope,
     animation: 'slide-in-up'
@@ -109,8 +118,25 @@ angular.module('Plitto.controllers', [])
   // Create a new list
   $scope.createList = function () {
     // TODO: Make database service call.
-    //
-      dbFactory.newList($scope.newList.title);
+    
+      dbFactory.newList($scope.newList.title, function(newListId, listName){ 
+        console.log('the list creation was successful', newListId, listName);
+       /*
+        $state.go('app.list', {
+          url: '/list/:listId',
+          views: {
+            'menuContent': {
+              templateUrl: 'templates/list.html',
+              controller: 'ListCtrl'
+            }
+          }
+        });
+        */
+        dbFactory.showAList(newListId);
+        
+        $state.go('app.list',{listId: newListId});
+        
+      }, function(){console.log('the list creation failed.'); });
       
   };
 
@@ -131,7 +157,46 @@ angular.module('Plitto.controllers', [])
   };
 })
 
-.controller('ListCtrl', function($scope, $stateParams) {
+.controller('ListCtrl', function($scope, $stateParams, $rootScope, dbFactory) {
+  $scope.listId = $stateParams.listId;
+  /* TODO This function must be available in may different locations throughout the app */
+    $scope.ditto = function(mykey, uid, lid, tid, $event){
+        console.log('your existing key is: ',mykey, ' from user: ',uid,' from list: ', lid,' and thing: ',tid);
+        
+        /* update the styles */
+        
+        
+        /* TODO update that record? THERE HAS TO BE A BETTER WAY*/
+        var i,j,k;
+        
+        /* Make it pending */
+        findItem:{
+            for(i in $rootScope.listItems){
+                if($rootScope.listItems[i].uid === uid){
+                    for(j in $rootScope.listItems[i]['lists']){
+                        if($rootScope.listItems[i]['lists'][j].lid === lid){
+                            for(k in $rootScope.listItems[i]['lists'][j]['items']){
+                                if($rootScope.listItems[i]['lists'][j]['items'][k].tid === tid){
+                                    // Change the state of this item.
+                                    $rootScope.listItems[i]['lists'][j]['items'][k].mykey = 0;
+                                    // There can be only one. So stop once you find it.
+                                    break findItem;
+                                }
+                            }
+                        }
+                    }
+                } 
+            }
+        }
+        
+        console.log('final ijk: ',i,j,k);
+        
+        // Call the ditto in the dbFactory. It will handle the key in the correct scope for styling purposes. 
+        /* TODO3 - Review this whole process */
+        dbFactory.dbDitto('listItems',i,j,k,mykey,uid,lid,tid, $event);
+        
+        
+    };
 })
 
 .controller('LoginCtrl', function($scope, $window) {

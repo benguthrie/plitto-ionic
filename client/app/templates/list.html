@@ -1,5 +1,60 @@
-<ion-view title="Playlist">
+<ion-view title="List: {{$root.list.listName}}">
   <ion-content class="has-header">
-    <h1>Playlist</h1>
+    <h1>{{$root.list.listName}}</h1>
+    
+    
+    <div class="list card" ng-repeat="user in listItems">
+      <a class="item item-avatar" href="#">
+        <img src="http://graph.facebook.com/{{user.fbuid}}/picture">
+        <h2>{{user.username}}</h2>
+        <p>IN COMMON STATS?</p>
+      </a>
+      
+      
+      <div class="list" ng-repeat="list in user.lists">
+        <div class="item item-divider">
+          {{list.listname}}
+        </div>
+        <div class="item" ng-repeat="item in list.items">
+            <div side="right" class="button"  style="font-size: 2.5em; float: right;" ng-class="{'ionicons ion-ios7-bolt' : item.mykey === 0 ,'ionicons ion-ios7-checkmark-outline' : item.mykey === null , 'ionicons ion-ios7-checkmark' : item.mykey > 0 }" ng-click="ditto(item.mykey, user.uid, list.lid, item.tid, $event);"></div>
+          {{item.thingname}}
+            
+            
+            <!-- TODO1 - Place this where it should go -->
+            <h6>{{item.added}}</h6>
+            
+            <!-- TODO1 - Place this where it should go --> 
+                <!-- TODO1 Add the mega-octicon font set - Remove "Typed" after --> 
+            <h6 ng-show="item.dittouser === null" class="mega-octicon octicon-pencil">TYPED</h6>
+            <h6 ng-show="item.dittouser !== null">dittoed from {{item.dittousername}}</h6>
+            
+            <!-- Style options: ios7-checkmark , ios7-checkmark-outline
+                Not working: icon fa fa-spinner, 
+            -->
+<!-- TODO:
+- Lock icon to the right
+- Ditto action - BEn
+- Change style of this item
+--> 
+
+                
+           
+            
+             
+        </div>
+        <!-- 
+         <div class="item item-divider" style="text-align: center;">
+            Load More ( if Available)
+        </div>
+        -->
+      </div>
+        
+    </div>
+    
   </ion-content>
 </ion-view>
+<!-- $scope.list = {
+      listId: listId,
+      listName: listName,
+      lists: []
+    }; -->

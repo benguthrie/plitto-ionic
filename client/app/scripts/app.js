@@ -201,7 +201,7 @@ angular.module('Plitto', [
 
   
     .state('app.profile', {
-      url: '/profile',
+      url: '/profile/:userId',
       views: {
         'menuContent': {
           templateUrl: 'templates/profile.html',
@@ -209,6 +209,7 @@ angular.module('Plitto', [
         }
       }
     })
+  
 
     .state('app.lists', {
       url: '/lists',
