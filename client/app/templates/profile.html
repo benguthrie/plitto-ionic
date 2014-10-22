@@ -8,15 +8,12 @@
     <div class="button-bar">
       <a class="button" ng-click="nav.view = 'user.ditto'; getSome(profileData.userId);">Ditto</a>
       <a class="button" ng-click="nav.view = 'user.feed'; showFeed(profileData.userId,'');">Feed</a>
-      <a class="button" ng-click="nav.view = 'user.lists'">Lists</a>
+      <a class="button" ng-click="nav.view = 'user.lists'; showLists(profileData.userId);">Lists</a>
       <a class="button" ng-click="nav.view = 'user.milestones'">Milestones</a>
     </div>
     
-    <h3>NV: {{nav.view}}</h3>
-    
-    
     <div class="list card" ng-repeat="user in $root.profileData.feed" ng-show="nav.view==='user.feed'">
-      <a class="item item-avatar" href="#/app/profile/{{user.uid}}" ng-click="showUser(user.uid,user.username,'ditto');">
+      <a class="item item-avatar" href="#/app/profile/{{user.uid}}" ng-click="showUser(user.uid,user.username,'profileData.feed');">
         <img src="http://graph.facebook.com/{{user.fbuid}}/picture">
         <h2>{{user.username}}</h2>
         <p>IN COMMON STATS?</p>
@@ -59,11 +56,35 @@
         
     </div>
     
-    <div ng-show="nav.view==='user.lists'">Lists</div>
+    <div ng-show="nav.view==='user.lists'">
+    
+      <p ng-show="!$root.profileData.lists.length">No lists yet. Add a list using the + button 
+        <div class="button-bar" ng-show="!$root.profileData.lists.length"><a class="button" ng-click="loadLists();">Reload Lists</a></div>
+      </p>
+
+      <ion-list can-swipe="true">
+        <ion-item class="item-icon-right" ng-repeat="list in $root.profileData.lists" href="#/app/lists/{{list.lid}}" ng-click="showList(list.lid, list.name, null);">
+            <ion-option-button class="button-assertive"
+              ng-click="deleteList(list)">Delete</ion-option-button>
+          {{list.name}}
+          <h3>ListID: {{list.lid}}</h3>
+          <h6>Shared: {{list.shared}}</h6>
+          <h6>Dittoable: {{list.dittoable}}</h6>
+          <h6>Mine: {{list.mymembers}}</h6>
+          <h6>Most Recent: {{list.mostrecent}}</h6>
+
+          <i class="icon ion-chevron-right icon-accessory"></i>
+        </ion-item>
+      </ion-list>
+    
+    </div>
+    
+    
+    
     <div ng-show="nav.view==='user.milestones'">Milestones</div>
     
     <div class="list card" ng-repeat="user in $root.profileData.ditto" ng-show="nav.view==='user.ditto'">
-      <a class="item item-avatar" href="#/app/profile/{{user.uid}}" ng-click="showUser(user.uid,user.username,'ditto');">
+      <a class="item item-avatar" href="#/app/profile/{{user.uid}}" ng-click="showUser(user.uid,user.username,'profileData.ditto');">
         <img src="http://graph.facebook.com/{{user.fbuid}}/picture">
         <h2>{{user.username}}</h2>
         <p>IN COMMON STATS?</p>

@@ -14,8 +14,8 @@ angular.module('Plitto.controllers', [])
     // };
   };
   
-  $rootScope.showUser = function(userId, userName, initialView){
-    console.log('global: show a user.', $rootScope.vars.user, 'uid: ',userId,' username: ',userName);
+  $rootScope.showUser = function(userId, userName, dataScope){
+    // console.log('global: show a user.', $rootScope.vars.user, 'uid: ',userId,' username: ',userName);
     $rootScope.profileData = {
       userName: userName,
       userId: userId,
@@ -26,7 +26,10 @@ angular.module('Plitto.controllers', [])
     
     $rootScope.nav.view = "user.ditto";
     
-    dbFactory.showUser(userId);
+    // dbFactory.showUser(userId);
+    // dbGetSome = function(thescope, userfilter, listfilter){
+    dbFactory.dbGetSome('$rootScope.profileData.ditto', userId, '');
+    dbFactory.getUserListOfLists(friendId, '$rootScope.profileData.lists');
   };
   
   
@@ -101,8 +104,9 @@ angular.module('Plitto.controllers', [])
   };
     
   $scope.loadLists = function(){
-    console.log("You want to load lists");
-    dbFactory.getUserListOfLists($rootScope.vars.user.userId);
+    console.log("You want to load lists into your profile.");
+    // dbFactory.getUserListOfLists($rootScope.vars.user.userId);
+    dbFactory.getUserListOfLists($rootScope.vars.user.userId , '$rootScope.lists');
   };
     
 })
@@ -113,24 +117,27 @@ angular.module('Plitto.controllers', [])
    
     
     $scope.getMore = function(){
-        dbFactory.dbGetSome($scope, '', '');
+        dbFactory.dbGetSome('$rootScope.bite', '', '');
     };
     
 })
 
 .controller('ProfileCtrl', function($scope,dbFactory) {
-  console.log("Profile Control",$scope);
+  // console.log("Profile Control",$scope);
   $scope.showFeed = function(userId, oldestItem){
-    console.log('profile show feed: ',userId, ' oldest: ',oldestItem);
+    // console.log('profile show feed: ',userId, ' oldest: ',oldestItem);
     // showFeed = function(theType, userFilter, listFilter, myState, oldestKey)
     dbFactory.showFeed('profile',userId,'','','');
   }; 
   
   $scope.getSome = function(userId){
-    console.log("Get Some for userid: ",userId);
-    dbFactory.dbGetSome('profile',userId,'');
+    // console.log("Get Some for userid: ",userId);
+    dbFactory.dbGetSome('$rootScope.profileData.ditto',userId,'');
   };
   
+  $scope.showLists = function(userId){
+    dbFactory.getUserListOfLists(userId, '$rootScope.profileData.lists');
+  };
   
   
 })
@@ -151,8 +158,8 @@ angular.module('Plitto.controllers', [])
   
   
   $scope.loadLists = function(){
-    console.log("Load Lists - Could also refresh.");
-    dbFactory.getUserListOfLists($rootScope.vars.user.userId);
+   //  console.log("Load Lists - Could also refresh.");
+    dbFactory.getUserListOfLists($rootScope.vars.user.userId,'$rootScope.lists');
   };
   
   $ionicModal.fromTemplateUrl('templates/modals/add-list.html', {

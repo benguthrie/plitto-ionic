@@ -52,8 +52,11 @@ var showUser = function(userId){
   
   // $rootScope.profileData = { lists: [], feed: [], ditto: [], milestones: []};
   
+  // dbDitto = function ('profileData.ditto', i,j,k, mykey, uid, lid, tid, event ){
+  
   $rootScope.profileData.lists = [{"id":"152275","name":"I like","lid":"6246","listmembers":"263","mymembers":"263","dittoable":"0","shared":"263","mostrecent":"2014-09-10 17:47:38","fbuids":"532345366"},{"id":"150331","name":"Movies I have Seen","lid":"231","listmembers":"261","mymembers":"261","dittoable":"0","shared":"261","mostrecent":"2014-09-18 14:57:33","fbuids":"532345366"},{"id":"150233","name":"Bands I have seen live","lid":"66","listmembers":"84","mymembers":"84","dittoable":"0","shared":"84","mostrecent":"2014-09-23 09:01:49","fbuids":"532345366"},{"id":"151021","name":"Cities I have visited on personal travels","lid":"1795","listmembers":"74","mymembers":"74","dittoable":"0","shared":"74","mostrecent":"2014-10-01 15:50:51","fbuids":"532345366"},{"id":"150243","name":"Cities Traveled for Work","lid":"85","listmembers":"63","mymembers":"63","dittoable":"0","shared":"63","mostrecent":"2011-10-06 01:01:42","fbuids":"532345366"},{"id":"151594","name":"Things Other People Like That I Don't","lid":"2911","listmembers":"56","mymembers":"56","dittoable":"0","shared":"56","mostrecent":"2014-09-22 05:49:56","fbuids":"532345366"},{"id":"150766","name":"Search Parameters for Houses","lid":"1357","listmembers":"54","mymembers":"54","dittoable":"0","shared":"54","mostrecent":"2008-11-22 22:54:15","fbuids":"532345366"},{"id":"151434","name":"Things I have Seen","lid":"2748","listmembers":"54","mymembers":"54","dittoable":"0","shared":"54","mostrecent":"2014-09-15 12:23:37","fbuids":"532345366"},{"id":"150366","name":"Yummy Things","lid":"134","listmembers":"50","mymembers":"50","dittoable":"0","shared":"50","mostrecent":"2014-09-04 07:03:07","fbuids":"532345366"},{"id":"152026","name":"about me","lid":"2250","listmembers":"48","mymembers":"48","dittoable":"0","shared":"48","mostrecent":"2011-08-28 03:09:54","fbuids":"532345366"},{"id":"151003","name":"Words Joseph Says","lid":"1724","listmembers":"42","mymembers":"42","dittoable":"0","shared":"42","mostrecent":"2014-10-01 15:37:11","fbuids":"532345366"},{"id":"151492","name":"Tech Services I Use","lid":"3063","listmembers":"41","mymembers":"41","dittoable":"0","shared":"41","mostrecent":"2014-10-02 15:45:30","fbuids":"532345366"},{"id":"152063","name":"States I've been to","lid":"5377","listmembers":"41","mymembers":"41","dittoable":"0","shared":"41","mostrecent":"2014-08-29 18:06:50","fbuids":"532345366"},{"id":"150344","name":"DVD Collection","lid":"260","listmembers":"35","mymembers":"35","dittoable":"0","shared":"35","mostrecent":"2009-08-17 02:16:34","fbuids":"532345366"},{"id":"151697","name":"Athletes I Like","lid":"2921","listmembers":"35","mymembers":"35","dittoable":"0","shared":"35","mostrecent":"2014-10-21 14:29:06","fbuids":"532345366"},{"id":"150429","name":"Recreational Hobbies","lid":"534","listmembers":"33","mymembers":"33","dittoable":"0","shared":"33","mostrecent":"2014-09-06 10:27:11","fbuids":"532345366"},{"id":"150813","name":"Rip these off","lid":"1409","listmembers":"33","mymembers":"33","dittoable":"0","shared":"33","mostrecent":"2008-11-22 22:54:15","fbuids":"532345366"},{"id":"151263","name":"Scrabble Bingos","lid":"2234","listmembers":"33","mymembers":"33","dittoable":"0","shared":"33","mostrecent":"2008-11-22 22:54:15","fbuids":"532345366"},{"id":"151465","name":"Simple Pleasures","lid":"2851","listmembers":"33","mymembers":"33","dittoable":"0","shared":"33","mostrecent":"2014-10-20 14:06:47","fbuids":"532345366"},{"id":"150845","name":"Wishlist","lid":"400","listmembers":"32","mymembers":"32","dittoable":"0","shared":"32","mostrecent":"2009-08-19 01:57:49","fbuids":"532345366"}];
 
+  
   
   getSome('profile',userId,'');
   /*
@@ -177,8 +180,8 @@ if(mykey === null){
 /* Get Some - things to ditto 
   9/23/2014 - Created
 */
-var dbGetSome = function(thescope, userfilter, listfilter){
-  console.log('getSomeDB Scope: ',thescope,' userfilter: ',userfilter,' listfilter: ',listfilter);
+var dbGetSome = function(theScope, userfilter, listfilter){
+  console.log('getSomeDB Scope: ',theScope,' userfilter: ',userfilter,' listfilter: ',listfilter);
 
   var params = {
     type:'user',
@@ -197,6 +200,9 @@ var dbGetSome = function(thescope, userfilter, listfilter){
       headers: {'Content-Type':'application/x-www-form-urlencoded'}
     })
     .success(function(data,status,headers,config){
+      eval('console.log("net Results",' + theScope +');');  
+      eval(theScope + ' = data.results;');
+      
       // console.log('dbFactory.getActivity data: ',data);
       /*
       if(thescope === 'root'){
@@ -204,11 +210,14 @@ var dbGetSome = function(thescope, userfilter, listfilter){
       } else {
         $rootScope.modal.bite = data.results;
       }*/
+    
+    /*
       if(thescope === 'profile'){
           $rootScope.profileData.ditto = data.results;
       } else {
         $rootScope.bite = data.results;
       }
+    */
     });
 };
 
@@ -270,6 +279,13 @@ var plittoLogin = function (meResponse, friendsResponse) {
 		fbState: 'disconnected',
 		plittoState: null
 	};
+    
+    $rootScope.profileData = {
+      lists: [],
+      userId: null,
+      feed: [],
+      ditto: []
+    };
       
     // Handle the users, lists and things.
       
@@ -502,7 +518,15 @@ var showUserLists = function (friendId){
   // Populate that user's information: from local storage?
   var userLists = localStorageService.get('userL_'+friendId);
 
+  if(userList.length > 0){
+    console.log('dataFactory.showUserLists: there are user list of lists available');
+  
+  }
+  
+  
+  
   // See if we need to create the list store.
+  /*
   if(!$rootScope.modal.listStore || $rootScope.modal.listStore.length === 0){
     $rootScope.modal.listStore = [];
 
@@ -571,6 +595,7 @@ var showUserLists = function (friendId){
   // Step 2.1: Update their list of lists
   getUserListOfLists(friendId);
 
+  */
 
 };
 
@@ -579,9 +604,10 @@ var showUserLists = function (friendId){
 /* 9/7/2014
   Get the list of lists for this user
 */
-var getUserListOfLists = function(friendId){
+var getUserListOfLists = function(friendId, theScope){
     // TODO2 - load from local storage, if it's there 
-    
+  console.log('getUserListOfLists: friendId: ',friendId,' theScope: ', theScope);  
+  
   var params = $.param({userfilter:friendId, token: $rootScope.token });
   // console.log('listoflists params: ',params);
   $http({
@@ -595,9 +621,10 @@ var getUserListOfLists = function(friendId){
       // Handle the users, lists and things.
         // Update the rootScope lists.
       // TODO - Come up with a strategy of where to store this better than Rootscope. Also, for each user, when navigating around, this could change.
-        $rootScope.lists = data.result;
-    
-    console.log('rootscope.lists', $rootScope.lists);
+       //  $rootScope.lists = data.result;
+      console.log('Load this here: ',theScope + ' = data.results;');
+      eval(theScope + ' = data.results;');
+    // console.log('rootscope.lists', $rootScope.lists);
 
         // Add / Update to local storage
         localStorageService.set('userLL_'+friendId, data.result);
