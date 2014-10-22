@@ -78,7 +78,7 @@ angular.module('Plitto.controllers', [])
             }
         }
         
-        console.log('final ijk: ',i,j,k);
+        // console.log('final ijk: ',i,j,k);
         
         // Call the ditto in the dbFactory. It will handle the key in the correct scope for styling purposes. 
         /* TODO3 - Review this whole process */
@@ -93,8 +93,12 @@ angular.module('Plitto.controllers', [])
     
 })
 
-.controller('ProfileCtrl', function($scope) {
+.controller('ProfileCtrl', function($scope,dbFactory) {
   console.log("Profile Control",$scope);
+  $scope.getSome = function(userId){
+    console.log("Get Some for userid: ",userId);
+    dbFactory.dbGetSome('profile',userId,'');
+  };
   
 })
 
