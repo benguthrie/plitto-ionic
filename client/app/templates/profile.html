@@ -3,10 +3,59 @@
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
   <ion-content class="has-header">
-    <h1>My Profile</h1>
-    {{user}}
-      <p>This is a a view for your friend. TODO - Show their stuff, and navigation.</p>
-      <p>!! LISTS !! SHARED !! DITTO !! OUR MILESTONES !! </p>
-      
+    <h1>{{profileData.userName}}</h1>
+        
+    <div class="button-bar">
+      <a class="button">Feed</a>
+      <a class="button">Ditto</a>
+      <a class="button">Lists</a>
+      <a class="button">Milestones</a>
+    </div>
+    
+    
+    <div class="list card" ng-repeat="user in $root.profileData.ditto">
+      <a class="item item-avatar" href="#/app/profile/{{user.uid}}" ng-click="showUser(user.uid,user.username,'ditto');">
+        <img src="http://graph.facebook.com/{{user.fbuid}}/picture">
+        <h2>{{user.username}}</h2>
+        <p>IN COMMON STATS?</p>
+      </a>
+      <div class="list" ng-repeat="list in user.lists">
+        <div class="item item-divider" ng-click="showList(list.lid, list.listname, user.uid);">
+          {{list.listname}}
+        </div>
+        <div class="item" ng-repeat="item in list.items">
+            <div side="right" class="button"  style="font-size: 2.5em; float: right;" ng-class="{'ionicons ion-ios7-bolt' : item.mykey === 0 ,'ionicons ion-ios7-checkmark-outline' : item.mykey === null , 'ionicons ion-ios7-checkmark' : item.mykey > 0 }" ng-click="ditto(item.mykey, user.uid, list.lid, item.tid, $event);"></div>
+          {{item.thingname}}
+            
+            
+            <!-- TODO1 - Place this where it should go -->
+            <h6>{{item.added}}</h6>
+            
+            <!-- TODO1 - Place this where it should go --> 
+                <!-- TODO1 Add the mega-octicon font set - Remove "Typed" after --> 
+            <h6 ng-show="item.dittouser === null" class="mega-octicon octicon-pencil">TYPED</h6>
+            <h6 ng-show="item.dittouser !== null">dittoed from {{item.dittousername}}</h6>
+            
+            <!-- Style options: ios7-checkmark , ios7-checkmark-outline
+                Not working: icon fa fa-spinner, 
+            -->
+<!-- TODO:
+- Lock icon to the right
+- Ditto action - BEn
+- Change style of this item
+--> 
+
+                
+           
+            
+             
+        </div>
+         <div class="item item-divider" style="text-align: center;">
+            Ditto more from this list.
+        </div>
+      </div>
+        
+    </div>
+    
   </ion-content>
 </ion-view>

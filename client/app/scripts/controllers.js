@@ -1,6 +1,35 @@
 'use strict';
 angular.module('Plitto.controllers', [])
 
+.run(function($rootScope, dbFactory, $state){
+  $rootScope.showList = function(listId, listName, userFilter){
+    console.log('global show a list');
+    
+     // $scope.showAList = function(listId, listName, userFilter){
+    // 10/22/2014 -- Build the entries in the rootScope for the list.
+    
+    dbFactory.showAList(listId, listName, userFilter);
+    
+    $state.go('app.list',{listId: listId});
+    // };
+  };
+  
+  $rootScope.showUser = function(userId, userName, initialView){
+    console.log('global: show a user.', $rootScope.vars.user);
+    $rootScope.profileData = {
+      userName: userName,
+      userId: userId,
+      lists: [],
+      ditto: [],
+      feed: []
+    };
+    
+    dbFactory.showUser(userId);
+  };
+  
+  
+}) 
+
 .controller('AppCtrl', function($scope, $state, dbFactory, $rootScope) {
   // Grab the user info here as soon as they login.
   // Global Logout Handler
@@ -65,6 +94,8 @@ angular.module('Plitto.controllers', [])
 })
 
 .controller('ProfileCtrl', function($scope) {
+  console.log("Profile Control",$scope);
+  
 })
 
 .controller('FriendsCtrl', function($scope, $rootScope) {
@@ -81,12 +112,10 @@ angular.module('Plitto.controllers', [])
   $scope.newList = {};
   $scope.modal = null;
   
-  $scope.showAList = function(listId, listName, userFilter){
-    // 10/22/2014 -- Build the entries in the rootScope for the list.
-    
-    dbFactory.showAList(listId, listName, userFilter);
-    
-    $state.go('app.list',{listId: listId});
+  
+  $scope.loadLists = function(){
+    console.log("Load Lists - Could also refresh.");
+    dbFactory.getUserListOfLists($rootScope.vars.user.userId);
   };
   
   $ionicModal.fromTemplateUrl('templates/modals/add-list.html', {
@@ -100,10 +129,7 @@ angular.module('Plitto.controllers', [])
   $scope.$on('$destroy', function() {
     $scope.modal.remove();
   });
-  // TODO: Make database service call to populate lists
-  $scope.lists = [
-    { title: 'Test', id: 2 }
-  ];
+  
 
   // Launch add-list modal
   $scope.addListModal = function () {

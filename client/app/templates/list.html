@@ -4,7 +4,7 @@
     
     
     <div class="list card" ng-repeat="user in listItems">
-      <a class="item item-avatar" href="#">
+      <a class="item item-avatar" href="#/app/profile/{{$root.user.userId}}" ng-click="showUser(user.uid,user.username,'ditto' );">
         <img src="http://graph.facebook.com/{{user.fbuid}}/picture">
         <h2>{{user.username}}</h2>
         <p>IN COMMON STATS?</p>

@@ -8,9 +8,12 @@
     </button>
   </ion-nav-buttons>
   <ion-content class="has-header">
-    <p ng-show="!$root.lists.length">No lists yet. Add a list using the + button</p>
+    <p ng-show="!$root.lists.length">No lists yet. Add a list using the + button 
+      <div class="button-bar" ng-show="!$root.lists.length"><a class="button" ng-click="loadLists();">Reload Lists</a></div>
+    </p>
+    
     <ion-list can-swipe="true">
-      <ion-item class="item-icon-right" ng-repeat="list in $root.lists" href="#/app/lists/{{list.lid}}" ng-click="showAList(list.lid, list.name, null);">
+      <ion-item class="item-icon-right" ng-repeat="list in $root.lists" href="#/app/lists/{{list.lid}}" ng-click="showList(list.lid, list.name, null);">
           <ion-option-button class="button-assertive"
             ng-click="deleteList(list)">Delete</ion-option-button>
         {{list.name}}

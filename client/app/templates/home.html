@@ -8,13 +8,13 @@
     
   <ion-content class="has-header">
     <div class="list card" ng-repeat="user in $root.bite">
-      <a class="item item-avatar" href="#">
+      <a class="item item-avatar" href="#/app/profile/{{user.uid}}" ng-click="showUser(user.uid,user.username,'ditto');">
         <img src="http://graph.facebook.com/{{user.fbuid}}/picture">
         <h2>{{user.username}}</h2>
         <p>IN COMMON STATS?</p>
       </a>
       <div class="list" ng-repeat="list in user.lists">
-        <div class="item item-divider">
+        <div class="item item-divider" ng-click="showList(list.lid, list.listname, user.uid);">
           {{list.listname}}
         </div>
         <div class="item" ng-repeat="item in list.items">
