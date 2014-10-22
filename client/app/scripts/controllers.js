@@ -15,7 +15,7 @@ angular.module('Plitto.controllers', [])
   };
   
   $rootScope.showUser = function(userId, userName, initialView){
-    console.log('global: show a user.', $rootScope.vars.user);
+    console.log('global: show a user.', $rootScope.vars.user, 'uid: ',userId,' username: ',userName);
     $rootScope.profileData = {
       userName: userName,
       userId: userId,
@@ -23,6 +23,8 @@ angular.module('Plitto.controllers', [])
       ditto: [],
       feed: []
     };
+    
+    $rootScope.nav.view = "user.ditto";
     
     dbFactory.showUser(userId);
   };
@@ -95,6 +97,12 @@ angular.module('Plitto.controllers', [])
 
 .controller('ProfileCtrl', function($scope,dbFactory) {
   console.log("Profile Control",$scope);
+  $scope.showFeed = function(userId, oldestItem){
+    console.log('profile show feed: ',userId, ' oldest: ',oldestItem);
+    // showFeed = function(theType, userFilter, listFilter, myState, oldestKey)
+    dbFactory.showFeed('profile',userId,'','','');
+  }; 
+  
   $scope.getSome = function(userId){
     console.log("Get Some for userid: ",userId);
     dbFactory.dbGetSome('profile',userId,'');
