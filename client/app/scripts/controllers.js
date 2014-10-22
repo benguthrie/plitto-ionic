@@ -30,6 +30,66 @@ angular.module('Plitto.controllers', [])
   };
   
   
+  /* TODO This function must be available in may different locations throughout the app */
+    $rootScope.ditto = function(mykey, uid, lid, tid, $event,scopeName){
+        // console.log('your existing key is: ',mykey, ' from user: ',uid,' from list: ', lid,' and thing: ',tid);
+        
+        /* update the styles */
+        
+        
+        /* TODO update that record? THERE HAS TO BE A BETTER WAY*/
+        var i,j,k;
+      
+      console.log('scopeName and results: ',scopeName, ' results: ',eval('$rootScope.' + scopeName));
+      
+        /* TODO1 - Dynamically apply the scope so it's only searching the scope that it could be in. better still, do this as part of the event. 
+        findItem:{
+            for(i in $rootScope[scopeName]){
+                if($rootScope[scopeName][i].uid === uid){
+                    for(j in $rootScope[scopeName][i]['lists']){
+                        if($rootScope[scopeName][i]['lists'][j].lid === lid){
+                            for(k in $rootScope[scopeName][i]['lists'][j]['items']){
+                                if($rootScope[scopeName][i]['lists'][j]['items'][k].tid === tid){
+                                    // Change the state of this item.
+                                    $rootScope[scopeName][i]['lists'][j]['items'][k].mykey = 0;
+                                    // There can be only one. So stop once you find it.
+                                    break findItem;
+                                }
+                            }
+                        }
+                    }
+                } 
+            }
+        } */
+        // console.log($rootScope.profileData.feed[0]["lists"
+      findItem:{
+            for(i in eval('$rootScope.' + scopeName)){
+                if(  eval('$rootScope.' + scopeName + '[i].uid') === uid){
+                    for(j in eval('$rootScope.' + scopeName + '[i]["lists"]') ){
+                        if(  eval('$rootScope.' + scopeName + '[i]["lists"][j].lid')  === lid){
+                            for(k in eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"]')  ){
+                                if( eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].tid') === tid){
+                                    // Change the state of this item.
+                                    eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].mykey = 0');
+                                    // There can be only one. So stop once you find it.
+                                    break findItem;
+                                }
+                            }
+                        }
+                    }
+                } 
+            }
+        }
+      
+        // console.log('final ijk: ',i,j,k);
+        
+        // Call the ditto in the dbFactory. It will handle the key in the correct scope for styling purposes. 
+        /* TODO3 - Review this whole process */
+        dbFactory.dbDitto(scopeName,i,j,k,mykey,uid,lid,tid, $event);
+        
+        
+    };
+  
 }) 
 
 .controller('AppCtrl', function($scope, $state, dbFactory, $rootScope) {
@@ -50,44 +110,7 @@ angular.module('Plitto.controllers', [])
 .controller('HomeCtrl',function($scope, $rootScope,dbFactory) {
   
     
-    /* TODO This function must be available in may different locations throughout the app */
-    $scope.ditto = function(mykey, uid, lid, tid, $event){
-        console.log('your existing key is: ',mykey, ' from user: ',uid,' from list: ', lid,' and thing: ',tid);
-        
-        /* update the styles */
-        
-        
-        /* TODO update that record? THERE HAS TO BE A BETTER WAY*/
-        var i,j,k;
-        
-        /* Make it pending */
-        findItem:{
-            for(i in $rootScope.bite){
-                if($rootScope.bite[i].uid === uid){
-                    for(j in $rootScope.bite[i]['lists']){
-                        if($rootScope.bite[i]['lists'][j].lid === lid){
-                            for(k in $rootScope.bite[i]['lists'][j]['items']){
-                                if($rootScope.bite[i]['lists'][j]['items'][k].tid === tid){
-                                    // Change the state of this item.
-                                    $rootScope.bite[i]['lists'][j]['items'][k].mykey = 0;
-                                    // There can be only one. So stop once you find it.
-                                    break findItem;
-                                }
-                            }
-                        }
-                    }
-                } 
-            }
-        }
-        
-        // console.log('final ijk: ',i,j,k);
-        
-        // Call the ditto in the dbFactory. It will handle the key in the correct scope for styling purposes. 
-        /* TODO3 - Review this whole process */
-        dbFactory.dbDitto('bite',i,j,k,mykey,uid,lid,tid, $event);
-        
-        
-    };
+   
     
     $scope.getMore = function(){
         dbFactory.dbGetSome($scope, '', '');
@@ -107,6 +130,8 @@ angular.module('Plitto.controllers', [])
     console.log("Get Some for userid: ",userId);
     dbFactory.dbGetSome('profile',userId,'');
   };
+  
+  
   
 })
 
@@ -210,44 +235,6 @@ angular.module('Plitto.controllers', [])
     dbFactory.addToList(itemObj);
   };
   
-  /* TODO This function must be available in may different locations throughout the app */
-    $scope.ditto = function(mykey, uid, lid, tid, $event){
-        // console.log('your existing key is: ',mykey, ' from user: ',uid,' from list: ', lid,' and thing: ',tid);
-        
-        /* update the styles */
-        
-        
-        /* TODO update that record? THERE HAS TO BE A BETTER WAY*/
-        var i,j,k;
-        
-        /* Make it pending */
-        findItem:{
-            for(i in $rootScope.listItems){
-                if($rootScope.listItems[i].uid === uid){
-                    for(j in $rootScope.listItems[i]['lists']){
-                        if($rootScope.listItems[i]['lists'][j].lid === lid){
-                            for(k in $rootScope.listItems[i]['lists'][j]['items']){
-                                if($rootScope.listItems[i]['lists'][j]['items'][k].tid === tid){
-                                    // Change the state of this item.
-                                    $rootScope.listItems[i]['lists'][j]['items'][k].mykey = 0;
-                                    // There can be only one. So stop once you find it.
-                                    break findItem;
-                                }
-                            }
-                        }
-                    }
-                } 
-            }
-        }
-        
-        // console.log('final ijk: ',i,j,k);
-        
-        // Call the ditto in the dbFactory. It will handle the key in the correct scope for styling purposes. 
-        /* TODO3 - Review this whole process */
-        dbFactory.dbDitto('listItems',i,j,k,mykey,uid,lid,tid, $event);
-        
-        
-    };
 })
 
 .controller('LoginCtrl', function($scope, $window) {

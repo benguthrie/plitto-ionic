@@ -26,7 +26,7 @@
           {{list.listname}}
         </div>
         <div class="item" ng-repeat="item in list.items">
-            <div side="right" class="button"  style="font-size: 2.5em; float: right;" ng-class="{'ionicons ion-ios7-bolt' : item.mykey === 0 ,'ionicons ion-ios7-checkmark-outline' : item.mykey === null , 'ionicons ion-ios7-checkmark' : item.mykey > 0 }" ng-click="ditto(item.mykey, user.uid, list.lid, item.tid, $event);"></div>
+            <div side="right" class="button"  style="font-size: 2.5em; float: right;" ng-class="{'ionicons ion-ios7-bolt' : item.mykey === 0 ,'ionicons ion-ios7-checkmark-outline' : item.mykey === null , 'ionicons ion-ios7-checkmark' : item.mykey > 0 }" ng-click="ditto(item.mykey, user.uid, list.lid, item.tid, $event,'profileData.feed');"></div>
           {{item.thingname}}
             
             
@@ -73,7 +73,7 @@
           {{list.listname}}
         </div>
         <div class="item" ng-repeat="item in list.items">
-            <div side="right" class="button"  style="font-size: 2.5em; float: right;" ng-class="{'ionicons ion-ios7-bolt' : item.mykey === 0 ,'ionicons ion-ios7-checkmark-outline' : item.mykey === null , 'ionicons ion-ios7-checkmark' : item.mykey > 0 }" ng-click="ditto(item.mykey, user.uid, list.lid, item.tid, $event);"></div>
+            <div side="right" class="button"  style="font-size: 2.5em; float: right;" ng-class="{'ionicons ion-ios7-bolt' : item.mykey === 0 ,'ionicons ion-ios7-checkmark-outline' : item.mykey === null , 'ionicons ion-ios7-checkmark' : item.mykey > 0 }" ng-click="ditto(item.mykey, user.uid, list.lid, item.tid, $event,'profileData.ditto');"></div>
           {{item.thingname}}
             
             

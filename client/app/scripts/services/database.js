@@ -165,8 +165,10 @@ if(mykey === null){
     }
 
     // Update my key within the correct scope.
-      $rootScope[scopeName][i].lists[j].items[k].mykey = mynewkey;
-      
+    // Results update
+    console.log('rs sn: ',scopeName, $rootScope[scopeName]);
+      // $rootScope[scopeName][i].lists[j].items[k].mykey = mynewkey;
+      eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].mykey = ' +mynewkey);
       
   });
 
