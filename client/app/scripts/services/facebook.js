@@ -105,7 +105,7 @@ angular.module('Services.facebook', [])
                             + '&redirect_uri=http://' 
                             + 'plitto.com/'
                         // + 'fbLoginLanding.html/'
-                            // + '&display=touch'
+                            //+ '&display=touch'
                              // + ' &state=' + app_data
                              + '&scope=email,user_friends'
                              ;

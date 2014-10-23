@@ -1,3 +1,5 @@
+
+
 'use strict';
 // Ionic Starter App, v0.9.20
 
@@ -15,6 +17,9 @@ angular.module('Plitto', [
 ])
 
 .run(function($ionicPlatform, $rootScope, dbFactory, Facebook) {
+  
+
+  
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -65,7 +70,8 @@ angular.module('Plitto', [
         if(!meResponse.email || !meResponse.name || !meResponse.id){
           /* Request More information */
           $rootScope.session.plittoState = 'Need more permissions from Facebook, like your email or name.';
-          // console.log('SessionController | Login failed. We need more information');
+          // 
+  console.log('SessionController | Login failed. We need more permissions');
           /* Call this to go get more information about this user */
              /* http://stackoverflow.com/questions/3834939/facebook-oauth-for-mobile-web */
                   document.location='http://www.facebook.com/dialog/oauth?client_id=' 
@@ -210,6 +216,15 @@ angular.module('Plitto', [
       }
     })
   
+    .state('app.debug', {
+      url: '/debug',
+      views: {
+        'menuContent' :{
+          templateUrl: 'templates/debug.html',
+          controller: 'DebugCtrl'
+        }
+      }
+    })
 
     .state('app.lists', {
       url: '/lists',
@@ -246,5 +261,9 @@ angular.module('Plitto', [
       }
     };
   });
+  
+  
+  
+  
 });
 

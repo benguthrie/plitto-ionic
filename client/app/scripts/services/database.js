@@ -2,8 +2,8 @@
 angular.module('Services.database', [])
 
 // This will handle storage within local databases.
-.factory ('dbFactory', ['$http','$rootScope','localStorageService'
-  , function ($http, $rootScope, localStorageService) {
+.factory ('dbFactory', ['$http','$rootScope','localStorageService','$state'
+  , function ($http, $rootScope, localStorageService,$state) {
       
 // var apiPath = 'http://plitto.com/api/2.0/';
   // var apiPath = 'http://localhost/api/2.0/';
@@ -200,9 +200,20 @@ var dbGetSome = function(theScope, userfilter, listfilter){
       headers: {'Content-Type':'application/x-www-form-urlencoded'}
     })
     .success(function(data,status,headers,config){
-      eval('console.log("net Results",' + theScope +');');  
-      eval(theScope + ' = data.results;');
-      
+    
+      if(data.error){
+        // Log out now.
+        if(data.errortxt === 'missing token'){
+          console.log('invalid token. log out.');
+          $rootScope.logout();
+        } else {
+          console.log('unknown error.');
+        }
+        
+      } else {
+        eval('console.log("net Results",' + theScope +');');  
+        eval(theScope + ' = data.results;');
+      }
       // console.log('dbFactory.getActivity data: ',data);
       /*
       if(thescope === 'root'){
@@ -291,6 +302,9 @@ var plittoLogin = function (meResponse, friendsResponse) {
         // Populate the initial "Ditto Some" view
         $rootScope.bite = data.getSome;
         console.log('get some goes into $rootScope.bite',$rootScope.bite);
+      
+      // FINALLY! - Load the interface
+      $state.go('app.home');
         
     } else {
       // TODO2 - Present errors somewhere.
@@ -659,6 +673,7 @@ var i = 0, j=0;
     for(i in $rootScope.list.items){
       // console.log('652 - rs.list.items',$rootScope.list.items[i],i);
       if($rootScope.list.items[i].uid === $rootScope.vars.user.userId){
+        console.log("Found my list at position",i );
         myListPosition = i;
         // We can assume that is the the first list, since there can only be one showing.
         for(j in $rootScope.list.items[i].lists[0].items){
@@ -682,12 +697,12 @@ var i = 0, j=0;
         username: $rootScope.vars.user.username,
         lists: [ { items: [] } ]
       };
-      // Make my list first
+      // Make my list first // TODO1 - This needs to work
       $rootScope.list.items.unshift(myList);
 
     } 
     else {
-      // Make my list first
+      // Move my list list to first in the order.
       if(myListPosition !== 0){
         var myList = $rootScope.list.items[myListPosition];
 

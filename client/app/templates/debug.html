@@ -1,0 +1,18 @@
+<ion-view title="Debug">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+    
+  <ion-content class="has-header">
+    <h1>Debug</h1>
+    <button ng-click="testString();">Test String</button>
+    <button ng-click="testObj();">Test Object</button>
+    
+    <button ng-click="rootScopePart('token');">Token</button>
+    
+    <button ng-click="logout();">Log Out</button>
+    
+    <h3>Output</h3>
+    <div ng-bind="debugLog">Debug Log goes here</div>
+  </ion-content>
+</ion-view>

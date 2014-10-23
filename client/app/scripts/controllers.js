@@ -3,9 +3,9 @@ angular.module('Plitto.controllers', [])
 
 .run(function($rootScope, dbFactory, $state, localStorageService ){
   
-  console.log('line 6');
+   console.log('line 6');
   
-  // Start by seeing if a user is logged in.
+  // Start by seeing if a user is logged in. TODO1 - This should be done on 10/23.
   if(!$rootScope.token){
     // See if it's in the local storage.
     if(localStorageService.get('token')){
@@ -13,13 +13,14 @@ angular.module('Plitto.controllers', [])
       console.log("BUT IS IT VALID?!?!?!? TODO1 - Only apply the token if it's a valid one.");
     } else {
       console.log("No token in local storage.");
-    //  $rootScope.init();
+    //  
     }
     
     
 
     
   }
+ 
   
   $rootScope.showList = function(listId, listName, userFilter){
     console.log('global show a list');
@@ -160,14 +161,24 @@ angular.module('Plitto.controllers', [])
   
 }) 
 
-.controller('AppCtrl', function($scope, $state, dbFactory, $rootScope) {
+.controller('AppCtrl', function($scope, $state, dbFactory, $rootScope, localStorageService,Facebook) {
   // Grab the user info here as soon as they login.
+  
+  
   // Global Logout Handler
   $scope.logout = function () {
     // TODO: Make database service call.
     console.log('TODO2: FB Logout call');
     // $state.go('app.login',{listId: newListId});
-    $rootScope.login();
+    Facebook.logout();
+    
+    // Clear all the stores.
+    $rootScope.init();
+    localStorageService.clearAll();
+    console.log("$rootScope",$rootScope);
+    
+    // Clear local storage
+    
     $state.go('login');
     /*
     
@@ -197,6 +208,26 @@ angular.module('Plitto.controllers', [])
         dbFactory.dbGetSome('$rootScope.bite', '', '');
     };
     
+})
+
+
+.controller('DebugCtrl', function($scope,dbFactory, $rootScope) {
+  $scope.debugLog = [{startItem: 'this is the start item'}];
+  
+ 
+  
+  $scope.testString = function(){
+    $scope.debugLog = "string";
+  };
+  
+  $scope.testObj = function(){
+    $scope.debugLog = JSON.stringify([{item: 'this is a test item'}]);
+  };
+  
+  $scope.rootScopePart = function(part){
+    $scope.debugLog = JSON.stringify(eval('$rootScope.' + part));
+  };
+  
 })
 
 .controller('ProfileCtrl', function($scope,dbFactory) {
@@ -321,10 +352,20 @@ angular.module('Plitto.controllers', [])
   
 })
 
-.controller('LoginCtrl', function($scope, $window) {
+.controller('LoginCtrl', function($scope, $window, Facebook) {
   $scope.loginOAuth = function(provider) {
     // TODO1 - This is the bit that handles the login.
-    $window.location.href = '/auth/' + provider;
+    if(provider === 'facebook'){
+      // Do that.
+      $scope.message = "Logging in with Facebook";
+      // 
+      Facebook.login();
+      
+      
+    } else {
+      console.log("You tried to log in with another provider");
+    }
+    // $window.location.href = '/auth/' + provider;
   };
 })
 

@@ -96,6 +96,7 @@ function($animate, $timeout) {
         $timeout(init);
 
         function init() {
+          console.log('this is the ionic init');
           var listView = listCtrl.listView = new ionic.views.ListView({
             el: $element[0],
             listEl: $element.children()[0],
