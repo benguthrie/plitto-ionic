@@ -249,44 +249,7 @@ var plittoLogin = function (meResponse, friendsResponse) {
   })
   .success(function(data,status,headers,config){
       // Initialize the rootScope.
-      $rootScope.modal = {
-		show: false,
-		type: null,
-		id: null,
-		listStore: [],
-		friendStore: [],
-		thingStore: [],
-		header: null
-	};
-
-	/* End if life in the future. It leads to scope bloat */
-	$rootScope.vars = { };
-	$rootScope.vars.listMenu = 'expanded';
-	$rootScope.vars.user = { userId: 0};
-	$rootScope.vars.message = '';
-	
-	$rootScope.vars.temp = {};
-	$rootScope.listStore = [];
-	$rootScope.friendStore = [];
-
-	// 8/26/2014 New Navigation Vars
-	$rootScope.nav = {
-		
-	};
-
-	$rootScope.session = {
-		fbAuth: null,
-		fbState: 'disconnected',
-		plittoState: null
-	};
-    
-    $rootScope.profileData = {
-      lists: [],
-      userId: null,
-      feed: [],
-      ditto: []
-    };
-      
+     $rootScope.init();
     // Handle the users, lists and things.
       
       
@@ -301,6 +264,7 @@ var plittoLogin = function (meResponse, friendsResponse) {
     
         // Set up the token
         $rootScope.token = data.me.token;
+        localStorageService.set('token', data.me.token);
         $rootScope.friendStore = data.friends;
         
         console.log('the token: ',$rootScope.token, 'friend store: ',$rootScope.friendStore);
@@ -408,7 +372,7 @@ var plittoFBApiCall = function (friendsData){
           $rootScope.friendStore = data.result;
 
           // Update the local storage.
-          localStorageAppend('friendStore',data.result);
+          localStorageAppend('fbLogin',data.result);
 
         });
   } else {

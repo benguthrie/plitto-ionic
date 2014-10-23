@@ -36,7 +36,7 @@ angular.module('Plitto', [
   // Function to update the RootScope from anywhere.
   $rootScope.$on('fb_status', function(event,data){
     // console.log('sessionController: test fb_status lin 9',event, data);
-    $rootScope.fb_status = 'test line 9 succedded';
+    $rootScope.fb_status = 'test app.js 39 succedded';
   });
 
   $rootScope.$on('rootScope:emit', function(event,data){
@@ -231,7 +231,7 @@ angular.module('Plitto', [
       }
     });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/lists');
+  $urlRouterProvider.otherwise('/app/home');
 
     
     

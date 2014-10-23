@@ -1,6 +1,5 @@
 <ion-view title="List: {{$root.list.listName}}">
   <ion-content class="has-header">
-    <h1>{{$root.list.listName}}</h1>
     <form name="newItemForm" ng-submit="addToList(newItem.theValue);">
       <label class="item item-input">
         
@@ -8,6 +7,14 @@
       </label>
     </form>
     
+    <!-- <h3>{{$root.list.listName}}</h3> --> 
+    <div class="button-bar">
+      <a class="button">Ditto</a>
+      <a class="button">Shared</a>
+      <a class="button">Mine</a>
+      <a class="button">Strangers</a>
+      
+    </div>
     
     <div class="list card" ng-repeat="user in list.items">
       <a class="item item-avatar" href="#/app/profile/{{$root.user.userId}}" ng-click="showUser(user.uid,user.username,'ditto' );">

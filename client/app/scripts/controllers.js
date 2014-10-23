@@ -1,7 +1,26 @@
 'use strict';
 angular.module('Plitto.controllers', [])
 
-.run(function($rootScope, dbFactory, $state){
+.run(function($rootScope, dbFactory, $state, localStorageService ){
+  
+  console.log('line 6');
+  
+  // Start by seeing if a user is logged in.
+  if(!$rootScope.token){
+    // See if it's in the local storage.
+    if(localStorageService.get('token')){
+      console.log("There was a token in the local storage.");
+      console.log("BUT IS IT VALID?!?!?!? TODO1 - Only apply the token if it's a valid one.");
+    } else {
+      console.log("No token in local storage.");
+    //  $rootScope.init();
+    }
+    
+    
+
+    
+  }
+  
   $rootScope.showList = function(listId, listName, userFilter){
     console.log('global show a list');
     
@@ -12,6 +31,52 @@ angular.module('Plitto.controllers', [])
     
     $state.go('app.list',{listId: listId});
     // };
+  };
+  
+  // Initialize the content
+  $rootScope.init = function(){
+     $rootScope.modal = {
+		show: false,
+		type: null,
+		id: null,
+		listStore: [],
+		friendStore: [],
+		thingStore: [],
+		header: null
+	};
+
+	/* End if life in the future. It leads to scope bloat */
+	$rootScope.vars = { };
+	$rootScope.vars.listMenu = 'expanded';
+	$rootScope.vars.user = { userId: 0};
+	$rootScope.vars.message = '';
+    
+    $rootScope.token = null;
+    
+    
+	
+	$rootScope.vars.temp = {};
+	$rootScope.listStore = [];
+	$rootScope.friendStore = [];
+
+	// 8/26/2014 New Navigation Vars
+	$rootScope.nav = {
+		
+	};
+
+	$rootScope.session = {
+		fbAuth: null,
+		fbState: 'disconnected',
+		plittoState: null
+	};
+    
+    $rootScope.profileData = {
+      lists: [],
+      userId: null,
+      feed: [],
+      ditto: []
+    };
+      
   };
   
   $rootScope.showUser = function(userId, userName, dataScope){
@@ -29,7 +94,7 @@ angular.module('Plitto.controllers', [])
     // dbFactory.showUser(userId);
     // dbGetSome = function(thescope, userfilter, listfilter){
     dbFactory.dbGetSome('$rootScope.profileData.ditto', userId, '');
-    dbFactory.getUserListOfLists(friendId, '$rootScope.profileData.lists');
+    dbFactory.getUserListOfLists(userId, '$rootScope.profileData.lists');
   };
   
   
@@ -101,6 +166,17 @@ angular.module('Plitto.controllers', [])
   $scope.logout = function () {
     // TODO: Make database service call.
     console.log('TODO2: FB Logout call');
+    // $state.go('app.login',{listId: newListId});
+    $rootScope.login();
+    $state.go('login');
+    /*
+    
+    .state('login', {
+      url: '/login',
+      templateUrl: 'templates/login.html',
+      controller: 'LoginCtrl'
+    })
+    */
   };
     
   $scope.loadLists = function(){
@@ -117,6 +193,7 @@ angular.module('Plitto.controllers', [])
    
     
     $scope.getMore = function(){
+        $rootScope.bite = [];
         dbFactory.dbGetSome('$rootScope.bite', '', '');
     };
     
@@ -246,6 +323,7 @@ angular.module('Plitto.controllers', [])
 
 .controller('LoginCtrl', function($scope, $window) {
   $scope.loginOAuth = function(provider) {
+    // TODO1 - This is the bit that handles the login.
     $window.location.href = '/auth/' + provider;
   };
 })
