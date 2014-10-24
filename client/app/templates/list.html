@@ -32,7 +32,7 @@
         <div class="item item-divider">
           {{list.listname}}
         </div>
-        <div class="item" ng-repeat="item in list.items">
+        <div class="item" ng-repeat="item in list.items" ng-click="showThing(item.tid, item.thingname, user.uid);">
             <div side="right" class="button"  style="font-size: 2.5em; float: right;" 
                 ng-class="{'ionicons ion-ios7-bolt' : item.mykey === 0 ,'ionicons ion-ios7-checkmark-outline' : item.mykey === null , 'ionicons ion-ios7-checkmark' : item.mykey > 0 }" 
                 ng-click="ditto(item.mykey, user.uid, list.lid, item.tid, $event,'list.items');"></div>

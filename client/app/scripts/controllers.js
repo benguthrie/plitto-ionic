@@ -29,6 +29,20 @@ angular.module('Plitto.controllers', [])
     // };
   };
   
+  $rootScope.showThing = function(thingId, thingName, userFilter){
+    console.log('global show a thing');
+    
+     // $scope.showAList = function(listId, listName, userFilter){
+    // 10/22/2014 -- Build the entries in the rootScope for the list.
+    
+    $rootScope.thingData = {thingId: thingId, thingName: thingName, items: []};
+    
+    dbFactory.showThing(thingId, thingName, userFilter);
+    
+    $state.go('app.thing',{thingId: thingId});
+    // };
+  };
+  
   // Initialize the content
   $rootScope.init = function(){
      $rootScope.modal = {
@@ -172,14 +186,20 @@ angular.module('Plitto.controllers', [])
     
 })
 
-.controller('HomeCtrl',function($scope, $rootScope,dbFactory) {
-  
-    $scope.getMore = function(){
-        $rootScope.bite = [];
-        dbFactory.dbGetSome('$rootScope.bite', '', '');
-    };
-    
-})
+  .controller('ThingCtrl',function($scope, $rootScope,dbFactory) {
+    // Control for thing goes here.
+     
+
+  })
+
+  .controller('HomeCtrl',function($scope, $rootScope,dbFactory) {
+
+      $scope.getMore = function(){
+          $rootScope.bite = [];
+          dbFactory.dbGetSome('$rootScope.bite', '', '');
+      };
+
+  })
 
 
 .controller('DebugCtrl', function($scope,dbFactory, $rootScope) {

@@ -1,5 +1,3 @@
-
-
 'use strict';
 // Ionic Starter App, v0.9.20
 
@@ -16,11 +14,9 @@ angular.module('Plitto', [
   'Plitto.services',
 ])
 
-.run(function($ionicPlatform, $rootScope, dbFactory, Facebook) {
+.run(function ($ionicPlatform, $rootScope, dbFactory, Facebook) {
   
-
-  
-  $ionicPlatform.ready(function() {
+  $ionicPlatform.ready(function () {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if(window.cordova && window.cordova.plugins.Keyboard) {
@@ -39,17 +35,17 @@ angular.module('Plitto', [
   };
   
   // Function to update the RootScope from anywhere.
-  $rootScope.$on('fb_status', function(event,data){
+  $rootScope.$on('fb_status', function (event, data ){
     // console.log('sessionController: test fb_status lin 9',event, data);
     $rootScope.fb_status = 'test app.js 39 succedded';
   });
 
-  $rootScope.$on('rootScope:emit', function(event,data){
+  $rootScope.$on('rootScope:emit', function (event, data){
     // 
     // console.log('sessionController: rootScope emitted to controller session: ',event, data);
   });
 
-  $rootScope.$on('getLoginStatus', function(event,data){
+  $rootScope.$on('getLoginStatus', function (event, data){
     // console.log('sessionController:  sniffed status change from fbFactory getLoginStatus OR From APP run.: ',event, data.status);
     // console.log('session.getLoginStatus. Do things based on the Facebook login.',event, data.status);
 
@@ -62,7 +58,7 @@ angular.module('Plitto', [
     if(data.status === 'connected'){
       /* The user is logged into Facebook. Get their Facebook information for Plitto login */
       // console.log('process the login');
-      FB.api('/me', function(meResponse) {
+      FB.api('/me', function (meResponse) {
         // 
         // console.log('sessionController called FB.api/me | response: ',response);
 
@@ -95,7 +91,7 @@ angular.module('Plitto', [
 
           // Call the Facebook Friends 
             // Insert the request for FB Friends here first.
-            FB.api('me/friends', function(friendsResponse){
+            FB.api('me/friends', function (friendsResponse){
               // console.log("fb response to friends: ",friendsResponse);
 
               // A this point, NOW we can log into Plitto. One call with my info, and friend info.
@@ -127,7 +123,7 @@ angular.module('Plitto', [
         version    : 'v2.0'
     });
 
-    FB.Event.subscribe('auth.statusChange', function(response) {
+    FB.Event.subscribe('auth.statusChange', function (response) {
       // At this point, we've received the element. We just need to broadcast it.
 
       // Do different things depending on the status
@@ -145,7 +141,7 @@ angular.module('Plitto', [
     });
   };
 
-  (function(d, s, id){
+  (function (d, s, id){
      var js, fjs = d.getElementsByTagName(s)[0];
      if (d.getElementById(id)) {return;}
      js = d.createElement(s); js.id = id;
@@ -154,7 +150,7 @@ angular.module('Plitto', [
    }(document, 'script', 'facebook-jssdk'));
 })
 
-.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
+.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
   $stateProvider
   
 
@@ -228,6 +224,16 @@ angular.module('Plitto', [
         }
       }
     })
+  
+    .state('app.thing', {
+      url: '/thing',
+      views: {
+        'menuContent' :{
+          templateUrl: 'templates/thing.html',
+          controller: 'ThingCtrl'
+        }
+      }
+    })
 
     .state('app.list', {
       url: '/lists/:listId',
@@ -244,9 +250,9 @@ angular.module('Plitto', [
     
     
   // Handle 401 Unauthorized responses
-  $httpProvider.interceptors.push(function($q, $location) {
+  $httpProvider.interceptors.push(function ($q, $location) {
     return {
-      responseError: function(rejection) {
+      responseError: function (rejection) {
         if (rejection.status == 401) {
           $location.path('/login');
         }

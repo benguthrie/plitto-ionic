@@ -1,3 +1,3 @@
-module.exports = function(List) {
+module.exports = function (List) {
 
 };
