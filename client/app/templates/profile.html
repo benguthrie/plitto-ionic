@@ -6,13 +6,14 @@
     <h1>{{profileData.userName}}</h1>
         
     <div class="button-bar">
-      <a class="button" ng-click="nav.view = 'user.ditto'; getSome(profileData.userId);">Ditto</a>
+      <a class="button" ng-hide="profileData.userId == vars.user.userId" ng-click="nav.view = 'user.ditto'; getSome(profileData.userId);">Ditto</a>
       <a class="button" ng-click="nav.view = 'user.feed'; showFeed(profileData.userId,'');">Feed</a>
       <a class="button" ng-click="nav.view = 'user.lists'; showLists(profileData.userId);">Lists</a>
       <a class="button">Shared</a>
       <a class="button" ng-click="nav.view = 'user.milestones'">Milestones</a>
     </div>
-    
+
+<!-- Start the Feed-->
     <div class="list card" ng-repeat="user in $root.profileData.feed" ng-show="nav.view==='user.feed'">
       <a class="item item-avatar" href="#/app/profile/{{user.uid}}" ng-click="showUser(user.uid,user.username,'profileData.feed');">
         <img src="http://graph.facebook.com/{{user.fbuid}}/picture">
@@ -39,11 +40,6 @@
             <!-- Style options: ios7-checkmark , ios7-checkmark-outline
                 Not working: icon fa fa-spinner, 
             -->
-<!-- TODO:
-- Lock icon to the right
-- Ditto action - BEn
-- Change style of this item
---> 
 
                 
            
@@ -51,11 +47,14 @@
              
         </div>
          <div class="item item-divider" style="text-align: center;">
-            Ditto more from this list.
+            Show More From this List (Pending)
         </div>
       </div>
         
     </div>
+<!-- End the Feed -->
+    
+<!-- Start User Lists -->    
     
     <div ng-show="nav.view==='user.lists'">
     
@@ -80,10 +79,14 @@
     
     </div>
     
-    
+ <!-- End User Lists -->   
+  
+  <!-- Start Milestones -->
     
     <div ng-show="nav.view==='user.milestones'">Milestones</div>
-    
+<!-- End Milestones -->     
+  
+<!-- Start Ditto -->  
     <div class="list card" ng-repeat="user in $root.profileData.ditto" ng-show="nav.view==='user.ditto'">
       <a class="item item-avatar" href="#/app/profile/{{user.uid}}" ng-click="showUser(user.uid,user.username,'profileData.ditto');">
         <img src="http://graph.facebook.com/{{user.fbuid}}/picture">
@@ -127,6 +130,7 @@
       </div>
         
     </div>
-    
+<!-- End Ditto Section --> 
+  
   </ion-content>
 </ion-view>

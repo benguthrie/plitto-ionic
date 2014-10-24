@@ -233,7 +233,8 @@ angular.module('Plitto.controllers', [])
 .controller('ProfileCtrl', function($scope,dbFactory) {
   // console.log("Profile Control",$scope);
   $scope.showFeed = function(userId, oldestItem){
-    // console.log('profile show feed: ',userId, ' oldest: ',oldestItem);
+    // 
+    console.log('profile show feed: ',userId, ' oldest: ',oldestItem);
     // showFeed = function(theType, userFilter, listFilter, myState, oldestKey)
     dbFactory.showFeed('profile',userId,'','','');
   }; 
