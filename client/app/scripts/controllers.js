@@ -15,13 +15,8 @@ angular.module('Plitto.controllers', [])
       console.log("No token in local storage.");
     //  
     }
-    
-    
-
-    
   }
  
-  
   $rootScope.showList = function(listId, listName, userFilter){
     console.log('global show a list');
     
@@ -54,8 +49,6 @@ angular.module('Plitto.controllers', [])
     
     $rootScope.token = null;
     
-    
-	
 	$rootScope.vars.temp = {};
 	$rootScope.listStore = [];
 	$rootScope.friendStore = [];
@@ -102,34 +95,15 @@ angular.module('Plitto.controllers', [])
   /* TODO This function must be available in may different locations throughout the app */
     $rootScope.ditto = function(mykey, uid, lid, tid, $event,scopeName){
         // console.log('your existing key is: ',mykey, ' from user: ',uid,' from list: ', lid,' and thing: ',tid);
+
         
-        /* update the styles */
         
-        
-        /* TODO update that record? THERE HAS TO BE A BETTER WAY*/
+        /* Trach which record we're updating. Direct key would be preferable to looping through any portion of the rootscope.. */
         var i,j,k;
       
-      console.log('scopeName and results: ',scopeName, ' results: ',eval('$rootScope.' + scopeName));
+      // console.log('scopeName and results: ',scopeName, ' results: ',eval('$rootScope.' + scopeName));
       
-        /* TODO1 - Dynamically apply the scope so it's only searching the scope that it could be in. better still, do this as part of the event. 
-        findItem:{
-            for(i in $rootScope[scopeName]){
-                if($rootScope[scopeName][i].uid === uid){
-                    for(j in $rootScope[scopeName][i]['lists']){
-                        if($rootScope[scopeName][i]['lists'][j].lid === lid){
-                            for(k in $rootScope[scopeName][i]['lists'][j]['items']){
-                                if($rootScope[scopeName][i]['lists'][j]['items'][k].tid === tid){
-                                    // Change the state of this item.
-                                    $rootScope[scopeName][i]['lists'][j]['items'][k].mykey = 0;
-                                    // There can be only one. So stop once you find it.
-                                    break findItem;
-                                }
-                            }
-                        }
-                    }
-                } 
-            }
-        } */
+       
         // console.log($rootScope.profileData.feed[0]["lists"
       findItem:{
             for(i in eval('$rootScope.' + scopeName)){
@@ -200,9 +174,6 @@ angular.module('Plitto.controllers', [])
 
 .controller('HomeCtrl',function($scope, $rootScope,dbFactory) {
   
-    
-   
-    
     $scope.getMore = function(){
         $rootScope.bite = [];
         dbFactory.dbGetSome('$rootScope.bite', '', '');
@@ -300,17 +271,7 @@ angular.module('Plitto.controllers', [])
     
       dbFactory.newList($scope.newList.title, function(newListId, listName){ 
         // console.log('the list creation was successful', newListId, listName);
-       /*
-        $state.go('app.list', {
-          url: '/list/:listId',
-          views: {
-            'menuContent': {
-              templateUrl: 'templates/list.html',
-              controller: 'ListCtrl'
-            }
-          }
-        });
-        */
+
         dbFactory.showAList(newListId);
         
         $state.go('app.list',{listId: newListId});

@@ -71,13 +71,12 @@ angular.module('Plitto', [
           /* Request More information */
           $rootScope.session.plittoState = 'Need more permissions from Facebook, like your email or name.';
           // 
-  console.log('SessionController | Login failed. We need more permissions');
+  console.log('SessionController | Login failed. We need more permissions. Needs testing post 10/23');
           /* Call this to go get more information about this user */
              /* http://stackoverflow.com/questions/3834939/facebook-oauth-for-mobile-web */
                   document.location='http://www.facebook.com/dialog/oauth?client_id=' 
                     + '207184820755&redirect_uri=http://plitto.com'
                    //   + '10152399335865756&redirect_uri=http://localhost/plitto-angular'
-                  // + '/'
                       + '&display=touch'
                        // + ' &state=' + app_data
                        + '&scope=email,user_friends'
@@ -94,20 +93,14 @@ angular.module('Plitto', [
           show: false, listStore: [], friendStore: [], thingStore: [], header: null
         };
 
-
           // Call the Facebook Friends 
             // Insert the request for FB Friends here first.
             FB.api('me/friends', function(friendsResponse){
-              console.log("fb response to friends: ",friendsResponse);
+              // console.log("fb response to friends: ",friendsResponse);
 
               // A this point, NOW we can log into Plitto. One call with my info, and friend info.
               dbFactory.plittoLogin(meResponse, friendsResponse);	
             });
-          /*
-          // Here, handle the plitto login.
-        dbFactory.plittoLogin(response);	
-        */
-
         }
 
 
