@@ -57,7 +57,6 @@ angular.module('Plitto.controllers', [])
 
 	/* End if life in the future. It leads to scope bloat */
 	$rootScope.vars = { };
-	$rootScope.vars.listMenu = 'expanded';
 	$rootScope.vars.user = { userId: 0};
 	$rootScope.vars.message = '';
     
@@ -242,8 +241,26 @@ angular.module('Plitto.controllers', [])
   
 })
 
+.controller('SearchCtrl', function($scope, $rootScope,$stateParams, dbFactory) {
+  console.log("You have entered Search");
+
+  $scope.search = {term: $stateParams.term, results: []};
+  
+  // Initialize a new search.
+  
+  $scope.$watch(function(){
+    
+    return $scope.search.term;
+  }, function(newValue, oldValue){
+    console.log("Changed from " + oldValue + " to " + newValue);
+    if(newValue.length !==0){
+      dbFactory.search(newValue);
+    }
+  });
+/*  */  
+})
 .controller('FriendsCtrl', function($scope, $rootScope) {
-  console.log("You have tried to control your friends",$rootScope.friendStore);
+  // console.log("You have tried to control your friends",$rootScope.friendStore);
 })
 
 .controller('FriendCtrl', function($scope, $rootScope) {

@@ -1,0 +1,44 @@
+<ion-view title="Search">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-content class="has-header">
+    <form name="searchForm" ng-submit="search(search.term);">
+      <label class="item item-input">
+        
+        
+        <input type="text" ng-model="search.term" placeholder="Search">
+      </label>
+      
+    </form>
+
+    
+    <div ng-show="$root.searchResults.length === 0 && search.term.length > 0" ><h2>No Results for that term</h2></div>
+    <div ng-show="$root.searchResults.length === 0 && search.term.length === 0" ><h2>Search To See Results</h2></div>
+    
+    <div ng-repeat="section in $root.searchResults">
+      <h3 ng-bind="section.title"></h3>
+      
+      <ion-list can-swipe="true" ng-show="section.type === 'thing' ">
+        <div class="item" ng-repeat="item in section.results">
+            <div  ng-click="showThing(item.nameId, item.itemName, 0);">
+              {{item.itemName}} - {{item.itemCount}}
+            </div>
+
+        </div>
+      </ion-list>
+      
+      <ion-list can-swipe="true" ng-show="section.type === 'list' ">
+        <ion-item class="item-icon-right" ng-repeat="list in section.results" href="#/app/lists/{{list.nameId}}" ng-click="showList(list.nameId, list.itemName, null);">
+            <ion-option-button class="button-assertive"
+              ng-click="">Mine</ion-option-button>
+          {{list.itemName}} - {{item.itemCount}}
+          
+          <i class="icon ion-chevron-right icon-accessory"></i>
+        </ion-item>
+      </ion-list>
+      
+    </div>
+    
+  </ion-content>
+</ion-view>

@@ -183,7 +183,21 @@ angular.module('Plitto', [
         }
       }
     })
-
+  
+  
+  
+   .state('app.search', {
+      url: '/search/',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/search.html',
+          controller: 'SearchCtrl'
+        }
+      }
+    })
+  
+  
+  
      .state('app.friends', {
       url: '/friends',
       views: {

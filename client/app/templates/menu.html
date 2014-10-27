@@ -28,6 +28,11 @@
         <ion-item nav-clear menu-close href="#/app/lists" ng-click="loadLists(); nav.view = user.lists; ">
           Lists
         </ion-item>
+        <ion-item nav-clear menu-close href="#/app/search/">
+          Search
+        </ion-item>
+        
+        
         
         <ion-item nav-clear menu-close href="#/app/debug">
           Debug
@@ -35,17 +40,15 @@
         
         
         <div class="item item-divider">Undone below</div>
-        
-        <!-- Not built / activated yet -->
-        <ion-item nav-clear menu-close>
-          Search
+        <ion-item nav-clear menu-close ng-click="addListModal()">
+          Add A List
         </ion-item>
+        <!-- Not built / activated yet -->
+        
         <ion-item nav-clear menu-close>
           Feed
         </ion-item>
-        <ion-item nav-clear menu-close>
-          Search
-        </ion-item>
+        
         <ion-item nav-clear menu-close>
           Add a list
         </ion-item>
