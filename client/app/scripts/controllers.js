@@ -81,7 +81,8 @@ angular.module('Plitto.controllers', [])
       lists: [],
       userId: null,
       feed: [],
-      ditto: []
+      ditto: [],
+      shared: []
     };
       
   };
@@ -93,14 +94,15 @@ angular.module('Plitto.controllers', [])
       userId: userId,
       lists: [],
       ditto: [],
-      feed: []
+      feed: [],
+      shared: []
     };
     
     $rootScope.nav.view = "user.ditto";
     
     // dbFactory.showUser(userId);
-    // dbGetSome = function(thescope, userfilter, listfilter){
-    dbFactory.dbGetSome('$rootScope.profileData.ditto', userId, '');
+    //dbGetSome = function (theScope, userfilter, listfilter, sharedFilter)
+    dbFactory.dbGetSome('$rootScope.profileData.ditto', userId, '', 'ditto');
     dbFactory.getUserListOfLists(userId, '$rootScope.profileData.lists');
   };
   
@@ -109,14 +111,11 @@ angular.module('Plitto.controllers', [])
     $rootScope.ditto = function(mykey, uid, lid, tid, $event,scopeName){
         // console.log('your existing key is: ',mykey, ' from user: ',uid,' from list: ', lid,' and thing: ',tid);
 
-        
-        
         /* Trach which record we're updating. Direct key would be preferable to looping through any portion of the rootscope.. */
         var i,j,k;
       
       // console.log('scopeName and results: ',scopeName, ' results: ',eval('$rootScope.' + scopeName));
       
-       
         // console.log($rootScope.profileData.feed[0]["lists"
       findItem:{
             for(i in eval('$rootScope.' + scopeName)){
@@ -193,9 +192,10 @@ angular.module('Plitto.controllers', [])
 
   .controller('HomeCtrl',function($scope, $rootScope,dbFactory) {
 
-      $scope.getMore = function(){
+      $scope.getSome = function(){
           $rootScope.bite = [];
-          dbFactory.dbGetSome('$rootScope.bite', '', '');
+          // dbGetSome = function (theScope, userfilter, listfilter, sharedFilter)
+          dbFactory.dbGetSome('$rootScope.bite', '', '', 'ditto');
       };
 
   })
@@ -229,16 +229,19 @@ angular.module('Plitto.controllers', [])
     dbFactory.showFeed('profile',userId,'','','');
   }; 
   
-  $scope.getSome = function(userId){
+  $scope.getSome = function(userId, filter){
     // console.log("Get Some for userid: ",userId);
-    dbFactory.dbGetSome('$rootScope.profileData.ditto',userId,'');
+    // dbGetSome = function (theScope, userfilter, listfilter, sharedFilter)
+    dbFactory.dbGetSome('$rootScope.profileData.'+filter, userId, '', filter);
   };
   
   $scope.showLists = function(userId){
     dbFactory.getUserListOfLists(userId, '$rootScope.profileData.lists');
   };
   
-  
+  $scope.makeActive = function(){
+    console.log('make active');
+  };
 })
 
 .controller('SearchCtrl', function($scope, $rootScope,$stateParams, dbFactory) {

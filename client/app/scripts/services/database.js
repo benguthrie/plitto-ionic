@@ -36,7 +36,7 @@ var showFeed = function (theType, userFilter, listFilter, myState, oldestKey) {
     
 var showUser = function (userId) {
   $rootScope.profileData.lists = [];
-  getSome('profile',userId,'');
+  getSome('profile',userId,'ditto');
   getUserListOfLists(userId, 'profileData.lists');              
 };
     
@@ -152,14 +152,16 @@ if(mykey === null) {
 /* Get Some - things to ditto 
   9/23/2014 - Created
 */
-var dbGetSome = function (theScope, userfilter, listfilter) {
+var dbGetSome = function (theScope, userfilter, listfilter, sharedFilter) {
   // console.log('getSomeDB Scope: ',theScope,' userfilter: ',userfilter,' listfilter: ',listfilter);
 
   var params = {
     type:'user',
     userFilter: userfilter,
     listFilter: listfilter,
-    token: $rootScope.token
+    token: $rootScope.token,
+    sharedFilter: sharedFilter
+    
   };
 // Fails: dbGetSome params Object {userfilter: "", listfilter: ""} 
 

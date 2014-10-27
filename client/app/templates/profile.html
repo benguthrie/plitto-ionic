@@ -6,11 +6,11 @@
     <h1>{{profileData.userName}}</h1>
         
     <div class="button-bar">
-      <a class="button" ng-hide="profileData.userId == vars.user.userId" ng-click="nav.view = 'user.ditto'; getSome(profileData.userId);">Ditto</a>
-      <a class="button" ng-click="nav.view = 'user.feed'; showFeed(profileData.userId,'');">Feed</a>
-      <a class="button" ng-click="nav.view = 'user.lists'; showLists(profileData.userId);">Lists</a>
-      <a class="button">Shared</a>
-      <a class="button" ng-click="nav.view = 'user.milestones'">Milestones</a>
+      <a class="button active" ng-class="{'active': nav.view ==='user.ditto'}" ng-hide="profileData.userId == vars.user.userId" ng-click="nav.view = 'user.ditto'; getSome(profileData.userId,'ditto');">Ditto</a>
+      <a class="button" ng-class="{'active': nav.view ==='user.feed'}" ng-click="nav.view = 'user.feed'; showFeed(profileData.userId,''); ">Feed</a>
+      <a class="button" ng-class="{'active': nav.view ==='user.lists'}" ng-click="nav.view = 'user.lists'; showLists(profileData.userId); ">Lists</a>
+      <a class="button" ng-class="{'active': nav.view ==='user.shared'}" ng-click="nav.view = 'user.shared';getSome(profileData.userId,'shared');">Shared</a>
+      <a class="button" ng-class="{'active': nav.view ==='user.milestones'}" ng-click="nav.view = 'user.milestones';">Milestones</a>
     </div>
 
 <!-- Start the Feed-->
@@ -121,6 +121,45 @@
         
     </div>
 <!-- End Ditto Section --> 
+  
+<!-- Start Shared -->  
+  <div class="list card" ng-repeat="user in $root.profileData.shared" ng-show="nav.view==='user.shared'">
+    <a class="item item-avatar" href="#/app/profile/{{user.uid}}" ng-click="showUser(user.uid,user.username,'profileData.shared');">
+      <img src="http://graph.facebook.com/{{user.fbuid}}/picture">
+      <h2>{{user.username}}</h2>
+      <p>IN COMMON STATS?</p>
+    </a>
+    <div class="list" ng-repeat="list in user.lists">
+      <div class="item item-divider" ng-click="showList(list.lid, list.listname, user.uid);">
+        {{list.listname}}
+      </div>
+      <div class="item" ng-repeat="item in list.items">
+          <div side="right" class="button"  style="font-size: 2.5em; float: right;" ng-class="{'ionicons ion-ios7-bolt' : item.mykey === 0 ,'ionicons ion-ios7-checkmark-outline' : item.mykey === null , 'ionicons ion-ios7-checkmark' : item.mykey > 0 }" ng-click="ditto(item.mykey, user.uid, list.lid, item.tid, $event,'profileData.ditto');"></div>
+          <div  ng-click="showThing(item.tid, item.thingname, user.uid);">
+            {{item.thingname}}
+
+
+            <!-- TODO1 - Place this where it should go -->
+            <h6>{{item.added}}</h6>
+
+            <!-- TODO1 - Place this where it should go --> 
+                <!-- TODO1 Add the mega-octicon font set - Remove "Typed" after --> 
+            <h6 ng-show="item.dittouser === null" class="mega-octicon octicon-pencil">TYPED</h6>
+            <h6 ng-show="item.dittouser !== null">dittoed from {{item.dittousername}}</h6>
+          </div>
+
+
+
+
+
+      </div>
+       <div class="item item-divider" style="text-align: center;">
+          Ditto more from this list.
+      </div>
+    </div>
+
+  </div>
+<!-- End Shared Section --> 
   
   </ion-content>
 </ion-view>
