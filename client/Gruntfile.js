@@ -1,4 +1,4 @@
-// Generated on 2014-10-17 using generator-ionic 0.6.0
+// Generated on 2014-10-24 using generator-ionic 0.6.1
 'use strict';
 
 var _ = require('lodash');
@@ -266,6 +266,12 @@ module.exports = function (grunt) {
     },
 
     concurrent: {
+      ionic: {
+        tasks: [],
+        options: {
+          logConcurrentOutput: true
+        }
+      },
       server: [
         'copy:styles',
         'copy:vendor',
@@ -365,34 +371,6 @@ module.exports = function (grunt) {
           dest: '.tmp/concat/<%= yeoman.scripts %>'
         }]
       }
-    },
-
-    // Configure the loopback angular sdk and associated documentation
-    loopback_sdk_angular: {
-      services: {
-        options: {
-          input: '../server/plitto-api.js',
-          output: '<%= yeoman.app %>/vendor/loopback/lb-services.js'
-        }
-      }
-    },
-    docular: {
-      groups: [
-        {
-          groupTitle: 'LoopBack',
-          groupId: 'loopback',
-          sections: [
-            {
-              id: 'lbServices',
-              title: 'LoopBack Services',
-              scripts: [ '<%= yeoman.app %>/vendor/loopback/lb-services.js' ]
-            }
-          ]
-        }
-      ]
-    },
-    docularserver: {
-      targetDir: 'docular_generated'
     }
 
   });
@@ -466,21 +444,14 @@ module.exports = function (grunt) {
 
   // Wrap ionic-cli commands
   grunt.registerTask('ionic', function() {
+    var done = this.async();
     var script = path.resolve('./node_modules/ionic/bin/', 'ionic');
     var flags = process.argv.splice(3);
-    var child = spawn(script, this.args.concat(flags));
-    child.stdout.on('data', function (data) {
-      grunt.log.writeln(data);
+    var child = spawn(script, this.args.concat(flags), { stdio: 'inherit' });
+    child.on('close', function (code) {
+      code = code ? false : true;
+      done(code);
     });
-    child.stderr.on('data', function (data) {
-      grunt.log.error(data);
-    });
-    process.on('exit', function (code) {
-      child.kill('SIGINT');
-      process.exit(code);
-    });
-
-    return grunt.task.run(['watch']);
   });
 
   grunt.registerTask('test', [
@@ -490,18 +461,22 @@ module.exports = function (grunt) {
     'karma:unit:start',
     'watch:karma'
   ]);
+
   grunt.registerTask('serve', function (target) {
     if (target === 'compress') {
       return grunt.task.run(['compress', 'ionic:serve']);
     }
 
-    grunt.task.run(['init', 'ionic:serve']);
+    grunt.config('concurrent.ionic.tasks', ['ionic:serve', 'watch']);
+    grunt.task.run(['init', 'concurrent:ionic']);
   });
   grunt.registerTask('emulate', function() {
-    return grunt.task.run(['init', 'ionic:emulate:' + this.args.join()]);
+    grunt.config('concurrent.ionic.tasks', ['ionic:emulate:' + this.args.join(), 'watch']);
+    return grunt.task.run(['init', 'concurrent:ionic']);
   });
   grunt.registerTask('run', function() {
-    return grunt.task.run(['init', 'ionic:run:' + this.args.join()]);
+    grunt.config('concurrent.ionic.tasks', ['ionic:run:' + this.args.join(), 'watch']);
+    return grunt.task.run(['init', 'concurrent:ionic']);
   });
   grunt.registerTask('build', function() {
     return grunt.task.run(['init', 'ionic:build:' + this.args.join()]);
@@ -510,7 +485,6 @@ module.exports = function (grunt) {
   grunt.registerTask('init', [
     'clean',
     'ngconstant:development',
-    //'loopback_sdk_angular',
     'wiredep',
     'concurrent:server',
     'autoprefixer',
@@ -522,7 +496,6 @@ module.exports = function (grunt) {
   grunt.registerTask('compress', [
     'clean',
     'ngconstant:production',
-    //'loopback_sdk_angular',
     'wiredep',
     'useminPrepare',
     'concurrent:dist',
