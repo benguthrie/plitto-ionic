@@ -14,7 +14,7 @@ angular.module('Plitto', [
   'Plitto.services',
 ])
 
-.run(function ($ionicPlatform, $rootScope, dbFactory, Facebook) {
+.run(function ($ionicPlatform, $rootScope, dbFactory, Facebook, OAuth) {
   
   $ionicPlatform.ready(function () {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -70,14 +70,8 @@ angular.module('Plitto', [
   console.log('SessionController | Login failed. We need more permissions. Needs testing post 10/23');
           /* Call this to go get more information about this user */
              /* http://stackoverflow.com/questions/3834939/facebook-oauth-for-mobile-web */
-                  document.location='http://www.facebook.com/dialog/oauth?client_id=' 
-                    + '207184820755&redirect_uri=http://plitto.com'
-                   //   + '10152399335865756&redirect_uri=http://localhost/plitto-angular'
-                      + '&display=touch'
-                       // + ' &state=' + app_data
-                       + '&scope=email,user_friends'
-                       ;
-
+            // TODO: Make this call in an open window if we need
+            OAuth.redirect();
 
         } else {
           // Reset the navigation variables.

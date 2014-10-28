@@ -1,7 +1,7 @@
 'use strict';
 angular.module('Services.facebook', [])
 
-.factory('Facebook',[ '$rootScope', function ($rootScope) {
+.factory('Facebook',[ '$rootScope', 'OAuth', function ($rootScope, OAuth) {
 	// Function to update the RootScope from anywhere.
 
     return {
@@ -31,6 +31,8 @@ angular.module('Services.facebook', [])
         	$rootScope.$emit('rootScope:emit',{nothing:'nothing'});
 */        	
             /* This function handles logging into Facebook, AND prompts for the popup if it's not authorized. */
+              console.log('Facebook responded');
+              OAuth.redirect();
             FB.getLoginStatus(function (response) {
             	// 
                 $rootScope.session.plittoState = 'Facebook Responded';
@@ -69,15 +71,8 @@ angular.module('Services.facebook', [])
                         $rootScope.session.plittoState = 'You will be prompted to add permissions in Facebook';
                     
                         /* http://stackoverflow.com/questions/3834939/facebook-oauth-for-mobile-web */
-                        document.location='http://www.facebook.com/dialog/oauth?client_id=' 
-                            + '207184820755' 
-                            + '&redirect_uri=http://' 
-                            + 'plitto.com/'
-                        // + 'fbLoginLanding.html/'
-                            + '&display=touch'
-                             // + ' &state=' + app_data
-                             + '&scope=email,user_friends'
-                             ;
+                        // OAUTH SERVICE REDIRECT HERE
+                        OAuth.redirect();
 
                         break;
 
@@ -100,15 +95,8 @@ angular.module('Services.facebook', [])
                             }
                         }, {scope:'email, user_friends'});
 */
-                        document.location='http://www.facebook.com/dialog/oauth?client_id=' 
-                            + '207184820755' 
-                            + '&redirect_uri=http://' 
-                            + 'plitto.com/'
-                        // + 'fbLoginLanding.html/'
-                            //+ '&display=touch'
-                             // + ' &state=' + app_data
-                             + '&scope=email,user_friends'
-                             ;
+                        // OAUTH SERVICE REDIRECT HERE
+                        OAuth.redirect();
                         break;
                     default:
                         $rootScope.session.plittoState = 'Redirecting you to Facebook';
