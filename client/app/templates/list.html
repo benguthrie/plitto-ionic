@@ -12,64 +12,224 @@
     
     <!-- <h3>{{$root.list.listName}}</h3> --> 
     <div class="button-bar">
-      <a class="button">Ditto</a>
-      <a class="button">Shared</a>
-      <a class="button">Mine</a>
-      <a class="button">Strangers</a>
-      <a class="button">Feed</a>
+      <a class="button" ng-class="{'active': $root.nav.listView ==='ditto'}" ng-click="view('ditto');">Ditto</a>
+      <a class="button" ng-class="{'active': $root.nav.listView ==='feed'}" ng-click="view('feed');">Feed</a>
+      <a class="button" ng-class="{'active': $root.nav.listView ==='shared'}" ng-click="view('shared');">Shared</a>
+      <a class="button" ng-class="{'active': $root.nav.listView ==='mine'}" ng-click="view('mine');">Mine</a>
+      <a class="button" ng-class="{'active': $root.nav.listView ==='strangers'}" ng-click="view('strangers');">Strangers</a>
       
     </div>
     
-    <div class="list card" ng-repeat="user in list.items">
-      <a class="item item-avatar" href="#/app/profile/{{$root.user.userId}}" ng-click="showUser(user.uid,user.username,'ditto' );">
-        <img src="http://graph.facebook.com/{{user.fbuid}}/picture">
-        <h2>{{user.username}}</h2>
-        <p>IN COMMON STATS?</p>
-      </a>
-      
-      
-      <div class="list" ng-repeat="list in user.lists">
-        <div class="item item-divider">
-          {{list.listname}}
+    <div ng-show="$root.nav.listView ==='ditto' ">
+      <h2>Ditto</h2>
+      <div class="list card" ng-repeat="user in list.ditto">
+        <a class="item item-avatar" href="#/app/profile/{{$root.user.userId}}" ng-click="showUser(user.uid,user.username,'ditto' );">
+          <img src="http://graph.facebook.com/{{user.fbuid}}/picture">
+          <h2>{{user.username}}</h2>
+          <p>IN COMMON STATS?</p>
+        </a>
+
+
+        <div class="list" ng-repeat="list in user.lists">
+          <div class="item item-divider">
+            {{list.listname}}
+          </div>
+          <div class="item" ng-repeat="item in list.items">
+              <div side="right" class="button"  style="font-size: 2.5em; float: right;" 
+                  ng-class="{'ionicons ion-ios7-bolt' : item.mykey === 0 ,'ionicons ion-ios7-checkmark-outline' : item.mykey === null , 'ionicons ion-ios7-checkmark' : item.mykey > 0 }" 
+                  ng-click="ditto(item.mykey, user.uid, list.lid, item.tid, $event,'list.ditto');"></div>
+              <div  ng-click="showThing(item.tid, item.thingname, user.uid);">
+                {{item.thingname}}
+
+
+                <!-- TODO1 - Place this where it should go -->
+                <h6>{{item.added}}</h6>
+
+                <!-- TODO1 - Place this where it should go --> 
+                    <!-- TODO1 Add the mega-octicon font set - Remove "Typed" after --> 
+                <h6 ng-show="item.dittouser === null" class="mega-octicon octicon-pencil">TYPED</h6>
+                <h6 ng-show="item.dittouser !== null">dittoed from {{item.dittousername}}</h6>
+              </div>
+
+          </div>
+          <!-- 
+           <div class="item item-divider" style="text-align: center;">
+              Load More ( if Available)
+          </div>
+          -->
         </div>
-        <div class="item" ng-repeat="item in list.items">
-            <div side="right" class="button"  style="font-size: 2.5em; float: right;" 
-                ng-class="{'ionicons ion-ios7-bolt' : item.mykey === 0 ,'ionicons ion-ios7-checkmark-outline' : item.mykey === null , 'ionicons ion-ios7-checkmark' : item.mykey > 0 }" 
-                ng-click="ditto(item.mykey, user.uid, list.lid, item.tid, $event,'list.items');"></div>
-            <div  ng-click="showThing(item.tid, item.thingname, user.uid);">
-              {{item.thingname}}
 
-
-              <!-- TODO1 - Place this where it should go -->
-              <h6>{{item.added}}</h6>
-
-              <!-- TODO1 - Place this where it should go --> 
-                  <!-- TODO1 Add the mega-octicon font set - Remove "Typed" after --> 
-              <h6 ng-show="item.dittouser === null" class="mega-octicon octicon-pencil">TYPED</h6>
-              <h6 ng-show="item.dittouser !== null">dittoed from {{item.dittousername}}</h6>
-            </div>
-            <!-- Style options: ios7-checkmark , ios7-checkmark-outline
-                Not working: icon fa fa-spinner, 
-            -->
-<!-- TODO:
-- Lock icon to the right
-- Ditto action - BEn
-- Change style of this item
---> 
-
-                
-           
-            
-             
-        </div>
-        <!-- 
-         <div class="item item-divider" style="text-align: center;">
-            Load More ( if Available)
-        </div>
-        -->
       </div>
-        
     </div>
+    
+    <div ng-show="$root.nav.listView ==='shared' ">
+      <h2>Shared</h2>
+      <div class="list card" ng-repeat="user in list.shared">
+        <a class="item item-avatar" href="#/app/profile/{{$root.user.userId}}" ng-click="showUser(user.uid,user.username,'ditto' );">
+          <img src="http://graph.facebook.com/{{user.fbuid}}/picture">
+          <h2>{{user.username}}</h2>
+          <p>IN COMMON STATS?</p>
+        </a>
+
+
+        <div class="list" ng-repeat="list in user.lists">
+          <div class="item item-divider">
+            {{list.listname}}
+          </div>
+          <div class="item" ng-repeat="item in list.items">
+              <div side="right" class="button"  style="font-size: 2.5em; float: right;" 
+                  ng-class="{'ionicons ion-ios7-bolt' : item.mykey === 0 ,'ionicons ion-ios7-checkmark-outline' : item.mykey === null , 'ionicons ion-ios7-checkmark' : item.mykey > 0 }" 
+                  ng-click="ditto(item.mykey, user.uid, list.lid, item.tid, $event,'list.shared');"></div>
+              <div  ng-click="showThing(item.tid, item.thingname, user.uid);">
+                {{item.thingname}}
+
+
+                <!-- TODO1 - Place this where it should go -->
+                <h6>{{item.added}}</h6>
+
+                <!-- TODO1 - Place this where it should go --> 
+                    <!-- TODO1 Add the mega-octicon font set - Remove "Typed" after --> 
+                <h6 ng-show="item.dittouser === null" class="mega-octicon octicon-pencil">TYPED</h6>
+                <h6 ng-show="item.dittouser !== null">dittoed from {{item.dittousername}}</h6>
+              </div>
+
+          </div>
+          <!-- 
+           <div class="item item-divider" style="text-align: center;">
+              Load More ( if Available)
+          </div>
+          -->
+        </div>
+
+      </div>
+    </div>
+    
+    <div ng-show="$root.nav.listView ==='strangers' ">
+      <h2>Strangers</h2>
+      <div class="list card" ng-repeat="user in list.strangers">
+        <a class="item item-avatar" href="#/app/profile/{{$root.user.userId}}" ng-click="showUser(user.uid,user.username,'ditto' );">
+          <img src="http://graph.facebook.com/{{user.fbuid}}/picture">
+          <h2>{{user.username}}</h2>
+          <p>IN COMMON STATS?</p>
+        </a>
+
+
+        <div class="list" ng-repeat="list in user.lists">
+          <div class="item item-divider">
+            {{list.listname}}
+          </div>
+          <div class="item" ng-repeat="item in list.items">
+              <div side="right" class="button"  style="font-size: 2.5em; float: right;" 
+                  ng-class="{'ionicons ion-ios7-bolt' : item.mykey === 0 ,'ionicons ion-ios7-checkmark-outline' : item.mykey === null , 'ionicons ion-ios7-checkmark' : item.mykey > 0 }" 
+                  ng-click="ditto(item.mykey, user.uid, list.lid, item.tid, $event,'list.strangers');"></div>
+              <div  ng-click="showThing(item.tid, item.thingname, user.uid);">
+                {{item.thingname}}
+
+
+                <!-- TODO1 - Place this where it should go -->
+                <h6>{{item.added}}</h6>
+
+                <!-- TODO1 - Place this where it should go --> 
+                    <!-- TODO1 Add the mega-octicon font set - Remove "Typed" after --> 
+                <h6 ng-show="item.dittouser === null" class="mega-octicon octicon-pencil">TYPED</h6>
+                <h6 ng-show="item.dittouser !== null">dittoed from {{item.dittousername}}</h6>
+              </div>
+
+          </div>
+          <!-- 
+           <div class="item item-divider" style="text-align: center;">
+              Load More ( if Available)
+          </div>
+          -->
+        </div>
+
+      </div>
+    </div>
+    
+    <div ng-show="$root.nav.listView ==='mine' ">
+      <h2>Mine</h2>
+      <div class="list card" ng-repeat="user in list.mine">
+        <a class="item item-avatar" href="#/app/profile/{{$root.user.userId}}" ng-click="showUser(user.uid,user.username,'ditto' );">
+          <img src="http://graph.facebook.com/{{user.fbuid}}/picture">
+          <h2>{{user.username}}</h2>
+          <p>IN COMMON STATS?</p>
+        </a>
+
+
+        <div class="list" ng-repeat="list in user.lists">
+          <div class="item item-divider">
+            {{list.listname}}
+          </div>
+          <div class="item" ng-repeat="item in list.items">
+              <div side="right" class="button"  style="font-size: 2.5em; float: right;" 
+                  ng-class="{'ionicons ion-ios7-bolt' : item.mykey === 0 ,'ionicons ion-ios7-checkmark-outline' : item.mykey === null , 'ionicons ion-ios7-checkmark' : item.mykey > 0 }" 
+                  ng-click="ditto(item.mykey, user.uid, list.lid, item.tid, $event,'list.mine');"></div>
+              <div  ng-click="showThing(item.tid, item.thingname, user.uid);">
+                {{item.thingname}}
+
+
+                <!-- TODO1 - Place this where it should go -->
+                <h6>{{item.added}}</h6>
+
+                <!-- TODO1 - Place this where it should go --> 
+                    <!-- TODO1 Add the mega-octicon font set - Remove "Typed" after --> 
+                <h6 ng-show="item.dittouser === null" class="mega-octicon octicon-pencil">TYPED</h6>
+                <h6 ng-show="item.dittouser !== null">dittoed from {{item.dittousername}}</h6>
+              </div>
+
+          </div>
+          <!-- 
+           <div class="item item-divider" style="text-align: center;">
+              Load More ( if Available)
+          </div>
+          -->
+        </div>
+
+      </div>
+    </div>
+    
+    <div ng-show="$root.nav.listView ==='feed' ">
+      <h2>Feed</h2>
+      <div class="list card" ng-repeat="user in list.feed">
+        <a class="item item-avatar" href="#/app/profile/{{$root.user.userId}}" ng-click="showUser(user.uid,user.username,'ditto' );">
+          <img src="http://graph.facebook.com/{{user.fbuid}}/picture">
+          <h2>{{user.username}}</h2>
+          <p>IN COMMON STATS?</p>
+        </a>
+
+
+        <div class="list" ng-repeat="list in user.lists">
+          <div class="item item-divider">
+            {{list.listname}}
+          </div>
+          <div class="item" ng-repeat="item in list.items">
+              <div side="right" class="button"  style="font-size: 2.5em; float: right;" 
+                  ng-class="{'ionicons ion-ios7-bolt' : item.mykey === 0 ,'ionicons ion-ios7-checkmark-outline' : item.mykey === null , 'ionicons ion-ios7-checkmark' : item.mykey > 0 }" 
+                  ng-click="ditto(item.mykey, user.uid, list.lid, item.tid, $event,'list.feed');"></div>
+              <div  ng-click="showThing(item.tid, item.thingname, user.uid);">
+                {{item.thingname}}
+
+
+                <!-- TODO1 - Place this where it should go -->
+                <h6>{{item.added}}</h6>
+
+                <!-- TODO1 - Place this where it should go --> 
+                    <!-- TODO1 Add the mega-octicon font set - Remove "Typed" after --> 
+                <h6 ng-show="item.dittouser === null" class="mega-octicon octicon-pencil">TYPED</h6>
+                <h6 ng-show="item.dittouser !== null">dittoed from {{item.dittousername}}</h6>
+              </div>
+
+          </div>
+          <!-- 
+           <div class="item item-divider" style="text-align: center;">
+              Load More ( if Available)
+          </div>
+          -->
+        </div>
+
+      </div>
+    </div>
+    
     
   </ion-content>
 </ion-view>

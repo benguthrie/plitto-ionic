@@ -19,11 +19,12 @@ angular.module('Plitto.controllers', [])
  
   $rootScope.showList = function(listId, listName, userFilter){
     console.log('global show a list');
-    
-     // $scope.showAList = function(listId, listName, userFilter){
+    // $scope.showAList = function(listId, listName, userFilter){
     // 10/22/2014 -- Build the entries in the rootScope for the list.
-    
     dbFactory.showAList(listId, listName, userFilter);
+    
+    $rootScope.nav.listView = 'ditto';
+    
     
     $state.go('app.list',{listId: listId});
     // };
@@ -68,8 +69,17 @@ angular.module('Plitto.controllers', [])
 
 	// 8/26/2014 New Navigation Vars
 	$rootScope.nav = {
-		
+		listView: 'ditto'
 	};
+    
+    $rootScope.list = {
+      listId: null,
+      listName: null,
+      ditto:[],
+      shared: [],
+      mine: [],
+      feed: []
+    };
 
 	$rootScope.session = {
 		fbAuth: null,
@@ -202,6 +212,17 @@ angular.module('Plitto.controllers', [])
 
 
 .controller('DebugCtrl', function($scope,dbFactory, $rootScope) {
+  $scope.loadList = function(type){
+    console.log('DEBUG loadList',type);
+    var listId = 231; // Movies I've seen.
+    // loadList = function(listNameId, listName, userIdFilter, type, sharedFilter, oldestKey){
+    var userIdFilter = ''; // Defaults to no filter.
+    // var type = 'all'; // This is the initial load. other options: 'feed','shared','ditto','strangers','all'
+    var sharedFilter = ''; // option to show shared / dittoable / all 
+    var oldestKey = 0; // Option is to show only items older than the one there.
+    dbFactory.loadList(listId, 'Products on My Radar', userIdFilter, type, sharedFilter, oldestKey);
+  };
+  
   $scope.debugLog = [{startItem: 'this is the start item'}];
   
  
@@ -256,7 +277,7 @@ angular.module('Plitto.controllers', [])
     return $scope.search.term;
   }, function(newValue, oldValue){
     console.log("Changed from " + oldValue + " to " + newValue);
-    if(newValue.length !==0){
+    if(typeof newValue !== 'undefined' && newValue.length > 0){
       dbFactory.search(newValue);
     }
   });
@@ -339,11 +360,26 @@ angular.module('Plitto.controllers', [])
 
 .controller('ListCtrl', function($scope, $stateParams, $rootScope, dbFactory) {
   $scope.listId = $stateParams.listId;
+  
+  $scope.navView = 'ditto';
 
+  $scope.view = function(theView){
+    // if it's already active, then make the call.
+    console.log('pressed view. ', theView);
+    if(theView === $rootScope.nav.listView){
+      console.log('make the call');
+      dbFactory.loadList($stateParams.listId, '', '', theView, '', '');
+    }
+    
+    $rootScope.nav.listView = theView;
+  }
+  
   $scope.newItem = {theValue: null};
   
   $scope.addToList = function(newItem){
     // console.log('submit to the list: ',newItem, 'newItemForm: ',$scope.newItemForm, ' scope: ',$scope,'Scope new Item: ',$scope.newItem);
+    // Make the active view my list, so I can see it.
+    $rootScope.nav.listView = 'mine';
     
     var itemObj = {lid: $stateParams.listId, thingName: newItem};
     

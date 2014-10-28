@@ -377,89 +377,67 @@ var addToList = function (addToListObj) {
       // console.log('added a new item: ',data)
       var item = data.results[0];
 
-  var myNewItem = {
-    mykey: item.thekey,
-    tid: item.thingid,
-    thingname: item.thingname,
-    added: 'now',
-    dittokey: 0,
-    dittouser: null,
-    dittousername: null
+      var myNewItem = {
+        mykey: item.thekey,
+        tid: item.thingid,
+        thingname: item.thingname,
+        added: 'now',
+        dittokey: 0,
+        dittouser: null,
+        dittousername: null
 
-  };
+      };
 
-    // Placeholder for existing list.
-    var didList = 0;
-    var myListPosition = -1;
-    var myThingAlready = -1;
+      // Placeholder for existing list.
 
-    // Updated to the new data Context 9/16/2014
-    // Find my list position within other user's lists.
-    
-     
-// console.log('rs.list',$rootScope.list, $rootScope.list.items);
-var i = 0, j=0;
-    for(i in $rootScope.list.items) {
-      // console.log('652 - rs.list.items',$rootScope.list.items[i],i);
-      if($rootScope.list.items[i].uid === $rootScope.vars.user.userId) {
-        console.log("Found my list at position",i );
-        myListPosition = i;
-        // We can assume that is the the first list, since there can only be one showing.
-        for(j in $rootScope.list.items[i].lists[0].items) {
-          if($rootScope.list.items[i].lists[0].items[j].tid === item.thingid) {
-            myThingAlready = j;
-          }
+      var myThingAlready = -1;
+
+      var i = 0;
+
+      for(i in $rootScope.list.mine[0].lists[0]){
+        if($rootScope.list.mine[0].lists[0].tid === item.thingid){
+          myThingAlready = i;
         }
       }
-    }
 
-    // console.log('didList',didList, 'myListPosition', myListPosition, 'myThingAlready', myThingAlready);
 
-    // This section will make my list and make it first in the order.
-    if(myListPosition === -1) {
-      // Make my list.
-      var myList = {
-        uid: $rootScope.vars.user.userId,
-        fbuid: $rootScope.vars.user.fbuid,
-        username: $rootScope.vars.user.username,
-        lists: [ { items: [] } ]
-      };
-      // Make my list first // TODO1 - This needs to work
-      $rootScope.list.items.unshift(myList);
+      // console.log('didList',didList, 'myListPosition', myListPosition, 'myThingAlready', myThingAlready);
 
-    } 
-    else {
-      // Move my list list to first in the order.
-      if(myListPosition !== 0) {
-        var myList = $rootScope.list.items[myListPosition];
+      // If my list doesn't exist yet, create it.
+      if($rootScope.list.mine.length === 0) {
+        // Make my list.
+        var myList = {
+          uid: $rootScope.vars.user.userId,
+          fbuid: $rootScope.vars.user.fbuid,
+          username: $rootScope.vars.user.username,
+          lists: [ { lid: addToListObj.lid, listname: $rootScope.list.listName, items: [ myNewItem ] } ]
+        };
+        // Make my list first // TODO1 - This needs to work
+        $rootScope.list.mine = myList;
 
-        $rootScope.list.items.splice(myListPosition, 1);
-        $rootScope.list.items.unshift(myList);
       } 
-      // Add my item to my list at the top.
+      else {
 
+      // Add my item to my list, but only if it's not already there.
+      if(myThingAlready === -1) {
+        // console.log($rootScope.modal.listStore[0]);
+
+        // console.log('RootStore before I build', $rootScope.list.items);
+        $rootScope.list.mine[0].lists[0].items.unshift(myNewItem);
+      } else {
+        // Move my old item to the top of your list.
+        // console.log('move it from one place to first',myThingAlready);
+        // Remove the old item
+        $rootScope.list.mine[0].lists[0].items.splice(myThingAlready, 1);
+        // Insert the new one with "now"
+        $rootScope.list.mine[0].lists[0].items.unshift(myNewItem);
+      }
+
+      /* End the Success Function */
     }
-
-    // Add my item to my list, but only if it's not already there.
-    // TODO2 - Highlight an item that is already there.
-    if(myThingAlready === -1) {
-      // console.log($rootScope.modal.listStore[0]);
-
-      console.log('RootStore before I build', $rootScope.list.items);
-      $rootScope.list.items[0].lists[0].items.unshift(myNewItem);
-    } else {
-      // Move my old item to the top of your list.
-      console.log('move it from one place to first',myThingAlready);
-      $rootScope.list.items[0].lists[0].items.splice(myThingAlready, 1);
-      $rootScope.list.items[0].lists[0].items.unshift(myNewItem);
-    }
-
-    /* End the Success Function */
-  });
-
-  
-
+ });
 };
+
 
 
 var modalReset = function () {
@@ -487,14 +465,65 @@ var showAList = function (listNameId, listName, userFilter) {
   // 
     console.log('showAList: ',listNameId, listName , userFilter);
   
-  $rootScope.list = { listId: listNameId, listName: listName, myItems: null , dittoable: null, shared: null, items: [] };
+  $rootScope.list = { listId: listNameId, listName: listName, ditto:[], shared:[], feed:[], strangers:[]};
   
   var existing = [];    
-  getMore ('list',listNameId, userFilter, existing);
-
+  // getMore ('list',listNameId, userFilter, existing);
+  loadList(listNameId, listName, userFilter, 'all', 'all')
   
 };  
 
+/* Populate a list with all the different views, if they're there. */
+var loadList = function(listNameId, listName, userIdFilter, type, sharedFilter, oldestKey){
+  
+  var params = $.param({
+    id: listNameId,
+    type: type,
+    token: $rootScope.token,
+    userIdFilter: userIdFilter,
+    oldestKey: oldestKey,
+    sharedFilter: sharedFilter
+    
+  });
+  $http({
+    method: 'POST',
+    url: apiPath + 'loadList',
+    data: params,
+    headers: {'Content-Type':'application/x-www-form-urlencoded'}
+  }).success(function(data, status, headers, config){
+    if(typeof data.results.ditto != 'undefined' && data.results.ditto.length > 0)     
+      { $rootScope.list.ditto = data.results.ditto; } 
+      else if(typeof data.results.ditto != 'undefined' && data.results.ditto.length === 0)
+        // Clean out the store if there were no results
+      { $rootScope.list.ditto = []; } 
+    
+    if(typeof data.results.shared != 'undefined' && data.results.shared.length > 0)    
+      { $rootScope.list.shared = data.results.shared; }
+      else if(typeof data.results.shared != 'undefined' && data.results.shared.length === 0)
+        // Clean out the store if there were no results
+      { $rootScope.list.shared = []; } 
+    
+    if(typeof data.results.feed != 'undefined' && data.results.feed.length > 0)      
+      { $rootScope.list.feed = data.results.feed; }
+      else if(typeof data.results.feed != 'undefined' && data.results.feed.length === 0)
+        // Clean out the store if there were no results
+      { $rootScope.list.feed = []; } 
+    
+    if(typeof data.results.mine != 'undefined' && data.results.mine.length > 0)      
+      { $rootScope.list.mine = data.results.mine; }
+      else if(typeof data.results.mine != 'undefined' && data.results.mine.length === 0)
+        // Clean out the store if there were no results
+      { $rootScope.list.mine = []; } 
+    
+    if(typeof data.results.strangers != 'undefined' && data.results.strangers.length > 0) 
+      { $rootScope.list.strangers = data.results.strangers; }
+    else if(typeof data.results.strangers != 'undefined' && data.results.strangers.length === 0)
+        // Clean out the store if there were no results
+      { $rootScope.list.strangers = []; } 
+    console.log('type: ',type,' listNameId: ', listNameId, ' listName: ', listName, ' userIdFilter: ', userIdFilter, 'Success? rs.list: ',$rootScope.list);
+  });
+  
+}
 
 /* 9/3/2014 / 9.5.2014
   This function gets more content for a user or a list.
@@ -739,6 +768,7 @@ return {
   , showThing: showThing
   , showUser: showUser
   , showFeed: showFeed
+  , loadList: loadList
 };
   
 }]);
