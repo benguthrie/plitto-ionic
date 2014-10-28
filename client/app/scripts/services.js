@@ -2,6 +2,7 @@
 angular.module('Plitto.services', [
   'Services.database',
   'Services.facebook',
-  'Services.localStorage'
+  'Services.localStorage',
+  'Services.oauth'
 ]);
 
