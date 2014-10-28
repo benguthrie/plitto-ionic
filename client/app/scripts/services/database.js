@@ -4,9 +4,8 @@ angular.module('Services.database', [])
 // This will handle storage within local databases.
 .factory('dbFactory', ['$http', '$rootScope', 'localStorageService', '$state', function ($http, $rootScope, localStorageService, $state) {
       
-// var apiPath = 'http://plitto.com/api/2.0/';
-  // var apiPath = 'http://localhost/api/2.0/';
-var apiPath = '/api/2.0/';
+ var apiPath = (window.cordova) ? 'http://plitto.com/api/2.0/' : 'http://localhost/api/2.0/';
+//var apiPath = '/api/2.0/';
       
 /* 10/22/2014 */
 
