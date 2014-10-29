@@ -222,7 +222,7 @@ var plittoLogin = function (meResponse, friendsResponse) {
      $rootScope.init();
     // Handle the users, lists and things.
       
-      
+    console.log('Yo. Diego. Check out the full data response from the fbLogin api call: ',data);
 
     $rootScope.session.plittoState = 'Plitto Response Confirmed. Interface Loading.';
       // Get their friends
