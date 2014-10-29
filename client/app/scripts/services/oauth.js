@@ -4,7 +4,7 @@ angular.module('Services.oauth', [])
 .service('OAuth', function ($window) {
   // Need to change redirect from plitto.com if on mobile
   // otherwise we're just going to load the entire website on the phone
-  var redirect_uri = window.cordova ? 'http://localhost' : 'http://plitto.com';
+  var redirect_uri = window.cordova ? 'http://plitto.com' : 'http://plitto.com';
   var authUrl ='http://www.facebook.com/dialog/oauth?'
     + 'client_id=207184820755'
     + '&redirect_uri=' + redirect_uri
@@ -27,21 +27,16 @@ angular.module('Services.oauth', [])
     var code = /\?code=(.+)$/.exec(e.url);
     var error = /\?error=(.+)$/.exec(e.url);
     if (code || error) {
-      console.log('Closing inAppBrowser');
-      authWindow.close();
+      //authWindow.close();
       authFinished(code);
     }
   };
 
   this.redirect = function () {
-    console.log('OAuth redirect() called');
     if (window.cordova) {
-      console.log('Redirecting for mobile');
-      console.log('OPENING WINDOW');
       authWindow = $window.open(authUrl, '_blank', 'location=no,toolbar=no');
       authWindow.addEventListener('loadstart', loadstart);
     } else {
-      console.log('Redirecting for web');
       $window.location = authUrl;
     }
   };

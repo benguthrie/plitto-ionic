@@ -160,6 +160,9 @@ angular.module('Plitto.controllers', [])
 .controller('AppCtrl', function($scope, $state, dbFactory, $rootScope, localStorageService,Facebook) {
   // Grab the user info here as soon as they login.
   
+  $scope.login = function () {
+    Facebook.login();
+  };
   
   // Global Logout Handler
   $scope.logout = function () {
