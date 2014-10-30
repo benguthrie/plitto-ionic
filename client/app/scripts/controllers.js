@@ -216,7 +216,7 @@ angular.module('Plitto.controllers', [])
   })
   .controller('LoadingCtrl',function($scope, $rootScope,dbFactory) {
     // Control for thing goes here.
-     
+     console.log('loadingctrl loaded');
 
   })
 

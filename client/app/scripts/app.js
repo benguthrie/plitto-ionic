@@ -27,13 +27,14 @@ angular.module('Plitto', [
     console.log('rootScope token changed',$rootScope.token);
     // If token is loading, go to loading screen.
     if(typeof ($rootScope.token) === 'string' && $rootScope.token ==='loading'){
-      $state.go('app.loading');
+      $state.go('loading');
     } else if (typeof ($rootScope.token) === 'string' && $rootScope.token.length > 0){
       // We will assume that the token is valid TODO1 - Test it.  
       $state.go('app.home');
       // $location.path('/login');
     } else {
-      $state.go('app.login');
+      $state.go('login');
+  
     }
     
   
@@ -202,15 +203,9 @@ angular.module('Plitto', [
       }
     })
   
-  .state('app.login', {
-      url: '/login',
-      templateUrl: 'templates/login.html',
-      controller: 'LoginCtrl'
-    })
-  
-  .state('app.loading',{
+  .state('loading',{
     url:'/loading',
-    templateUrl: 'templates/modals/loading.html',
+    templateUrl: 'templates/loading.html',
     controller: 'LoadingCtrl'
   })
   
