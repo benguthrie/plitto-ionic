@@ -19,6 +19,10 @@
     <button ng-click="testObj();">Test Object</button>
     
     <button ng-click="rootScopePart('token');">Token</button>
+    <button ng-click="$root.token = '';">Destroy Token</button>
+    <button ng-click="$root.token = 'loading';">Loading Token</button>
+    <button ng-click="$root.token = '35358a19f081483800da33f59635e86f';">Ben Token</button>
+    <button ng-click="$root.token = 'd1753e10d522bd0599067436660201c4';">Emily Token</button>
     
     <button ng-click="logout();">Log Out</button>
     

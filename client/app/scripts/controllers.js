@@ -1,7 +1,7 @@
 'use strict';
 angular.module('Plitto.controllers', [])
 
-.run(function($rootScope, dbFactory, $state, localStorageService ){
+.run(function($rootScope, dbFactory, $state, localStorageService, $ionicModal ){
   
    console.log('line 6');
   
@@ -11,11 +11,23 @@ angular.module('Plitto.controllers', [])
     if(localStorageService.get('token')){
       console.log("There was a token in the local storage.");
       console.log("BUT IS IT VALID?!?!?!? TODO1 - Only apply the token if it's a valid one.");
+      // Set the token.
+      $rootScope.token = localStorageService.get('token');
+      // TODO1 - Test the token.
+      
     } else {
       console.log("No token in local storage.");
     //  
     }
   }
+/*  
+  $ionicModal.fromTemplateUrl('templates/modals/loading.html', {
+    scope: $rootScope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+*/
  
   $rootScope.showList = function(listId, listName, userFilter){
     console.log('global show a list');
@@ -198,6 +210,11 @@ angular.module('Plitto.controllers', [])
 })
 
   .controller('ThingCtrl',function($scope, $rootScope,dbFactory) {
+    // Control for thing goes here.
+     
+
+  })
+  .controller('LoadingCtrl',function($scope, $rootScope,dbFactory) {
     // Control for thing goes here.
      
 

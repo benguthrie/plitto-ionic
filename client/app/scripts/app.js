@@ -14,7 +14,30 @@ angular.module('Plitto', [
   'Plitto.services',
 ])
 
-.run(function ($ionicPlatform, $rootScope, dbFactory, Facebook, OAuth) {
+.run(function ($ionicPlatform, $rootScope, dbFactory, Facebook, OAuth, $state) {
+  /* 
+  $rootScope.$watch( function($rootScope.token){
+    console.log('watching rootScope.token',$rootScope.token);
+    return($rootScope.token);
+  }, function(newValue,oldValue){
+    console.log('RootScope.token change: new: ',newValue,' old: ', oldValue);
+  }); */
+  
+  $rootScope.$watch('token',function(){
+    console.log('rootScope token changed',$rootScope.token);
+    // If token is loading, go to loading screen.
+    if(typeof ($rootScope.token) === 'string' && $rootScope.token ==='loading'){
+      $state.go('app.loading');
+    } else if (typeof ($rootScope.token) === 'string' && $rootScope.token.length > 0){
+      // We will assume that the token is valid TODO1 - Test it.  
+      $state.go('app.home');
+      // $location.path('/login');
+    } else {
+      $state.go('app.login');
+    }
+    
+  
+  });
   
   $ionicPlatform.ready(function () {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -46,6 +69,7 @@ angular.module('Plitto', [
   });
 
   $rootScope.$on('getLoginStatus', function (event, data){
+    console.log('app.getLoginStatus called. This is presumably for Facebook logins only.');
     // console.log('sessionController:  sniffed status change from fbFactory getLoginStatus OR From APP run.: ',event, data.status);
     // console.log('session.getLoginStatus. Do things based on the Facebook login.',event, data.status);
 
@@ -177,6 +201,18 @@ angular.module('Plitto', [
         }
       }
     })
+  
+  .state('app.login', {
+      url: '/login',
+      templateUrl: 'templates/login.html',
+      controller: 'LoginCtrl'
+    })
+  
+  .state('app.loading',{
+    url:'/loading',
+    templateUrl: 'templates/modals/loading.html',
+    controller: 'LoadingCtrl'
+  })
   
   
   
