@@ -39,7 +39,7 @@ angular.module('Services.oauth', [])
   this.redirect = function () {
     if (window.cordova) {
       console.log('Redirecting for mobile: ' + authUrl);
-      authWindow = $window.open(authUrl, '_blank');
+      authWindow = $window.open(authUrl, '_blank', 'location=no,toolbar=no');
       authWindow.addEventListener('loadstart', loadstart);
     } else {
       console.log('Redirecting for web');
