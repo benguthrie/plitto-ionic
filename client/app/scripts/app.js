@@ -31,6 +31,7 @@ angular.module('Plitto', [
     } else if (typeof ($rootScope.token) === 'string' && $rootScope.token.length > 0){
       // We will assume that the token is valid TODO1 - Test it.
       $state.go('app.home');
+      $ionicViewService.clearHistory();
       // $location.path('/login');
     } else {
       $state.go('login');
