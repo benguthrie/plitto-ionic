@@ -136,8 +136,8 @@ angular.module('Plitto', [
     FB.init({
          appId:'207184820755',
         // appId: '10152399335865756',
-        status:true,
-        cookie:true,
+        status: true,
+        cookie: true,
         xfbml      : true,
         version    : 'v2.0'
     });

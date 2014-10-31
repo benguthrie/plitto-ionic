@@ -410,7 +410,11 @@ angular.module('Plitto.controllers', [])
   
 })
 
-.controller('LoginCtrl', function($scope, $window, Facebook) {
+.controller('LoginCtrl', function($scope, $window, Facebook, $rootScope) {
+  $scope.force = function(){
+    $rootScope.token = 'ae6d5d593f59d15652109f88edaea72a'; 
+  };
+  
   $scope.loginOAuth = function(provider) {
     // TODO1 - This is the bit that handles the login.
     if(provider === 'facebook'){
