@@ -1,7 +1,7 @@
 'use strict';
 angular.module('Services.oauth', [])
 
-.service('OAuth', function ($window, $rootScope) {
+.service('OAuth', function ($window, $rootScope, $timeout) {
   // Need to change redirect from plitto.com if on mobile
   // otherwise we're just going to load the entire website on the phone
   var redirect_uri = window.cordova ? 'http://plitto.com' : 'http://plitto.com';
@@ -29,16 +29,20 @@ angular.module('Services.oauth', [])
     var error = /\?error=(.+)$/.exec(e.url);
 
     if (code || error) {
-      authWindow.close();
-      authFinished(code);
+      $timeout(function () {
+        authWindow.close();
+        authFinished(code);
+      }, 300);
     }
   };
 
   this.redirect = function () {
     if (window.cordova) {
-      authWindow = $window.open(authUrl, '_blank', 'location=no,toolbar=no');
+      console.log('Redirecting for mobile: ' + authUrl);
+      authWindow = $window.open(authUrl, '_blank');
       authWindow.addEventListener('loadstart', loadstart);
     } else {
+      console.log('Redirecting for web');
       $window.location = authUrl;
     }
   };
