@@ -14,7 +14,7 @@ angular.module('Plitto', [
   'Plitto.services',
 ])
 
-.run(function ($ionicPlatform, $rootScope, dbFactory, Facebook, OAuth, $state) {
+.run(function ($ionicPlatform, $rootScope, $ionicViewService, dbFactory, Facebook, OAuth, $state) {
   /* 
   $rootScope.$watch( function($rootScope.token){
     console.log('watching rootScope.token',$rootScope.token);
@@ -29,12 +29,11 @@ angular.module('Plitto', [
     if(typeof ($rootScope.token) === 'string' && $rootScope.token ==='loading'){
       $state.go('loading');
     } else if (typeof ($rootScope.token) === 'string' && $rootScope.token.length > 0){
-      // We will assume that the token is valid TODO1 - Test it.  
+      // We will assume that the token is valid TODO1 - Test it.
       $state.go('app.home');
       // $location.path('/login');
     } else {
       $state.go('login');
-  
     }
     
   
