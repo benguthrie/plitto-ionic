@@ -170,6 +170,21 @@ angular.module('Plitto.controllers', [])
 }) 
 
 .controller('AppCtrl', function($scope, $state, dbFactory, $rootScope, localStorageService,Facebook) {
+  // On load, load the correct interface
+  console.log('$rootScope.token onload action: ', $rootScope.token);
+  if(typeof ($rootScope.token) === 'string' && $rootScope.token ==='loading'){
+    console.log('initial: loading');
+    $state.go('loading');
+  } else if (typeof ($rootScope.token) === 'string' && $rootScope.token.length > 0){
+    // We will assume that the token is valid TODO1 - Test it.
+    console.log('initial: appears valid');
+    $state.go('app.home'); // TODO1 - Diego - Should this be moved? - Not working!
+    $ionicViewService.clearHistory();
+    // $location.path('/login');
+  } else {
+    console.log('initial: null?');
+    $state.go('login');
+  }
   
   $scope.deleteFBaccess = function() {
     console.log('deleteFBaccess in loginctrl');

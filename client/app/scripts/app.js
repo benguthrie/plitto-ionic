@@ -24,21 +24,6 @@ angular.module('Plitto', [
   }); */
   
   
-  // On load, load the correct interface
-  console.log('$rootScope.token onload action: ', $rootScope.token);
-  if(typeof ($rootScope.token) === 'string' && $rootScope.token ==='loading'){
-    console.log('initial: loading');
-    $state.go('loading');
-  } else if (typeof ($rootScope.token) === 'string' && $rootScope.token.length > 0){
-    // We will assume that the token is valid TODO1 - Test it.
-    console.log('initial: appears valid');
-    $state.go('app.home'); // TODO1 - Diego - Should this be moved? - Not working!
-    $ionicViewService.clearHistory();
-    // $location.path('/login');
-  } else {
-    console.log('initial: null?');
-    $state.go('login');
-  }
     
   $ionicPlatform.ready(function () {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -291,7 +276,7 @@ angular.module('Plitto', [
       }
     });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('login');
+  $urlRouterProvider.otherwise('/app/home');
 
   // Handle 401 Unauthorized responses
   $httpProvider.interceptors.push(function ($q, $location) {
