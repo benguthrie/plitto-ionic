@@ -1,11 +1,7 @@
 'use strict';
 angular.module('Services.oauth', [])
 
-<<<<<<< HEAD
-.service('OAuth', function ($window, $rootScope, $state) {
-=======
-.service('OAuth', function ($window, $rootScope, $timeout) {
->>>>>>> origin/master
+.service('OAuth', function ($window, $rootScope, $state, $timeout) {
   // Need to change redirect from plitto.com if on mobile
   // otherwise we're just going to load the entire website on the phone
   var redirect_uri = window.cordova ? 'http://plitto.com' : 'http://plitto.com';
@@ -24,7 +20,7 @@ angular.module('Services.oauth', [])
       $state.go('login');
     }
   });
-  
+  // TODO 11/2/2014 - This might not be used.
   var authUrl ='http://www.facebook.com/dialog/oauth?'
     + 'client_id=207184820755'
     + '&redirect_uri=' + redirect_uri
@@ -35,12 +31,14 @@ angular.module('Services.oauth', [])
   var authWindow = null;
 
   // Function that is called with auth code and redirect home
+  /*
   var authFinished = function (code) {
     console.log('Got this code: ' + code);
     console.log('Now what? Think a post to plitto.com has to happen');
     $window.location = '#/app/home';
     $rootScope.token = "807cfa6f392685f6d1131082d9a42276";
   };
+  */
 
   // Event handler for the inAppBrowser plugin's `loadstart` event
   var loadstart = function (e) {
@@ -51,15 +49,13 @@ angular.module('Services.oauth', [])
     var error = /\?error=(.+)$/.exec(e.url);
 
     if (code || error) {
-<<<<<<< HEAD
       authWindow.close();
       authFinished(code); 
-=======
+
       $timeout(function () {
         authWindow.close();
         authFinished(code);
       }, 300);
->>>>>>> origin/master
     }
   };
 
@@ -69,13 +65,10 @@ angular.module('Services.oauth', [])
       authWindow = $window.open(authUrl, '_blank', 'location=no,toolbar=no');
       authWindow.addEventListener('loadstart', loadstart);
     } else {
-<<<<<<< HEAD
       // $window.location = authUrl;
-      console.log('OAuth - Web Redirect', authUrl, redirect_uri);
-=======
+      console.log('OAuth - Web Redirecta for web clients', authUrl, redirect_uri);
       console.log('Redirecting for web');
       $window.location = authUrl;
->>>>>>> origin/master
     }
   };
 });

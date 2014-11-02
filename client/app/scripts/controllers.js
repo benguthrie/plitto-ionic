@@ -170,9 +170,16 @@ angular.module('Plitto.controllers', [])
 }) 
 
 .controller('AppCtrl', function($scope, $state, dbFactory, $rootScope, localStorageService,Facebook) {
+  
+  $scope.deleteFBaccess = function() {
+    console.log('deleteFBaccess in loginctrl');
+    Facebook.unsubscribe();
+  };
+  
   // Grab the user info here as soon as they login.
   
   $scope.login = function () {
+    console.log('controllers AppCtrl.login() pressed.');
     Facebook.login();
   };
   
@@ -227,7 +234,7 @@ angular.module('Plitto.controllers', [])
           // dbGetSome = function (theScope, userfilter, listfilter, sharedFilter)
           dbFactory.dbGetSome('$rootScope.bite', '', '', 'ditto');
       };
-
+  
   })
 
 
@@ -410,10 +417,12 @@ angular.module('Plitto.controllers', [])
   
 })
 
-.controller('LoginCtrl', function($scope, $window, Facebook, $rootScope) {
+.controller('LoginCtrl', function($scope, $window, Facebook, $rootScope, $state) {
+  /* 
   $scope.force = function(){
     $rootScope.token = 'ae6d5d593f59d15652109f88edaea72a'; 
   };
+  */
   
   $scope.loginOAuth = function(provider) {
     // TODO1 - This is the bit that handles the login.
@@ -421,8 +430,8 @@ angular.module('Plitto.controllers', [])
       // Do that.
       $scope.message = "Logging in with Facebook";
       // 
+      $state.go('loading');      // TODO 1 - Is this working?
       Facebook.login();
-      
       
     } else {
       console.log("You tried to log in with another provider");

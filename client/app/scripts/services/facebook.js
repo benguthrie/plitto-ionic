@@ -1,7 +1,46 @@
 'use strict';
 angular.module('Services.facebook', [])
 
-.factory('Facebook',[ '$rootScope', 'OAuth', 'dbFactory', function ( $rootScope, OAuth, dbFactory ) {
+.factory('Facebook',[ '$rootScope', 'OAuth', 'dbFactory','$state', function ( $rootScope, OAuth, dbFactory, $state ) {
+   window.fbAsyncInit = function () {
+    FB.init({
+         appId:'207184820755',
+        // appId: '10152399335865756',
+        status: true,
+        cookie: true,
+        xfbml      : true,
+        version    : 'v2.0'
+    });
+
+     /*
+    FB.Event.subscribe('auth.statusChange', function (response) {
+      // At this point, we've received the element. We just need to broadcast it.
+
+      // Do different things depending on the status
+      // console.log('script.php | getLoginStatus | ',response.status);
+      // REMOVED 10/31  $rootScope.session.plittoState='28 Facebook says you are' + response.status;
+      if(response.status === 'not_authorized'){
+        $rootScope.$broadcast("getLoginStatus", {
+            'status': response.status
+          });
+      } else {
+          $rootScope.$broadcast("getLoginStatus", {
+            'status': response.status, 
+            'userID': response.authResponse.userID});
+        }
+    });
+    */
+  };
+
+  (function (d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+  
+  
 	// Function to update the RootScope from anywhere.
   var apiPath = (window.cordova) ? 'http://plitto.com/api/2.0/' : '/api/2.0/';
     return {
@@ -22,6 +61,12 @@ angular.module('Services.facebook', [])
             }, true);
         },
         login:function () {
+          console.log('Facebook login happening.');
+          
+          // $state.go('loading');
+          
+          // setTimeout(console.log('delay in facebook.login'),2000);
+          
         	// $rootScope.session.plittoState = 'Checking your Facebook Status on this device.';
             // 
             // console.log('facebook factory login button was pressed.');
@@ -36,12 +81,13 @@ angular.module('Services.facebook', [])
 // TODO1 - Where should this go?!?            OAuth.redirect();
             FB.getLoginStatus(function (response) {
                 // REMOVED 10/31 $rootScope.session.plittoState = 'Facebook Responded';
-              console.log('Facebook.login 39 - Facebook response for getLoginStatus: ', response , response.authResponse.accessToken);
+              console.log('Facebook.login 39 - Facebook response for getLoginStatus: ', response );
               
               // If there is an access token, then we should pass that to the Plitto API for processing.
-              if(response.authResponse.accessToken && response.status ==='connected'){
+              if( response.authResponse !== null && typeof response.authResponse.accessToken !== 'undefined' && response.status ==='connected'){
                 // Ths user is logged in, and has authorized Plitto.
-               dbFactory.fbTokenLogin(response.authResponse.accessToken);
+                console.log('plittoFacebook45: connected, with a token.');
+                dbFactory.fbTokenLogin(response.authResponse.accessToken);
                 
               } else {
                 console.log("FB.login - response wasn't 'connected'. ", response);
@@ -103,9 +149,11 @@ angular.module('Services.facebook', [])
                           break;
                       default:
                           $rootScope.session.plittoState = 'Redirecting you to Facebook for authorization approval.';
-                          // console.log('factory_Facebook.login = Default. FB.login about to be caled');
+                          // 
+                      console.log('factory_Facebook.login = Default. FB.login about to be called again after getting permissions. Line 113.');
                           FB.login(function (response) {
                               if (response.authResponse) {
+                                
                                   $rootScope.$broadcast('fb_connected', {facebook_id:response.authResponse.userID});
                                   $rootScope.$broadcast('fb_get_login_status');
                               } else {
@@ -133,10 +181,14 @@ angular.module('Services.facebook', [])
             });
         },
         unsubscribe:function () {
-            $rootScope.session.plittoState = 'Facebook Remove Plitto Access Called.';
+            console.log('Remove Plitto from Facebook Account');
+            
+            $rootScope.token = '';
+            $rootScope.init();
         	// 
             // console.log('facebook factory unsubsubscribe');
             FB.api("/me/permissions", "DELETE", function (response) {
+                console.log('Facebook Unsbscribe Plitto Succeeded');
                 $rootScope.session.plittoState = 'Facebook Remove Plitto Access Succeeded';
                 // $rootScope.$broadcast('fb_get_login_status');
                 // console.log('FacebookAPI: unsubscribe response: ',response);

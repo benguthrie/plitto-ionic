@@ -23,27 +23,23 @@ angular.module('Plitto', [
     console.log('RootScope.token change: new: ',newValue,' old: ', oldValue);
   }); */
   
-<<<<<<< HEAD
-
-=======
-  $rootScope.$watch('token',function(){
-    console.log('rootScope token changed',$rootScope.token);
-    // If token is loading, go to loading screen.
-    if(typeof ($rootScope.token) === 'string' && $rootScope.token ==='loading'){
-      $state.go('loading');
-    } else if (typeof ($rootScope.token) === 'string' && $rootScope.token.length > 0){
-      // We will assume that the token is valid TODO1 - Test it.
-      $state.go('app.home');
-      $ionicViewService.clearHistory();
-      // $location.path('/login');
-    } else {
-      $state.go('login');
-    }
+  
+  // On load, load the correct interface
+  console.log('$rootScope.token onload action: ', $rootScope.token);
+  if(typeof ($rootScope.token) === 'string' && $rootScope.token ==='loading'){
+    console.log('initial: loading');
+    $state.go('loading');
+  } else if (typeof ($rootScope.token) === 'string' && $rootScope.token.length > 0){
+    // We will assume that the token is valid TODO1 - Test it.
+    console.log('initial: appears valid');
+    $state.go('app.home'); // TODO1 - Diego - Should this be moved? - Not working!
+    $ionicViewService.clearHistory();
+    // $location.path('/login');
+  } else {
+    console.log('initial: null?');
+    $state.go('login');
+  }
     
-  
-  });
->>>>>>> origin/master
-  
   $ionicPlatform.ready(function () {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -140,6 +136,7 @@ angular.module('Plitto', [
 
 */
   
+/* 11/2 0 Replace this.  
   // Perform Facebook JS SKD Authentication
   window.fbAsyncInit = function () {
     FB.init({
@@ -176,6 +173,7 @@ angular.module('Plitto', [
      js.src = "//connect.facebook.net/en_US/sdk.js";
      fjs.parentNode.insertBefore(js, fjs);
    }(document, 'script', 'facebook-jssdk'));
+   */
 })
 
 .config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
@@ -295,8 +293,6 @@ angular.module('Plitto', [
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('login');
 
-    
-    
   // Handle 401 Unauthorized responses
   $httpProvider.interceptors.push(function ($q, $location) {
     return {
@@ -308,9 +304,6 @@ angular.module('Plitto', [
       }
     };
   });
-  
-  
-  
   
 });
 

@@ -5,9 +5,17 @@ angular.module('Services.database', [])
 .factory('dbFactory', ['$http', '$rootScope', 'localStorageService', '$state', function ($http, $rootScope, localStorageService, $state) {
       
  var apiPath = (window.cordova) ? 'http://plitto.com/api/2.0/' : '/api/2.0/';
-      
-/* 10/22/2014 */
 
+/* 11/2/2014 */
+  var checkToken = function(token){
+    console.log('check the token to see if we should proceed.');
+    if(typeof token ==='undefined' || token.length === 0){
+      $state.go('login');
+    }
+      
+  }
+  
+/* 10/22/2014 */
 
 var showFeed = function (theType, userFilter, listFilter, myState, oldestKey) {
   var params = $.param({theType: theType, userFilter: userFilter, listFilter: listFilter, myState: myState, oldestKey: oldestKey, token: $rootScope.token });
@@ -150,7 +158,8 @@ if(mykey === null) {
 */
 var dbGetSome = function (theScope, userfilter, listfilter, sharedFilter) {
   // console.log('getSomeDB Scope: ',theScope,' userfilter: ',userfilter,' listfilter: ',listfilter);
-
+  checkToken($rootScope.token);
+    
   var params = {
     type:'user',
     userFilter: userfilter,
