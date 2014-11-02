@@ -23,7 +23,26 @@ angular.module('Plitto', [
     console.log('RootScope.token change: new: ',newValue,' old: ', oldValue);
   }); */
   
+<<<<<<< HEAD
 
+=======
+  $rootScope.$watch('token',function(){
+    console.log('rootScope token changed',$rootScope.token);
+    // If token is loading, go to loading screen.
+    if(typeof ($rootScope.token) === 'string' && $rootScope.token ==='loading'){
+      $state.go('loading');
+    } else if (typeof ($rootScope.token) === 'string' && $rootScope.token.length > 0){
+      // We will assume that the token is valid TODO1 - Test it.
+      $state.go('app.home');
+      $ionicViewService.clearHistory();
+      // $location.path('/login');
+    } else {
+      $state.go('login');
+    }
+    
+  
+  });
+>>>>>>> origin/master
   
   $ionicPlatform.ready(function () {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
