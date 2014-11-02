@@ -23,21 +23,7 @@ angular.module('Plitto', [
     console.log('RootScope.token change: new: ',newValue,' old: ', oldValue);
   }); */
   
-  $rootScope.$watch('token',function(){
-    console.log('rootScope token changed',$rootScope.token);
-    // If token is loading, go to loading screen.
-    if(typeof ($rootScope.token) === 'string' && $rootScope.token ==='loading'){
-      $state.go('loading');
-    } else if (typeof ($rootScope.token) === 'string' && $rootScope.token.length > 0){
-      // We will assume that the token is valid TODO1 - Test it.
-      $state.go('app.home');
-      // $location.path('/login');
-    } else {
-      $state.go('login');
-    }
-    
-  
-  });
+
   
   $ionicPlatform.ready(function () {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -50,12 +36,15 @@ angular.module('Plitto', [
       StatusBar.styleDefault();
     }
   });
+  // TODO1 - We might not need this. Removed on 10/31,
   
   // Initialize rootScope usage. If this was a service we wouldn't need to do this!
   // TODO: Refactor candidate
+  /* 
   $rootScope.session = {
     plittoState: {}
   };
+  
   
   // Function to update the RootScope from anywhere.
   $rootScope.$on('fb_status', function (event, data ){
@@ -80,7 +69,7 @@ angular.module('Plitto', [
 
 
     if(data.status === 'connected'){
-      /* The user is logged into Facebook. Get their Facebook information for Plitto login */
+      // The user is logged into Facebook. Get their Facebook information for Plitto login 
       // console.log('process the login');
       FB.api('/me', function (meResponse) {
         // 
@@ -88,12 +77,12 @@ angular.module('Plitto', [
 
 
         if(!meResponse.email || !meResponse.name || !meResponse.id){
-          /* Request More information */
+          // Request More information 
           $rootScope.session.plittoState = 'Need more permissions from Facebook, like your email or name.';
           // 
   console.log('SessionController | Login failed. We need more permissions. Needs testing post 10/23');
-          /* Call this to go get more information about this user */
-             /* http://stackoverflow.com/questions/3834939/facebook-oauth-for-mobile-web */
+          // Call this to go get more information about this user 
+             //  http://stackoverflow.com/questions/3834939/facebook-oauth-for-mobile-web
             // TODO: Make this call in an open window if we need
             OAuth.redirect();
 
@@ -101,7 +90,7 @@ angular.module('Plitto', [
           // Reset the navigation variables.
           // console.log('Logging into Plitto Now.');
           $rootScope.session.plittoState = 'Logging into Plitto';
-          /* While that's happening, let's set up the user and the interface */
+          // While that's happening, let's set up the user and the interface 
 
         $rootScope.modal = {
           show: false, listStore: [], friendStore: [], thingStore: [], header: null
@@ -129,6 +118,8 @@ angular.module('Plitto', [
       // console.log('sessionController: You are not logged into Facebook.')
     }
   });
+
+*/
   
   // Perform Facebook JS SKD Authentication
   window.fbAsyncInit = function () {
@@ -146,7 +137,7 @@ angular.module('Plitto', [
 
       // Do different things depending on the status
       // console.log('script.php | getLoginStatus | ',response.status);
-      $rootScope.session.plittoState='28 Facebook says you are' + response.status;
+      // REMOVED 10/31  $rootScope.session.plittoState='28 Facebook says you are' + response.status;
       if(response.status === 'not_authorized'){
         $rootScope.$broadcast("getLoginStatus", {
             'status': response.status

@@ -1,15 +1,33 @@
 'use strict';
 angular.module('Services.oauth', [])
 
-.service('OAuth', function ($window, $rootScope) {
+.service('OAuth', function ($window, $rootScope, $state) {
   // Need to change redirect from plitto.com if on mobile
   // otherwise we're just going to load the entire website on the phone
   var redirect_uri = window.cordova ? 'http://plitto.com' : 'http://plitto.com';
+  
+  // This watches for changes in the token, and redirects as needed.
+  $rootScope.$watch('token',function(){
+    console.log('rootScope token changed',$rootScope.token);
+    // If token is loading, go to loading screen.
+    if(typeof ($rootScope.token) === 'string' && $rootScope.token ==='loading'){
+      $state.go('loading');
+    } else if (typeof ($rootScope.token) === 'string' && $rootScope.token.length > 0){
+      // We will assume that the token is valid TODO1 - Test it.
+      $state.go('app.home');
+      // $location.path('/login');
+    } else {
+      $state.go('login');
+    }
+  });
+  
   var authUrl ='http://www.facebook.com/dialog/oauth?'
     + 'client_id=207184820755'
     + '&redirect_uri=' + redirect_uri
     + '&display=touch'
-    + '&scope=email,user_friends';
+    + '&scope=email,user_friends'
+    + '&response_type=token'
+  ;
   var authWindow = null;
 
   // Function that is called with auth code and redirect home
@@ -30,7 +48,7 @@ angular.module('Services.oauth', [])
 
     if (code || error) {
       authWindow.close();
-      authFinished(code);
+      authFinished(code); 
     }
   };
 
@@ -39,7 +57,8 @@ angular.module('Services.oauth', [])
       authWindow = $window.open(authUrl, '_blank', 'location=no,toolbar=no');
       authWindow.addEventListener('loadstart', loadstart);
     } else {
-      $window.location = authUrl;
+      // $window.location = authUrl;
+      console.log('OAuth - Web Redirect', authUrl, redirect_uri);
     }
   };
 });

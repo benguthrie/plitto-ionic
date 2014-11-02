@@ -15,14 +15,12 @@ var showFeed = function (theType, userFilter, listFilter, myState, oldestKey) {
 // Is there currently a reed?
 // console.log('showFeed params: ',params);
 
-  $http(
-    {
-      method: 'POST',
-      url: apiPath + 'showFeed', 
-      data: params,
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    }
-  )
+  $http({
+    method: 'POST',
+    url: apiPath + 'showFeed', 
+    data: params,
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+  })
   .success(function (data, status, headers, config) {
     if (theType === 'profile') {
       $rootScope.profileData.feed = data.results;
@@ -191,7 +189,50 @@ var dbGetSome = function (theScope, userfilter, listfilter, sharedFilter) {
     });
 };
 
+/* Created 11/2/2014 */
+var fbTokenLogin = function(fbToken){
+  // The user has a valid Facebook token for plitto, and now wants to log into Plitto
+   var loginParams = $.param( { fbToken: fbToken } );
+                
+    $http({
+      method:'POST',
+      url: apiPath + 'fbToken', 
+      data: loginParams ,
+      headers: {'Content-Type':'application/x-www-form-urlencoded'}
+    })
+    .success(function (data,status,headers,config) {
+      // Initialize the rootScope.
+     $rootScope.init();
+      
+      console.log('response from fbToken: ',data);
+      // data.me.puid is the plitto userid. That should be there.
+      if( /^\+?(0|[1-9]\d*)$/.test(data.me.puid)){
+        console.log("puid is valid");
+        // Set the stores.
+        $rootScope.vars.user = { userId: data.me.puid, username: data.me.username, fbuid: data.me.fbuid };
+        $rootScope.token = data.me.token;
+        localStorageService.set('token', data.me.token);
+        $rootScope.friendStore = data.friends;
+        
+        //   console.log('the token: ',$rootScope.token, 'friend store: ',$rootScope.friendStore);
+        
+        // Populate the initial "Ditto Some" view
+        $rootScope.bite = data.getSome;
+        //  console.log('get some goes into $rootScope.bite',$rootScope.bite);
+      
+        // FINALLY! - Load the interface
+      $state.go('app.home');
+        
+      }else{
+        console.log("TODO1 There was an error. Log it.");
+      }
+      
 
+
+    } );
+};  
+  
+  
 /* 
 
 pre 9/3/2014 
@@ -222,9 +263,9 @@ var plittoLogin = function (meResponse, friendsResponse) {
      $rootScope.init();
     // Handle the users, lists and things.
       
-    console.log('Yo. Diego. Check out the full data response from the fbLogin api call: ',data);
+    // console.log('Yo. Diego. Check out the full data response from the fbLogin api call: ',data);
 
-    $rootScope.session.plittoState = 'Plitto Response Confirmed. Interface Loading.';
+    //$rootScope.session.plittoState = 'Plitto Response Confirmed. Interface Loading.';
       // Get their friends
     if( typeof parseInt(data.me.puid) ==='number') {
       // User can log in
@@ -768,6 +809,7 @@ return {
   , showUser: showUser
   , showFeed: showFeed
   , loadList: loadList
+  , fbTokenLogin: fbTokenLogin
 };
   
 }]);
