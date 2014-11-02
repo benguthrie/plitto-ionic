@@ -169,7 +169,7 @@ angular.module('Plitto.controllers', [])
   
 }) 
 
-.controller('AppCtrl', function($scope, $state, dbFactory, $rootScope, localStorageService,Facebook) {
+.controller('AppCtrl', function($scope, $state, dbFactory, $rootScope, $ionicViewService, localStorageService,Facebook) {
   // On load, load the correct interface
   console.log('$rootScope.token onload action: ', $rootScope.token);
   if(typeof ($rootScope.token) === 'string' && $rootScope.token ==='loading'){

@@ -14,7 +14,7 @@ angular.module('Plitto', [
   'Plitto.services',
 ])
 
-.run(function ($ionicPlatform, $rootScope, $ionicViewService, dbFactory, Facebook, OAuth, $state) {
+.run(function ($ionicPlatform, $rootScope, dbFactory, Facebook, OAuth, $state) {
   /* 
   $rootScope.$watch( function($rootScope.token){
     console.log('watching rootScope.token',$rootScope.token);
