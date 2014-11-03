@@ -98,21 +98,10 @@ angular.module('Services.facebook', [])
                 // Facebook will either be: connected, not_authorized, or unknown.
                   switch (response.status) {
                       case 'connected':
-                          // console.log('28 -response.status is connected.');
-
-                          // This isn't needed. $rootScope.$broadcast('fb_connected', {facebook_id:response.authResponse.userID});
-
-                          /* If this works, we should be good to delete the line above. */
-
-                          // $rootScope.session.plittoState = 'Facebook is connected. Waiting for Plitto';
-                          // console.log('fb_connected 53',response,{facebook_id:response.authResponse.userID});
-                          //$rootScope.$broadcast('fb_connected', {facebook_id:response.authResponse.userID});                        
-                          // $rootScope.$broadcast('getLoginStatus',response);
-
-                          /* Call out to Plitto from here */
+                        // Facebook had responded, and you're connected.
                         console.log("You are connected, but without a token. This should never happen.");
-
-                          break;
+                        
+                        break;
                       case 'not_authorized':
                           // TODO? Here, we should handle the authorization.
                           // console.log('factory_Facebook | The user pressed the button. | NOT AUTHORIZED.');
@@ -127,23 +116,7 @@ angular.module('Services.facebook', [])
 
                       case 'unknown':
                           console.log('Facebook Redirect. If you see this for long, go to plitto.com in Safari, Chrome, Opera, Firefox or Internet Explorer. status: unknown.');
-                          // 
-                          // console.log('32 -response.status is unknown.');
-                          /*
-                          FB.login(function (response) {
-                              $rootScope.session.plittoState = 'Facebook Responded. You are not logged in.';
-                              if (response.authResponse) {
-                                  // The user is not authorized to facebook, but could be.
-                                  $rootScope.$broadcast('fb_connected', {
-                                      facebook_id:response.authResponse.userID,
-                                      userNotAuthorized:true
-                                  });
-                              } else {
-                                  $rootScope.$broadcast('fb_login_failed');
-                                  $rootScope.session.plittoState = 'That Facebook Login Failed';
-                              }
-                          }, {scope:'email, user_friends'});
-  */
+               
                           // OAUTH SERVICE REDIRECT HERE
                           OAuth.redirect();
                           break;

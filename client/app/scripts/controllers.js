@@ -238,7 +238,24 @@ angular.module('Plitto.controllers', [])
   })
   .controller('LoadingCtrl',function($scope, $rootScope,dbFactory) {
     // Control for thing goes here.
+    $scope.thetoken = $rootScope.token;
+  
      console.log('loadingctrl loaded');
+    $scope.showToken = function(){
+      console.log('showToken');
+      $scope.thetoken = $rootScope.token;
+    }
+    
+    $scope.clearToken = function(){
+      console.log('clearToken');
+      $scope.thetoken = 'cleared!';
+    }
+    
+    $scope.setToken = function(){
+      console.log('setToken');
+      $scope.thetoken = '35358a19f081483800da33f59635e86f';
+    }
+    
 
   })
 

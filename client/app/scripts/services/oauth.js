@@ -4,6 +4,7 @@ angular.module('Services.oauth', [])
 .service('OAuth', function ($window, $rootScope, $state, $timeout) {
   // Need to change redirect from plitto.com if on mobile
   // otherwise we're just going to load the entire website on the phone
+  console.log('window: ',window);
   var redirect_uri = window.cordova ? 'http://plitto.com' : 'http://plitto.com';
   
   // This watches for changes in the token, and redirects as needed.

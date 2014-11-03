@@ -2,5 +2,16 @@
   
   <ion-content>
     <h1>Loading</h1>
+    <button ng-click="showToken();">Show Token</button>
+    <button ng-click="clearToken();">Clear Token</button>
+    <button ng-click="setToken();">Set Token</button>
+    <p>token: <div ng-bind="thetoken"></div></p>
+  
+    <button ng-click="setToken();">Set Token</button>
+  
+  <h1>Message</h1>
+  <p ng-bind='$root.message'></p>
+  
+  <a href='/#/login'>Back to login</a>
   </ion-content>
-</ion-view>
+</ion-modal-view>
