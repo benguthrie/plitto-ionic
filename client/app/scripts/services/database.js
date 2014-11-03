@@ -791,7 +791,8 @@ var newList = function (thingName, success, failure) {
         .success(function (data,status,headers,config) {
           // 
           var newListId = data.results[0]['thingid'];
-            // console.log("New List ID: ",newListId);
+            // 
+            console.log("New List ID: ",newListId, 'thingname: ',thingName);
           
             // Callback - On creating the new list.
             success(newListId, thingName);          

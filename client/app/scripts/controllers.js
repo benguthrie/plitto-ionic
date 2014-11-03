@@ -179,9 +179,53 @@ angular.module('Plitto.controllers', [])
   
 }) 
 
-.controller('AppCtrl', function($scope, $state, dbFactory, $rootScope, $ionicViewService, localStorageService,Facebook) {
+.controller('AppCtrl', function($scope, $state, dbFactory, $rootScope, $ionicViewService, localStorageService,Facebook,$ionicModal ) {
+  // Add a list
+   // Initialize variablse
+  $scope.newList = {};
+  $scope.modal = null;
+  
+   //Cleanup the modal when we're done with it!
+  $scope.$on('$destroy', function() {
+    $scope.modal.remove();
+  });
+  
+
+  $ionicModal.fromTemplateUrl('templates/modals/add-list.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+  // Launch add-list modal
+  $scope.addListModal = function () {
+    $rootScope.debug('addListModal called');
+    $scope.modal.show();
+  };
+
+  // Close add-list modal
+  $scope.closeModal = function () {
+    $scope.modal.hide();
+  };
+
+  // Create a new list
+  $scope.createList = function () {
+    // TODO: Make database service call.
+    
+      dbFactory.newList($scope.newList.title, function(newListId, listName){
+        // console.log('the list creation was successful', newListId, listName);
+
+        dbFactory.showAList(newListId);
+        
+        $state.go('app.list',{listId: newListId});
+        
+      }, function(){console.log('the list creation failed.'); });
+      
+  };
+  
+  
   // On load, load the correct interface
-  console.log('$rootScope.token onload action: ', $rootScope.token);
+  // console.log('$rootScope.token onload action: ', $rootScope.token);
   $rootScope.debug('AppCtrl load: Token: ' + $rootScope.token );
   if(typeof ($rootScope.token) === 'string' && $rootScope.token ==='loading'){
     console.log('initial: loading');
@@ -241,6 +285,12 @@ angular.module('Plitto.controllers', [])
     $rootScope.debug("AppCtrl You want to load lists into your profile.");
     // dbFactory.getUserListOfLists($rootScope.vars.user.userId);
     dbFactory.getUserListOfLists($rootScope.vars.user.userId , '$rootScope.lists');
+  };
+  
+  // Launch add-list modal
+  $scope.addListModal = function () {
+    $rootScope.debug('addListModal called');
+    $scope.modal.show();
   };
     
 })
@@ -375,54 +425,15 @@ angular.module('Plitto.controllers', [])
 })
 
 /* 10/21/2014 - Added RootScope to populate the list with? TODO1 - Build lists from $rootScope.lists */
-.controller('ListsCtrl', function($scope, $ionicModal, $ionicActionSheet,$rootScope, dbFactory,$state) {
-  // Initialize variablse
-  $scope.newList = {};
-  $scope.modal = null;
-  
-  
+.controller('ListsCtrl', function($scope, $rootScope, dbFactory,$state, $ionicActionSheet ) {
+ 
   $scope.loadLists = function(){
    //  console.log("Load Lists - Could also refresh.");
     dbFactory.getUserListOfLists($rootScope.vars.user.userId,'$rootScope.lists');
   };
   
-  $ionicModal.fromTemplateUrl('templates/modals/add-list.html', {
-    scope: $scope,
-    animation: 'slide-in-up'
-  }).then(function(modal) {
-    $scope.modal = modal;
-  });
 
-  //Cleanup the modal when we're done with it!
-  $scope.$on('$destroy', function() {
-    $scope.modal.remove();
-  });
-  
-
-  // Launch add-list modal
-  $scope.addListModal = function () {
-    $scope.modal.show();
-  };
-
-  // Close add-list modal
-  $scope.closeModal = function () {
-    $scope.modal.hide();
-  };
-
-  // Create a new list
-  $scope.createList = function () {
-    // TODO: Make database service call.
-    
-      dbFactory.newList($scope.newList.title, function(newListId, listName){ 
-        // console.log('the list creation was successful', newListId, listName);
-
-        dbFactory.showAList(newListId);
-        
-        $state.go('app.list',{listId: newListId});
-        
-      }, function(){console.log('the list creation failed.'); });
-      
-  };
+ 
 
   // Delete a list
   $scope.deleteList = function (list) {

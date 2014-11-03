@@ -9,7 +9,8 @@ angular.module('Services.oauth', [])
   
   // This watches for changes in the token, and redirects as needed.
   $rootScope.$watch('token',function(){
-    console.log('rootScope token changed',$rootScope.token);
+    
+    $rootScope.debug('oauth13: rootScope token changed: ' + $rootScope.token);
     // If token is loading, go to loading screen.
     if(typeof ($rootScope.token) === 'string' && $rootScope.token ==='loading'){
       $state.go('loading');
