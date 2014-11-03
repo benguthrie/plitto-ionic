@@ -5,34 +5,8 @@
   <ion-content class="has-header">
     
     <div class="list card" ng-repeat="user in $root.thingData.items">
-      <a class="item item-avatar" href="#/app/profile/{{user.uid}}" ng-click="showUser(user.uid,user.username,'ditto');">
-        <img src="http://graph.facebook.com/{{user.fbuid}}/picture">
-        <h2>{{user.username}}</h2>
-        <p>IN COMMON STATS?</p>
-      </a>
-      <div class="list" ng-repeat="list in user.lists">
-        <div class="item item-divider" ng-click="showList(list.lid, list.listname, user.uid);">
-          {{list.listname}}
-        </div>
-        <div class="item" ng-repeat="item in list.items">
-            <div side="right" class="button"  style="font-size: 2.5em; float: right;" ng-class="{'ionicons ion-ios7-bolt' : item.mykey === 0 ,'ionicons ion-ios7-checkmark-outline' : item.mykey === null , 'ionicons ion-ios7-checkmark' : item.mykey > 0 }" ng-click="ditto(item.mykey, user.uid, list.lid, item.tid, $event,'thingData.items');"></div>
-          {{item.thingname}}
-            
-            
-            <!-- TODO1 - Place this where it should go -->
-            <h6>{{item.added}}</h6>
-            
-            <!-- TODO1 - Place this where it should go --> 
-                <!-- TODO1 Add the mega-octicon font set - Remove "Typed" after --> 
-            <h6 ng-show="item.dittouser === null" class="mega-octicon octicon-pencil">TYPED</h6>
-            <h6 ng-show="item.dittouser !== null">dittoed from {{item.dittousername}}</h6>
-            
-        </div>
-         <div class="item item-divider" style="text-align: center;">
-            Ditto more from this list.
-        </div>
-      </div>
-        
+      {{user}}
+      <user-list-thing store="thingData.items" source="thing" user-data="thingData.items"></user-list-thing>        
     </div>
     
   </ion-content>

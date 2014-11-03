@@ -38,14 +38,38 @@ var showFeed = function (theType, userFilter, listFilter, myState, oldestKey) {
 
 }    
     
-var showUser = function (userId) {
-  $rootScope.profileData.lists = [];
-  getSome('profile',userId,'ditto');
-  getUserListOfLists(userId, 'profileData.lists');              
+/* 11.3.2014 */
+var showUser = function (userId, userName, dataScope) {
+  
+    // 
+  console.log('dbFactory: show a user. vars.user: ', $rootScope.vars.user, ' uid: ',userId,' username: ',userName, 'dataScope', dataScope);
+  $rootScope.profileData = {
+    userName: userName,
+    userId: userId,
+    lists: [],
+    ditto: [],
+    feed: [],
+    shared: []
+  };
+
+  // Get something to ditto 
+  dbGetSome('$rootScope.profileData.ditto', userId, '', 'ditto');
+  
+  $rootScope.nav.view = "user.ditto";
+  getUserListOfLists(userId, '$rootScope.profileData.lists');
+
+  // dbFactory.showUser(userId);
+  //dbGetSome = function (theScope, userfilter, listfilter, sharedFilter)
+  $state.go('app.profile',{userId: userId});
+  
 };
     
-/* 10/4/2014 */
+/* 10/4/2014, 11/3/2014 */
 var showThing = function (thingId, thingName, userFilter) {
+  // Clear out the rootScope.thingData to show a new thing.
+  $rootScope.thingData = {thingId: thingId, thingName: thingName, items: []};
+  $state.go('app.thing',{thingId: thingId});
+        
   // $rootScope.vars.modal.filter = 'all';
   var thingParams = $.param({token: $rootScope.token, thingId: thingId });
   $http(
@@ -59,10 +83,8 @@ var showThing = function (thingId, thingName, userFilter) {
   
     // $rootScope.modal.listStore = data.results;
     $rootScope.thingData.items = data.results;
-
-    // console.log($rootScope.modal.listStore);
-
-      // For the user and the list, change the increments of dittoable and in common.
+    
+    console.log('rs.td.items',$rootScope.thingData);
   } );
     
 };
@@ -94,8 +116,28 @@ var search = function (searchTerm) {
 
 // dbFactory.dbDitto('bite',i,j,k,mykey,uid,lid,tid);      
       
-var dbDitto = function (scopeName, i,j,k, mykey, uid, lid, tid, event ) {
+var dbDitto = function (scopeName, mykey, uid, lid, tid, event ) {
   //  console.log('dbFactory.dbDitto | mykey: ', mykey,'| ownerid: ', uid, '| listid: ',lid, tid,i,j,k);
+  var i,j,k;
+
+  findItem:{
+      for(i in eval('$rootScope.' + scopeName)){
+          if(  eval('$rootScope.' + scopeName + '[i].uid') === uid){
+              for(j in eval('$rootScope.' + scopeName + '[i]["lists"]') ){
+                  if(  eval('$rootScope.' + scopeName + '[i]["lists"][j].lid')  === lid){
+                      for(k in eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"]')  ){
+                          if( eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].tid') === tid){
+                              // Change the state of this item.
+                              eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].mykey = 0');
+                              // There can be only one. So stop once you find it.
+                              break findItem;
+                          }
+                      }
+                  }
+              }
+          } 
+      }
+  }
 
 // Update the action, by whether or not the first item is null or not.
 if(mykey === null) {
@@ -516,9 +558,11 @@ var modalReset = function () {
 /* 9/3/2014 */
 var showAList = function (listNameId, listName, userFilter) {
   // 
-    console.log('showAList: ',listNameId, listName , userFilter);
+  console.log('showAList: ',listNameId, listName , userFilter);
   
   $rootScope.list = { listId: listNameId, listName: listName, ditto:[], shared:[], feed:[], strangers:[]};
+  $rootScope.nav.listView = 'ditto';
+  $state.go('app.list',{listId: listNameId});
   
   var existing = [];    
   // getMore ('list',listNameId, userFilter, existing);

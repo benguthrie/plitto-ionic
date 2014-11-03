@@ -44,33 +44,6 @@ angular.module('Plitto.controllers', [])
     }
   };
   
- 
-  $rootScope.showList = function(listId, listName, userFilter){
-    console.log('global show a list');
-    // $scope.showAList = function(listId, listName, userFilter){
-    // 10/22/2014 -- Build the entries in the rootScope for the list.
-    dbFactory.showAList(listId, listName, userFilter);
-    
-    $rootScope.nav.listView = 'ditto';
-    
-    
-    $state.go('app.list',{listId: listId});
-    // };
-  };
-  
-  $rootScope.showThing = function(thingId, thingName, userFilter){
-    console.log('global show a thing');
-    
-     // $scope.showAList = function(listId, listName, userFilter){
-    // 10/22/2014 -- Build the entries in the rootScope for the list.
-    
-    $rootScope.thingData = {thingId: thingId, thingName: thingName, items: []};
-    
-    dbFactory.showThing(thingId, thingName, userFilter);
-    
-    $state.go('app.thing',{thingId: thingId});
-    // };
-  };
   
   // Initialize the content
   $rootScope.init = function(){
@@ -119,63 +92,7 @@ angular.module('Plitto.controllers', [])
       
   };
   
-  $rootScope.showUser = function(userId, userName, dataScope){
-    // console.log('global: show a user.', $rootScope.vars.user, 'uid: ',userId,' username: ',userName);
-    $rootScope.profileData = {
-      userName: userName,
-      userId: userId,
-      lists: [],
-      ditto: [],
-      feed: [],
-      shared: []
-    };
-    
-    $rootScope.nav.view = "user.ditto";
-    
-    // dbFactory.showUser(userId);
-    //dbGetSome = function (theScope, userfilter, listfilter, sharedFilter)
-    dbFactory.dbGetSome('$rootScope.profileData.ditto', userId, '', 'ditto');
-    dbFactory.getUserListOfLists(userId, '$rootScope.profileData.lists');
-  };
   
-  
-  /* TODO This function must be available in may different locations throughout the app */
-    $rootScope.ditto = function(mykey, uid, lid, tid, $event,scopeName){
-        // console.log('your existing key is: ',mykey, ' from user: ',uid,' from list: ', lid,' and thing: ',tid);
-
-        /* Trach which record we're updating. Direct key would be preferable to looping through any portion of the rootscope.. */
-        var i,j,k;
-      
-      // console.log('scopeName and results: ',scopeName, ' results: ',eval('$rootScope.' + scopeName));
-      
-        // console.log($rootScope.profileData.feed[0]["lists"
-      findItem:{
-            for(i in eval('$rootScope.' + scopeName)){
-                if(  eval('$rootScope.' + scopeName + '[i].uid') === uid){
-                    for(j in eval('$rootScope.' + scopeName + '[i]["lists"]') ){
-                        if(  eval('$rootScope.' + scopeName + '[i]["lists"][j].lid')  === lid){
-                            for(k in eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"]')  ){
-                                if( eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].tid') === tid){
-                                    // Change the state of this item.
-                                    eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].mykey = 0');
-                                    // There can be only one. So stop once you find it.
-                                    break findItem;
-                                }
-                            }
-                        }
-                    }
-                } 
-            }
-        }
-      
-        // console.log('final ijk: ',i,j,k);
-        
-        // Call the ditto in the dbFactory. It will handle the key in the correct scope for styling purposes. 
-        /* TODO3 - Review this whole process */
-        dbFactory.dbDitto(scopeName,i,j,k,mykey,uid,lid,tid, $event);
-        
-        
-    };
   
 }) 
 .controller('AppCtrl', function($scope, $state, dbFactory, $rootScope, localStorageService,Facebook,$ionicViewService) {
@@ -278,69 +195,21 @@ angular.module('Plitto.controllers', [])
 
   })
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-  .controller('HomeCtrl',function($scope, $rootScope,dbFactory) {
-    console.log('initiate home control');
-    
-    $scope.test = { whatever: 'that'};
+.controller('HomeCtrl',function($scope, $rootScope,dbFactory) {
+  console.log('initiate home control');
+  $scope.testFunction = function(){
+    console.log('test function clicked.');
+  };
   
-    $scope.userListThing = [{"uid":"69","username":"Desiree Lieber","fbuid":"1247873543","lists":[{"lid":"1795","listname":"Cities I have visited on personal travels","items":[{"added":"2008-11-22 22:54:15","tid":"3451","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"Cherry Hill, NJ"},{"added":"2008-11-22 22:54:15","tid":"3453","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"San Marcos, TX"},{"added":"2008-11-22 22:54:15","tid":"3447","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"Rome, Italy"},{"added":"2008-11-22 22:54:15","tid":"3454","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"Buda, TX"},{"added":"2008-11-22 22:54:15","tid":"3450","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"Philadelphia, PA"},{"added":"2008-11-22 22:54:15","tid":"3457","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"Wauconda, IL"},{"added":"2008-11-22 22:54:15","tid":"3104","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"Palm Springs, CA"},{"added":"2008-11-22 22:54:15","tid":"3455","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"Hilton Head Island, SC"},{"added":"2008-11-22 22:54:15","tid":"3456","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"Columbia, SC"}]}]} ,{"uid":"18","username":"Greg Guthrie","fbuid":"4700900","lists":[{"lid":"222","listname":"Movies I Want to Watch","items":[{"added":"2008-11-22 22:54:15","tid":"229","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"I am Sam"},{"added":"2008-11-22 22:54:15","tid":"283","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"Arrested Development: Season 3"},{"added":"2008-11-22 22:54:15","tid":"223","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"Sling Blade"},{"added":"2008-11-22 22:54:15","tid":"224","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"Braveheart"},{"added":"2008-11-22 22:54:15","tid":"225","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"Shawshank Redemption"}]}]} ,{"uid":"0","username":"Stranger","fbuid":"0","lists":[{"lid":"2851","listname":"Simple Pleasures","items":[{"added":"2008-11-22 22:54:15","tid":"3691","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"streching when tired"},{"added":"2008-11-22 22:54:15","tid":"3694","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"scooping soft ice cream"},{"added":"2008-11-22 22:54:15","tid":"3691","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"streching when tired"},{"added":"2009-01-23 03:38:08","tid":"6286","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"using an automatic faucet with water that is the perfect temperature"},{"added":"2008-12-17 18:15:58","tid":"6286","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"using an automatic faucet with water that is the perfect temperature"},{"added":"2009-06-25 16:30:17","tid":"6748","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"Getting a close parking spot in a crowded lot"}]},{"lid":"2874","listname":"Famous People I've Seen Around","items":[{"added":"2008-11-22 22:54:15","tid":"3797","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"Brian Baumgartner"},{"added":"2008-11-22 22:54:15","tid":"4159","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"Leann Rimes"},{"added":"2009-01-23 03:38:42","tid":"6323","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"Arnold Morning"},{"added":"2008-12-20 07:28:31","tid":"6288","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"Rafael Nadal"},{"added":"2008-11-22 22:54:15","tid":"6194","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"Jon Voight"},{"added":"2008-11-22 22:54:15","tid":"355","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"Ben Folds"},{"added":"2009-01-25 06:19:54","tid":"6357","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"James Marsden"},{"added":"2008-11-22 22:54:15","tid":"6195","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"Randy White"},{"added":"2008-11-22 22:54:15","tid":"2879","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"Jay Cutler"},{"added":"2009-02-26 15:31:24","tid":"6434","dittokey":"0","mykey":null,"dittouser":null,"dittofbuid":null,"dittousername":null,"thingname":"Steve Zahn"}]}]} ];
-  
-    $scope.getSome = function(){
-        $rootScope.bite = [];
-      $scope.bite = 'this was reloaded';
-        // dbGetSome = function (theScope, userfilter, listfilter, sharedFilter)
-        dbFactory.dbGetSome('$rootScope.bite', '', '', 'ditto');
-    };
-  
-  })
 
+  $scope.getSome = function(){
+      $rootScope.bite = [];
+    $scope.bite = 'this was reloaded';
+      // dbGetSome = function (theScope, userfilter, listfilter, sharedFilter)
+      dbFactory.dbGetSome('$rootScope.bite', '', '', 'ditto');
+  };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+})
 
 .controller('DebugCtrl', function($scope,dbFactory, $rootScope) {
   $scope.loadList = function(type){

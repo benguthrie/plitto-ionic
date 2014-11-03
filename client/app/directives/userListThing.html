@@ -1,19 +1,17 @@
-
-<a class="item item-avatar" href="#/app/profile/{{userData.uid}}" ng-click="showUser(userData.uid,user.username,'ditto');">
+<a class="item item-avatar"  ng-click="showUser(userData.uid,userData.username,'ditto');">
   <img src="http://graph.facebook.com/{{userData.fbuid}}/picture">
   <h2>{{userData.username}}</h2>
   <p>IN COMMON STATS?</p>
 </a>
 <div class="list" ng-repeat="list in userData.lists">
-  <div class="item item-divider" ng-click="showList(list.lid, list.listname, userData.uid);">
+  <div class="item item-divider" ng-click="showList(list.lid, list.listname, userData.uid); testFunction();">
     {{list.listname}}
   </div>
   <div class="item" ng-repeat="item in list.items">
-    <div side="right" class="button"  style="font-size: 2.5em; float: right;" ng-class="{'ionicons ion-ios7-bolt' : item.mykey === 0 ,'ionicons ion-ios7-checkmark-outline' : item.mykey === null , 'ionicons ion-ios7-checkmark' : item.mykey > 0 }" ng-click="ditto(item.mykey, userData.uid, list.lid, item.tid, $event,'bite');"></div>
+    <div side="right" class="button"  style="font-size: 2.5em; float: right;" ng-class="{'ionicons ion-ios7-bolt' : item.mykey === 0 ,'ionicons ion-ios7-checkmark-outline' : item.mykey === null , 'ionicons ion-ios7-checkmark' : item.mykey > 0 }" ng-click="ditto(item.mykey, userData.uid, list.lid, item.tid, $event,store);"></div>
     <div  ng-click="showThing(item.tid, item.thingname, userData.uid);">
       {{item.thingname}}
 
-  
       <h6>{{item.added}}</h6>
 
       <h6 ng-show="item.dittouser === null" class="mega-octicon octicon-pencil">TYPED</h6>

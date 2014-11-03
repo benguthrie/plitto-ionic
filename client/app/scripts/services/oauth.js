@@ -40,7 +40,7 @@ angular.module('Services.oauth', [])
     console.log('Got this code: ' + code);
     console.log('Now what? Think a post to plitto.com has to happen');
     $window.location = '#/app/home';
-    $rootScope.token = "807cfa6f392685f6d1131082d9a42276";
+    $rootScope.token = "807cfa6f392685f6d1131082d9a42276"; // Diego's hard coded token.
   };
   */
 
@@ -73,7 +73,7 @@ angular.module('Services.oauth', [])
       authWindow.addEventListener('loadstart', loadstart);
     } else {
       // $window.location = authUrl;
-      console.log('OAuth - Web Redirecta for web clients', authUrl, redirect_uri);
+      console.log('OAuth - Web Redirect for web clients', authUrl, redirect_uri);
       console.log('Redirecting for web');
       $window.location = authUrl;
     }

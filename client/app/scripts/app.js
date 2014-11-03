@@ -290,21 +290,36 @@ angular.module('Plitto', [
     };
   });
   
-}).directive('userListThing', function() {
+}).directive('userListThing', function($rootScope, dbFactory, $state) {
   return {
     restrict: 'E',
     templateUrl: 'directives/userListThing.html',
     
     scope: {
-    store: '@store',
-    source: '@source',
-    userData: '=userData'
-//      user: "@userData" // Is the string version of the object we want..
-      // user: "=userData" // 2 way bound? Error. Token'user is unexpected, expecting [:] at expression [{{user}}]
-      // user: "&userData" // 2 way bound? Error. Token'user is unexpected, expecting [:] at expression [{{user}}]
-      // user: 'userData' // Invalid isolate scope definition for directive 'userListThing'. Definition: {... user: 'userData' ...}
-      // user: userData // 'userData' is not defined/
+      store: '@store',
+      source: '@source',
+      userData: '=userData'
+    },
+    controller: function($scope, dbFactory, $state) {
+      /* Ditto */
+      $scope.ditto = function(mykey, uid, lid, tid, $event,scopeName){
+        dbFactory.dbDitto(scopeName,mykey,uid,lid,tid, $event);
+      };
   
+      /* User */
+      $scope.showUser = function(userId, userName, dataScope){
+        dbFactory.showUser(userId,userName, dataScope);
+      };
+  
+      /* List */
+      $scope.showList = function(listId, listName, userFilter){
+        dbFactory.showAList(listId, listName, userFilter);
+      };
+  
+      /* Thing */
+      $scope.showThing = function(thingId, thingName, userFilter){
+        dbFactory.showThing(thingId, thingName, userFilter);
+      };
     }
   };
 });
