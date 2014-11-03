@@ -58,15 +58,6 @@ angular.module('Plitto.controllers', [])
   
   // Initialize the content
   $rootScope.init = function(){
-     $rootScope.modal = {
-		show: false,
-		type: null,
-		id: null,
-		listStore: [],
-		friendStore: [],
-		thingStore: [],
-		header: null
-	};
 
 	/* End if life in the future. It leads to scope bloat */
 	$rootScope.vars = { };
@@ -78,6 +69,7 @@ angular.module('Plitto.controllers', [])
 	$rootScope.vars.temp = {};
 	$rootScope.listStore = [];
 	$rootScope.friendStore = [];
+    $rootScope.message = 'rs message';
 
 	// 8/26/2014 New Navigation Vars
 	$rootScope.nav = {

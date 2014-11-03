@@ -62,6 +62,7 @@ angular.module('Services.facebook', [])
         },
         login:function () {
           console.log('Facebook login happening.');
+          $rootScope.message = $rootScope.message + ' <br/>facebook.login.';
           
           // $state.go('loading');
           
@@ -80,6 +81,7 @@ angular.module('Services.facebook', [])
               // console.log('Facebook responded');
 // TODO1 - Where should this go?!?            OAuth.redirect();
             FB.getLoginStatus(function (response) {
+              $rootScope.message = $rootScope.message + ' <br/>facebook.getLoginStatus.' + response;
                 // REMOVED 10/31 $rootScope.session.plittoState = 'Facebook Responded';
               console.log('Facebook.login 39 - Facebook response for getLoginStatus: ', response );
               
@@ -100,40 +102,42 @@ angular.module('Services.facebook', [])
                       case 'connected':
                         // Facebook had responded, and you're connected.
                         console.log("You are connected, but without a token. This should never happen.");
-                        
+                        $rootScope.message = $rootScope.message + ' <br/>facebook connected. Should not happen 105.';
                         break;
                       case 'not_authorized':
-                          // TODO? Here, we should handle the authorization.
-                          // console.log('factory_Facebook | The user pressed the button. | NOT AUTHORIZED.');
+                        // TODO? Here, we should handle the authorization.
+                        // console.log('factory_Facebook | The user pressed the button. | NOT AUTHORIZED.');
+                        $rootScope.message = $rootScope.message + ' <br/>facebook.login: not_authorized.';
+                        console.log('You will be prompted to add permissions in Facebook. Status: not_authorized.');
 
-                          console.log('You will be prompted to add permissions in Facebook. Status: not_authorized.');
+                        /* http://stackoverflow.com/questions/3834939/facebook-oauth-for-mobile-web */
+                        // OAUTH SERVICE REDIRECT HERE
+                        OAuth.redirect();
 
-                          /* http://stackoverflow.com/questions/3834939/facebook-oauth-for-mobile-web */
-                          // OAUTH SERVICE REDIRECT HERE
-                          OAuth.redirect();
-
-                          break;
+                        break;
 
                       case 'unknown':
-                          console.log('Facebook Redirect. If you see this for long, go to plitto.com in Safari, Chrome, Opera, Firefox or Internet Explorer. status: unknown.');
-               
-                          // OAUTH SERVICE REDIRECT HERE
-                          OAuth.redirect();
-                          break;
+                        $rootScope.message = $rootScope.message + ' <br/>facebook.login: unknown';
+                        console.log('Facebook Redirect. If you see this for long, go to plitto.com in Safari, Chrome, Opera, Firefox or Internet Explorer. status: unknown.');
+
+                        // OAUTH SERVICE REDIRECT HERE
+                        OAuth.redirect();
+                        break;
                       default:
-                          $rootScope.session.plittoState = 'Redirecting you to Facebook for authorization approval.';
+                        $rootScope.message = $rootScope.message + ' <br/>facebook.login default - Get more permissions..';
+                        $rootScope.session.plittoState = 'Redirecting you to Facebook for authorization approval.';
                           // 
-                      console.log('factory_Facebook.login = Default. FB.login about to be called again after getting permissions. Line 113.');
-                          FB.login(function (response) {
-                              if (response.authResponse) {
-                                
-                                  $rootScope.$broadcast('fb_connected', {facebook_id:response.authResponse.userID});
-                                  $rootScope.$broadcast('fb_get_login_status');
-                              } else {
-                                  $rootScope.$broadcast('fb_login_failed');
-                              }
-                          });
-                          break;
+                        console.log('factory_Facebook.login = Default. FB.login about to be called again after getting permissions. Line 113.');
+                        FB.login(function (response) {
+                            if (response.authResponse) {
+
+                                $rootScope.$broadcast('fb_connected', {facebook_id:response.authResponse.userID});
+                                $rootScope.$broadcast('fb_get_login_status');
+                            } else {
+                                $rootScope.$broadcast('fb_login_failed');
+                            }
+                        });
+                        break;
                   }
                 }
             }, true);

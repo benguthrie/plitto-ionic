@@ -4,7 +4,7 @@ angular.module('Services.oauth', [])
 .service('OAuth', function ($window, $rootScope, $state, $timeout) {
   // Need to change redirect from plitto.com if on mobile
   // otherwise we're just going to load the entire website on the phone
-  console.log('window: ',window);
+  // console.log('window: ',window);
   var redirect_uri = window.cordova ? 'http://plitto.com' : 'http://plitto.com';
   
   // This watches for changes in the token, and redirects as needed.
@@ -43,6 +43,8 @@ angular.module('Services.oauth', [])
 
   // Event handler for the inAppBrowser plugin's `loadstart` event
   var loadstart = function (e) {
+    $rootScope.message = $rootScope.message + ' <br/>oauth loadstart.';
+    
     console.log(e.url);
     // TODO: HANDLE ERROR (if user denies access)
     // Form: error=access_denied&error_code=200&error_description=Permissions+error&error_reason=user_denied
@@ -61,6 +63,7 @@ angular.module('Services.oauth', [])
   };
 
   this.redirect = function () {
+    $rootScope.message = $rootScope.message + ' <br/>oauth redirect.';
     if (window.cordova) {
       console.log('Redirecting for mobile: ' + authUrl);
       authWindow = $window.open(authUrl, '_blank', 'location=no,toolbar=no');
