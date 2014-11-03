@@ -28,6 +28,22 @@ angular.module('Plitto.controllers', [])
     $scope.modal = modal;
   });
 */
+  $rootScope.debug = function(message) {
+    
+    if(typeof($rootScope.message) === 'string' && $rootScope.message.length > 255){
+      $rootScope.message = 'cleared';
+    }
+    
+    if($rootScope.debugOn === true){
+      if(typeof (message) ==='string'){
+        console.log(message);
+        $rootScope.message = $rootScope.message + " | " + message;
+      } else {
+        console.log('message is not a string', message);
+      }
+    }
+  };
+  
  
   $rootScope.showList = function(listId, listName, userFilter){
     console.log('global show a list');
@@ -58,6 +74,8 @@ angular.module('Plitto.controllers', [])
   
   // Initialize the content
   $rootScope.init = function(){
+    // Manage debug globally.
+    $rootScope.debugOn = true;
 
 	/* End if life in the future. It leads to scope bloat */
 	$rootScope.vars = { };
@@ -164,17 +182,20 @@ angular.module('Plitto.controllers', [])
 .controller('AppCtrl', function($scope, $state, dbFactory, $rootScope, $ionicViewService, localStorageService,Facebook) {
   // On load, load the correct interface
   console.log('$rootScope.token onload action: ', $rootScope.token);
+  $rootScope.debug('AppCtrl load: Token: ' + $rootScope.token );
   if(typeof ($rootScope.token) === 'string' && $rootScope.token ==='loading'){
     console.log('initial: loading');
+    $rootScope.debug('Appctrl - 179 Rootscope is loading.');
     $state.go('loading');
   } else if (typeof ($rootScope.token) === 'string' && $rootScope.token.length > 0){
     // We will assume that the token is valid TODO1 - Test it.
-    console.log('initial: appears valid');
+    $rootScope.debug('Appctrl - 183 Loading because the token looks good.');
     $state.go('app.home'); // TODO1 - Diego - Should this be moved? - Not working!
     $ionicViewService.clearHistory();
     // $location.path('/login');
   } else {
     console.log('initial: null?');
+    $rootScope.debug('Appctrl - 189 Rootscope is null?');
     $state.go('login');
   }
   
@@ -186,21 +207,22 @@ angular.module('Plitto.controllers', [])
   // Grab the user info here as soon as they login.
   
   $scope.login = function () {
-    console.log('controllers AppCtrl.login() pressed.');
+    $rootScope.debug('Appctrl - controllers AppCtrl.login() pressed.');
     Facebook.login();
   };
   
   // Global Logout Handler
   $scope.logout = function () {
     // TODO: Make database service call.
-    console.log('TODO2: FB Logout call');
+    
+    $rootScope.debug('Appctrl - TODO2: FB Logout call.');
     // $state.go('app.login',{listId: newListId});
     Facebook.logout();
     
     // Clear all the stores.
     $rootScope.init();
     localStorageService.clearAll();
-    console.log("$rootScope",$rootScope);
+    $rootScope.debug('clear rootScope. Rootscope: ' + JSON.stringify($rootScope));
     
     // Clear local storage
     
@@ -216,7 +238,7 @@ angular.module('Plitto.controllers', [])
   };
     
   $scope.loadLists = function(){
-    console.log("You want to load lists into your profile.");
+    $rootScope.debug("AppCtrl You want to load lists into your profile.");
     // dbFactory.getUserListOfLists($rootScope.vars.user.userId);
     dbFactory.getUserListOfLists($rootScope.vars.user.userId , '$rootScope.lists');
   };
@@ -231,20 +253,22 @@ angular.module('Plitto.controllers', [])
   .controller('LoadingCtrl',function($scope, $rootScope,dbFactory) {
     // Control for thing goes here.
     $scope.thetoken = $rootScope.token;
-  
-     console.log('loadingctrl loaded');
+    $rootScope.debug("loadingctrl loaded");
+     
     $scope.showToken = function(){
-      console.log('showToken');
+      $rootScope.debug("LoadingCtrl showToken");
+      
       $scope.thetoken = $rootScope.token;
     }
     
     $scope.clearToken = function(){
-      console.log('clearToken');
+      $rootScope.debug("LoadingCtrl clearToken");
+      
       $scope.thetoken = 'cleared!';
     }
     
     $scope.setToken = function(){
-      console.log('setToken');
+      $rootScope.debug("LoadingCtrl setToken to 35358a19f081483800da33f59635e86f");
       $scope.thetoken = '35358a19f081483800da33f59635e86f';
     }
     
@@ -264,7 +288,8 @@ angular.module('Plitto.controllers', [])
 
 .controller('DebugCtrl', function($scope,dbFactory, $rootScope) {
   $scope.loadList = function(type){
-    console.log('DEBUG loadList',type);
+    $rootScope.debug("DebugCtrl DEBUG loadList TYPE: " +type);
+    
     var listId = 231; // Movies I've seen.
     // loadList = function(listNameId, listName, userIdFilter, type, sharedFilter, oldestKey){
     var userIdFilter = ''; // Defaults to no filter.
@@ -273,6 +298,11 @@ angular.module('Plitto.controllers', [])
     var oldestKey = 0; // Option is to show only items older than the one there.
     dbFactory.loadList(listId, 'Products on My Radar', userIdFilter, type, sharedFilter, oldestKey);
   };
+  
+  $scope.debugCtrl = function(state){
+    $rootScope.debugOn = state;
+    $rootScope.debug("Debug now: " +state);
+  }
   
   $scope.debugLog = [{startItem: 'this is the start item'}];
   

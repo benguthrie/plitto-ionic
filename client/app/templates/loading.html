@@ -9,9 +9,11 @@
   
     <button ng-click="setToken();">Set Token</button>
   
+    <button ng-click="$root.debugOn = true; $root.debug('debugging is now on');">Debugging On</button>
+    <button ng-click="$root.debug('debugging is now off'); $root.debugOn = false;">Debugging Off</button>
   <h1>Message</h1>
   <p ng-bind='$root.message'></p>
   
-  <a href='/#/login'>Back to login</a>
+  <a href='#/login'>Back to login</a>
   </ion-content>
 </ion-modal-view>

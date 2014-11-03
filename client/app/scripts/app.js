@@ -15,13 +15,13 @@ angular.module('Plitto', [
 ])
 
 .run(function ($ionicPlatform, $rootScope, dbFactory, Facebook, OAuth, $state) {
-  /* 
-  $rootScope.$watch( function($rootScope.token){
-    console.log('watching rootScope.token',$rootScope.token);
+  
+  $rootScope.$watch( function(token){
+    $rootScope.debug(" app.js 21 watching rootScope.token " + $rootScope.token);
     return($rootScope.token);
   }, function(newValue,oldValue){
-    console.log('RootScope.token change: new: ',newValue,' old: ', oldValue);
-  }); */
+    $rootScope.debug('app.js 25 RootScope.token change: new: ' + newValue +' old: '+ oldValue);
+  }); 
   
   
     
