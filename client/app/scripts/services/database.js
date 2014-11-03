@@ -234,7 +234,7 @@ var fbTokenLogin = function(fbToken){
         //  console.log('get some goes into $rootScope.bite',$rootScope.bite);
       
         // FINALLY! - Load the interface
-      $state.go('app.home');
+        $state.go('app.home');
         
       }else{
         console.log("TODO1 There was an error. Log it.");

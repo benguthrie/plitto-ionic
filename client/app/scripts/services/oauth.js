@@ -7,7 +7,7 @@ angular.module('Services.oauth', [])
   // console.log('window: ',window);
   var redirect_uri = window.cordova ? 'http://plitto.com' : 'http://plitto.com';
   
-  // This watches for changes in the token, and redirects as needed.
+  // This is the only place that controlls the navigation based on the token's presence.
   $rootScope.$watch('token',function(){
     
     $rootScope.debug('oauth13: rootScope token changed: ' + $rootScope.token);
@@ -22,6 +22,8 @@ angular.module('Services.oauth', [])
       $state.go('login');
     }
   });
+  
+  
   // TODO 11/2/2014 - This might not be used.
   var authUrl ='http://www.facebook.com/dialog/oauth?'
     + 'client_id=207184820755'
