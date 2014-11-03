@@ -178,52 +178,8 @@ angular.module('Plitto.controllers', [])
     };
   
 }) 
+.controller('AppCtrl', function($scope, $state, dbFactory, $rootScope, localStorageService,Facebook,$ionicViewService) {
 
-.controller('AppCtrl', function($scope, $state, dbFactory, $rootScope, $ionicViewService, localStorageService,Facebook,$ionicModal ) {
-  // Add a list
-   // Initialize variablse
-  $scope.newList = {};
-  $scope.modal = null;
-  
-   //Cleanup the modal when we're done with it!
-  $scope.$on('$destroy', function() {
-    $scope.modal.remove();
-  });
-  
-
-  $ionicModal.fromTemplateUrl('templates/modals/add-list.html', {
-    scope: $scope,
-    animation: 'slide-in-up'
-  }).then(function(modal) {
-    $scope.modal = modal;
-  });
-  // Launch add-list modal
-  $scope.addListModal = function () {
-    $rootScope.debug('addListModal called');
-    $scope.modal.show();
-  };
-
-  // Close add-list modal
-  $scope.closeModal = function () {
-    $scope.modal.hide();
-  };
-
-  // Create a new list
-  $scope.createList = function () {
-    // TODO: Make database service call.
-    
-      dbFactory.newList($scope.newList.title, function(newListId, listName){
-        // console.log('the list creation was successful', newListId, listName);
-
-        dbFactory.showAList(newListId);
-        
-        $state.go('app.list',{listId: newListId});
-        
-      }, function(){console.log('the list creation failed.'); });
-      
-  };
-  
-  
   // On load, load the correct interface
   // console.log('$rootScope.token onload action: ', $rootScope.token);
   $rootScope.debug('AppCtrl load: Token: ' + $rootScope.token );
@@ -287,11 +243,6 @@ angular.module('Plitto.controllers', [])
     dbFactory.getUserListOfLists($rootScope.vars.user.userId , '$rootScope.lists');
   };
   
-  // Launch add-list modal
-  $scope.addListModal = function () {
-    $rootScope.debug('addListModal called');
-    $scope.modal.show();
-  };
     
 })
 
@@ -327,15 +278,66 @@ angular.module('Plitto.controllers', [])
 
   })
 
-  .controller('HomeCtrl',function($scope, $rootScope,dbFactory) {
 
-      $scope.getSome = function(){
-          $rootScope.bite = [];
-          // dbGetSome = function (theScope, userfilter, listfilter, sharedFilter)
-          dbFactory.dbGetSome('$rootScope.bite', '', '', 'ditto');
-      };
+
+
+
+
+
+
+
+
+
+
+
+
+  .controller('HomeCtrl',function($scope, $rootScope,dbFactory) {
+    console.log('initiate home control');
+    
+  
+  
+    $scope.getSome = function(){
+        $rootScope.bite = [];
+      $scope.bite = 'this was reloaded';
+        // dbGetSome = function (theScope, userfilter, listfilter, sharedFilter)
+        dbFactory.dbGetSome('$rootScope.bite', '', '', 'ditto');
+    };
   
   })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 .controller('DebugCtrl', function($scope,dbFactory, $rootScope) {

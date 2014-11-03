@@ -1,0 +1,45 @@
+Source: {{source}} <br/>
+Store: {{store}} <br/>
+UserID: {{user.uid}}<br/>
+user: {{user}}
+<!--
+User Raw: {{user}} <br/>
+
+fromJson: {{fromJson(user).uid}} <br/>
+user.uid: {{user.uid}}<br/>
+subScope[0].uid: {{user[0].uid}}<br/>
+just uid: {{uid}}<br/>
+
+bite: {{bite}}<br/>
+
+<h1>Template needs a valid source.</h1>
+<a class="item item-avatar" href="#/app/profile/{{user.uid}}" ng-click="showUser(user.uid,user.username,'ditto');">
+  <img src="http://graph.facebook.com/{{user.fbuid}}/picture">
+  <h2>{{user.username}}</h2>
+  <p>IN COMMON STATS?</p>
+</a>
+<div class="list" ng-repeat="list in user.lists">
+  <div class="item item-divider" ng-click="showList(list.lid, list.listname, user.uid);">
+    {{list.listname}}
+  </div>
+  <div class="item" ng-repeat="item in list.items">
+    <div side="right" class="button"  style="font-size: 2.5em; float: right;" ng-class="{'ionicons ion-ios7-bolt' : item.mykey === 0 ,'ionicons ion-ios7-checkmark-outline' : item.mykey === null , 'ionicons ion-ios7-checkmark' : item.mykey > 0 }" ng-click="ditto(item.mykey, user.uid, list.lid, item.tid, $event,'bite');"></div>
+    <div  ng-click="showThing(item.tid, item.thingname, user.uid);">
+      {{item.thingname}}
+
+  
+      <h6>{{item.added}}</h6>
+
+      <h6 ng-show="item.dittouser === null" class="mega-octicon octicon-pencil">TYPED</h6>
+      <h6 ng-show="item.dittouser !== null">dittoed from {{item.dittousername}}</h6>
+
+    </div>
+
+  </div>
+
+-->
+  <!-- TODO - add logic to show this line only when there are more items from this list
+  <div class="item item-divider" style="text-align: center;">
+    Ditto more from this list.
+  </div>
+</div>

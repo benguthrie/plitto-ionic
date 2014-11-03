@@ -190,8 +190,12 @@ var dbGetSome = function (theScope, userfilter, listfilter, sharedFilter) {
         }
         
       } else {
-        // eval('console.log("net Results",' + theScope +');');  
+        // eval('console.log("net Results",' + theScope +');'); 
+        // This makes the scope that was passed in that part of the root scope.
         eval(theScope + ' = data.results;');
+        
+        // Testing returning it so it can be part of the rootScope:
+        // return data.results;
       }
       // console.log('dbFactory.getActivity data: ',data);
       

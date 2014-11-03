@@ -290,5 +290,24 @@ angular.module('Plitto', [
     };
   });
   
+}).directive('userListThing', function() {
+  return {
+    restrict: 'E',
+    templateUrl: 'directives/userListThing.html',
+    scope: {
+      store: '@store',
+      source: '@source',
+      user: "@userData" // Is the string version of the object we want..
+      // user: "=userData" // 2 way bound? Error. Token'user is unexpected, expecting [:] at expression [{{user}}]
+      // user: "&userData" // 2 way bound? Error. Token'user is unexpected, expecting [:] at expression [{{user}}]
+      // user: 'userData' // Invalid isolate scope definition for directive 'userListThing'. Definition: {... user: 'userData' ...}
+      // user: userData // 'userData' is not defined/
+  
+    },
+    controller: function($scope){
+      // console.log('307', angular.fromJson($scope.user));
+      $scope.user = angular.fromJson($scope.user); //!!!  This doesn't apply the change in the scope.
+    }
+  };
 });
 
