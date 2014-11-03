@@ -5,8 +5,7 @@
   <ion-content class="has-header">
     
     <div class="list card" ng-repeat="user in $root.thingData.items">
-      {{user}}
-      <user-list-thing store="thingData.items" source="thing" user-data="thingData.items"></user-list-thing>        
+      <user-list-thing store="thingData.items" source="thing" user-data="user"></user-list-thing>        
     </div>
     
   </ion-content>

@@ -8,9 +8,10 @@ angular.module('Services.database', [])
 
 /* 11/2/2014 */
   var checkToken = function(token){
-    console.log('check the token to see if we should proceed.');
+    // console.log('check the token to see if we should proceed.');
     if(typeof token ==='undefined' || token.length === 0){
       $state.go('login');
+      $rootScope.init();
     }
       
   }

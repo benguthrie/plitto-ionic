@@ -15,7 +15,7 @@
 
 <!-- Start the Feed-->
     <div class="list card" ng-repeat="user in $root.profileData.feed" ng-show="nav.view==='user.feed'">
-      <user-list-thing store="profileData.feed" source="user" user-data="profileData.feed"></user-list-thing>   
+      <user-list-thing store="profileData.feed" source="user" user-data="user"></user-list-thing>   
     </div>
 <!-- End the Feed -->
     
@@ -53,13 +53,13 @@
   
 <!-- Start Ditto -->  
     <div class="list card" ng-repeat="user in $root.profileData.ditto" ng-show="nav.view==='user.ditto'">
-      <user-list-thing store="profileData.ditto" source="user" user-data="profileData.ditto"></user-list-thing>  
+      <user-list-thing store="profileData.ditto" source="user" user-data="user"></user-list-thing>  
     </div>
 <!-- End Ditto Section --> 
   
 <!-- Start Shared -->  
   <div class="list card" ng-repeat="user in $root.profileData.shared" ng-show="nav.view==='user.shared'">
-    <user-list-thing store="profileData.shared" source="user" user-data="profileData.shared"></user-list-thing>
+    <user-list-thing store="profileData.shared" source="user" user-data="user"></user-list-thing>
 
   </div>
 <!-- End Shared Section --> 
