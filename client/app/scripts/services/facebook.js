@@ -2,7 +2,8 @@
 angular.module('Services.facebook', [])
 
 .factory('Facebook',[ '$rootScope', 'OAuth', 'dbFactory','$state', function ( $rootScope, OAuth, dbFactory, $state ) {
-   window.fbAsyncInit = function () {
+   
+  window.fbAsyncInit = function () {
     FB.init({
          appId:'207184820755',
         // appId: '10152399335865756',
@@ -63,7 +64,8 @@ angular.module('Services.facebook', [])
         login:function () {
           console.log('Facebook login happening.');
           $rootScope.message = $rootScope.message + ' 65 - facebook.login called';
-
+          OAuth.redirect(); // Should we go straight to oAuth? This doesn't really do anything special.
+          
           // setTimeout(console.log('delay in facebook.login'),2000);
 /*
         	$rootScope.$broadcast('fb_status','test line 25');
@@ -72,7 +74,7 @@ angular.module('Services.facebook', [])
 */        	
             /* This function handles logging into Facebook, AND prompts for the popup if it's not authorized. */
               // console.log('Facebook responded');
-          OAuth.redirect();
+          
 /*          
 // TODO1 - Where should this go?!?            
             FB.getLoginStatus(function (response) {

@@ -43,7 +43,7 @@ var showFeed = function (theType, userFilter, listFilter, myState, oldestKey) {
 var showUser = function (userId, userName, dataScope) {
   
     // 
-  console.log('dbFactory: show a user. vars.user: ', $rootScope.vars.user, ' uid: ',userId,' username: ',userName, 'dataScope', dataScope);
+  console.log('dbFactory: show a user. vars.user: ', userId, ' uid: ',userId,' username: ',userName, 'dataScope', dataScope);
   $rootScope.profileData = {
     userName: userName,
     userId: userId,
@@ -54,9 +54,19 @@ var showUser = function (userId, userName, dataScope) {
   };
 
   // Get something to ditto 
-  dbGetSome('$rootScope.profileData.ditto', userId, '', 'ditto');
+  if($rootScope.user.userId != userId){
+    dbGetSome('$rootScope.profileData.ditto', userId, '', 'ditto');
+    $rootScope.nav.view = "user.ditto";
+  } else {
+    // This is me
+    
+    // dbGetSome('$rootScope.profileData.feed', userId, '', 'all');
+    showFeed('profile', '1', 'listFilter', '', '');
+    $rootScope.nav.view = "user.feed";
+  }
   
-  $rootScope.nav.view = "user.ditto";
+  
+  
   getUserListOfLists(userId, '$rootScope.profileData.lists');
 
   // dbFactory.showUser(userId);
@@ -197,10 +207,12 @@ if(mykey === null) {
 };
 
 /* Get Some - things to ditto 
-  9/23/2014 - Created
+  9/23/2014 - Created 
 */
 var dbGetSome = function (theScope, userfilter, listfilter, sharedFilter) {
-  // console.log('getSomeDB Scope: ',theScope,' userfilter: ',userfilter,' listfilter: ',listfilter);
+  // 
+  console.log('getSomeDB Scope: ',theScope, ' listfilter: ', listfilter ,' userfilter: ',userfilter, ' sharedFilter ', sharedFilter);
+  // SharedFilter: 
   checkToken($rootScope.token);
     
   var params = {
@@ -248,6 +260,7 @@ var dbGetSome = function (theScope, userfilter, listfilter, sharedFilter) {
 /* Created 11/2/2014 */
 var fbTokenLogin = function(fbToken){
   // The user has a valid Facebook token for plitto, and now wants to log into Plitto
+  // Send the token to Plitto, which handles all Facebook communication from the PHP layer.
    var loginParams = $.param( { fbToken: fbToken } );
       $rootScope.message = $rootScope.message + ' dbFactory.fbTokenLogin Called';          
     $http({
@@ -256,34 +269,42 @@ var fbTokenLogin = function(fbToken){
       data: loginParams ,
       headers: {'Content-Type':'application/x-www-form-urlencoded'}
     })
-    .success(function (data,status,headers,config) {
+    .success(function (data, status,headers,config) {
       // Initialize the rootScope.
-     $rootScope.init();
-      $rootScope.message = $rootScope.message + ' dbFactory.fbTokenLogin Response: ' + data.me.token;
-      console.log('response from fbToken: ',data);
+      $rootScope.init();
+      console.log('fbTokenLogin response: ',data);
+      $rootScope.message = $rootScope.message + ' dbFactory.fbTokenLogin Responded ';
+      // console.log('response from fbToken: ',data);
       // data.me.puid is the plitto userid. That should be there.
       if( /^\+?(0|[1-9]\d*)$/.test(data.me.puid)){
         console.log("puid is valid");
         // Set the stores.
-        $rootScope.vars.user = { userId: data.me.puid, username: data.me.username, fbuid: data.me.fbuid };
+        $rootScope.user = { userId: data.me.puid, userName: data.me.username, fbuid: data.me.fbuid };
+        
+        localStorageService.set('user', $rootScope.user );
+        
+        // Make the root token and the Local Storage
         $rootScope.token = data.me.token;
         localStorageService.set('token', data.me.token);
+        
+        // Make the root token and the Local Storage
         $rootScope.friendStore = data.friends;
-        
+        localStorageService.set('friendStore', data.friends);
+
         //   console.log('the token: ',$rootScope.token, 'friend store: ',$rootScope.friendStore);
-        
+
         // Populate the initial "Ditto Some" view
         $rootScope.bite = data.getSome;
+        localStorageService.set('bite', data.getSome);
+        
         //  console.log('get some goes into $rootScope.bite',$rootScope.bite);
-      
+
         // FINALLY! - Load the interface
         $state.go('app.home');
-        
+
       }else{
         console.log("TODO1 There was an error. Log it.");
       }
-      
-
 
     } );
 };  
@@ -327,12 +348,15 @@ var plittoLogin = function (meResponse, friendsResponse) {
       // User can log in
       // Initialize the scope settings.
 
-      $rootScope.vars.user = { userId: data.me.puid, username: data.me.username, fbuid: data.me.fbuid };  // The API determines the value of this.
+      $rootScope.user = { userId: data.me.puid, username: data.me.username, fbuid: data.me.fbuid };  // The API determines the value of this.
     
         // Set up the token
         $rootScope.token = data.me.token;
         localStorageService.set('token', data.me.token);
         $rootScope.friendStore = data.friends;
+      
+        localStorageService.set('friendStore', data.me.token);
+      
         
       //   console.log('the token: ',$rootScope.token, 'friend store: ',$rootScope.friendStore);
         
@@ -503,9 +527,9 @@ var addToList = function (addToListObj) {
       if($rootScope.list.mine.length === 0) {
         // Make my list.
         var myList = {
-          uid: $rootScope.vars.user.userId,
-          fbuid: $rootScope.vars.user.fbuid,
-          username: $rootScope.vars.user.username,
+          uid: $rootScope.user.userId,
+          fbuid: $rootScope.user.fbuid,
+          username: $rootScope.user.username,
           lists: [ { lid: addToListObj.lid, listname: $rootScope.list.listName, items: [ myNewItem ] } ]
         };
         // Make my list first // TODO1 - This needs to work
@@ -535,7 +559,7 @@ var addToList = function (addToListObj) {
 };
 
 
-
+/* Removed this 11/4/2014 
 var modalReset = function () {
   // console.log("dbFactory.modalReset");
   // STEP 1 - Clear out any listStore filters applied within this user profile.
@@ -555,6 +579,8 @@ var modalReset = function () {
     }
   }
 };
+
+*/
     
 /* 9/3/2014 */
 var showAList = function (listNameId, listName, userFilter) {
@@ -848,6 +874,35 @@ var newList = function (thingName, success, failure) {
       });
 
 };
+  
+/* 11.4.2014 - Updates friends, lists, user info on app re-launch */
+var refreshData = function(token){
+  // This function will be called when the app loads, and already has a token. It's kind of like login.
+  
+  // Populate profile information
+  if(localStorageService.get('user'))
+    {
+      $rootScope.user = localStorageService.get('user');
+    }
+  
+  // Populate the friendstore.
+  if(localStorageService.get('friendStore')){
+    $rootScope.friendStore = localStorageService.get('friendStore');
+  }
+  
+  // Populate the bite.
+  if(localStorageService.get('bite')){
+    $rootScope.bite = localStorageService.get('bite');
+  } 
+  
+  // TODO2 Now, make the HTTP calls to refresh them.
+  
+  
+  
+  
+  
+  
+};
 
 return {
   plittoLogin: plittoLogin
@@ -857,7 +912,7 @@ return {
   , dbDitto: dbDitto
   , getUserListOfLists: getUserListOfLists
   , sharedStat: sharedStat /* 9/7/2014 */
-  , modalReset: modalReset
+  // , modalReset: modalReset
   , showAList: showAList
   , getMore: getMore
   , getMoreAppend: getMoreAppend
@@ -869,6 +924,7 @@ return {
   , showFeed: showFeed
   , loadList: loadList
   , fbTokenLogin: fbTokenLogin
+  , refreshData: refreshData
 };
   
 }]);

@@ -3,7 +3,10 @@ angular.module('Plitto.controllers', [])
 
 .run(function($rootScope, dbFactory, $state, localStorageService, $ionicModal ){
   
-   console.log('line 6');
+   console.log('line 6');  
+  
+  // At first, initialize the rootScope.
+  init();
   
   // Start by seeing if a user is logged in. TODO1 - This should be done on 10/23.
   if(!$rootScope.token){
@@ -13,7 +16,11 @@ angular.module('Plitto.controllers', [])
       console.log("BUT IS IT VALID?!?!?!? TODO1 - Only apply the token if it's a valid one.");
       // Set the token.
       $rootScope.token = localStorageService.get('token');
-      // TODO1 - Test the token.
+      
+      
+      
+      // This should only happen when the app loads, and at specific times, so we'll build everything back up in dbFactory
+      dbFactory.refreshData($rootScope.token);
       
     } else {
       console.log("No token in local storage.");
@@ -46,27 +53,18 @@ angular.module('Plitto.controllers', [])
   
   
   // Initialize the content
-  $rootScope.init = function(){
-    // Manage debug globally.
-    $rootScope.debugOn = false;
-    
-    $rootScope.message = '';
-
-	/* End if life in the future. It leads to scope bloat */
-	$rootScope.vars = { };
-	$rootScope.vars.user = { userId: 0};
-	$rootScope.vars.message = '';
-    
+    function init(){
+      console.log('rootScope initialized! Mount up!');
+    // These have been used and referenced since Nov 4.
     $rootScope.token = null;
     
-	$rootScope.vars.temp = {};
-	$rootScope.listStore = [];
-	$rootScope.friendStore = [];
-    $rootScope.message = 'rs message';
-
-	// 8/26/2014 New Navigation Vars
-	$rootScope.nav = {
-		listView: 'ditto'
+    $rootScope.debugOn = false; // Debug
+    $rootScope.message = ''; // Also debug, but that's in how you use it.
+    $rootScope.nav = {
+		listView: 'ditto',
+        profileView: 'ditto',
+        view: 'home' // This tracks the currently active view, and sub-view.
+          
 	};
     
     $rootScope.list = {
@@ -77,13 +75,9 @@ angular.module('Plitto.controllers', [])
       mine: [],
       feed: []
     };
-
-	$rootScope.session = {
-		fbAuth: null,
-		fbState: 'disconnected',
-		plittoState: null
-	};
     
+    $rootScope.listStore = [];
+	$rootScope.friendStore = [];
     $rootScope.profileData = {
       lists: [],
       userId: null,
@@ -91,6 +85,29 @@ angular.module('Plitto.controllers', [])
       ditto: [],
       shared: []
     };
+    
+    // These have not been verified that they've been used.   
+
+
+	/* End if life in the future. It leads to scope bloat 
+	$rootScope.vars = { };
+	$rootScope.user = { userId: 0};
+	
+    
+    
+    
+	$rootScope.vars.temp = {};
+	
+
+	// 8/26/2014 New Navigation Vars
+	
+
+	$rootScope.session = {
+		fbAuth: null,
+		fbState: 'disconnected',
+		plittoState: null
+	};
+    */
       
   };
   
@@ -123,11 +140,18 @@ angular.module('Plitto.controllers', [])
     Facebook.unsubscribe();
   };
   
+  // This is for the logged in user
+  $scope.showUser = function(userId, userName, dataScope){
+    
+    dbFactory.showUser(userId,userName, dataScope);
+  };
+  
+  
   // Grab the user info here as soon as they login.
   
   $scope.login = function () {
     $rootScope.debug('Appctrl - controllers AppCtrl.login() pressed.');
-    Facebook.login();
+    Oauth.login();
   };
   
   // Global Logout Handler
@@ -159,7 +183,7 @@ angular.module('Plitto.controllers', [])
   $scope.loadLists = function(){
     $rootScope.debug("AppCtrl You want to load lists into your profile.");
     // dbFactory.getUserListOfLists($rootScope.vars.user.userId);
-    dbFactory.getUserListOfLists($rootScope.vars.user.userId , '$rootScope.lists');
+    dbFactory.getUserListOfLists($rootScope.user.userId , '$rootScope.lists');
   };
   
     
@@ -188,7 +212,7 @@ angular.module('Plitto.controllers', [])
       $scope.thetoken = 'cleared!';
     }
     
-    $scope.setToken = function(){
+    $scope.setToken = function(){W
       $rootScope.debug("LoadingCtrl setToken to 35358a19f081483800da33f59635e86f");
       $rootScope.token = '35358a19f081483800da33f59635e86f';
       $scope.thetoken = '35358a19f081483800da33f59635e86f';
@@ -303,8 +327,8 @@ angular.module('Plitto.controllers', [])
 .controller('ListsCtrl', function($scope, $rootScope, dbFactory,$state, $ionicActionSheet ) {
  
   $scope.loadLists = function(){
-   //  console.log("Load Lists - Could also refresh.");
-    dbFactory.getUserListOfLists($rootScope.vars.user.userId,'$rootScope.lists');
+   // user.userId is hard coded in lists, because it's always going to be this user's lists.
+    dbFactory.getUserListOfLists($rootScope.user.userId,'$rootScope.lists');
   };
   
 
@@ -359,7 +383,7 @@ angular.module('Plitto.controllers', [])
   
 })
 
-.controller('LoginCtrl', function($scope, $window, Facebook, $rootScope, $state) {
+.controller('LoginCtrl', function($scope, $window, $rootScope, $state, OAuth) {
   /* 
   $scope.force = function(){
     $rootScope.token = 'ae6d5d593f59d15652109f88edaea72a'; 
@@ -374,8 +398,11 @@ angular.module('Plitto.controllers', [])
       $scope.message = "Logging in with Facebook";
       $rootScope.message = $rootScope.message + ' Initial Facebook Login';
       // 
+      OAuth.login('facebook');
+      
       $state.go('loading');      // TODO 1 - Is this working?
-      Facebook.login();
+      // Facebook.login();
+      
       
     } else {
       $rootScope.message = $rootScope.message + ' You tried to login with an unknown oauth provider.';

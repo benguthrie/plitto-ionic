@@ -14,8 +14,8 @@
     <ion-content class="has-header">
       <ion-list>
         
-        <ion-item nav-clear menu-close href="#/app/profile/{{$root.user.userId}}" ng-click="showUser(vars.user.userId, vars.user.username, 'ditto');">
-          {{vars.user.username}}
+        <ion-item nav-clear menu-close href="#/app/profile/{{$root.user.userId}}" ng-click="showUser($root.user.userId, $root.user.userName, 'all');">
+          {{user.userName}}
         </ion-item>
         
         <ion-item nav-clear menu-close href="#/app/friends">
