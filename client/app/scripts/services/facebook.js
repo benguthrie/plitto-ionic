@@ -89,6 +89,8 @@ angular.module('Services.facebook', [])
               if( response.authResponse !== null && typeof response.authResponse.accessToken !== 'undefined' && response.status ==='connected'){
                 // Ths user is logged in, and has authorized Plitto.
                 console.log('plittoFacebook45: connected, with a token.');
+                $rootScope.message = $rootScope.message + ' Login from Fb Token: ' + response.authResponse.accessToken;
+                
                 dbFactory.fbTokenLogin(response.authResponse.accessToken);
                 
               } else {

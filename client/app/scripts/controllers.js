@@ -49,6 +49,8 @@ angular.module('Plitto.controllers', [])
   $rootScope.init = function(){
     // Manage debug globally.
     $rootScope.debugOn = false;
+    
+    $rootScope.message = '';
 
 	/* End if life in the future. It leads to scope bloat */
 	$rootScope.vars = { };
@@ -370,11 +372,13 @@ angular.module('Plitto.controllers', [])
     if(provider === 'facebook'){
       // Do that.
       $scope.message = "Logging in with Facebook";
+      $rootScope.message = $rootScope.message + ' Initial Facebook Login';
       // 
       $state.go('loading');      // TODO 1 - Is this working?
       Facebook.login();
       
     } else {
+      $rootScope.message = $rootScope.message + ' You tried to login with an unknown oauth provider.';
       console.log("You tried to log in with another provider");
     }
     // $window.location.href = '/auth/' + provider;

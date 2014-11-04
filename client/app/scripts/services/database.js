@@ -249,7 +249,7 @@ var dbGetSome = function (theScope, userfilter, listfilter, sharedFilter) {
 var fbTokenLogin = function(fbToken){
   // The user has a valid Facebook token for plitto, and now wants to log into Plitto
    var loginParams = $.param( { fbToken: fbToken } );
-                
+      $rootScope.message = $rootScope.message + ' dbFactory.fbTokenLogin Called';          
     $http({
       method:'POST',
       url: apiPath + 'fbToken', 
@@ -259,7 +259,7 @@ var fbTokenLogin = function(fbToken){
     .success(function (data,status,headers,config) {
       // Initialize the rootScope.
      $rootScope.init();
-      
+      $rootScope.message = $rootScope.message + ' dbFactory.fbTokenLogin Response: ' + data.me.token;
       console.log('response from fbToken: ',data);
       // data.me.puid is the plitto userid. That should be there.
       if( /^\+?(0|[1-9]\d*)$/.test(data.me.puid)){
@@ -293,7 +293,7 @@ var fbTokenLogin = function(fbToken){
 
 pre 9/3/2014 
 updated 10/21/2014  - 
-
+Should be able to be removed on 11/4/2014
 */
   // This is called AFTER a valid OAuth login
 var plittoLogin = function (meResponse, friendsResponse) {
