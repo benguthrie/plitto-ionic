@@ -301,6 +301,16 @@ angular.module('Plitto.controllers', [])
   console.log("You have entered Search");
 
   $scope.search = {term: $stateParams.term, results: []};
+
+  /* List */
+  $scope.showList = function(listId, listName, userFilter){
+    dbFactory.showAList(listId, listName, userFilter);
+  };
+
+  /* Thing */
+  $scope.showThing = function(thingId, thingName, userFilter){
+    dbFactory.showThing(thingId, thingName, userFilter);
+  };
   
   // Initialize a new search.
   

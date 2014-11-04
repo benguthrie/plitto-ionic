@@ -79,6 +79,7 @@ var showUser = function (userId, userName, dataScope) {
 var showThing = function (thingId, thingName, userFilter) {
   // Clear out the rootScope.thingData to show a new thing.
   $rootScope.thingData = {thingId: thingId, thingName: thingName, items: []};
+  $rootScope.nav.view = 'thing'; // To disable link when in thing view.
   $state.go('app.thing',{thingId: thingId});
         
   // $rootScope.vars.modal.filter = 'all';

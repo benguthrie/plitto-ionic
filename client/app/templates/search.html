@@ -14,7 +14,7 @@
 
     
     <div ng-show="$root.searchResults.length === 0 && search.term.length > 0" ><h2>No Results for that term</h2></div>
-    <div ng-show="$root.searchResults.length === 0 && search.term.length === 0" ><h2>Search To See Results</h2></div>
+    <div ng-show="$root.searchResults.length === 0 || search.term.length === 0" ><h2>Search To See Results</h2></div>
     
     <div ng-repeat="section in $root.searchResults">
       <h3 ng-bind="section.title"></h3>
@@ -42,3 +42,4 @@
     
   </ion-content>
 </ion-view>
+

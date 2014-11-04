@@ -25,10 +25,10 @@
         <ion-item nav-clear menu-close href="#/app/home">
           Ditto
         </ion-item>
-        <ion-item nav-clear menu-close href="#/app/lists" ng-click="loadLists(); nav.view = user.lists; ">
+        <ion-item nav-clear menu-close href="#/app/lists" ng-click="loadLists(); nav.view = 'user.lists'; ">
           Lists
         </ion-item>
-        <ion-item nav-clear menu-close href="#/app/search/">
+        <ion-item nav-clear menu-close href="#/app/search/" ng-click="nav.view = 'search'">
           Search
         </ion-item>
         
