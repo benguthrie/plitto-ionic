@@ -83,7 +83,7 @@ angular.module('Services.facebook', [])
             FB.getLoginStatus(function (response) {
               $rootScope.message = $rootScope.message + ' <br/>facebook.getLoginStatus.' + response;
                 // REMOVED 10/31 $rootScope.session.plittoState = 'Facebook Responded';
-              console.log('Facebook.login 39 - Facebook response for getLoginStatus: ', response );
+              // console.log('Facebook.login 39 - Facebook response for getLoginStatus: ', response );
               
               // If there is an access token, then we should pass that to the Plitto API for processing.
               if( response.authResponse !== null && typeof response.authResponse.accessToken !== 'undefined' && response.status ==='connected'){

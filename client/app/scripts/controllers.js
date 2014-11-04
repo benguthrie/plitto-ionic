@@ -365,6 +365,7 @@ angular.module('Plitto.controllers', [])
   */
   
   $scope.loginOAuth = function(provider) {
+    $rootScope.message += 'loginOAuth profider: ' + provider;
     // TODO1 - This is the bit that handles the login.
     if(provider === 'facebook'){
       // Do that.
