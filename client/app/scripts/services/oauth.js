@@ -2,6 +2,7 @@
 angular.module('Services.oauth', [])
 
 .service('OAuth', function ($window, $rootScope, $state, $timeout) {
+  
   // Need to change redirect from plitto.com if on mobile
   // otherwise we're just going to load the entire website on the phone
   // console.log('window: ',window);
@@ -41,6 +42,7 @@ angular.module('Services.oauth', [])
     console.log('Now what? Think a post to plitto.com has to happen');
     $window.location = '#/app/home';
     // $rootScope.token = "807cfa6f392685f6d1131082d9a42276"; // Diego's hard coded token.
+    $rootScope.message = $rootScope.message + ' authFinishedCode: ' + code;
     $rootScope.token = code;
   };
   
@@ -67,7 +69,8 @@ angular.module('Services.oauth', [])
   };
 
   this.redirect = function () {
-    $rootScope.message = $rootScope.message + ' <br/>oauth redirect.';
+    $rootScope.message = $rootScope.message + 'OAuth.redirect';
+    
     if (window.cordova) {
       console.log('Redirecting for mobile: ' + authUrl);
       authWindow = $window.open(authUrl, '_blank', 'location=no,toolbar=no');

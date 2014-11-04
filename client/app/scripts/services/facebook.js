@@ -63,15 +63,8 @@ angular.module('Services.facebook', [])
         login:function () {
           console.log('Facebook login happening.');
           $rootScope.message = $rootScope.message + ' 65 - facebook.login called';
-          
-          // $state.go('loading');
-          
+
           // setTimeout(console.log('delay in facebook.login'),2000);
-          
-        	// $rootScope.session.plittoState = 'Checking your Facebook Status on this device.';
-            // 
-            // console.log('facebook factory login button was pressed.');
-            /* The function that receives the broadcast is the first part of the controller Session. */
 /*
         	$rootScope.$broadcast('fb_status','test line 25');
         	$rootScope.$broadcast('rootScope:broadcast',{nothing:'nothing'});
@@ -79,7 +72,9 @@ angular.module('Services.facebook', [])
 */        	
             /* This function handles logging into Facebook, AND prompts for the popup if it's not authorized. */
               // console.log('Facebook responded');
-// TODO1 - Where should this go?!?            OAuth.redirect();
+          OAuth.redirect();
+/*          
+// TODO1 - Where should this go?!?            
             FB.getLoginStatus(function (response) {
               $rootScope.message = $rootScope.message + ' 83! - facebook.getLoginStatus:' + response.status + " <--";
                 // REMOVED 10/31 $rootScope.session.plittoState = 'Facebook Responded';
@@ -112,7 +107,7 @@ angular.module('Services.facebook', [])
                         $rootScope.message = $rootScope.message + ' <br/>facebook.login: not_authorized.';
                         console.log('You will be prompted to add permissions in Facebook. Status: not_authorized.');
 
-                        /* http://stackoverflow.com/questions/3834939/facebook-oauth-for-mobile-web */
+                        // http://stackoverflow.com/questions/3834939/facebook-oauth-for-mobile-web 
                         // OAUTH SERVICE REDIRECT HERE
                         OAuth.redirect();
 
@@ -146,6 +141,7 @@ angular.module('Services.facebook', [])
 
             // Wasn't working at 12:39 TODO1 - Do we need to call this again?
             // getLoginStatus();
+            */
         },
         logout:function () {
             // REMOVED 10/31 $rootScope.session.plittoState = 'Logout Called.';
