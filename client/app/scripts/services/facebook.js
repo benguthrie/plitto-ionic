@@ -62,7 +62,7 @@ angular.module('Services.facebook', [])
         },
         login:function () {
           console.log('Facebook login happening.');
-          $rootScope.message = $rootScope.message + ' <br/>facebook.login.';
+          $rootScope.message = $rootScope.message + ' 65 - facebook.login called';
           
           // $state.go('loading');
           
@@ -81,7 +81,7 @@ angular.module('Services.facebook', [])
               // console.log('Facebook responded');
 // TODO1 - Where should this go?!?            OAuth.redirect();
             FB.getLoginStatus(function (response) {
-              $rootScope.message = $rootScope.message + ' <br/>facebook.getLoginStatus.' + response;
+              $rootScope.message = $rootScope.message + ' 83! - facebook.getLoginStatus.' + response;
                 // REMOVED 10/31 $rootScope.session.plittoState = 'Facebook Responded';
               // console.log('Facebook.login 39 - Facebook response for getLoginStatus: ', response );
               
