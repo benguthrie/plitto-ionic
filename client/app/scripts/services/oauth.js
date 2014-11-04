@@ -35,14 +35,15 @@ angular.module('Services.oauth', [])
   var authWindow = null;
 
   // Function that is called with auth code and redirect home
-  /*
+  /* */
   var authFinished = function (code) {
     console.log('Got this code: ' + code);
     console.log('Now what? Think a post to plitto.com has to happen');
     $window.location = '#/app/home';
-    $rootScope.token = "807cfa6f392685f6d1131082d9a42276"; // Diego's hard coded token.
+    // $rootScope.token = "807cfa6f392685f6d1131082d9a42276"; // Diego's hard coded token.
+    $rootScope.token = code;
   };
-  */
+  
 
   // Event handler for the inAppBrowser plugin's `loadstart` event
   var loadstart = function (e) {
