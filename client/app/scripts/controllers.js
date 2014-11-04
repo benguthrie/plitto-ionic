@@ -141,7 +141,7 @@ angular.module('Plitto.controllers', [])
     // Clear all the stores.
     $rootScope.init();
     localStorageService.clearAll();
-    $rootScope.debug('clear rootScope. Rootscope: ' + JSON.stringify($rootScope));
+    // $rootScope.debug('clear rootScope. Rootscope: ' + JSON.stringify($rootScope));
     
     // Clear local storage
     
