@@ -41,6 +41,12 @@ angular.module('Services.oauth', [])
     $rootScope.token = code;
   };
   
+  function getParameterByName(name, path) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
 
   // Event handler for the inAppBrowser plugin's `loadstart` event
   var loadstart = function (e) {
@@ -52,22 +58,28 @@ angular.module('Services.oauth', [])
     // TODO: HANDLE ERROR (if user denies access)
     // Form: error=access_denied&error_code=200&error_description=Permissions+error&error_reason=user_denied
   
-    var code = /\?#access_token=(.+)$/.exec(e.url);
+    /* Commenting out Diego's stuff
+    var accessToken = /\?#access_token=(.+)$/.exec(e.url);
     var error = /\?error=(.+)$/.exec(e.url);
+    */
+    var accessToken = getParameterByName('access_token',e.url);
+    var fbError = getParameterByName('error',e.url);
 
     // The above should sniff the presense of an access token.
     
-    if (code || error) {
-      $rootScope.message = "<h3>7. Loadstart Code: "+ code +"</h3>";
+    if (accessToken || fbError) {
+      $rootScope.message = "<h3>7. Loadstart Code: "+ accessToken +"</h3>";
       console.log('7. loadstart found a code');
-      console.log('7. loadstart code: ' + code);
+      console.log('7. loadstart code: ' + accessToken);
       authWindow.close();
       authFinished(code); 
 
       $timeout(function () {
         authWindow.close();
-        authFinished(code);
+        authFinished(accessToken);
       }, 300);
+    } else {
+      console.log('loadstart debug 72. No accessToken or error');
     }
   };
 
