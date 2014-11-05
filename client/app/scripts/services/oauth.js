@@ -44,7 +44,7 @@ angular.module('Services.oauth', [])
   function getParameterByName(name, path) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-        results = regex.exec(location.search);
+        results = regex.exec(path);
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 
