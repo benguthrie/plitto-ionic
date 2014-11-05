@@ -198,6 +198,11 @@ angular.module('Plitto.controllers', [])
     dbFactory.loadList(listId, 'Products on My Radar', userIdFilter, type, sharedFilter, oldestKey);
   };
   
+  $scope.thisDomain = function(){
+    console.log('thisDomain: ',document.URL);
+    $rootScope.message = 'domain: ' + document.URL;
+  };
+  
   $scope.debugCtrl = function(state){
     $rootScope.debugOn = state;
     $rootScope.debug("Debug now: " +state);
