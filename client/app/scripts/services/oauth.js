@@ -51,7 +51,8 @@ angular.module('Services.oauth', [])
     console.log('e.url loadstart', e.url);
     // TODO: HANDLE ERROR (if user denies access)
     // Form: error=access_denied&error_code=200&error_description=Permissions+error&error_reason=user_denied
-    var code = /\?access_token=(.+)$/.exec(e.url);
+  
+    var code = /\?#access_token=(.+)$/.exec(e.url);
     var error = /\?error=(.+)$/.exec(e.url);
 
     // The above should sniff the presense of an access token.
