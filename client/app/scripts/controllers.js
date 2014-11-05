@@ -160,7 +160,7 @@ angular.module('Plitto.controllers', [])
       $scope.thetoken = 'cleared!';
     }
     
-    $scope.setToken = function(){W
+    $scope.setToken = function(){
       $rootScope.debug("LoadingCtrl setToken to 35358a19f081483800da33f59635e86f");
       $rootScope.token = '35358a19f081483800da33f59635e86f';
       $scope.thetoken = '35358a19f081483800da33f59635e86f';

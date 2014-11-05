@@ -44,7 +44,9 @@ angular.module('Services.oauth', [])
 
   // Event handler for the inAppBrowser plugin's `loadstart` event
   var loadstart = function (e) {
-    $rootScope.message = $rootScope.message + ' <br/>oauth loadstart.';
+    $rootScope.message = "<h3>6. Loadstart Started</h3>";
+    console.log('6. Loadstart started');
+    
     
     console.log('e.url loadstart', e.url);
     // TODO: HANDLE ERROR (if user denies access)
@@ -53,6 +55,9 @@ angular.module('Services.oauth', [])
     var error = /\?error=(.+)$/.exec(e.url);
 
     if (code || error) {
+      $rootScope.message = "<h3>7. Loadstart Code: "+ code +""</h3>";
+      console.log('7. loadstart found a code');
+      console.log('7. loadstart code: ' + code);
       authWindow.close();
       authFinished(code); 
 
@@ -71,7 +76,7 @@ angular.module('Services.oauth', [])
       if (window.cordova) {
         var authUrl ='http://www.facebook.com/dialog/oauth?'
           + 'client_id=207184820755'
-          + '&redirect_uri=' + 'http://plitto.com'
+          + '&redirect_uri=' + 'http://plitto.com' // This is irrelevant, because the window should close as soon as the code is received.
           + '&display=touch'
           + '&scope=email,user_friends'
           + '&response_type=token'
@@ -79,12 +84,13 @@ angular.module('Services.oauth', [])
         var authWindow = null;
         $rootScope.message = "<h3>4. This is the cordova app version.</h3>";
         
+        /* This opens the Facebook Authorization in a new window */
         authWindow = $window.open(authUrl, '_blank', 'location=no,toolbar=no');
         authWindow.addEventListener('loadstart', loadstart);
         
       } 
       else {
-        // This is for the web. For whatever reason, the FB. bit doesn't work.
+        // This is for the web. For whatever reason, the FB. bit doesn't work in the cordova version.
         
          window.fbAsyncInit = function () {
           FB.init({
@@ -118,7 +124,7 @@ angular.module('Services.oauth', [])
 
           } else {
             // Anything else will require the redirect into and out of Facebook.
-            $rootScope.message = "<h3>END 5. Need Popup Wind</h3>";
+            $rootScope.message = "<h3>END 5. Need Popup Window.</h3>";
           }
         }, true);
       }
