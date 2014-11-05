@@ -11,10 +11,44 @@ angular.module('Services.database', [])
     // console.log('check the token to see if we should proceed.');
     if(typeof token ==='undefined' || token.length === 0){
       $state.go('login');
-      $rootScope.init();
+      dbInit();
     }
       
   }
+  
+var dbInit = function () {
+  console.log('rootScope initialized! Mount up!');
+  // These have been used and referenced since Nov 4.
+  $rootScope.token = null;
+
+  $rootScope.debugOn = false; // Debug
+  $rootScope.message = ''; // Also debug, but that's in how you use it.
+  $rootScope.nav = {
+      listView: 'ditto',
+      profileView: 'ditto',
+      view: 'home' // This tracks the currently active view, and sub-view.
+
+  };
+
+  $rootScope.list = {
+    listId: null,
+    listName: null,
+    ditto:[],
+    shared: [],
+    mine: [],
+    feed: []
+  };
+
+  $rootScope.listStore = [];
+  $rootScope.friendStore = [];
+  $rootScope.profileData = {
+    lists: [],
+    userId: null,
+    feed: [],
+    ditto: [],
+    shared: []
+  };
+};  
   
 /* 10/22/2014 */
 
@@ -262,121 +296,55 @@ var dbGetSome = function (theScope, userfilter, listfilter, sharedFilter) {
 var fbTokenLogin = function(fbToken){
   // The user has a valid Facebook token for plitto, and now wants to log into Plitto
   // Send the token to Plitto, which handles all Facebook communication from the PHP layer.
-   var loginParams = $.param( { fbToken: fbToken } );
-      $rootScope.message = $rootScope.message + ' dbFactory.fbTokenLogin Called';          
-    $http({
-      method:'POST',
-      url: apiPath + 'fbToken', 
-      data: loginParams ,
-      headers: {'Content-Type':'application/x-www-form-urlencoded'}
-    })
-    .success(function (data, status,headers,config) {
-      // Initialize the rootScope.
-      $rootScope.init();
-      console.log('fbTokenLogin response: ',data);
-      $rootScope.message = $rootScope.message + ' dbFactory.fbTokenLogin Responded ';
-      // console.log('response from fbToken: ',data);
-      // data.me.puid is the plitto userid. That should be there.
-      if( /^\+?(0|[1-9]\d*)$/.test(data.me.puid)){
-        console.log("puid is valid");
-        // Set the stores.
-        $rootScope.user = { userId: data.me.puid, userName: data.me.username, fbuid: data.me.fbuid };
-        
-        localStorageService.set('user', $rootScope.user );
-        
-        // Make the root token and the Local Storage
-        $rootScope.token = data.me.token;
-        localStorageService.set('token', data.me.token);
-        
-        // Make the root token and the Local Storage
-        $rootScope.friendStore = data.friends;
-        localStorageService.set('friendStore', data.friends);
+  var loginParams = $.param( { fbToken: fbToken } );
+  $rootScope.message = "<h3>6. dbFactory.fbTokenLogin: " + fbToken + "</h3>";        
+  $http({
+    method:'POST',
+    url: apiPath + 'fbToken', 
+    data: loginParams ,
+    headers: {'Content-Type':'application/x-www-form-urlencoded'}
+  })
+  .success(function (data, status,headers,config) {
+    // Initialize the rootScope.
+    dbInit();
+    $rootScope.message = "<h3>7. api/fbToken responded</h3>";
+    console.log('fbTokenLogin response: ',data);
+    
+    // console.log('response from fbToken: ',data);
+    // data.me.puid is the plitto userid. That should be there.
+    if( /^\+?(0|[1-9]\d*)$/.test(data.me.puid)){
+      console.log("puid is valid");
+      $rootScope.message = "<h3>8. PUID valid: " + data.me.token +". Redirect to app.home</h3>";
+      // Set the stores.
+      $rootScope.user = { userId: data.me.puid, userName: data.me.username, fbuid: data.me.fbuid };
 
-        //   console.log('the token: ',$rootScope.token, 'friend store: ',$rootScope.friendStore);
+      localStorageService.set('user', $rootScope.user );
 
-        // Populate the initial "Ditto Some" view
-        $rootScope.bite = data.getSome;
-        localStorageService.set('bite', data.getSome);
-        
-        //  console.log('get some goes into $rootScope.bite',$rootScope.bite);
+      // Make the root token and the Local Storage
+      $rootScope.token = data.me.token;
+      localStorageService.set('token', data.me.token);
 
-        // FINALLY! - Load the interface
-        $state.go('app.home');
+      // Make the root token and the Local Storage
+      $rootScope.friendStore = data.friends;
+      localStorageService.set('friendStore', data.friends);
 
-      }else{
-        console.log("TODO1 There was an error. Log it.");
-      }
+      // Populate the initial "Ditto Some" view
+      $rootScope.bite = data.getSome;
+      localStorageService.set('bite', data.getSome);
 
-    } );
+      // FINALLY! - Load the interface
+      $state.go('app.home'); // TODO1 - This needs to be reflected in the URL.
+      
+      
+
+    }else{
+      console.log("TODO1 There was an error. Log it.");
+    }
+
+  } );
 };  
   
   
-/* 
-
-pre 9/3/2014 
-updated 10/21/2014  - 
-Should be able to be removed on 11/4/2014
-*/
-  // This is called AFTER a valid OAuth login
-var plittoLogin = function (meResponse, friendsResponse) {
-  // console.log('plitto login',fbResponse);
-  var params = $.param( {fbMe: meResponse, fbFriends: friendsResponse} );
-
-  // Receive the handoff from Facebook, if we have a redirect URL to intercept.
-  if( window.location.search.replace("?", "") ) {
-    var gets = window.location.search.replace("?", "");
-    // console.log('dbFactory.plittoLogin: gets: ',gets); 
-    location.replace('/');
-  }
-
-  $http(
-    {
-      method:'POST',
-      url: apiPath + 'fbLogin',  
-      data: params,
-      headers: {'Content-Type':'application/x-www-form-urlencoded'}
-  })
-  .success(function (data,status,headers,config) {
-      // Initialize the rootScope.
-     $rootScope.init();
-    // Handle the users, lists and things.
-      
-    // console.log('Yo. Diego. Check out the full data response from the fbLogin api call: ',data);
-
-    //$rootScope.session.plittoState = 'Plitto Response Confirmed. Interface Loading.';
-      // Get their friends
-    if( typeof parseInt(data.me.puid) ==='number') {
-      // User can log in
-      // Initialize the scope settings.
-
-      $rootScope.user = { userId: data.me.puid, username: data.me.username, fbuid: data.me.fbuid };  // The API determines the value of this.
-    
-        // Set up the token
-        $rootScope.token = data.me.token;
-        localStorageService.set('token', data.me.token);
-        $rootScope.friendStore = data.friends;
-      
-        localStorageService.set('friendStore', data.me.token);
-      
-        
-      //   console.log('the token: ',$rootScope.token, 'friend store: ',$rootScope.friendStore);
-        
-        // Populate the initial "Ditto Some" view
-        $rootScope.bite = data.getSome;
-       //  console.log('get some goes into $rootScope.bite',$rootScope.bite);
-      
-      // FINALLY! - Load the interface
-      $state.go('app.home');
-        
-    } else {
-      // TODO2 - Present errors somewhere.
-    }
-
-    // Update the window sizes
-    // gotResized();
-
-  });
-};
 
 /* Gets their Plitto Friends, and adds it to the local store. 9/3/2014
     // 10/21/2014 This will only be called on a refresh, which isn't built yet.
@@ -906,8 +874,8 @@ var refreshData = function(token){
 };
 
 return {
-  plittoLogin: plittoLogin
-  , fbPlittoFriends: fbPlittoFriends
+  
+  fbPlittoFriends: fbPlittoFriends
   , plittoFBApiCall: plittoFBApiCall
   , dbGetSome: dbGetSome
   , dbDitto: dbDitto
@@ -926,6 +894,7 @@ return {
   , loadList: loadList
   , fbTokenLogin: fbTokenLogin
   , refreshData: refreshData
+  , dbInit: dbInit /* Initializes the rootscope */
 };
   
 }]);

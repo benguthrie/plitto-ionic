@@ -6,7 +6,7 @@ angular.module('Plitto.controllers', [])
    console.log('line 6');  
   
   // At first, initialize the rootScope.
-  init();
+  dbFactory.dbInit();
   
   // Start by seeing if a user is logged in. TODO1 - This should be done on 10/23.
   if(!$rootScope.token){
@@ -52,64 +52,6 @@ angular.module('Plitto.controllers', [])
   };
   
   
-  // Initialize the content
-    function init(){
-      console.log('rootScope initialized! Mount up!');
-    // These have been used and referenced since Nov 4.
-    $rootScope.token = null;
-    
-    $rootScope.debugOn = false; // Debug
-    $rootScope.message = ''; // Also debug, but that's in how you use it.
-    $rootScope.nav = {
-		listView: 'ditto',
-        profileView: 'ditto',
-        view: 'home' // This tracks the currently active view, and sub-view.
-          
-	};
-    
-    $rootScope.list = {
-      listId: null,
-      listName: null,
-      ditto:[],
-      shared: [],
-      mine: [],
-      feed: []
-    };
-    
-    $rootScope.listStore = [];
-	$rootScope.friendStore = [];
-    $rootScope.profileData = {
-      lists: [],
-      userId: null,
-      feed: [],
-      ditto: [],
-      shared: []
-    };
-    
-    // These have not been verified that they've been used.   
-
-
-	/* End if life in the future. It leads to scope bloat 
-	$rootScope.vars = { };
-	$rootScope.user = { userId: 0};
-	
-    
-    
-    
-	$rootScope.vars.temp = {};
-	
-
-	// 8/26/2014 New Navigation Vars
-	
-
-	$rootScope.session = {
-		fbAuth: null,
-		fbState: 'disconnected',
-		plittoState: null
-	};
-    */
-      
-  };
   
   
   
@@ -163,7 +105,7 @@ angular.module('Plitto.controllers', [])
     Facebook.logout();
     
     // Clear all the stores.
-    $rootScope.init();
+    dbFactory.dbInit();
     localStorageService.clearAll();
     // $rootScope.debug('clear rootScope. Rootscope: ' + JSON.stringify($rootScope));
     
@@ -194,10 +136,16 @@ angular.module('Plitto.controllers', [])
      
 
   })
-  .controller('LoadingCtrl',function($scope, $rootScope,dbFactory) {
+  .controller('LoadingCtrl',function($scope, $state, $rootScope, dbFactory) {
     // Control for thing goes here.
     $scope.thetoken = $rootScope.token;
     $rootScope.debug("loadingctrl loaded");
+  
+    /* When this screen loads, if there is a token, go home. */
+    if($rootScope.token.length > 0 && $rootScope.token !== 'loading'){
+      console.log('Loading, go home!');
+      $state.go('app.home');
+    }
      
     $scope.showToken = function(){
       $rootScope.debug("LoadingCtrl showToken");
@@ -400,13 +348,16 @@ angular.module('Plitto.controllers', [])
   };
   */
   
+  
+  
   $scope.loginOAuth = function(provider) {
-    $rootScope.message += 'loginOAuth profider: ' + provider;
+    $rootScope.message = "<h3>1. loginOAuth Pressed</h3>";
+    
     // TODO1 - This is the bit that handles the login.
     if(provider === 'facebook'){
       // Do that.
-      $scope.message = "Logging in with Facebook";
-      $rootScope.message = $rootScope.message + ' Initial Facebook Login';
+      
+      $rootScope.message = "<h3>2. Call OAuth.login</h3>";
       // 
       OAuth.login('facebook');
       
@@ -415,8 +366,8 @@ angular.module('Plitto.controllers', [])
       
       
     } else {
-      $rootScope.message = $rootScope.message + ' You tried to login with an unknown oauth provider.';
-      console.log("You tried to log in with another provider");
+      $rootScope.message = "<h3>2. END - Unknown Provider</h3>";
+      
     }
     // $window.location.href = '/auth/' + provider;
   };

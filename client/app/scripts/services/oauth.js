@@ -72,24 +72,25 @@ angular.module('Services.oauth', [])
 
   this.login = function(oauthService) {
     if(oauthService === 'facebook'){
+      $rootScope.message = "<h3>3. OAuth.login.Facebook Opened</h3>";
       FB.getLoginStatus(function (response) {
                 // $rootScope.session.plittoState = 'Facebook Responded 7';
                 // 
-        console.log('oauth.getLoginStatus -> FB.getLoginStatus: This function is only called when requesting permissions.',response);
+        $rootScope.message = "<h3>4. Facebook Responded.</h3>";
         if(response.status === 'connected'){
-          $rootScope.message = "<h2>Facebook says you're connected!</h2>";
+          $rootScope.message = "<h3>5. Facebook Says Connected</h3>";
           // Take the token and send it to Plitto for login.
           dbFactory.fbTokenLogin(response.authResponse.accessToken);
-          $rootScope.message = "<h2>Logging into Plitto now.</h2>";
+          
         } else {
           // Anything else will require the redirect into and out of Facebook.
-          $rootScope.message = "You're going to need the facebook popup window.";
+          $rootScope.message = "<h3>END 5. Need Popup Wind</h3>";
         }
         
 
       }, true);
     } else {
-      console.log('unknown service.');
+      $rootScope.message = "<h3>END 5. Unknown Service Requested</h3>";
     }
   };
   
