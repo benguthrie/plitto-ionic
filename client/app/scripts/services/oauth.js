@@ -116,7 +116,7 @@ angular.module('Services.oauth', [])
         $rootScope.message = "<h3>4. This is the cordova app version.</h3>";
         
         /* This opens the Facebook Authorization in a new window */
-        authWindow = $window.open(authUrl, '_blank', 'location=no,toolbar=no');
+        var authWindow = $window.open(authUrl, '_blank', 'location=no,toolbar=no');
         console.log('111authWindow: ',authWindow);
         authWindow.addEventListener('loadstart', loadstart);
         
