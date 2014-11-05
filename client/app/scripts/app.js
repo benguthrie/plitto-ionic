@@ -322,5 +322,29 @@ angular.module('Plitto', [
       };
     }
   };
+}).directive('listOfLists', function($rootScope, dbFactory, $state) {
+  return {
+    restrict: 'E',
+    templateUrl: 'directives/listOfLists.html',
+    
+    scope: {
+      store: '@store',
+      source: '@source',
+      listsData: '=listsData'
+    },
+    controller: function($scope, dbFactory, $state) {
+      /* Link to List */
+      $scope.showList = function(listId, listName, userFilter){
+        
+        dbFactory.showAList(listId, listName, userFilter);
+      };
+  
+      /* Thing */
+      $scope.loadLists = function(listId){
+        // dbFactory.showThing(thingId, thingName, userFilter);
+        console.log('lol load lists');
+      };
+    }
+  };
 });
 

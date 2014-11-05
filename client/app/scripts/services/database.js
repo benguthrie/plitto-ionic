@@ -403,7 +403,16 @@ var plittoFBApiCall = function (friendsData) {
 */
 var getUserListOfLists = function (friendId, theScope) {
     // TODO2 - load from local storage, if it's there 
-  console.log('getUserListOfLists: friendId: ',friendId,' theScope: ', theScope);  
+  console.log('getUserListOfLists: friendId: ',friendId,' theScope: ', theScope); 
+  
+  // Get from local storage first, then populate.
+  if(localStorageService.get('userLL_'+friendId)){
+    console.log('load user lists from local storage');
+    $rootScope.profileData.lists = localStorageService.get('userLL_'+friendId);
+  }else{
+    console.log('local storage not et');
+  }
+    
   
   var params = $.param({userfilter:friendId, token: $rootScope.token });
   // console.log('listoflists params: ',params);
@@ -424,7 +433,7 @@ var getUserListOfLists = function (friendId, theScope) {
     // console.log('rootscope.lists', $rootScope.lists);
 
         // Add / Update to local storage
-        localStorageService.set('userLL_'+friendId, data.result);
+        localStorageService.set('userLL_'+friendId, data.results);
       });
 };
 
@@ -557,6 +566,17 @@ var showAList = function (listNameId, listName, userFilter) {
   console.log('showAList: ',listNameId, listName , userFilter);
   
   $rootScope.list = { listId: listNameId, listName: listName, ditto:[], shared:[], feed:[], strangers:[]};
+  
+  // Load from local storage, if it exists.
+  var viewTypes = Array('ditto','shared','feed','strangers','mine');
+  for(var i in viewTypes){
+    if(localStorageService.get('listId' + listNameId + viewTypes[i])){
+      eval("$rootScope.list." + viewTypes[i] + " = localStorageService.get('listId' + listNameId +'" + viewTypes[i] +"')");
+    }  
+  }
+  
+  
+  
   $rootScope.nav.listView = 'ditto';
   $state.go('app.list',{listId: listNameId});
   
@@ -568,7 +588,7 @@ var showAList = function (listNameId, listName, userFilter) {
 
 /* Populate a list with all the different views, if they're there. */
 var loadList = function(listNameId, listName, userIdFilter, type, sharedFilter, oldestKey){
-  
+  console.log('loadList before: ',$rootScope.list);
   var params = $.param({
     id: listNameId,
     type: type,
@@ -584,8 +604,44 @@ var loadList = function(listNameId, listName, userIdFilter, type, sharedFilter, 
     data: params,
     headers: {'Content-Type':'application/x-www-form-urlencoded'}
   }).success(function(data, status, headers, config){
+    console.log('data response: ', data.results);
+    
+    var viewTypes = Array('ditto','shared','feed','strangers','mine');
+    if(type === "all"){
+      for(var i in viewTypes){
+        // console.log('i: ',i, type[i]);
+        // Build each type, but only clear the store if the request type was "all"
+        if( typeof eval("data.results." + viewTypes[i]) != 'undefined' && eval("data.results." + viewTypes[i] + ".length") === 0)
+          // Clean out the store if there were no results
+        { eval("$rootScope.list." + viewTypes[i] +  "= [];"); } 
+        else {
+          console.log('make type: ',viewTypes[i]);
+          // Build the view
+          eval("$rootScope.list." + viewTypes[i] + "= data.results." + viewTypes[i]);
+          // Create the local storage
+          eval("localStorageService.set('listId' + listNameId +'" +  viewTypes[i] + " ', data.results." + viewTypes[i] + ");");
+        }
+
+        if(localStorageService.get('listId' + listNameId + 'ditto')){
+          eval("$rootScope.list." + viewTypes[i] + "= localStorageService.get('listId' + listNameId +'" +  viewTypes[i] + "');");
+        }  
+      }
+    }else{
+      // Only update this specific part of the view.
+      console.log("EVAL THIS: " + "$rootScope.list." + type + " = data.results." +  type + ";");
+      eval("$rootScope.list." + type + " = data.results." +  type + ";");
+      eval("localStorageService.set('listId' + listNameId +'" +  type + "' , data.results." + type + ");");
+      // And update the local storage
+      // eval("localStorageService.set('listId' + listNameId +'" +  sharedFilter + "' , data.results." + sharedFilter + ");");
+    }
+    
+    /*
     if(typeof data.results.ditto != 'undefined' && data.results.ditto.length > 0)     
-      { $rootScope.list.ditto = data.results.ditto; } 
+      { 
+        $rootScope.list.ditto = data.results.ditto; 
+        // Set the local storage.
+        localStorageService.set('listId' + listNameId + 'ditto',data.results.ditto);
+      } 
       else if(typeof data.results.ditto != 'undefined' && data.results.ditto.length === 0)
         // Clean out the store if there were no results
       { $rootScope.list.ditto = []; } 
@@ -613,6 +669,7 @@ var loadList = function(listNameId, listName, userIdFilter, type, sharedFilter, 
     else if(typeof data.results.strangers != 'undefined' && data.results.strangers.length === 0)
         // Clean out the store if there were no results
       { $rootScope.list.strangers = []; } 
+    */
     console.log('type: ',type,' listNameId: ', listNameId, ' listName: ', listName, ' userIdFilter: ', userIdFilter, 'Success? rs.list: ',$rootScope.list);
   });
   

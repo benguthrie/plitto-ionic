@@ -322,6 +322,10 @@ angular.module('Plitto.controllers', [])
   $scope.view = function(theView){
     // if it's already active, then make the call.
     console.log('pressed view. ', theView);
+    
+    
+    
+    // If it is already this view, then reload this content.
     if(theView === $rootScope.nav.listView){
       console.log('make the call');
       dbFactory.loadList($stateParams.listId, '', '', theView, '', '');

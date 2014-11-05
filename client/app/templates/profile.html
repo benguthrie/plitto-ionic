@@ -15,33 +15,29 @@
 
 <!-- Start the Feed-->
     <div class="list card" ng-repeat="user in $root.profileData.feed" ng-show="nav.view==='user.feed'">
-      <user-list-thing store="profileData.feed" source="user" user-data="user"></user-list-thing>   
+      <user-list-thing store="profileData.feed" source="profile" user-data="user"></user-list-thing>   
     </div>
 <!-- End the Feed -->
-    
+   
+  
+<!-- Start Ditto -->  
+    <div class="list card" ng-repeat="user in $root.profileData.ditto" ng-show="nav.view==='user.ditto'">
+      <user-list-thing store="profileData.ditto" source="profile" user-data="user"></user-list-thing>  
+    </div>
+<!-- End Ditto Section --> 
+  
+<!-- Start Shared -->  
+  <div class="list card" ng-repeat="user in $root.profileData.shared" ng-show="nav.view==='user.shared'">
+    <user-list-thing store="profileData.shared" source="profile" user-data="user"></user-list-thing>
+
+  </div>
+<!-- End Shared Section --> 
+  
+   
 <!-- Start User Lists -->    
     
     <div ng-show="nav.view==='user.lists'">
-    
-      <p ng-show="!$root.profileData.lists.length">No lists yet. Add a list using the + button 
-        <div class="button-bar" ng-show="!$root.profileData.lists.length"><a class="button" ng-click="loadLists();">Reload Lists</a></div>
-      </p>
-
-      <ion-list can-swipe="true">
-        <ion-item class="item-icon-right" ng-repeat="list in $root.profileData.lists" href="#/app/lists/{{list.lid}}" ng-click="showList(list.lid, list.name, null);">
-            <ion-option-button class="button-assertive"
-              ng-click="deleteList(list)">Delete</ion-option-button>
-          {{list.name}}
-          <h3>ListID: {{list.lid}}</h3>
-          <h6>Shared: {{list.shared}}</h6>
-          <h6>Dittoable: {{list.dittoable}}</h6>
-          <h6>Mine: {{list.mymembers}}</h6>
-          <h6>Most Recent: {{list.mostrecent}}</h6>
-
-          <i class="icon ion-chevron-right icon-accessory"></i>
-        </ion-item>
-      </ion-list>
-    
+      <list-of-lists store="profileData.lists" source="profile" lists-data="$root.profileData.lists"></list-of-lists>
     </div>
     
  <!-- End User Lists -->   
@@ -49,20 +45,7 @@
   <!-- Start Milestones -->
     
     <div ng-show="nav.view==='user.milestones'">Milestones</div>
-<!-- End Milestones -->     
-  
-<!-- Start Ditto -->  
-    <div class="list card" ng-repeat="user in $root.profileData.ditto" ng-show="nav.view==='user.ditto'">
-      <user-list-thing store="profileData.ditto" source="user" user-data="user"></user-list-thing>  
-    </div>
-<!-- End Ditto Section --> 
-  
-<!-- Start Shared -->  
-  <div class="list card" ng-repeat="user in $root.profileData.shared" ng-show="nav.view==='user.shared'">
-    <user-list-thing store="profileData.shared" source="user" user-data="user"></user-list-thing>
-
-  </div>
-<!-- End Shared Section --> 
-  
+<!-- End Milestones -->       
+    
   </ion-content>
 </ion-view>
