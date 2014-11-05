@@ -36,8 +36,8 @@ angular.module('Services.oauth', [])
     console.log('Got this code: ' + code);
     console.log('Now what? Think a post to plitto.com has to happen');
     
-    $rootScope.message = $rootScope.message + ' authFinishedCode: ' + code;
-    $rootScope.token = code;
+    // $rootScope.message = $rootScope.message + ' authFinishedCode: ' + code;
+    $rootScope.token = code; // This is the magic bit. This should trigger the 
     
     // Close the auth window?
     console.log('authFinished wants to closed authWindow.');
@@ -62,7 +62,7 @@ angular.module('Services.oauth', [])
   var loadstart = function (e) {
     $rootScope.message = "<h3>6. Loadstart Started</h3>";
     console.log('6. Loadstart started');
-    console.log('this is the authwindow: ', authWindow);
+    // console.log('this is the authwindow: ', authWindow);
     
     
     console.log('e.url loadstart', e.url);
@@ -87,11 +87,11 @@ angular.module('Services.oauth', [])
       $rootScope.message = "<h3>7. Loadstart Code: "+ accessToken +"</h3>";
       console.log('7. loadstart found a code');
       console.log('7. loadstart code: ' + accessToken);
-      authWindow.close();
+      // authWindow.close(); // do this inside authFinished code.
       authFinished(accessToken); 
 
       $timeout(function () {
-        authWindow.close();
+        // authWindow.close();
         authFinished(accessToken);
       }, 300);
     } else {
@@ -116,7 +116,8 @@ angular.module('Services.oauth', [])
         $rootScope.message = "<h3>4. This is the cordova app version.</h3>";
         
         /* This opens the Facebook Authorization in a new window */
-        var authWindow = $window.open(authUrl, '_blank', 'location=no,toolbar=no');
+        var authWindow = null;
+        authWindow = $window.open(authUrl, '_blank', 'location=no,toolbar=no');
         console.log('111authWindow: ',authWindow);
         authWindow.addEventListener('loadstart', loadstart);
         
