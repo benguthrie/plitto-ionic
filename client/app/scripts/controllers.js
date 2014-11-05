@@ -142,7 +142,7 @@ angular.module('Plitto.controllers', [])
     $rootScope.debug("loadingctrl loaded");
   
     /* When this screen loads, if there is a token, go home. */
-    if($rootScope.token.length > 0 && $rootScope.token !== 'loading'){
+    if(typeof $rootScope.token === 'string' && $rootScope.token !== 'loading'){
       console.log('Loading, go home!');
       $state.go('app.home');
     }

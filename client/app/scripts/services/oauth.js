@@ -72,23 +72,31 @@ angular.module('Services.oauth', [])
 
   this.login = function(oauthService) {
     if(oauthService === 'facebook'){
-      $rootScope.message = "<h3>3. OAuth.login.Facebook Opened</h3>";
-      FB.getLoginStatus(function (response) {
+      $rootScope.message = "<h3>3. OAuth.login.Facebook Opened. Next: Initiate FB.</h3>";
+      
+      if (window.cordova) {
+        $rootScope.message = "<h3>4. This is the cordova app version.</h3>";
+        
+      } else {
+        // This is for the web.
+        FB.getLoginStatus(function (response) {
                 // $rootScope.session.plittoState = 'Facebook Responded 7';
                 // 
-        $rootScope.message = "<h3>4. Facebook Responded.</h3>";
-        if(response.status === 'connected'){
-          $rootScope.message = "<h3>5. Facebook Says Connected</h3>";
-          // Take the token and send it to Plitto for login.
-          dbFactory.fbTokenLogin(response.authResponse.accessToken);
-          
-        } else {
-          // Anything else will require the redirect into and out of Facebook.
-          $rootScope.message = "<h3>END 5. Need Popup Wind</h3>";
-        }
-        
+          $rootScope.message = "<h3>4. Facebook Responded.</h3>";
+          if(response.status === 'connected'){
+            $rootScope.message = "<h3>5. Facebook Says Connected</h3>";
+            // Take the token and send it to Plitto for login.
+            dbFactory.fbTokenLogin(response.authResponse.accessToken);
 
-      }, true);
+          } else {
+            // Anything else will require the redirect into and out of Facebook.
+            $rootScope.message = "<h3>END 5. Need Popup Wind</h3>";
+          }
+        }, true);
+      }
+    
+      
+
     } else {
       $rootScope.message = "<h3>END 5. Unknown Service Requested</h3>";
     }

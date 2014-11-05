@@ -161,7 +161,7 @@ angular.module('Services.facebook', [])
             console.log('Remove Plitto from Facebook Account');
             
             $rootScope.token = '';
-            $rootScope.init();
+            dbFactory.dbInit();
         	// 
             // console.log('facebook factory unsubsubscribe');
             FB.api("/me/permissions", "DELETE", function (response) {
