@@ -74,12 +74,39 @@ angular.module('Services.oauth', [])
     if(oauthService === 'facebook'){
       $rootScope.message = "<h3>3. OAuth.login.Facebook Opened. Next: Initiate FB.</h3>";
       
+      /* Cordova App: All Facebook Info gets routed through a window. */
       if (window.cordova) {
         $rootScope.message = "<h3>4. This is the cordova app version.</h3>";
         
-      } else {
-        // This is for the web.
-        FB.getLoginStatus(function (response) {
+        authWindow = $window.open(authUrl, '_blank', 'location=no,toolbar=no');
+        authWindow.addEventListener('loadstart', loadstart);
+        
+      } 
+      else {
+        // This is for the web. For whatever reason, the FB. bit doesn't work.
+        
+         window.fbAsyncInit = function () {
+          FB.init({
+               appId:'207184820755',
+              // appId: '10152399335865756',
+              status: true,
+              cookie: true,
+              xfbml      : true,
+              version    : 'v2.0'
+          });
+        };
+
+        // Bring in the facebook SDK.
+         (function (d, s, id){
+           var js, fjs = d.getElementsByTagName(s)[0];
+           if (d.getElementById(id)) {return;}
+           js = d.createElement(s); js.id = id;
+           js.src = "//connect.facebook.net/en_US/sdk.js";
+           fjs.parentNode.insertBefore(js, fjs);
+         }(document, 'script', 'facebook-jssdk'));
+
+
+         FB.getLoginStatus(function (response) {
                 // $rootScope.session.plittoState = 'Facebook Responded 7';
                 // 
           $rootScope.message = "<h3>4. Facebook Responded.</h3>";
@@ -122,25 +149,7 @@ angular.module('Services.oauth', [])
   
 // From here down,  Created on 11/4 to eliminate facebook.js
   // Access the facebook platform through FB.??? calls.
-  window.fbAsyncInit = function () {
-    FB.init({
-         appId:'207184820755',
-        // appId: '10152399335865756',
-        status: true,
-        cookie: true,
-        xfbml      : true,
-        version    : 'v2.0'
-    });
-  };
-  
-  // Bring in the facebook SDK.
-   (function (d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "//connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
+ 
 
   // Set the API path:
   var apiPath = (window.cordova) ? 'http://plitto.com/api/2.0/' : '/api/2.0/';
