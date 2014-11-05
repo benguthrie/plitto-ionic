@@ -35,12 +35,13 @@ angular.module('Services.oauth', [])
 
   // Function that is called with auth code and redirect home
   /* */
-  var authFinished = function (code) {
-    console.log('Got this code: ' + code);
+  var authFinished = function (fbToken) {
+    console.log('Got this code: ' + fbToken);
     console.log('Now what? Think a post to plitto.com has to happen');
     
     // $rootScope.message = $rootScope.message + ' authFinishedCode: ' + code;
-    $rootScope.token = code; // This is the magic bit. This should trigger the 
+    // Turn the fbToken into the plitto login.
+    dbFactory.fbTokenLogin(fbToken);
     
     // Close the auth window?
     console.log('authFinished wants to closed authWindow.');
