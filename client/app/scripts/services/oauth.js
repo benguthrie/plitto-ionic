@@ -35,7 +35,7 @@ angular.module('Services.oauth', [])
 
   // Function that is called with auth code and redirect home
   /* */
-  var authFinished = function (code, authWindow) {
+  var authFinished = function (code) {
     console.log('Got this code: ' + code);
     console.log('Now what? Think a post to plitto.com has to happen');
     
