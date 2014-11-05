@@ -8,6 +8,9 @@ angular.module('Services.oauth', [])
   // console.log('window: ',window);
   var redirect_uri = window.cordova ? 'http://plitto.com' : 'http://localhost/plitto-ionic/client/app/';
   
+  // Define the auth-window as an element within the whole scope.
+  var authWindow = null;
+  
   // This is the only place that controlls the navigation based on the token's presence.
   $rootScope.$watch('token',function(){
     
@@ -32,7 +35,7 @@ angular.module('Services.oauth', [])
 
   // Function that is called with auth code and redirect home
   /* */
-  var authFinished = function (code) {
+  var authFinished = function (code, authWindow) {
     console.log('Got this code: ' + code);
     console.log('Now what? Think a post to plitto.com has to happen');
     
@@ -84,7 +87,7 @@ angular.module('Services.oauth', [])
     // The above should sniff the presense of an access token.
     
     if (accessToken || fbError) {
-      $rootScope.message = "<h3>7. Loadstart Code: "+ accessToken +"</h3>";
+      // $rootScope.message = "<h3>7. Loadstart Code: "+ accessToken +"</h3>";
       console.log('7. loadstart found a code');
       console.log('7. loadstart code: ' + accessToken);
       // authWindow.close(); // do this inside authFinished code.
@@ -116,7 +119,7 @@ angular.module('Services.oauth', [])
         $rootScope.message = "<h3>4. This is the cordova app version.</h3>";
         
         /* This opens the Facebook Authorization in a new window */
-        var authWindow = null;
+        
         authWindow = $window.open(authUrl, '_blank', 'location=no,toolbar=no');
         console.log('111authWindow: ',authWindow);
         authWindow.addEventListener('loadstart', loadstart);
