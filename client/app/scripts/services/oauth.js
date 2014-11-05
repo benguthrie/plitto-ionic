@@ -27,14 +27,7 @@ angular.module('Services.oauth', [])
   
   // TODO 11/2/2014 - This might not be used. TRY TO REMOVE IT.
   /*
-  var authUrl ='http://www.facebook.com/dialog/oauth?'
-    + 'client_id=207184820755'
-    + '&redirect_uri=' + redirect_uri
-    + '&display=touch'
-    + '&scope=email,user_friends'
-    + '&response_type=token'
-  ;
-  var authWindow = null;
+  
   */ 
 
   // Function that is called with auth code and redirect home
@@ -76,6 +69,14 @@ angular.module('Services.oauth', [])
       
       /* Cordova App: All Facebook Info gets routed through a window. */
       if (window.cordova) {
+        var authUrl ='http://www.facebook.com/dialog/oauth?'
+          + 'client_id=207184820755'
+          + '&redirect_uri=' + 'http://plitto.com'
+          + '&display=touch'
+          + '&scope=email,user_friends'
+          + '&response_type=token'
+        ;
+        var authWindow = null;
         $rootScope.message = "<h3>4. This is the cordova app version.</h3>";
         
         authWindow = $window.open(authUrl, '_blank', 'location=no,toolbar=no');
@@ -128,7 +129,8 @@ angular.module('Services.oauth', [])
       $rootScope.message = "<h3>END 5. Unknown Service Requested</h3>";
     }
   };
-  
+
+  /*
   // This handles everything by opening up windows. We should replace this if possible.
   this.redirect = function () {
     console.log('called OAuth.redirect. Eliminate!');
@@ -146,6 +148,7 @@ angular.module('Services.oauth', [])
       $window.location = authUrl;
     }
   };
+  */
   
 // From here down,  Created on 11/4 to eliminate facebook.js
   // Access the facebook platform through FB.??? calls.
