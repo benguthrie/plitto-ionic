@@ -42,11 +42,12 @@ angular.module('Services.oauth', [])
   };
   
   function getParameterByName(name, path) {
-    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-        results = regex.exec(path);
+    var bettername = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + bettername + "=([^&#]*)"),
+        var results = regex.exec(path);
+    console.log('getParameterByName: name: ',name,' bettername: ',bettername, ' path: ', path);
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-}
+  } 
 
   // Event handler for the inAppBrowser plugin's `loadstart` event
   var loadstart = function (e) {
@@ -62,8 +63,13 @@ angular.module('Services.oauth', [])
     var accessToken = /\?#access_token=(.+)$/.exec(e.url);
     var error = /\?error=(.+)$/.exec(e.url);
     */
-    var accessToken = getParameterByName('access_token',e.url);
-    var fbError = getParameterByName('error',e.url);
+    
+    // Let's strip out the pound sign. 
+    var fburlpath = e.url.replace('#','');
+    
+    var accessToken = getParameterByName('access_token',fburlpath);
+    
+    var fbError = getParameterByName('error',fburlpath);
 
     // The above should sniff the presense of an access token.
     
