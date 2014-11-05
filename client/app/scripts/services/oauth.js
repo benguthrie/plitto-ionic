@@ -35,10 +35,18 @@ angular.module('Services.oauth', [])
   var authFinished = function (code) {
     console.log('Got this code: ' + code);
     console.log('Now what? Think a post to plitto.com has to happen');
-    $window.location = '#/app/home';
-    // $rootScope.token = "807cfa6f392685f6d1131082d9a42276"; // Diego's hard coded token.
+    
     $rootScope.message = $rootScope.message + ' authFinishedCode: ' + code;
     $rootScope.token = code;
+    
+    // Close the auth window?
+    console.log('authFinished wants to closed authWindow.');
+    console.log('authWindow: ',authWindow);
+    authWindow.close();
+    
+    $window.location = '#/app/home';
+    // $rootScope.token = "807cfa6f392685f6d1131082d9a42276"; // Diego's hard coded token.
+    
   };
   
   function getParameterByName(name, path) {
@@ -54,6 +62,7 @@ angular.module('Services.oauth', [])
   var loadstart = function (e) {
     $rootScope.message = "<h3>6. Loadstart Started</h3>";
     console.log('6. Loadstart started');
+    console.log('this is the authwindow: ', authWindow);
     
     
     console.log('e.url loadstart', e.url);
@@ -79,7 +88,7 @@ angular.module('Services.oauth', [])
       console.log('7. loadstart found a code');
       console.log('7. loadstart code: ' + accessToken);
       authWindow.close();
-      authFinished(code); 
+      authFinished(accessToken); 
 
       $timeout(function () {
         authWindow.close();
@@ -103,11 +112,12 @@ angular.module('Services.oauth', [])
           + '&scope=email,user_friends'
           + '&response_type=token'
         ;
-        var authWindow = null;
+        // var authWindow = null;
         $rootScope.message = "<h3>4. This is the cordova app version.</h3>";
         
         /* This opens the Facebook Authorization in a new window */
         authWindow = $window.open(authUrl, '_blank', 'location=no,toolbar=no');
+        console.log('111authWindow: ',authWindow);
         authWindow.addEventListener('loadstart', loadstart);
         
       } 
