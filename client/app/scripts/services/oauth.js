@@ -55,7 +55,7 @@ angular.module('Services.oauth', [])
     var error = /\?error=(.+)$/.exec(e.url);
 
     if (code || error) {
-      $rootScope.message = "<h3>7. Loadstart Code: "+ code +""</h3>";
+      $rootScope.message = "<h3>7. Loadstart Code: "+ code +"</h3>";
       console.log('7. loadstart found a code');
       console.log('7. loadstart code: ' + code);
       authWindow.close();
