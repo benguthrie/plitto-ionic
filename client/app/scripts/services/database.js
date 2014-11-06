@@ -67,6 +67,10 @@ var showFeed = function (theType, userFilter, listFilter, myState, oldestKey) {
   .success(function (data, status, headers, config) {
     if (theType === 'profile') {
       $rootScope.profileData.feed = data.results;
+      if(userFilter !== "0" && userFilter !== ""){
+        // We know it's a user, so let's set local storage.
+        localStorageService.set('user' + userFilter + 'feed', data.results);
+      }
     }
   // console.log("profile feed after showfeed",$rootScope.profileData.feed);
   });
@@ -86,11 +90,23 @@ var showUser = function (userId, userName, dataScope) {
     feed: [],
     shared: []
   };
+  
+  // Populate from local storage.
+  var lsTypes = Array('ditto','feed','lists','shared');
+  for (var i in lsTypes){
+    if(localStorageService.get('user' + userId + lsTypes[i])){
+      eval("$rootScope.profileData." + lsTypes[i] + " = localStorageService.get('user" + userId + "" + lsTypes[i] + "');");
+    }  
+  }
+  
+  // Start by populating from local storage.
+  
 
   // Get something to ditto 
   if($rootScope.user.userId != userId){
     dbGetSome('$rootScope.profileData.ditto', userId, '', 'ditto');
     $rootScope.nav.view = "user.ditto";
+    
   } else {
     // This is me
     
@@ -238,16 +254,16 @@ var dittoParams = $.param({
 /* Get Some - things to ditto 
   9/23/2014 - Created 
 */
-var dbGetSome = function (theScope, userfilter, listfilter, sharedFilter) {
+var dbGetSome = function (theScope, userFilter, listFilter, sharedFilter) {
   // 
-  console.log('getSomeDB Scope: ',theScope, ' listfilter: ', listfilter ,' userfilter: ',userfilter, ' sharedFilter ', sharedFilter);
+  console.log('getSomeDB Scope: ',theScope, ' listfilter: ', listFilter ,' userfilter: ',userFilter, ' sharedFilter ', sharedFilter);
   // SharedFilter: 
   checkToken($rootScope.token);
     
   var params = {
     type:'user',
-    userFilter: userfilter,
-    listFilter: listfilter,
+    userFilter: userFilter,
+    listFilter: listFilter,
     token: $rootScope.token,
     sharedFilter: sharedFilter
     
@@ -278,6 +294,17 @@ var dbGetSome = function (theScope, userfilter, listfilter, sharedFilter) {
         // This makes the scope that was passed in that part of the root scope.
         eval(theScope + ' = data.results;');
         
+        if(userFilter !== "0" && userFilter !== ""){
+          // We know it's a user, so let's set local storage.
+          localStorageService.set('user' + userFilter + sharedFilter, data.results);
+        }
+        
+        if(listFilter !== "0" && listFilter !== ""){
+          // We know it's a user, so let's set local storage.
+          localStorageService.set('list' + listFilter + sharedFilter, data.results);
+        }
+        
+        
         // Testing returning it so it can be part of the rootScope:
         // return data.results;
       }
@@ -285,7 +312,7 @@ var dbGetSome = function (theScope, userfilter, listfilter, sharedFilter) {
       
     });
 };
-
+  
 /* Created 11/2/2014 */
 var fbTokenLogin = function(fbToken){
   // The user has a valid Facebook token for plitto, and now wants to log into Plitto
@@ -333,7 +360,7 @@ var fbTokenLogin = function(fbToken){
       console.log("TODO1 There was an error. Log it.");
     }
 
-  } );
+  });
 };  
   
 /* Gets their Plitto Friends, and adds it to the local store. 9/3/2014
@@ -378,7 +405,6 @@ var plittoFBApiCall = function (friendsData) {
 
           // Update the local storage.
           localStorageAppend('fbLogin',data.result);
-
         });
   } else {
     var response = 'You should invite your friends to Plitto';
@@ -394,14 +420,13 @@ var getUserListOfLists = function (friendId, theScope) {
   console.log('getUserListOfLists: friendId: ',friendId,' theScope: ', theScope); 
   
   // Get from local storage first, then populate.
-  if(localStorageService.get('userLL_'+friendId)){
+  if(localStorageService.get('user'+friendId +'lists')){
     console.log('load user lists from local storage');
-    $rootScope.profileData.lists = localStorageService.get('userLL_'+friendId);
+    $rootScope.profileData.lists = localStorageService.get('user'+friendId + 'lists');
   }else{
     console.log('local storage not et');
   }
     
-  
   var params = $.param({userfilter:friendId, token: $rootScope.token });
   // console.log('listoflists params: ',params);
   $http({
@@ -419,9 +444,9 @@ var getUserListOfLists = function (friendId, theScope) {
       eval(theScope + ' = data.results;');
     // console.log('rootscope.lists', $rootScope.lists);
 
-        // Add / Update to local storage
-        localStorageService.set('userLL_'+friendId, data.results);
-      });
+      // Add / Update to local storage
+      localStorageService.set('user'+friendId+'lists', data.results);
+    });
 };
 
 
@@ -548,7 +573,7 @@ var showAList = function (listNameId, listName, userFilter) {
 
 /* Populate a list with all the different views, if they're there. */
 var loadList = function(listNameId, listName, userIdFilter, type, sharedFilter, oldestKey){
-  console.log('loadList before: ',$rootScope.list);
+  console.log('loadList573 - rs.list before: ',$rootScope.list);
   var params = $.param({
     id: listNameId,
     type: type,
@@ -579,25 +604,24 @@ var loadList = function(listNameId, listName, userIdFilter, type, sharedFilter, 
           // Build the view
           eval("$rootScope.list." + viewTypes[i] + "= data.results." + viewTypes[i]);
           // Create the local storage
-          eval("localStorageService.set('listId' + listNameId +'" +  viewTypes[i] + " ', data.results." + viewTypes[i] + ");");
+          eval("localStorageService.set('listId" + listNameId +  viewTypes[i] + "', data.results." + viewTypes[i] + ");");
         }
 
         if(localStorageService.get('listId' + listNameId + 'ditto')){
           eval("$rootScope.list." + viewTypes[i] + "= localStorageService.get('listId' + listNameId +'" +  viewTypes[i] + "');");
         }  
       }
-    }else{
+    } else {
       // Only update this specific part of the view.
-      console.log("EVAL THIS: " + "$rootScope.list." + type + " = data.results." +  type + ";");
+      // console.log("EVAL THIS: " + "localStorageService.set('listId" + listNameId + type + "' , data.results." + type + ");");
       eval("$rootScope.list." + type + " = data.results." +  type + ";");
-      eval("localStorageService.set('listId' + listNameId +'" +  type + "' , data.results." + type + ");");
+      eval("localStorageService.set('listId" + listNameId + type + "' , data.results." + type + ");");
       // And update the local storage
       // eval("localStorageService.set('listId' + listNameId +'" +  sharedFilter + "' , data.results." + sharedFilter + ");");
     }
     
     // console.log('type: ',type,' listNameId: ', listNameId, ' listName: ', listName, ' userIdFilter: ', userIdFilter, 'Success? rs.list: ',$rootScope.list);
   });
-  
 }
 
 /* 9/3/2014 / 9.5.2014
@@ -626,8 +650,10 @@ var getMore = function (type, id, ownerid, existing) {
 
     // Put it in the listStore if we know what it is
     if(type==="list") {
+      // TODO2 - Append rather than overwrite.
       $rootScope.list.items = data.results;
       // $rootScope.list.itemCount = data.results.length;
+      // There isn't a benefit for local storage here, because it
       
       console.log("rootScope.list built by getMore: ",$rootScope.list.items);
       
@@ -751,49 +777,9 @@ var getMoreAppend = function (caption,params,data, id) {
             data[i].lists[j].used = true;
           } 
         }
-        /*
-        for(k in data[i].items[j]) {
-
-        } */
       }
     }
-
-    // Process lists that are new. Anything with .used === false hasn't been added yet.
-    console.log('unused items? userlists, data: ',userLists, data);
-    // Data that is false can just be added, methinks.
-
-    if(thefilter==='modalUser') {
-      for(i in data[0].lists) {
-        // Push each list onto the scope if it wasn't already used..
-        if(data[0].lists[i].used === false) {
-          gma[0].lists.push(data[0].lists[i]);
-        }
-        
-      }
-    } else if (thefilter === 'modalList') {
-      console.log('userLists,data',userLists,data);
-      for(i in data) {
-        // Inside the User part.
-        console.log('dataused',data[i].lists[0].used);
-        if(data[i].lists[0].used === false) {
-          // We have content for a user, but didn't append it before. Create this list for the user.
-          gma.push(data[i]);
-        }
-      }
-    }
-
-    // Update the proper scope.
-    if(thefilter === 'modalUser' || thefilter==='modalList') {
-      $rootScope.modal.listStore = gma;
-      // Update the localStorage.
-      localStorageService.set(thekey,gma);
-    }
-
-
   }
-
-
-  
   // Update the local storage.
 
 }
