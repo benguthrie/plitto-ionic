@@ -165,8 +165,6 @@ angular.module('Plitto.controllers', [])
       $rootScope.token = '35358a19f081483800da33f59635e86f';
       $scope.thetoken = '35358a19f081483800da33f59635e86f';
     }
-    
-
   })
 
 .controller('HomeCtrl',function($scope, $rootScope,dbFactory) {
@@ -209,8 +207,6 @@ angular.module('Plitto.controllers', [])
   }
   
   $scope.debugLog = [{startItem: 'this is the start item'}];
-  
- 
   
   $scope.testString = function(){
     $scope.debugLog = "string";
@@ -266,9 +262,7 @@ angular.module('Plitto.controllers', [])
   };
   
   // Initialize a new search.
-  
   $scope.$watch(function(){
-    
     return $scope.search.term;
   }, function(newValue, oldValue){
     console.log("Changed from " + oldValue + " to " + newValue);
@@ -276,7 +270,6 @@ angular.module('Plitto.controllers', [])
       dbFactory.search(newValue);
     }
   });
-/*  */  
 })
 .controller('FriendsCtrl', function($scope, $rootScope) {
   // console.log("You have tried to control your friends",$rootScope.friendStore);
@@ -294,9 +287,6 @@ angular.module('Plitto.controllers', [])
     dbFactory.getUserListOfLists($rootScope.user.userId,'$rootScope.lists');
   };
   
-
- 
-
   // Delete a list
   $scope.deleteList = function (list) {
     $ionicActionSheet.show({
@@ -321,9 +311,7 @@ angular.module('Plitto.controllers', [])
 
   $scope.view = function(theView){
     // if it's already active, then make the call.
-    console.log('pressed view. ', theView);
-    
-    
+    // console.log('pressed view. ', theView);
     
     // If it is already this view, then reload this content.
     if(theView === $rootScope.nav.listView){
@@ -351,13 +339,6 @@ angular.module('Plitto.controllers', [])
 })
 
 .controller('LoginCtrl', function($scope, $window, $rootScope, $state, OAuth) {
-  /* 
-  $scope.force = function(){
-    $rootScope.token = 'ae6d5d593f59d15652109f88edaea72a'; 
-  };
-  */
-  
-  
   
   $scope.loginOAuth = function(provider) {
     $rootScope.message = "<h3>1. loginOAuth Pressed</h3>";
@@ -382,7 +363,7 @@ angular.module('Plitto.controllers', [])
   };
 })
 
-/*
+/* TODO - Can this be deleted? What is the LoginCallBack? 
 .controller('LoginCallbackCtrl', function($scope, $state, $stateParams, $ionicViewService, LoopBackAuth) {
   LoopBackAuth.accessTokenId = $stateParams.access_token;
   LoopBackAuth.currentUserId = $stateParams.userId;

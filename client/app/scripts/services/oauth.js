@@ -6,7 +6,11 @@ angular.module('Services.oauth', [])
   // Need to change redirect from plitto.com if on mobile
   // otherwise we're just going to load the entire website on the phone
   // console.log('window: ',window);
-  var redirect_uri = window.cordova ? 'http://plitto.com' : 'http://localhost/plitto-ionic/client/app/';
+  
+  if(document.URL.indexOf("localhost") > -1)
+    {var redirect_uri = window.cordova ? 'http://plitto.com' : 'http://localhost/plitto-ionic/client/app/';}
+  else
+    {var redirect_uri = window.cordova ? 'http://plitto.com' : 'http://plitto.com/client/app/';}
   
   // Define the auth-window as an element within the whole scope.
   var authWindow = null;
@@ -27,12 +31,6 @@ angular.module('Services.oauth', [])
     }
   });
   
-  
-  // TODO 11/2/2014 - This might not be used. TRY TO REMOVE IT.
-  /*
-  
-  */ 
-
   // Function that is called with auth code and redirect home
   /* */
   var authFinished = function (fbToken) {
@@ -65,19 +63,14 @@ angular.module('Services.oauth', [])
   // Event handler for the inAppBrowser plugin's `loadstart` event
   var loadstart = function (e) {
     $rootScope.message = "<h3>6. Loadstart Started</h3>";
-    console.log('6. Loadstart started');
+    //console.log('6. Loadstart started');
     // console.log('this is the authwindow: ', authWindow);
     
     
-    console.log('e.url loadstart', e.url);
-    // TODO: HANDLE ERROR (if user denies access)
+   // console.log('e.url loadstart', e.url);
+    // TODO1: HANDLE ERROR (if user denies access)
     // Form: error=access_denied&error_code=200&error_description=Permissions+error&error_reason=user_denied
   
-    /* Commenting out Diego's stuff
-    var accessToken = /\?#access_token=(.+)$/.exec(e.url);
-    var error = /\?error=(.+)$/.exec(e.url);
-    */
-    
     // Let's strip out the pound sign. 
     var fburlpath = e.url.replace('#','');
     
@@ -89,8 +82,8 @@ angular.module('Services.oauth', [])
     
     if (accessToken || fbError) {
       // $rootScope.message = "<h3>7. Loadstart Code: "+ accessToken +"</h3>";
-      console.log('7. loadstart found a code');
-      console.log('7. loadstart code: ' + accessToken);
+     // console.log('7. loadstart found a code');
+      //console.log('7. loadstart code: ' + accessToken);
       // authWindow.close(); // do this inside authFinished code.
       authFinished(accessToken); 
 
@@ -109,7 +102,7 @@ angular.module('Services.oauth', [])
       
       /* Cordova App: All Facebook Info gets routed through a window. */
       if (window.cordova) {
-        var authUrl ='http://www.facebook.com/dialog/oauth?'
+        var authUrl ='https://www.facebook.com/dialog/oauth?'
           + 'client_id=207184820755'
           + '&redirect_uri=' + 'http://plitto.com' // This is irrelevant, because the window should close as soon as the code is received.
           + '&display=touch'
@@ -173,27 +166,6 @@ angular.module('Services.oauth', [])
     }
   };
 
-  /*
-  // This handles everything by opening up windows. We should replace this if possible.
-  this.redirect = function () {
-    console.log('called OAuth.redirect. Eliminate!');
-    
-    $rootScope.message = $rootScope.message + 'OAuth.redirect';
-    
-    if (window.cordova) {
-      console.log('Redirecting for mobile: ' + authUrl);
-      authWindow = $window.open(authUrl, '_blank', 'location=no,toolbar=no');
-      authWindow.addEventListener('loadstart', loadstart);
-    } else {
-      // $window.location = authUrl;
-      console.log('OAuth - Web Redirect for web clients', authUrl, redirect_uri);
-      console.log('TODO Handle what happens here. Facebook should be verifying the user, because there is no valid token. Restore line 82, if we must.');
-      $window.location = authUrl;
-    }
-  };
-  */
-  
-// From here down,  Created on 11/4 to eliminate facebook.js
   // Access the facebook platform through FB.??? calls.
  
 

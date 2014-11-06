@@ -3,27 +3,28 @@
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
   <ion-content class="has-header">
-    <h1>{{profileData.userName}}</h1>
-        
-    <div class="button-bar">
-      <a class="button active" ng-class="{'active': nav.view ==='user.ditto'}" ng-hide="profileData.userId == user.userId" ng-click="nav.view = 'user.ditto'; getSome(profileData.userId,'ditto');">Ditto</a>
-      <a class="button" ng-class="{'active': nav.view ==='user.feed'}" ng-click="nav.view = 'user.feed'; showFeed(profileData.userId,''); ">Feed</a>
-      <a class="button" ng-class="{'active': nav.view ==='user.lists'}" ng-click="nav.view = 'user.lists'; showLists(profileData.userId); ">Lists</a>
-      <a class="button" ng-class="{'active': nav.view ==='user.shared'}" ng-hide="profileData.userId == user.userId" ng-click="nav.view = 'user.shared';getSome(profileData.userId,'shared');">Shared</a>
-      <a class="button" ng-class="{'active': nav.view ==='user.milestones'}" ng-click="nav.view = 'user.milestones';">Milestones</a>
-    </div>
+  <h1>{{profileData.userName}}</h1>
+
+<!-- Start menu -->
+  <div class="button-bar">
+    <a class="button active" ng-class="{'active': nav.view ==='user.ditto'}" ng-hide="profileData.userId == user.userId" ng-click="nav.view = 'user.ditto'; getSome(profileData.userId,'ditto');">Ditto</a>
+    <a class="button" ng-class="{'active': nav.view ==='user.feed'}" ng-click="nav.view = 'user.feed'; showFeed(profileData.userId,''); ">Feed</a>
+    <a class="button" ng-class="{'active': nav.view ==='user.lists'}" ng-click="nav.view = 'user.lists'; showLists(profileData.userId); ">Lists</a>
+    <a class="button" ng-class="{'active': nav.view ==='user.shared'}" ng-hide="profileData.userId == user.userId" ng-click="nav.view = 'user.shared';getSome(profileData.userId,'shared');">Shared</a>
+    <a class="button" ng-class="{'active': nav.view ==='user.milestones'}" ng-click="nav.view = 'user.milestones';">Milestones</a>
+  </div>
+<!-- End menu --> 
 
 <!-- Start the Feed-->
-    <div class="list card" ng-repeat="user in $root.profileData.feed" ng-show="nav.view==='user.feed'">
-      <user-list-thing store="profileData.feed" source="profile" user-data="user"></user-list-thing>   
-    </div>
+  <div class="list card" ng-repeat="user in $root.profileData.feed" ng-show="nav.view==='user.feed'">
+    <user-list-thing store="profileData.feed" source="profile" user-data="user"></user-list-thing>   
+  </div>
 <!-- End the Feed -->
    
-  
 <!-- Start Ditto -->  
-    <div class="list card" ng-repeat="user in $root.profileData.ditto" ng-show="nav.view==='user.ditto'">
-      <user-list-thing store="profileData.ditto" source="profile" user-data="user"></user-list-thing>  
-    </div>
+  <div class="list card" ng-repeat="user in $root.profileData.ditto" ng-show="nav.view==='user.ditto'">
+    <user-list-thing store="profileData.ditto" source="profile" user-data="user"></user-list-thing>  
+  </div>
 <!-- End Ditto Section --> 
   
 <!-- Start Shared -->  
@@ -33,18 +34,14 @@
   </div>
 <!-- End Shared Section --> 
   
-   
 <!-- Start User Lists -->    
-    
-    <div ng-show="nav.view==='user.lists'">
-      <list-of-lists store="profileData.lists" source="profile" lists-data="$root.profileData.lists"></list-of-lists>
-    </div>
-    
- <!-- End User Lists -->   
+  <div ng-show="nav.view==='user.lists'">
+    <list-of-lists store="profileData.lists" source="profile" lists-data="$root.profileData.lists"></list-of-lists>
+  </div>
+<!-- End User Lists -->   
   
-  <!-- Start Milestones -->
-    
-    <div ng-show="nav.view==='user.milestones'">Milestones</div>
+<!-- Start Milestones -->    
+  <div ng-show="nav.view==='user.milestones'">Milestones</div>
 <!-- End Milestones -->       
     
   </ion-content>

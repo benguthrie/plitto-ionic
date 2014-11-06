@@ -99,8 +99,6 @@ var showUser = function (userId, userName, dataScope) {
     $rootScope.nav.view = "user.feed";
   }
   
-  
-  
   getUserListOfLists(userId, '$rootScope.profileData.lists');
 
   // dbFactory.showUser(userId);
@@ -195,13 +193,12 @@ if(mykey === null) {
   var action = 'remove';
 }
 
- var dittoParams = $.param(
-     {
-        action: action ,
-        listid: lid, 
-         fromuserid: uid, 
-         thingid: tid, 
-         token: $rootScope.token });
+var dittoParams = $.param({
+  action: action ,
+  listid: lid, 
+  fromuserid: uid, 
+  thingid: tid, 
+  token: $rootScope.token });
 
   $http(
     {
@@ -214,10 +211,7 @@ if(mykey === null) {
     // console.log("ditto response: ",data,'mykey',data.results[0]['thekey']);
 
     if(action === 'ditto') {
-    /* NO NEED FOR THESE
-      var thingname = data.results[0]['thingname'];
-      var listname = data.results[0]['listname'];
-    */
+      
       var mynewkey  = data.results[0]['thekey'];
       var friendsWith = data.results[0]['friendsWith'];
 
@@ -335,8 +329,6 @@ var fbTokenLogin = function(fbToken){
       // FINALLY! - Load the interface
       $state.go('app.home'); // TODO1 - This needs to be reflected in the URL.
       
-      
-
     }else{
       console.log("TODO1 There was an error. Log it.");
     }
@@ -344,8 +336,6 @@ var fbTokenLogin = function(fbToken){
   } );
 };  
   
-  
-
 /* Gets their Plitto Friends, and adds it to the local store. 9/3/2014
     // 10/21/2014 This will only be called on a refresh, which isn't built yet.
 */
@@ -396,8 +386,6 @@ var plittoFBApiCall = function (friendsData) {
   }
 };
 
-
-
 /* 9/7/2014
   Get the list of lists for this user
 */
@@ -425,7 +413,6 @@ var getUserListOfLists = function (friendId, theScope) {
     .success(function (data,status,headers,config) {
       // console.log("testlogin: ",data, data.puid);
       // Handle the users, lists and things.
-        // Update the rootScope lists.
       // TODO - Come up with a strategy of where to store this better than Rootscope. Also, for each user, when navigating around, this could change.
        //  $rootScope.lists = data.result;
       console.log('Load this here: ',theScope + ' = data.results;');
@@ -497,8 +484,6 @@ var addToList = function (addToListObj) {
           myThingAlready = i;
         }
       }
-
-
       // console.log('didList',didList, 'myListPosition', myListPosition, 'myThingAlready', myThingAlready);
 
       // If my list doesn't exist yet, create it.
@@ -510,7 +495,8 @@ var addToList = function (addToListObj) {
           username: $rootScope.user.username,
           lists: [ { lid: addToListObj.lid, listname: $rootScope.list.listName, items: [ myNewItem ] } ]
         };
-        // Make my list first // TODO1 - This needs to work
+        
+        // Make my list first 
         $rootScope.list.mine = myList;
 
       } 
@@ -523,9 +509,7 @@ var addToList = function (addToListObj) {
         // console.log('RootStore before I build', $rootScope.list.items);
         $rootScope.list.mine[0].lists[0].items.unshift(myNewItem);
       } else {
-        // Move my old item to the top of your list.
-        // console.log('move it from one place to first',myThingAlready);
-        // Remove the old item
+        // Move my old item to the top of your list & remove the old one.
         $rootScope.list.mine[0].lists[0].items.splice(myThingAlready, 1);
         // Insert the new one with "now"
         $rootScope.list.mine[0].lists[0].items.unshift(myNewItem);
@@ -537,28 +521,6 @@ var addToList = function (addToListObj) {
 };
 
 
-/* Removed this 11/4/2014 
-var modalReset = function () {
-  // console.log("dbFactory.modalReset");
-  // STEP 1 - Clear out any listStore filters applied within this user profile.
-  for(i in $rootScope.listStore) {
-    // Check each list to see if it's mine. Hide it if it's mine.
-    if(parseInt($rootScope.listStore[i].uid) === $rootScope.vars.user.userId) {
-      $rootScope.listStore[i].show = "0";
-      
-    } else {
-      
-      // Only go through the items if it's someone else's list.
-      $rootScope.listStore[i].show = "1";
-      for(j in $rootScope.listStore[i].items) {
-        $rootScope.listStore[i].items[j].show = "1"; 
-        // console.log('Show'+ $rootScope.listStore[i].username + "'s " + $rootScope.listStore[i].listname + ' item' + $rootScope.listStore[i][j]) 
-      }
-    }
-  }
-};
-
-*/
     
 /* 9/3/2014 */
 var showAList = function (listNameId, listName, userFilter) {
@@ -574,8 +536,6 @@ var showAList = function (listNameId, listName, userFilter) {
       eval("$rootScope.list." + viewTypes[i] + " = localStorageService.get('listId' + listNameId +'" + viewTypes[i] +"')");
     }  
   }
-  
-  
   
   $rootScope.nav.listView = 'ditto';
   $state.go('app.list',{listId: listNameId});
@@ -635,42 +595,7 @@ var loadList = function(listNameId, listName, userIdFilter, type, sharedFilter, 
       // eval("localStorageService.set('listId' + listNameId +'" +  sharedFilter + "' , data.results." + sharedFilter + ");");
     }
     
-    /*
-    if(typeof data.results.ditto != 'undefined' && data.results.ditto.length > 0)     
-      { 
-        $rootScope.list.ditto = data.results.ditto; 
-        // Set the local storage.
-        localStorageService.set('listId' + listNameId + 'ditto',data.results.ditto);
-      } 
-      else if(typeof data.results.ditto != 'undefined' && data.results.ditto.length === 0)
-        // Clean out the store if there were no results
-      { $rootScope.list.ditto = []; } 
-    
-    if(typeof data.results.shared != 'undefined' && data.results.shared.length > 0)    
-      { $rootScope.list.shared = data.results.shared; }
-      else if(typeof data.results.shared != 'undefined' && data.results.shared.length === 0)
-        // Clean out the store if there were no results
-      { $rootScope.list.shared = []; } 
-    
-    if(typeof data.results.feed != 'undefined' && data.results.feed.length > 0)      
-      { $rootScope.list.feed = data.results.feed; }
-      else if(typeof data.results.feed != 'undefined' && data.results.feed.length === 0)
-        // Clean out the store if there were no results
-      { $rootScope.list.feed = []; } 
-    
-    if(typeof data.results.mine != 'undefined' && data.results.mine.length > 0)      
-      { $rootScope.list.mine = data.results.mine; }
-      else if(typeof data.results.mine != 'undefined' && data.results.mine.length === 0)
-        // Clean out the store if there were no results
-      { $rootScope.list.mine = []; } 
-    
-    if(typeof data.results.strangers != 'undefined' && data.results.strangers.length > 0) 
-      { $rootScope.list.strangers = data.results.strangers; }
-    else if(typeof data.results.strangers != 'undefined' && data.results.strangers.length === 0)
-        // Clean out the store if there were no results
-      { $rootScope.list.strangers = []; } 
-    */
-    console.log('type: ',type,' listNameId: ', listNameId, ' listName: ', listName, ' userIdFilter: ', userIdFilter, 'Success? rs.list: ',$rootScope.list);
+    // console.log('type: ',type,' listNameId: ', listNameId, ' listName: ', listName, ' userIdFilter: ', userIdFilter, 'Success? rs.list: ',$rootScope.list);
   });
   
 }
@@ -686,9 +611,8 @@ var getMore = function (type, id, ownerid, existing) {
         existing: existing,
         token: $rootScope.token
     });
-  // 
-  // 
-  console.log('getMoreparams: ',params);
+  
+  // console.log('getMoreparams: ',params);
   $http(
     {
       method:'POST',
@@ -699,8 +623,6 @@ var getMore = function (type, id, ownerid, existing) {
   .success(function (data,status,headers,config) {
     // Append the data to the proper place.
     // console.log('data.results size',data.results,data.results.length);
-
-    // TODO1 - Add it to the correct store. getMoreAppend('getMoreAppendSuccess',params,data.results, id);
 
     // Put it in the listStore if we know what it is
     if(type==="list") {
@@ -720,6 +642,7 @@ var getMore = function (type, id, ownerid, existing) {
 /* 9/6/2014 - 
   Get more must append the results, not just overwrite them 
   9/17/2014 - Building it to append. 
+  11/5/2014 - This is currently not used.
 */
 var getMoreAppend = function (caption,params,data, id) {
   // Step 1. Get the key that should be in place for the local storage.
@@ -732,8 +655,6 @@ var getMoreAppend = function (caption,params,data, id) {
     } else {
       gma = [];
     }
-  
-
   } 
   else if ($rootScope.nav.modal === true && $rootScope.nav.filter ==="list") {
     var thefilter = 'modalList';
@@ -757,8 +678,6 @@ var getMoreAppend = function (caption,params,data, id) {
   }
 
   // console.log('starting GMA',gma);
-
-  // 
   // console.log('dbFactory.getMoreAppend | params, data', params, data,'listStore start',$rootScope.modal.listStore, 'full scope',$rootScope);
   
   // Set the scope for processing.
@@ -901,7 +820,8 @@ var newList = function (thingName, success, failure) {
 
 };
   
-/* 11.4.2014 - Updates friends, lists, user info on app re-launch */
+/* 11.4.2014 - Updates friends, lists, user info on app re-launch 
+TODO2 - This shoud start to be used.*/
 var refreshData = function(token){
   // This function will be called when the app loads, and already has a token. It's kind of like login.
   
@@ -921,12 +841,9 @@ var refreshData = function(token){
     $rootScope.bite = localStorageService.get('bite');
   } 
   
+  // Check to make sure that the token is still valid.
+  
   // TODO2 Now, make the HTTP calls to refresh them.
-  
-  
-  
-  
-  
   
 };
 
