@@ -213,9 +213,17 @@ angular.module('Plitto', [
       }
     })
   
+  .state('app.feed', {
+      url: '/feed',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/feed.html',
+          controller: 'FeedCtrl'
+        }
+      }
+    })
   
-  
-     .state('app.friends', {
+   .state('app.friends', {
       url: '/friends',
       views: {
         'menuContent': {
@@ -245,6 +253,8 @@ angular.module('Plitto', [
         }
       }
     })
+  
+  
 
     .state('app.lists', {
       url: '/lists',

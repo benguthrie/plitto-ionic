@@ -25,11 +25,18 @@
         <ion-item nav-clear menu-close href="#/app/home">
           Ditto
         </ion-item>
+        
+        
         <ion-item nav-clear menu-close href="#/app/lists" ng-click="loadLists(); nav.view = 'user.lists'; ">
           Lists
         </ion-item>
+        
         <ion-item nav-clear menu-close href="#/app/search/" ng-click="nav.view = 'search'">
           Search
+        </ion-item>
+        
+        <ion-item nav-clear menu-close href="#/app/feed" ng-click="nav.view = 'feed'">
+          Feed
         </ion-item>
         
         <ion-item nav-clear menu-close ng-click="logout()" href="#/login">
@@ -37,7 +44,7 @@
         </ion-item>
         
         <ion-item nav-clear ng-click="deleteFBaccess()">
-          -rm FB oauth
+          Delete Plitto from Facebook
         </ion-item>
         
         <ion-item nav-clear menu-close href="#/app/debug">
@@ -51,9 +58,7 @@
         </ion-item>
         
         
-        <ion-item nav-clear >
-          Feed
-        </ion-item>
+        
         
         <ion-item nav-clear >
           Add a list

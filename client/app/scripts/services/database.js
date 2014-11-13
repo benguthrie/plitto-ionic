@@ -15,6 +15,7 @@ angular.module('Services.database', [])
     }
       
   }
+
   
 var dbInit = function () {
   console.log('rootScope initialized! Mount up!');
@@ -27,9 +28,15 @@ var dbInit = function () {
       listView: 'ditto',
       profileView: 'ditto',
       view: 'home', // This tracks the currently active view, and sub-view.
-      homeView: 'friends'
+      homeView: 'friends',
+      feedView: 'friends'
   };
 
+  $rootScope.feed = {
+    friends: [],
+    strangers: []
+  };
+  
   $rootScope.list = {
     listId: null,
     listName: null,
@@ -50,10 +57,85 @@ var dbInit = function () {
   };
 };  
   
+
+/* 11/12/2014 - Created */    
+var loadFeed = function (filter, startFrom){
+
+  // Step 1: Load from local storage.
+  $rootScope.feed.friends = localStorageService.get('feedFriends');
+  $rootScope.feed.strangers = localStorageService.get('feedStrangers');
+
+};  
+
+  
+/* 11/12/2014 - Created 
+  dbFactory.mainFeed(filter, continueFrom, filter, '', '','nav.feed.' + filter, newerOrOlder);
+*/  
+var mainFeed = function (theType, continueFrom, userFilter, listFilter, sharedFilter, scopeName, newerOrOlder){
+  
+  // console.log('mainFeed:',theType, continueFrom);
+  var continueKey = 0;
+  
+  // Step 0 - Prep by finding the oldest key
+  if( continueFrom === "older" && $rootScope.feed[theType].length > 0 ){
+    // The interface doesn't know the last key. Help it.
+    var userCt = ($rootScope.feed[theType].length - 1) ;
+    
+    
+    var listCt = $rootScope.feed[theType][userCt].lists.length - 1;
+    if(typeof $rootScope.feed[theType][userCt].lists[listCt].items !== 'undefined'){
+      var thingCt = $rootScope.feed[theType][userCt].lists[listCt].items.length - 1;
+      if( typeof $rootScope.feed[theType][userCt].lists[listCt].items[thingCt].id !== 'undefined')
+      {
+        var continueKey = $rootScope.feed[theType][userCt].lists[listCt].items[thingCt].id;
+      }
+    }
+    
+    
+    // console.log('last? ',  continueFrom);
+  } 
+  // TODO3 - Create a way to load newer content.
+  
+  // Step 1: Make the call the the API
+  var params = $.param({theType: theType, userFilter: '', listFilter: '', myState: '', continueKey: continueKey, token: $rootScope.token , newerOrOlder: newerOrOlder });
+  
+  $http({
+    method: 'POST',
+    url: apiPath + 'showFeed', 
+    data: params,
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+  })
+  .success(function (data, status, headers, config) {
+    // console.log('results: ',data.results);
+    // console.log('continue: ',oldestKey);
+    if(continueFrom === "older" && continueKey !== 0){
+     // Append 
+      // console.log('readL older');
+      for  (var rRow in data.results){
+        $rootScope.feed[theType].push(data.results[rRow]);
+      }
+
+    } else {
+      // Replace
+      $rootScope.feed[theType] = data.results;
+    }
+
+    // Update local storage 
+    // eval('localStorageService.set("feed'+ (theType && theType[0].toUpperCase() + theType.slice(1) ) + '", data.results)');
+    
+    // console.log('feed.Friends: ', $rootScope.feed.friends);
+    // console.log('feed.Strangers: ', $rootScope.feed.strangers);
+  }
+  // console.log("profile feed after showfeed",$rootScope.profileData.feed);
+  );
+  
+  
+};    
+  
 /* 10/22/2014 */
 
-var showFeed = function (theType, userFilter, listFilter, myState, oldestKey) {
-  var params = $.param({theType: theType, userFilter: userFilter, listFilter: listFilter, myState: myState, oldestKey: oldestKey, token: $rootScope.token });
+var showFeed = function (theType, userFilter, listFilter, myState, continueKey) {
+  var params = $.param({theType: theType, userFilter: userFilter, listFilter: listFilter, myState: myState, continueKey: continueKey, token: $rootScope.token });
 
 // Load from local storage first.
   if(userFilter !== "0" && userFilter !== "" && localStorageService.get('user' + userFilter + 'feed') ) {
@@ -859,6 +941,8 @@ return {
   , fbTokenLogin: fbTokenLogin
   , refreshData: refreshData
   , dbInit: dbInit /* Initializes the rootscope */
+  , mainFeed: mainFeed /* Updates the main feed */
+  , loadFeed: loadFeed /* Loads in the feed from local storage */
 };
   
 }]);

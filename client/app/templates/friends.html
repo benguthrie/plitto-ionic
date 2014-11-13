@@ -6,7 +6,7 @@
   <ion-content class="has-header">
     <p ng-show="!friendStore.length">None of your Facebook friends have a Plitto account.</p>
     <ion-list can-swipe="true">
-      <ion-item class="item-icon-right" ng-repeat="friend in friendStore" href="#/app/profile/{{friend.id}}" ng-click="showUser(friend.id,friend.name,'ditto');">
+      <ion-item class="item-icon-right" ng-repeat="friend in friendStore" href="#/app/profile/{{friend.id}}" ng-click="showUser(friend.id,friend.name,'ditto', friend.fbuid);">
           
           <div style="display: block; max-width: 10em; clear: both; float: right;">
             <div style="padding: 0.3em; float: left;  background-color: #b0b0b0; color: #fff;">Dittoable: {{friend.dittoable}}</div>

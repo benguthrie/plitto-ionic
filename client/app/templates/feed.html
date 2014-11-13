@@ -1,0 +1,35 @@
+<ion-view title="Feed">
+ <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+  
+  <ion-content class="has-header">
+    <!-- <h3>{{$root.list.listName}}</h3> --> 
+    
+    <div class="button-bar">
+      <a class="button" ng-class="{'active': $root.nav.feedView ==='friends'}" ng-click="feed('friends','newer','newer');">
+        <img ng-src="img/974-users@2x.png" style="margin-top:7px;margin-right:5px; height: 30px; width: 40px;"/>&nbsp;Friends</a>
+      <a class="button" ng-class="{'active': $root.nav.feedView ==='strangers'}" ng-click="feed('strangers','newer','newer');">
+        <img ng-src="img/135-hockeymask.png" style="margin-top:7px;margin-right:5px; height: 30px; width: 25px;"/>&nbsp;Strangers</a>
+      <!-- <a class="button" ng-class="{'active': $root.nav.listView ==='shared'}" ng-click="view('shared');">Nearby</a> --> 
+    </div>
+    
+    
+    <div class="list card" ng-repeat="user in $root.feed.friends" ng-show="nav.feedView ==='friends'">
+      <user-list-thing store="feed.friends" source="feed" user-data="user"></user-list-thing>
+    </div>
+    <div ng-show="nav.feedView ==='friends'">
+      <button ng-click="feed('friends','older','older');">Load Older</button>
+    </div>
+    
+    <div class="list card" ng-repeat="user in $root.feed.strangers" ng-show="nav.feedView ==='strangers'">
+      <user-list-thing store="feed.strangers" source="feed" user-data="user"></user-list-thing>
+      
+    </div>
+    <div ng-show="nav.feedView ==='strangers' ">
+      <button ng-click="feed('strangers','older','older');">Load Older</button>
+    </div>
+    
+    
+  </ion-content>
+</ion-view>

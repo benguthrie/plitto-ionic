@@ -184,6 +184,7 @@ angular.module('Plitto.controllers', [])
 
 })
 
+
 .controller('DebugCtrl', function($scope,dbFactory, $rootScope) {
   $scope.loadList = function(type){
     $rootScope.debug("DebugCtrl DEBUG loadList TYPE: " +type);
@@ -309,6 +310,23 @@ angular.module('Plitto.controllers', [])
       }
     });
   };
+})
+
+.controller('FeedCtrl', function($scope, $stateParams, $rootScope, dbFactory) {
+  // var mainFeed = function (theType, continueFrom, userFilter, listFilter, sharedFilter, scopeName, newerOrOlder){
+  dbFactory.mainFeed('friends', '', '', '', '', 'feed.friends',''); // Should only evaluate when navigating to "feed"
+  
+  $scope.feed = function(filter, continueFrom, newerOrOlder){
+    // Set the active view.
+    $rootScope.nav.feedView = filter;
+    
+    // Tell dbFactory what to do.
+    dbFactory.mainFeed(filter, continueFrom, filter, '', '','nav.feed.' + filter, newerOrOlder);
+    
+  };
+  
+
+  
 })
 
 .controller('ListCtrl', function($scope, $stateParams, $rootScope, dbFactory) {
