@@ -5,6 +5,41 @@
     
   <ion-content class="has-header">
     <p ng-show="!friendStore.length">None of your Facebook friends have a Plitto account.</p>
+    
+    <div ng-repeat="friend in friendStore" href="#/app/profile/{{friend.id}}" ng-click="showUser(friend.id,friend.name,'ditto', friend.fbuid);" class="gridItem">
+      <table class="gridHeader">
+        <tr><td style="background-image: url('http://graph.facebook.com/{{friend.fbuid}}/picture');" class="gridProfile"></td>
+        <td class="gridTitle" ng-bind="friend.name"></td></tr>
+      </table>
+      
+      <table class="gridStats">
+        <tr>
+          <th rowspan="2" class="statGroup">Things</th>
+
+          <td class="statValue"><a class="statShared">{{friend.shared}} <span class="statLabel">Shared</span></a></td>
+          
+        </tr>
+
+        <tr>
+          <td class="statValue"><a class="statStandard">{{friend.dittoable}} <span class="statLabel">Dittoable</span></a></td>
+        </tr>
+
+        <tr>
+          <th rowspan="2" class="statGroup">Lists</th>
+          <td class="statValue"><a class="statShared">{{friend.sharedlists}} <span class="statLabel">Shared</span></a></td>
+        </tr>
+        <tr>
+          
+          <td class="statValue"><a class="statStandard">{{friend.lists}} <span class="statLabel">Lists</span></a></td>
+          
+
+        </tr>
+      </table>
+
+    
+    
+    
+    <!-- The list
     <ion-list can-swipe="true">
       <ion-item class="item-icon-right" ng-repeat="friend in friendStore" href="#/app/profile/{{friend.id}}" ng-click="showUser(friend.id,friend.name,'ditto', friend.fbuid);">
           
@@ -19,7 +54,7 @@
           
           <ion-option-button class="button-assertive"
             ng-click="deleteList(list)">Be Cool</ion-option-button>
-          <img src="http://graph.facebook.com/{{friend.fbuid}}/picture" style="float: left; margin-right: 1em;">
+          <img src="http://graph.facebook.com/{{friend.fbuid}}/picture" style="float: left; margin-right: 1em; margin-top: -15px; margin-left: -15px;">
 
           
         {{friend.name}}
@@ -27,6 +62,6 @@
         <i class="icon ion-chevron-right icon-accessory"></i>
       </ion-item>
         
-    </ion-list>
+    </ion-list> -->
   </ion-content>
 </ion-view>

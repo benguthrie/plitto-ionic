@@ -71,3 +71,116 @@ div.button-bar > a.active {
 ion-nav-bar.nav-bar {
   background-color: #DEDDD9 !important;
 }
+
+div.gridItem {
+  width: 155px;
+  height: 190px;
+  float: left;
+  border: 1px solid rgba(100,100,100,0.5);
+  margin: 3px;
+  -webkit-box-shadow: 5px 5px 2px -4px rgba(0,0,0,0.52);
+  -moz-box-shadow: 5px 5px 2px -4px rgba(0,0,0,0.52);
+  box-shadow: 5px 5px 2px -4px rgba(0,0,0,0.52);
+  
+}
+
+
+table.gridHeader {
+  height: 50px;
+  max-height: 50px;
+  width: 100%;
+  border-bottom: 1px solid rgba(150,150,150, 0.8);
+  background-color: #32868C;
+  padding: 5px;
+  color: #000;
+  
+}
+
+td.gridProfile {
+  
+  height; 50px;
+  width: 50px;
+  background-repeat: no-repeat;
+  background-size: 50px;
+}
+
+td.gridTitle {
+  
+  
+  text-overflow: ellipsis;
+  font-size: 0.9em;
+  padding-left: 0.5em;
+  text-rendering: geometricPrecision; /* Formal grammar: auto | optimizeSpeed | optimizeLegibility | geometricPrecision */
+  
+}
+
+table.gridStats {
+  margin: 5px;
+}
+
+table.gridStats th.statGroup {
+  
+}
+
+table.gridStats td.statValue {
+  text-align: right;
+  
+  
+}
+
+
+span.statLabel {
+  font-size: 0.7em;
+}
+
+a.statStandard , a.statShared {
+  width: 100px;
+  display: block;
+  text-align: center;
+  margin: 2px;
+}
+
+a.statStandard {
+  border: 2px solid gray;
+  background-color: rgba(200,200,200,0.5);
+}
+
+a.statShared {
+  border: 2px solid green;
+  background-color: rgba(200,255,200,0.5);
+}
+
+
+/*     
+
+
+    <table class="gridStats">
+        <tr>
+          <th rowspan="2" class="statGroup">Things</th>
+
+          <td class="statValue"><a class="statShared">{{friend.shared}} <span class="statLabel">Shared</span></a></td>
+          
+        </tr>
+
+        <tr>
+          <td class="statValue"><a class="statStandard">{{friend.dittoable}} <span class="statLabel">Dittoable</span></a></td>
+        </tr>
+
+        <tr>
+          <th rowspan="2" class="statGroup">Lists</th>
+          <td class="statValue"><a class="statShared">{{friend.sharedlists}} <span class="statLabel">Shared</span></a></td>
+        </tr>
+        <tr>
+          
+          <td class="statValue"><a class="statStandard">{{friend.lists}} <span class="statLabel">Lists</span></a></td>
+          
+
+        </tr>
+      </table>
+
+table.gridStats td.statValue, table.gridStats th.statLabel {
+  border-bottom: 1px solid black;
+  margin: 5px;
+}
+    
+*/

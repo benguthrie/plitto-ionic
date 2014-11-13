@@ -4,12 +4,12 @@
   </ion-nav-buttons>
 
   <ion-content class="has-header">
-    UserId: {{$root.user.userId}}
+    
     <div class="list list-inset">
       <form name="listForm">
         <label class="item item-input">
           <input type="text" name="title"
-            placeholder="Title"
+            placeholder="New List Title"
             ng-model="newList.title"
             required>
         </label>
@@ -21,7 +21,7 @@
         </button>
       </form>
     </div>
-    <div><h2>Debug:</h2><p>Title: {{newList.title}}</p></div>
+    
   </ion-content>
 </ion-view>
 
