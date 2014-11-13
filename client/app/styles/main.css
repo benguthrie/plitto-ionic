@@ -28,3 +28,46 @@ body {
   margin: 10px 0px; 
 }
 */
+
+img.title-image {
+  float: left;
+}
+
+a.userLine {
+  padding: 0 0 0 50px;;
+  min-height: 45px !important;
+  background-color: #32868C;
+  
+}
+
+a.userLine > h2 {
+  color: #fff;
+  padding: 5px;
+}
+
+a.userLine > p {
+  display: none; /* This is the "in common stats" part */
+}
+
+a.userLine > img {
+  
+  top: 0px !important;
+  left: 0px !important;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  
+}
+
+div.listLIne {
+  background-color: #3FA8B0;
+}
+
+div.button-bar > a.active {
+  border: solid 3px #F49653;
+  padding: -3px;
+}
+
+ion-nav-bar.nav-bar {
+  background-color: #DEDDD9 !important;
+}

@@ -1,10 +1,15 @@
-<ion-view title="Profile">
-  <ion-nav-buttons side="left">
-    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
-  </ion-nav-buttons>
+<ion-view title="{{profileTitle}}" align-title="left">
+    
+    <ion-nav-buttons side="left">
+      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+  
+  
   <ion-content class="has-header">
-  <h1>{{profileData.userName}}</h1>
-
+<!--    
+    <img ng-src="http://graph.facebook.com/{{profileData.fbuid}}/picture">
+  <h3>{{profileData.userName}}</h3>
+--> 
 <!-- Start menu -->
   <div class="button-bar">
     <a class="button active" ng-class="{'active': nav.view ==='user.ditto'}" ng-hide="profileData.userId == user.userId" ng-click="nav.view = 'user.ditto'; getSome(profileData.userId,'ditto');">Ditto</a>
@@ -46,3 +51,4 @@
     
   </ion-content>
 </ion-view>
+ 

@@ -307,8 +307,8 @@ angular.module('Plitto', [
       };
   
       /* User */
-      $scope.showUser = function(userId, userName, dataScope){
-        dbFactory.showUser(userId,userName, dataScope);
+      $scope.showUser = function(userId, userName, dataScope, fbuid){
+        dbFactory.showUser(userId,userName, dataScope, fbuid);
       };
   
       /* List */

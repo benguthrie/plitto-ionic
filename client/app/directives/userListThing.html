@@ -1,10 +1,11 @@
-<a class="item item-avatar"  ng-click="showUser(userData.uid,userData.username,'ditto');">
-  <img src="http://graph.facebook.com/{{userData.fbuid}}/picture">
+<a class="item item-avatar userLine"  ng-click="showUser(userData.uid,userData.username,'ditto', userData.fbuid);">
+  <img ng-src="{{ userData.uid === '0' && 'img/135-hockeymask.png' || 'http://graph.facebook.com/' + userData.fbuid + '/picture' }}"/>
+  
   <h2>{{userData.username}}</h2>
   <p>IN COMMON STATS?</p>
 </a>
 <div class="list" ng-repeat="list in userData.lists">
-  <div class="item item-divider" ng-click="showList(list.lid, list.listname, userData.uid); testFunction();">
+  <div class="item item-divider listLIne" ng-click="showList(list.lid, list.listname, userData.uid); testFunction();">
     {{list.listname}}
   </div>
   <div class="item" ng-repeat="item in list.items">

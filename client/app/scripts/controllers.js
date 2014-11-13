@@ -83,9 +83,9 @@ angular.module('Plitto.controllers', [])
   };
   
   // This is for the logged in user
-  $scope.showUser = function(userId, userName, dataScope){
-    
-    dbFactory.showUser(userId,userName, dataScope);
+  $scope.showUser = function(userId, userName, dataScope, fbuid){
+    console.log('controllers.js - showUser 87');
+    dbFactory.showUser(userId,userName, dataScope, fbuid);
   };
   
   
@@ -174,11 +174,12 @@ angular.module('Plitto.controllers', [])
   };
   
 
-  $scope.getSome = function(){
+  $scope.getSome = function(typeFilter){
       $rootScope.bite = [];
+    $rootScope.nav.homeView = typeFilter;
     $scope.bite = 'this was reloaded';
       // dbGetSome = function (theScope, userfilter, listfilter, sharedFilter)
-      dbFactory.dbGetSome('$rootScope.bite', '', '', 'ditto');
+      dbFactory.dbGetSome('$rootScope.bite', typeFilter, '', 'ditto');
   };
 
 })
@@ -222,8 +223,14 @@ angular.module('Plitto.controllers', [])
   
 })
 
-.controller('ProfileCtrl', function($scope,dbFactory) {
+.controller('ProfileCtrl', function($scope,dbFactory,$rootScope) {
   // console.log("Profile Control",$scope);
+  
+  
+  // Put the user info in the title bar
+  $scope.profileTitle = "<img src='http://graph.facebook.com/" + $rootScope.profileData.fbuid + "/picture' class='title-image'> " + $rootScope.profileData.userName;
+  
+  
   $scope.showFeed = function(userId, oldestItem){
     // 
     console.log('profile show feed: ',userId, ' oldest: ',oldestItem);

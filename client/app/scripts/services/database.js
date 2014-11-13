@@ -26,8 +26,8 @@ var dbInit = function () {
   $rootScope.nav = {
       listView: 'ditto',
       profileView: 'ditto',
-      view: 'home' // This tracks the currently active view, and sub-view.
-
+      view: 'home', // This tracks the currently active view, and sub-view.
+      homeView: 'friends'
   };
 
   $rootScope.list = {
@@ -55,9 +55,13 @@ var dbInit = function () {
 var showFeed = function (theType, userFilter, listFilter, myState, oldestKey) {
   var params = $.param({theType: theType, userFilter: userFilter, listFilter: listFilter, myState: myState, oldestKey: oldestKey, token: $rootScope.token });
 
-// Is there currently a reed?
-// console.log('showFeed params: ',params);
-
+// Load from local storage first.
+  if(userFilter !== "0" && userFilter !== "" && localStorageService.get('user' + userFilter + 'feed') ) {
+    // We know it's a user, so let's set local storage.
+    $rootScope.profileData.feed = localStorageService.get( 'user' + userFilter + 'feed' );
+  }
+  
+  
   $http({
     method: 'POST',
     url: apiPath + 'showFeed', 
@@ -78,13 +82,13 @@ var showFeed = function (theType, userFilter, listFilter, myState, oldestKey) {
 }    
     
 /* 11.3.2014 */
-var showUser = function (userId, userName, dataScope) {
+var showUser = function (userId, userName, dataScope, fbuid) {
   
-    // 
-  console.log('dbFactory: show a user. vars.user: ', userId, ' uid: ',userId,' username: ',userName, 'dataScope', dataScope);
+    //  console.log('dbFactory: show a user. vars.user: ', userId, ' uid: ',userId,' username: ',userName, 'dataScope', dataScope);
   $rootScope.profileData = {
     userName: userName,
     userId: userId,
+    fbuid: fbuid,
     lists: [],
     ditto: [],
     feed: [],

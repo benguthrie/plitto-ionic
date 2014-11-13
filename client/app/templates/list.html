@@ -19,37 +19,30 @@
     </div>
     
     <div ng-show="$root.nav.listView ==='ditto' ">
-      <h2>Ditto</h2>
       <div class="list card" ng-repeat="user in list.ditto">
         <user-list-thing store="list.ditto" source="list" user-data="user"></user-list-thing>
       </div>
     </div>
     
     <div ng-show="$root.nav.listView ==='shared' ">
-      <h2>Shared</h2>
       <div class="list card" ng-repeat="user in list.shared">
         <user-list-thing store="list.shared" source="list" user-data="user"></user-list-thing>
       </div>
     </div>
     
     <div ng-show="$root.nav.listView ==='strangers' ">
-      <h2>Strangers</h2>
       <div class="list card" ng-repeat="user in list.strangers">
         <user-list-thing store="list.strangers" source="list" user-data="user"></user-list-thing>
       </div>
     </div>
     
     <div ng-show="$root.nav.listView ==='mine' ">
-      <h2>Mine</h2>
       <div class="list card" ng-repeat="user in list.mine">
-        
         <user-list-thing store="list.mine" source="list" user-data="user"></user-list-thing>
-
       </div>
     </div>
     
     <div ng-show="$root.nav.listView ==='feed' ">
-      <h2>Feed</h2>
       <div class="list card" ng-repeat="user in list.feed">
         <user-list-thing store="list.feed" source="list" user-data="user"></user-list-thing>
       </div>
