@@ -254,7 +254,15 @@ angular.module('Plitto', [
       }
     })
   
-  
+    .state('app.addlist', {
+      url: '/addlist',
+      views: {
+        'menuContent' :{
+          templateUrl: 'templates/add-list.html',
+          controller: 'addListCtrl'
+        }
+      }
+    })
 
     .state('app.lists', {
       url: '/lists',
@@ -349,11 +357,14 @@ angular.module('Plitto', [
         dbFactory.showAList(listId, listName, userFilter);
       };
   
-      /* Thing */
-      $scope.loadLists = function(listId){
-        // dbFactory.showThing(thingId, thingName, userFilter);
-        console.log('lol load lists');
-      };
+      /* Load up the lists 
+       $scope.loadLists = function(){
+         // user.userId is hard coded in lists, because it's always going to be this user's lists.
+          dbFactory.getUserListOfLists($rootScope.user.userId,'$rootScope.lists');
+        };
+      */
+
+      
     }
   };
 });

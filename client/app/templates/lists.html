@@ -1,1 +1,9 @@
-<list-of-lists store="listsData" source="listOfLists" lists-data="$root.listsData"></list-of-lists>
+<ion-view title="Lists">
+ <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-content class="has-header">
+    UserId: {{$root.user.userId}}
+    <list-of-lists store="listsData" source="listOfLists" lists-data="$root.lists"></list-of-lists>
+  </ion-content>
+</ion-view>

@@ -14,7 +14,7 @@
     <ion-content class="has-header">
       <ion-list>
         
-        <ion-item nav-clear menu-close href="#/app/profile/{{$root.user.userId}}" ng-click="showUser($root.user.userId, $root.user.userName, 'all');">
+        <ion-item nav-clear menu-close href="#/app/profile/{{$root.user.userId}}" ng-click="showUser($root.user.userId, $root.user.userName, 'all', $root.user.fbuid);">
           {{user.userName}}
         </ion-item>
         
@@ -50,19 +50,22 @@
         <ion-item nav-clear menu-close href="#/app/debug">
           Debug
         </ion-item>
+        
+        
+        <ion-item nav-clear menu-close href="#/app/addlist" ng-click="nav.view = 'addlist'">
+          Add a list
+        </ion-item>
+        
 
 <!-- Not built / activated yet -->        
         <div class="item item-divider">Undone below</div>
         <ion-item nav-clear  ng-click="addListModal()">
-          Add A List
+          Add List Modal 
         </ion-item>
         
         
         
         
-        <ion-item nav-clear >
-          Add a list
-        </ion-item>
         <ion-item nav-clear >
           3rd Party
         </ion-item>

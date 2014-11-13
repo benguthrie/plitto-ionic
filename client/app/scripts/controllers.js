@@ -224,6 +224,8 @@ angular.module('Plitto.controllers', [])
   
 })
 
+
+
 .controller('ProfileCtrl', function($scope,dbFactory,$rootScope) {
   // console.log("Profile Control",$scope);
   
@@ -236,7 +238,7 @@ angular.module('Plitto.controllers', [])
     // 
     console.log('profile show feed: ',userId, ' oldest: ',oldestItem);
     // showFeed = function(theType, userFilter, listFilter, myState, oldestKey)
-    dbFactory.showFeed('profile',userId,'','','');
+    dbFactory.showFeed('profile',userId,'','','','');
   }; 
   
   $scope.getSome = function(userId, filter){
@@ -252,6 +254,27 @@ angular.module('Plitto.controllers', [])
   $scope.makeActive = function(){
     console.log('make active');
   };
+})
+
+.controller('addListCtrl', function($scope, $rootScope, $stateParams, dbFactory){
+  this.newList = {title:''};
+  console.log('addListCtrl called');
+  
+  $scope.createList = function(){
+    console.log('User Clicked "Create List" with this title: ',this.newList.title);
+    var success = function(listName, listId){
+      console.log('success function',listName, listId);
+      // navigate to that list.
+      dbFactory.showAList(listName, listId, $rootScope.user.userId );
+    }
+    
+    var failure = function(theValue){
+      console.log('failure function',theValue);
+    }
+    
+    dbFactory.newList( this.newList.title, success, failure);
+  }
+  
 })
 
 .controller('SearchCtrl', function($scope, $rootScope,$stateParams, dbFactory) {
@@ -289,9 +312,12 @@ angular.module('Plitto.controllers', [])
 
 /* 10/21/2014 - Added RootScope to populate the list with? TODO1 - Build lists from $rootScope.lists */
 .controller('ListsCtrl', function($scope, $rootScope, dbFactory,$state, $ionicActionSheet ) {
- 
+  // On load, load up their lists.
+  dbFactory.getUserListOfLists($rootScope.user.userId,'$rootScope.lists');
+  
   $scope.loadLists = function(){
    // user.userId is hard coded in lists, because it's always going to be this user's lists.
+    console.log('ListsCtrl - loadLists')
     dbFactory.getUserListOfLists($rootScope.user.userId,'$rootScope.lists');
   };
   

@@ -134,8 +134,8 @@ var mainFeed = function (theType, continueFrom, userFilter, listFilter, sharedFi
   
 /* 10/22/2014 */
 
-var showFeed = function (theType, userFilter, listFilter, myState, continueKey) {
-  var params = $.param({theType: theType, userFilter: userFilter, listFilter: listFilter, myState: myState, continueKey: continueKey, token: $rootScope.token });
+var showFeed = function (theType, userFilter, listFilter, myState, continueKey, newerOrOlder) {
+  var params = $.param({theType: theType, userFilter: userFilter, listFilter: listFilter, myState: myState, continueKey: continueKey, newerOrOlder: newerOrOlder, token: $rootScope.token });
 
 // Load from local storage first.
   if(userFilter !== "0" && userFilter !== "" && localStorageService.get('user' + userFilter + 'feed') ) {
@@ -499,10 +499,10 @@ var plittoFBApiCall = function (friendsData) {
 };
 
 /* 9/7/2014
-  Get the list of lists for this user
+  Get the list of lists for this user, and from you and your friends
 */
 var getUserListOfLists = function (friendId, theScope) {
-    // TODO2 - load from local storage, if it's there 
+  // TODO2 - load from local storage, if it's there 
   console.log('getUserListOfLists: friendId: ',friendId,' theScope: ', theScope); 
   
   // Get from local storage first, then populate.
@@ -589,7 +589,9 @@ var addToList = function (addToListObj) {
       var myThingAlready = -1;
 
       var i = 0;
-
+     // make sure I have the list before I can just push something to it.
+     console.log('what is in this new lsit? ', $rootScope.list, $rootScope.list.mine);
+     
       for(i in $rootScope.list.mine[0].lists[0]){
         if($rootScope.list.mine[0].lists[0].tid === item.thingid){
           myThingAlready = i;
@@ -598,7 +600,7 @@ var addToList = function (addToListObj) {
       // console.log('didList',didList, 'myListPosition', myListPosition, 'myThingAlready', myThingAlready);
 
       // If my list doesn't exist yet, create it.
-      if($rootScope.list.mine.length === 0) {
+      if($rootScope.list.mine.length === 0 ) {
         // Make my list.
         var myList = {
           uid: $rootScope.user.userId,
@@ -638,14 +640,35 @@ var showAList = function (listNameId, listName, userFilter) {
   // 
   console.log('showAList: ',listNameId, listName , userFilter);
   
-  $rootScope.list = { listId: listNameId, listName: listName, ditto:[], shared:[], feed:[], strangers:[]};
+  $rootScope.list = { listId: listNameId, listName: listName, 
+     mine:[
+       {
+        fbuid: $rootScope.user.fbuid, 
+        uid: $rootScope.user.userId, 
+        username: $rootScope.user.userName, 
+        lists: [
+          {
+            lid: listNameId,
+            listname: listName,
+            items: []
+          }
+        ]
+     }
+    ], 
+     ditto:[], shared:[], feed:[], strangers:[]};
   
   // Load from local storage, if it exists.
   var viewTypes = Array('ditto','shared','feed','strangers','mine');
+  console.log('ls get mine: ',localStorageService.get('listId' + listNameId + 'mine'));
+  
   for(var i in viewTypes){
     if(localStorageService.get('listId' + listNameId + viewTypes[i])){
+      if(viewTypes[i] === "mine"){
+        console.log(' this is mine.');
+        
+      }
       eval("$rootScope.list." + viewTypes[i] + " = localStorageService.get('listId' + listNameId +'" + viewTypes[i] +"')");
-    }  
+    } 
   }
   
   $rootScope.nav.listView = 'ditto';
@@ -675,16 +698,28 @@ var loadList = function(listNameId, listName, userIdFilter, type, sharedFilter, 
     data: params,
     headers: {'Content-Type':'application/x-www-form-urlencoded'}
   }).success(function(data, status, headers, config){
-    console.log('data response: ', data.results);
+    console.log('loadList: ', data.results);
     
     var viewTypes = Array('ditto','shared','feed','strangers','mine');
+    
     if(type === "all"){
       for(var i in viewTypes){
         // console.log('i: ',i, type[i]);
+        
         // Build each type, but only clear the store if the request type was "all"
-        if( typeof eval("data.results." + viewTypes[i]) != 'undefined' && eval("data.results." + viewTypes[i] + ".length") === 0)
+            console.log('Type response: ', typeof data.results[ viewTypes[i] ], viewTypes[i], data.results[ viewTypes[i] ], ' typeof: ',typeof (data.results[ viewTypes[i] ].rowcount) );
+        
+        if( typeof eval("data.results." + viewTypes[i]) != 'undefined' && typeof (data.results[ viewTypes[i] ].rowcount) !== 'undefined')
           // Clean out the store if there were no results
-        { eval("$rootScope.list." + viewTypes[i] +  "= [];"); } 
+        { 
+          if(viewTypes[i] !== 'mine')
+          {
+            $rootScope.list[ viewTypes[i] ] = [];
+          } else {
+            // Create an empty list so my item can be added.
+            $rootScope.list.mine = [ { username: $rootScope.user.userName, uid: $rootScope.user.userId, fbuid: $rootScope.user.fbuid, lists: [{ lid: listNameId, listname: listName, items: [] }]} ];
+          }
+        } 
         else {
           console.log('make type: ',viewTypes[i]);
           // Build the view
@@ -700,6 +735,7 @@ var loadList = function(listNameId, listName, userIdFilter, type, sharedFilter, 
     } else {
       // Only update this specific part of the view.
       // console.log("EVAL THIS: " + "localStorageService.set('listId" + listNameId + type + "' , data.results." + type + ");");
+      
       eval("$rootScope.list." + type + " = data.results." +  type + ";");
       eval("localStorageService.set('listId" + listNameId + type + "' , data.results." + type + ");");
       // And update the local storage
