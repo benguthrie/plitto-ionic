@@ -13,7 +13,7 @@
     <div  ng-click="showThing(item.tid, item.thingname, userData.uid);">
       {{item.thingname}}
 
-      <h6>{{item.added}}</h6>
+      <h6>{{item.added}}</h6> 
 
       <h6 ng-show="item.dittouser === null" class="mega-octicon octicon-pencil">TYPED</h6>
       <h6 ng-show="item.dittouser !== null">dittoed from {{item.dittousername}}</h6>

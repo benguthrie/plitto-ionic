@@ -37,7 +37,6 @@ img.title-image {
   padding: 0 0 0 50px;;
   min-height: 45px !important;
   background-color: #32868C;
-  
 }
 
 a.userLine > h2 {
@@ -50,13 +49,11 @@ a.userLine > p {
 }
 
 a.userLine > img {
-  
   top: 0px !important;
   left: 0px !important;
   border-radius: 0;
   padding: 0;
   margin: 0;
-  
 }
 
 div.listLIne {
@@ -81,7 +78,6 @@ div.gridItem {
   -webkit-box-shadow: 5px 5px 2px -4px rgba(0,0,0,0.52);
   -moz-box-shadow: 5px 5px 2px -4px rgba(0,0,0,0.52);
   box-shadow: 5px 5px 2px -4px rgba(0,0,0,0.52);
-  
 }
 
 
@@ -92,11 +88,9 @@ table.gridHeader {
   border-bottom: 1px solid rgba(150,150,150, 0.8);
   padding: 5px;
   color: #000;
-  
 }
 
 td.gridProfile {
-  
   height: 50px;
   width: 50px;
   background-repeat: no-repeat;
@@ -104,13 +98,10 @@ td.gridProfile {
 }
 
 td.gridTitle {
-  
-  
   text-overflow: ellipsis;
   font-size: 0.9em;
   padding-left: 0.5em;
   text-rendering: geometricPrecision; /* Formal grammar: auto | optimizeSpeed | optimizeLegibility | geometricPrecision */
-  
 }
 
 table.gridStats {
@@ -123,10 +114,7 @@ table.gridStats th.statGroup {
 
 table.gridStats td.statValue {
   text-align: right;
-  
-  
 }
-
 
 span.statLabel {
   font-size: 0.7em;
@@ -148,38 +136,3 @@ a.statShared {
   border: 2px solid green;
   background-color: rgba(200,255,200,0.5);
 }
-
-
-/*     
-
-
-    <table class="gridStats">
-        <tr>
-          <th rowspan="2" class="statGroup">Things</th>
-
-          <td class="statValue"><a class="statShared">{{friend.shared}} <span class="statLabel">Shared</span></a></td>
-          
-        </tr>
-
-        <tr>
-          <td class="statValue"><a class="statStandard">{{friend.dittoable}} <span class="statLabel">Dittoable</span></a></td>
-        </tr>
-
-        <tr>
-          <th rowspan="2" class="statGroup">Lists</th>
-          <td class="statValue"><a class="statShared">{{friend.sharedlists}} <span class="statLabel">Shared</span></a></td>
-        </tr>
-        <tr>
-          
-          <td class="statValue"><a class="statStandard">{{friend.lists}} <span class="statLabel">Lists</span></a></td>
-          
-
-        </tr>
-      </table>
-
-table.gridStats td.statValue, table.gridStats th.statLabel {
-  border-bottom: 1px solid black;
-  margin: 5px;
-}
-    
-*/
