@@ -1,7 +1,72 @@
 <p ng-show="!listsData.length">No lists yet. Add a list using the + button 
   <div class="button-bar" ng-show="!listsData.length"><a class="button" ng-click="loadLists();">Reload Lists</a></div>
+
+  
 </p>
 
+<div ng-repeat="list in listsData" href="#/app/list/{{list.id}}" ng-click="showList(list.id,list.name,null);" class="gridItem">
+  <table class="gridHeader">
+    <tr>
+    <td class="gridTitle" ng-bind="list.name"></td></tr>
+  </table>
+
+  <table class="gridStats">
+    <tr>
+      <th rowspan="4" class="statGroup">Items</th>
+
+      <td class="statValue"><a class="statShared">{{list.shared}} <span class="statLabel">Shared</span></a></td>
+
+    </tr>
+
+    <tr>
+      <td class="statValue"><a class="statStandard">{{list.dittoable}} <span class="statLabel">Dittoable</span></a></td>
+    </tr>
+    
+    <tr>
+      <td class="statValue"><a class="statStandard">{{list.mymembers}} <span class="statLabel">Mine</span></a></td>
+    </tr>
+    
+    <tr>
+      <td class="statValue"><a class="statStandard" style="font-size: 0.6em;">{{list.mostrecent}} <span class="statLabel">Newest</span></a></td>
+    </tr>
+
+  </table>
+
+</div>
+
+<!--<div ng-repeat="friend in friendStore" href="#/app/profile/{{friend.id}}" ng-click="showUser(friend.id,friend.name,'ditto', friend.fbuid);" class="gridItem">
+      <table class="gridHeader">
+        <tr><td style="background-image: url('http://graph.facebook.com/{{friend.fbuid}}/picture');" class="gridProfile"></td>
+        <td class="gridTitle" ng-bind="friend.name"></td></tr>
+      </table>
+      
+      <table class="gridStats">
+        <tr>
+          <th rowspan="2" class="statGroup">Things</th>
+
+          <td class="statValue"><a class="statShared">{{friend.shared}} <span class="statLabel">Shared</span></a></td>
+          
+        </tr>
+
+        <tr>
+          <td class="statValue"><a class="statStandard">{{friend.dittoable}} <span class="statLabel">Dittoable</span></a></td>
+        </tr>
+
+        <tr>
+          <th rowspan="2" class="statGroup">Lists</th>
+          <td class="statValue"><a class="statShared">{{friend.sharedlists}} <span class="statLabel">Shared</span></a></td>
+        </tr>
+        <tr>
+          
+          <td class="statValue"><a class="statStandard">{{friend.lists}} <span class="statLabel">Lists</span></a></td>
+          
+
+        </tr>
+      </table>
+
+    </div> -->
+
+<!--
 <ion-list can-swipe="true">
   <ion-item class="item-icon-right" ng-repeat="list in listsData" href="#/app/lists/{{list.lid}}" ng-click="showList(list.lid, list.name, null);">
       <ion-option-button class="button-assertive"
@@ -16,3 +81,4 @@
     <i class="icon ion-chevron-right icon-accessory"></i>
   </ion-item>
 </ion-list>
+-->
