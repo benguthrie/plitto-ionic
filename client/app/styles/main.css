@@ -33,7 +33,7 @@ img.title-image {
   float: left;
 }
 
-a.userLine {
+.userLine {
   padding: 0 0 0 50px;;
   min-height: 45px !important;
   background-color: #32868C;
@@ -90,7 +90,6 @@ table.gridHeader {
   max-height: 50px;
   width: 100%;
   border-bottom: 1px solid rgba(150,150,150, 0.8);
-  background-color: #32868C;
   padding: 5px;
   color: #000;
   

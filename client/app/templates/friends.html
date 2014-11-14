@@ -8,7 +8,7 @@
     
     <div ng-repeat="friend in friendStore" href="#/app/profile/{{friend.id}}" ng-click="showUser(friend.id,friend.name,'ditto', friend.fbuid);" class="gridItem">
       <table class="gridHeader">
-        <tr><td style="background-image: url('http://graph.facebook.com/{{friend.fbuid}}/picture');" class="gridProfile"></td>
+        <tr class="userLine"><td style="background-image: url('http://graph.facebook.com/{{friend.fbuid}}/picture');" class="gridProfile"></td>
         <td class="gridTitle" ng-bind="friend.name"></td></tr>
       </table>
       
