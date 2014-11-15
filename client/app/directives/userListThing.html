@@ -1,6 +1,5 @@
 <a class="item item-avatar userLine"  ng-click="showUser(userData.uid,userData.username,'ditto', userData.fbuid);">
   <img ng-src="{{ userData.uid === '0' && 'img/135-hockeymask.png' || 'http://graph.facebook.com/' + userData.fbuid + '/picture' }}"/>
-  
   <h2>{{userData.username}}</h2>
   <p>IN COMMON STATS?</p>
 </a>
@@ -9,24 +8,18 @@
     {{list.listname}}
   </div>
   <div class="item" ng-repeat="item in list.items">
-    <div side="right" class="button"  style="font-size: 2.5em; float: right;" ng-class="{'ionicons ion-ios7-bolt' : item.mykey === 0 ,'ionicons ion-ios7-checkmark-outline' : item.mykey === null , 'ionicons ion-ios7-checkmark' : item.mykey > 0 }" ng-click="ditto(item.mykey, userData.uid, list.lid, item.tid, $event,store);"></div>
+    <div side="right" 
+         class="button"  
+         style="font-size: 2.5em; float: right;" 
+         ng-class="{'ionicons ion-ios7-bolt' : item.mykey === 0 ,'ionicons ion-ios7-checkmark-outline' : item.mykey === null , 'ionicons ion-ios7-checkmark' : item.mykey > 0 }" 
+         ng-click="ditto(item.mykey, userData.uid, list.lid, item.tid, $event,store);">
+    </div>
     <div  ng-click="showThing(item.tid, item.thingname, userData.uid);">
       {{item.thingname}}
-
       <h6>{{item.added}}</h6> 
-
       <h6 ng-show="item.dittouser === null" class="mega-octicon octicon-pencil">TYPED</h6>
       <h6 ng-show="item.dittouser !== null">dittoed from {{item.dittousername}}</h6>
-
     </div>
-
   </div>
   
-  <!-- <div ng-bind='$root.nav.view'>Root Nav View.</div> -->
-  
-  <!-- TODO2 - add logic to show this line only when there are more items from this list 
-  <div class="item item-divider" style="text-align: center;">
-    Ditto more from this list.
-  </div>
-  -->
 </div>

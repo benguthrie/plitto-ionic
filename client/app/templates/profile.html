@@ -16,7 +16,7 @@
     <a class="button" ng-class="{'active': nav.view ==='user.feed'}" ng-click="nav.view = 'user.feed'; showFeed(profileData.userId,''); ">Feed</a>
     <a class="button" ng-class="{'active': nav.view ==='user.lists'}" ng-click="nav.view = 'user.lists'; showLists(profileData.userId); ">Lists</a>
     <a class="button" ng-class="{'active': nav.view ==='user.shared'}" ng-hide="profileData.userId == user.userId" ng-click="nav.view = 'user.shared';getSome(profileData.userId,'shared');">Shared</a>
-    <a class="button" ng-class="{'active': nav.view ==='user.milestones'}" ng-click="nav.view = 'user.milestones';">Milestones</a>
+    <!-- TODO1 - Restore this <a class="button" ng-class="{'active': nav.view ==='user.milestones'}" ng-click="nav.view = 'user.milestones';">Milestones</a> --> 
   </div>
 <!-- End menu --> 
 
