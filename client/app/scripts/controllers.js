@@ -5,42 +5,49 @@ angular.module('Plitto.controllers', [])
   
    console.log('line 6');  
   
-  // At first, initialize the rootScope.
-  dbFactory.dbInit();
+  // Prepare the success callback.
   
-  // Start by seeing if a user is logged in. TODO1 - This should be done on 10/23.
-  if(!$rootScope.token){
-    // See if it's in the local storage.
-    if(localStorageService.get('token')){
-      console.log("There was a token in the local storage.");
-      console.log("BUT IS IT VALID?!?!?!? TODO1 - Only apply the token if it's a valid one.");
-      // Set the token.
-      $rootScope.token = localStorageService.get('token');
-      
-      
-      
-      // This should only happen when the app loads, and at specific times, so we'll build everything back up in dbFactory
-      dbFactory.refreshData($rootScope.token);
-      
-    } else {
-      console.log("No token in local storage.");
-    //  
-    }
-  }
-/*  
-  $ionicModal.fromTemplateUrl('templates/modals/loading.html', {
-    scope: $rootScope,
-    animation: 'slide-in-up'
-  }).then(function(modal) {
-    $scope.modal = modal;
-  });
-*/
-  $rootScope.debug = function(message) {
+  
+  
+  
+  // TODO1 - The below should be triggered as part of the callback.
+  var initCallback = function(){
+    if(!$rootScope.token }} $rootScope.token === null){
+      // See if it's in the local storage.
+      $rootScope.message = "Looking for token in local storage.";
+      if(localStorageService.get('token')){
+        $rootScope.message = "Token Found";
+        console.log("There was a token in the local storage.");
+        console.log("BUT IS IT VALID?!?!?!? TODO1 - Only apply the token if it's a valid one.");
+        // Set the token.
+        $rootScope.token = localStorageService.get('token');
+
+
+
+        // This should only happen when the app loads, and at specific times, so we'll build everything back up in dbFactory
+        $rootScope.message = "use dbFactory.refreshData to check if the token is valid.";
+        dbFactory.refreshData($rootScope.token);
+
+      } else {
+        console.log("No token in local storage.");
+        $rootScope.message = "There is no token in local storage. What next?";
+      //  
+      }
+    } 
     
+  
+  }
+  
+  // The first function of the app is initializing it the database.
+  dbFactory.dbInit(initCallback);
+
+  // Global 
+  $rootScope.debug = function(message) {
+
     if(typeof($rootScope.message) === 'string' && $rootScope.message.length > 255){
       $rootScope.message = 'cleared';
     }
-    
+
     if($rootScope.debugOn === true){
       if(typeof (message) ==='string'){
         console.log(message);
@@ -50,10 +57,6 @@ angular.module('Plitto.controllers', [])
       }
     }
   };
-  
-  
-  
-  
   
 }) 
 .controller('AppCtrl', function($scope, $state, dbFactory, $rootScope, localStorageService,Facebook,$ionicViewService) {

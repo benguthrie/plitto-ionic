@@ -17,7 +17,7 @@ angular.module('Services.database', [])
   }
 
   
-var dbInit = function () {
+var dbInit = function ( fCallback ) {
   console.log('rootScope initialized! Mount up!');
   // These have been used and referenced since Nov 4.
   $rootScope.token = null;
@@ -55,6 +55,14 @@ var dbInit = function () {
     ditto: [],
     shared: []
   };
+  
+  $rootScope.message = "RS initialized.";
+  
+  
+  if(typeof fCallback === "function"){
+    console.log('Callback made')
+    fCallback("complete");
+  }
 };  
   
 
