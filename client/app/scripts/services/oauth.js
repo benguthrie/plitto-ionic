@@ -146,7 +146,8 @@ angular.module('Services.oauth', [])
          FB.getLoginStatus(function (response) {
                 // $rootScope.session.plittoState = 'Facebook Responded 7';
                 // 
-          $rootScope.message = "<h3>4. Facebook Responded.</h3>";
+          $rootScope.message = "<h3>4. Facebook Responded.</h3>"; 
+           
           if(response.status === 'connected'){
             $rootScope.message = "<h3>5. Facebook Says Connected</h3>";
             // Take the token and send it to Plitto for login.
@@ -154,7 +155,11 @@ angular.module('Services.oauth', [])
 
           } else {
             // Anything else will require the redirect into and out of Facebook.
-            $rootScope.message = "<h3>END 5. Need Popup Window.</h3>";
+            // TODO! - This needs a popup window for web / iOS users 
+            
+            $rootScope.message = "<h3>END 5. Need Popup Window for the web interface.</h3>";
+            // FB.login(); // 11/2014 - Doesn't work.
+            
           }
         }, true);
       }
@@ -162,14 +167,14 @@ angular.module('Services.oauth', [])
       
 
     } else {
-      $rootScope.message = "<h3>END 5. Unknown Service Requested</h3>";
+      $rootScope.message = "<h3>END 5.1. Unknown Service Requested</h3>";
     }
   };
 
   // Access the facebook platform through FB.??? calls.
  
 
-  // Set the API path:
+  // Set the API path for the mobile app, and localhost:
   var apiPath = (window.cordova) ? 'http://plitto.com/api/2.0/' : '/api/2.0/';
   
  

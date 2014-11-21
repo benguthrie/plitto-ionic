@@ -452,6 +452,7 @@ var fbTokenLogin = function(fbToken){
       
     }else{
       console.log("TODO1 There was an error. Log it.");
+      $state.go('/login'); // TODO1 - This needs to be reflected in the URL.
     }
 
   });
@@ -465,7 +466,7 @@ var fbPlittoFriends = function (server) {
   // console.log('rs server',$rootScope.server);
     
      $rootScope.nav.logging = false;
-    // TODO0 - This needs to work.
+    // TODO2 - This needs to work. It should get called on every login.
     FB.api('/me/friends', function (response) {
       // console.log('my friends: ',response.data);
       // Using this, call the Plitto API to log this users friends

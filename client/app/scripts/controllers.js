@@ -1,7 +1,7 @@
 'use strict';
 angular.module('Plitto.controllers', [])
 
-.run(function($rootScope, dbFactory, $state, localStorageService, $ionicModal ){
+.run(function($rootScope, dbFactory, $state, localStorageService, $ionicModal, $location ){
   
    console.log('line 6');  
   
@@ -12,7 +12,8 @@ angular.module('Plitto.controllers', [])
   
   // TODO1 - The below should be triggered as part of the callback.
   var initCallback = function(){
-    if(!$rootScope.token }} $rootScope.token === null){
+    console.log('controller.js initCallback made.');
+    if(!$rootScope.token || $rootScope.token === null){
       // See if it's in the local storage.
       $rootScope.message = "Looking for token in local storage.";
       if(localStorageService.get('token')){
@@ -30,6 +31,8 @@ angular.module('Plitto.controllers', [])
 
       } else {
         console.log("No token in local storage.");
+        // $state.go('app.login'); // TODO1 - this fails..
+        $location.path('/login');
         $rootScope.message = "There is no token in local storage. What next?";
       //  
       }

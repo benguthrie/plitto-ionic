@@ -73,6 +73,7 @@ angular.module('Services.facebook', [])
         logout:function () {
             // REMOVED 10/31 $rootScope.session.plittoState = 'Logout Called.';
         	// console.log('facebook factory logout');
+          // TODO2 - It looks like this isn't working as part of the logout portion. Maybe we don't need it? 11/2014
             FB.logout(function (response) {
                 // REMOVED 10/31 $rootScope.session.plittoState = 'Facebook Responded to logout.';
                 if (response) {
