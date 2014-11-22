@@ -1,11 +1,64 @@
 'use strict';
 angular.module('Plitto.controllers', [])
 
-.run(function($rootScope, dbFactory, $state, localStorageService, $ionicModal, $location ){
+.run(function($rootScope, dbFactory, $state, localStorageService, $ionicModal, $location , pFb){
   
    console.log('line 6');  
   
   // Prepare the success callback.
+  
+  // watch for fblogin update. Should watch from the full app.
+  $rootScope.$on('getLoginStatus', function(event, args){
+    $rootScope.message = "got request to login you in at getLoginStatus";
+    
+    console.log('event: ', event, ' and args: ', args);
+    
+   //      console.log('typeof fbresponse.status', typeof args.fbresponse.status);
+    if(args.fbresponse === null){
+      // Nothing. this was a clearing deal.
+    } else {
+       if(args.fbresponse !== null 
+       && args.fbresponse.status !== "unknown"
+       && typeof args.fbresponse.authResponse.accessToken === 'string' )
+      {
+        console.log('step 1', args.fbresponse);
+        // $rootScope.$broadcast('getLoginStatus', {fbresponse: 'test'});
+        console.log('controllers.appctrl. getLoginStatus got an access token from Facebook. Loginto Plitto.');
+        dbFactory.fbTokenLogin(args.fbresponse.authResponse.accessToken);
+
+
+      } 
+      // anything from here down will need a response with a status.
+      else if (
+        typeof args === "object" 
+        && typeof args.fbresponse.status === "string" // This should be an object.
+        && args.fbresponse.status === "unknown"
+      ) {
+        $rootScope.message = "Redirect to Facebook for login";    
+        // pFb.login();
+        /*
+        if(typeof args.fbresponse.status !== "undefined"){
+          if(args.fbresponse.status === "unknown")  {
+            args.fbresponse.status !== "unknown"
+            console.log('redirect to FB Login.');
+        
+          }
+        }
+        */
+
+
+
+      } else {
+        console.log("Handle the error. Facebook didn't logyou in ", typeof args, args.fbresponse.status);
+        $rootScope.message = "Facebook Authentication Failed. Please tweet @benguthrie. He's working on it.";
+        
+      }
+      
+    }
+    
+   
+  });
+      
   
   
   
@@ -31,7 +84,7 @@ angular.module('Plitto.controllers', [])
 
       } else {
         console.log("No token in local storage.");
-        // $state.go('app.login'); // TODO1 - this fails..
+        
         $location.path('/login');
         $rootScope.message = "There is no token in local storage. What next?";
       //  
@@ -62,7 +115,9 @@ angular.module('Plitto.controllers', [])
   };
   
 }) 
-.controller('AppCtrl', function($scope, $state, dbFactory, $rootScope, localStorageService,Facebook,$ionicViewService) {
+// REMOVED Facebook from the injectors
+.controller('AppCtrl', function($scope, $state, dbFactory, $rootScope, localStorageService,$ionicViewService) {
+  
 
   // On load, load the correct interface
   // console.log('$rootScope.token onload action: ', $rootScope.token);
@@ -84,8 +139,8 @@ angular.module('Plitto.controllers', [])
   }
   
   $scope.deleteFBaccess = function() {
-    console.log('deleteFBaccess in loginctrl');
-    Facebook.unsubscribe();
+    console.log('deleteFBaccess in loginctrl TODO1 ');
+    // TODO1 Restore this: Facebook.unsubscribe();
   };
   
   // This is for the logged in user
@@ -108,7 +163,7 @@ angular.module('Plitto.controllers', [])
     
     $rootScope.debug('Appctrl - TODO2: FB Logout call.');
     // $state.go('app.login',{listId: newListId});
-    Facebook.logout();
+    // TODO1 - Restore this. Facebook.logout();
     
     // Clear all the stores.
     dbFactory.dbInit();

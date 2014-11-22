@@ -1,7 +1,7 @@
 'use strict';
 angular.module('Services.oauth', [])
 
-.service('OAuth', function ($window, $rootScope, $state, $timeout, dbFactory) {
+.service('OAuth', function ($window, $rootScope, $state, $timeout, dbFactory, $location, pFb ) {
   
   // Need to change redirect from plitto.com if on mobile
   // otherwise we're just going to load the entire website on the phone
@@ -46,7 +46,7 @@ angular.module('Services.oauth', [])
     console.log('authWindow: ',authWindow);
     authWindow.close();
     
-    $window.location = '#/app/home';
+    // $window.location = '#/app/home';
     // $rootScope.token = "807cfa6f392685f6d1131082d9a42276"; // Diego's hard coded token.
     
   };
@@ -98,13 +98,13 @@ angular.module('Services.oauth', [])
 
   this.login = function(oauthService) {
     if(oauthService === 'facebook'){
-      $rootScope.message = "<h3>3. OAuth.login.Facebook Opened. Next: Initiate FB.</h3>";
+      $rootScope.message = "<h3>3. OAuth.login.Facebook (oauth.101) Opened. Next: Initiate FB.</h3>";
       
       /* Cordova App: All Facebook Info gets routed through a window. */
       if (window.cordova) {
         var authUrl ='https://www.facebook.com/dialog/oauth?'
           + 'client_id=207184820755'
-          + '&redirect_uri=' + 'http://plitto.com' // This is irrelevant, because the window should close as soon as the code is received.
+          + '&redirect_uri=' + redirect_uri // This is irrelevant, because the window should close as soon as the code is received.
           + '&display=touch'
           + '&scope=email,user_friends'
           + '&response_type=token'
@@ -121,9 +121,29 @@ angular.module('Services.oauth', [])
       } 
       else {
         // This is for the web. For whatever reason, the FB. bit doesn't work in the cordova version.
+        $rootScope.message = "Web Version Open Auth with Facebook, and isn't complete.";
         
+        var authUrl ='https://www.facebook.com/dialog/oauth?'
+          + 'client_id=207184820755'
+          + '&redirect_uri=' + redirect_uri // This is irrelevant, because the window should close as soon as the code is received.
+          + '&display=touch'
+          + '&scope=email,user_friends'
+          + '&response_type=token'
+        ;
+        // var authWindow = null;
+        $rootScope.message = "<h3>4. This is the web app version.</h3>";
+        
+        /* This opens the Facebook Authorization in a new window */
+        
+        // $window.open(authUrl, '', 'location=no,toolbar=no');
+        // window.location = authUrl; // This successfully loads up Facebook, and returns it in the same window.
+        console.log('111authWindow: ',authWindow);
+        
+        // It's telling us that we need a login, if we're here. TODO1 - QA this.
+        
+        /*
          window.fbAsyncInit = function () {
-          FB.init({
+          pFb.init({
                appId:'207184820755',
               // appId: '10152399335865756',
               status: true,
@@ -132,7 +152,8 @@ angular.module('Services.oauth', [])
               version    : 'v2.0'
           });
         };
-
+        */
+        
         // Bring in the facebook SDK.
          (function (d, s, id){
            var js, fjs = d.getElementsByTagName(s)[0];
@@ -142,29 +163,58 @@ angular.module('Services.oauth', [])
            fjs.parentNode.insertBefore(js, fjs);
          }(document, 'script', 'facebook-jssdk'));
 
-
-         FB.getLoginStatus(function (response) {
-                // $rootScope.session.plittoState = 'Facebook Responded 7';
-                // 
-          $rootScope.message = "<h3>4. Facebook Responded.</h3>"; 
-           
-          if(response.status === 'connected'){
-            $rootScope.message = "<h3>5. Facebook Says Connected</h3>";
-            // Take the token and send it to Plitto for login.
-            dbFactory.fbTokenLogin(response.authResponse.accessToken);
-
-          } else {
-            // Anything else will require the redirect into and out of Facebook.
-            // TODO! - This needs a popup window for web / iOS users 
-            
-            $rootScope.message = "<h3>END 5. Need Popup Window for the web interface.</h3>";
-            // FB.login(); // 11/2014 - Doesn't work.
-            
-          }
-        }, true);
+        
+        
       }
     
+      // Handle the conditions:
+      var fbAuthLogicCallback = function (response ) {
+        
+        // $rootScope.$broadcast("getLoginStatus", {value:'value'
+        
+        // console.log('callback success: ', success);
+        console.log('fbAuth return: ', response);
+          // $rootScope.session.plittoState = 'Facebook Responded 7';
+          // 
+        console.log('fbAuthLogicCallback Status:.',response.status, response );
+        $rootScope.message = "<h3>Facebook Response: " + response.status + "</h3>";
+        
+        var fbStatus = response.status;
+        if(fbStatus ==='not_authorized'){
+          // Open a window to generate authroization TODO1 - Handle this.
+          var fbAuthUrl = 'https://www.facebook.com/dialog/oauth?client_id=207184820755&redirect_uri=' + redirect_uri;
+          // $location.path(fbAuthUrl);
+          // TODO1 window.location = fbAuthUrl;
+          
+          // It will return with the code, but that must be sniffed from somewhere else in the app.
+        }
+        else if (fbStatus === 'connected'){
+          // We have a valid facebook token, but not a Plitto account.
+          console.log('status token: ', response.authResponse.accessToken, response.authResponse.userID);
+          
+          // Make the token request:
+          dbFactory.fbTokenLogin(response.authResponse.accessToken);
+
+          
+        }
+        else if (fbStatus === 'NEED MORE PERMISSIONS'){
+        }
+        else { 
+          
+          $rootScope.message = "Unknown Facebook Response Status: " + response.status;
+        }
+        
+      };
       
+      var successCallback = function (){
+        console.log('that worked 188');
+      };
+      
+      // This part conects to facebook to get permissions.
+//!!!      
+      pFb.getLoginStatus( fbAuthLogicCallback , successCallback);      
+        
+     // pFb.getLoginStatus( getLoginCallback, true);
 
     } else {
       $rootScope.message = "<h3>END 5.1. Unknown Service Requested</h3>";

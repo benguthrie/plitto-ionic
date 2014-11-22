@@ -1,7 +1,7 @@
 'use strict';
 angular.module('Plitto.services', [
   'Services.database',
-  'Services.facebook',
+  'Services.pfb',
   'Services.localStorage',
   'Services.oauth'
 ]);

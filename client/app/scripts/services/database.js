@@ -2,8 +2,9 @@
 angular.module('Services.database', [])
 
 // This will handle storage within local databases.
-.factory('dbFactory', ['$http', '$rootScope', 'localStorageService', '$state', function ($http, $rootScope, localStorageService, $state) {
-      
+.factory('dbFactory', ['$http', '$rootScope', 'localStorageService', '$state',  function ($http, $rootScope, localStorageService, $state ) {
+  
+
  var apiPath = (window.cordova) ? 'http://plitto.com/api/2.0/' : '/api/2.0/';
 
 /* 11/2/2014 */
@@ -18,6 +19,9 @@ angular.module('Services.database', [])
 
   
 var dbInit = function ( fCallback ) {
+  
+  
+  
   console.log('rootScope initialized! Mount up!');
   // These have been used and referenced since Nov 4.
   $rootScope.token = null;
@@ -330,6 +334,7 @@ var dittoParams = $.param({
 
       // For the user and the list, change the increments of dittoable and in common.
     } else {
+      
       // It was removed. Finalize that.
       var mynewkey = null;
         $(event.target).html("");
@@ -422,12 +427,15 @@ var fbTokenLogin = function(fbToken){
   .success(function (data, status,headers,config) {
     // Initialize the rootScope.
     dbInit();
+    
+    // $rootScope.$broadcast("getLoginStatus", {value:'value'});
+    $rootScope.$broadcast('getLoginStatus', { fbresponse: null});
     $rootScope.message = "<h3>7. api/fbToken responded</h3>";
     console.log('fbTokenLogin response: ',data);
     
     // console.log('response from fbToken: ',data);
     // data.me.puid is the plitto userid. That should be there.
-    if( /^\+?(0|[1-9]\d*)$/.test(data.me.puid)){
+    if(data.me && data.me.puid && /^\+?(0|[1-9]\d*)$/.test(data.me.puid)){
       console.log("puid is valid");
       $rootScope.message = "<h3>8. PUID valid: " + data.me.token +". Redirect to app.home</h3>";
       // Set the stores.
@@ -451,8 +459,10 @@ var fbTokenLogin = function(fbToken){
       $state.go('app.home'); // TODO1 - This needs to be reflected in the URL.
       
     }else{
-      console.log("TODO1 There was an error. Log it.");
-      $state.go('/login'); // TODO1 - This needs to be reflected in the URL.
+      console.log("TODO1 There was an error. Log it.", data);
+      // window.location.replace('index.html');
+      $state.go('app.login'); // TODO1 - This needs to be reflected in the URL. 11/2014 - THIS MIGHT WORK> NEEDS TO BE TESTED>
+      $dbInit();
     }
 
   });
