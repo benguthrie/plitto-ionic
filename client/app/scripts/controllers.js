@@ -29,7 +29,8 @@ angular.module('Plitto.controllers', [])
     else if (args.command === "state"){
       console.log( "$state.go, args.path: ", args.path );
       // TODO1 - This is not working for the loading page.
-      // TODO1 - Restore this . $state.go(args.path);
+      // TODO1 - Restore this . 
+      $state.go(args.path);
       // $state.go("app.home");
       // $state.go("app.debug");
     }
@@ -121,8 +122,6 @@ angular.module('Plitto.controllers', [])
         // Set the token.
         $rootScope.token = localStorageService.get('token');
 
-
-
         // This should only happen when the app loads, and at specific times, so we'll build everything back up in dbFactory
         $rootScope.message = "use dbFactory.refreshData to check if the token is valid.";
         dbFactory.refreshData($rootScope.token);
@@ -132,12 +131,12 @@ angular.module('Plitto.controllers', [])
         
         // $location.path('/login');
         $rootScope.message = "There is no token in local storage. What next?";
-        $rootScope.$broadcast("broadcast",{ command: "state", path: "login" , debug: "controllers.js 127. No token in local storage at the loading screen."} );
-      //  
+        $rootScope.$broadcast("broadcast",
+          { command: "state", path: "login" , 
+           debug: "controllers.js 127. No token in local storage at the loading screen."} 
+         );
       }
-    } 
-    
-  
+    }
   }
   
   // The first function of the app is initializing it the database.
