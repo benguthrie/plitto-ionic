@@ -1,13 +1,45 @@
 'use strict';
 angular.module('Plitto.controllers', [])
 
-.run(function($rootScope, dbFactory, $state, localStorageService, $ionicModal, $location , pFb){
+.run(function($rootScope, dbFactory, $state, localStorageService, $ionicModal, $location , OAuth){
   
-   console.log('line 6');  
+  /* Control all the login and redirect functions */
+  $rootScope.$on('broadcast', function (event, args){
+    console.log('heard command');
+    
+    
+    console.log('command event: ', event, 'args: ', args);
+    
+    console.log("Debug message: ", args.debug);
+    
+    if(args.command === "login"){
+      if(args.platform === "facebook")
+      {
+        console.log("login with facebook");
+        OAuth.login('facebook');
+      }
+    }
+    
+    else if (args.command === "redirect" )
+    {
+      console.log('args.redirect, args.path:  ', args.path );
+      // TODO1 - Restore this .window.location.assign(args.path);
+    }
+    
+    else if (args.command === "state"){
+      console.log( "$state.go, args.path: ", args.path );
+      // TODO1 - This is not working for the loading page.
+      // TODO1 - Restore this . $state.go(args.path);
+      // $state.go("app.home");
+      // $state.go("app.debug");
+    }
+    
+  });
+  
   
   // Prepare the success callback.
-  
-  // watch for fblogin update. Should watch from the full app.
+/*  
+  // watch for fblogin update. Should watch from the full app. broadcast sends this here.
   $rootScope.$on('getLoginStatus', function(event, args){
     $rootScope.message = "got request to login you in at getLoginStatus";
     
@@ -23,10 +55,8 @@ angular.module('Plitto.controllers', [])
       {
         console.log('step 1', args.fbresponse);
         // $rootScope.$broadcast('getLoginStatus', {fbresponse: 'test'});
-        console.log('controllers.appctrl. getLoginStatus got an access token from Facebook. Loginto Plitto.');
+        console.log('controllers.appctrl. getLoginStatus got an access token from Facebook. Log into Plitto.');
         dbFactory.fbTokenLogin(args.fbresponse.authResponse.accessToken);
-
-
       } 
       // anything from here down will need a response with a status.
       else if (
@@ -34,17 +64,30 @@ angular.module('Plitto.controllers', [])
         && typeof args.fbresponse.status === "string" // This should be an object.
         && args.fbresponse.status === "unknown"
       ) {
-        $rootScope.message = "Redirect to Facebook for login";    
-        // pFb.login();
-        /*
-        if(typeof args.fbresponse.status !== "undefined"){
-          if(args.fbresponse.status === "unknown")  {
-            args.fbresponse.status !== "unknown"
-            console.log('redirect to FB Login.');
-        
-          }
+        $rootScope.message = "Redirect to Facebook for login from controllers37"; 
+        // Here, we build the URL that we need the user to go to. 
+        if (document.location.hostname == "localhost"){
+          var redirect_uri = "http://localhost/plitto-ionic/client/app/";
+        } else {
+          var redirect_uri = "http://plitto.com/client/app/";
         }
-        */
+          
+        var fbAuthUrl = 'https://www.facebook.com/dialog/oauth?client_id=207184820755&redirect_uri=' + redirect_uri;
+        
+        // 
+        
+        console.log('controller.36', redirect_uri);
+        window.location = fbAuthUrl;
+        // OAuth.login('facebook'); 
+        // pFb.login();
+        
+//        if(typeof args.fbresponse.status !== "undefined"){
+//          if(args.fbresponse.status === "unknown")  {
+//            args.fbresponse.status !== "unknown"
+//            console.log('redirect to FB Login.');
+        
+//          }
+//        }
 
 
 
@@ -55,11 +98,12 @@ angular.module('Plitto.controllers', [])
       }
       
     }
+        
     
    
   });
       
-  
+  */
   
   
   
@@ -69,6 +113,7 @@ angular.module('Plitto.controllers', [])
     if(!$rootScope.token || $rootScope.token === null){
       // See if it's in the local storage.
       $rootScope.message = "Looking for token in local storage.";
+      // Check for Active Token on load
       if(localStorageService.get('token')){
         $rootScope.message = "Token Found";
         console.log("There was a token in the local storage.");
@@ -85,8 +130,9 @@ angular.module('Plitto.controllers', [])
       } else {
         console.log("No token in local storage.");
         
-        $location.path('/login');
+        // $location.path('/login');
         $rootScope.message = "There is no token in local storage. What next?";
+        $rootScope.$broadcast("broadcast",{ command: "state", path: "login" , debug: "controllers.js 127. No token in local storage at the loading screen."} );
       //  
       }
     } 
@@ -118,10 +164,13 @@ angular.module('Plitto.controllers', [])
 // REMOVED Facebook from the injectors
 .controller('AppCtrl', function($scope, $state, dbFactory, $rootScope, localStorageService,$ionicViewService) {
   
+  
 
-  // On load, load the correct interface
-  // console.log('$rootScope.token onload action: ', $rootScope.token);
+  // On load, load the correct interface, based on the token.
+  
   $rootScope.debug('AppCtrl load: Token: ' + $rootScope.token );
+  // Execute the check for the token in the RootScope on load.
+  
   if(typeof ($rootScope.token) === 'string' && $rootScope.token ==='loading'){
     console.log('initial: loading');
     $rootScope.debug('Appctrl - 179 Rootscope is loading.');
@@ -129,13 +178,16 @@ angular.module('Plitto.controllers', [])
   } else if (typeof ($rootScope.token) === 'string' && $rootScope.token.length > 0){
     // We will assume that the token is valid TODO1 - Test it.
     $rootScope.debug('Appctrl - 183 Loading because the token looks good.');
-    $state.go('app.home'); // TODO1 - Diego - Should this be moved? - Not working!
+    // $state.go('app.home'); // TODO1 - Diego - Should this be moved? - Not working!
+    $rootScope.$broadcast("broadcast",{ command: "state", path: "app.home", debug: "Valid token. Move."} ); // TODO2 -  Test this. 
+    // TODO1 - Check this, or will that happen when requesting the first call?
     $ionicViewService.clearHistory();
     // $location.path('/login');
   } else {
     console.log('initial: null?');
+    $rootScope.message = "Initial token is null? ";
     $rootScope.debug('Appctrl - 189 Rootscope is null?');
-    $state.go('login');
+    // TODO1 When would this be done? $state.go("login");
   }
   
   $scope.deleteFBaccess = function() {
@@ -153,8 +205,7 @@ angular.module('Plitto.controllers', [])
   // Grab the user info here as soon as they login.
   
   $scope.login = function () {
-    $rootScope.debug('Appctrl - controllers AppCtrl.login() pressed.');
-    Oauth.login();
+    $rootScope.$broadcast('broadcast',{ command: "login", platform: "facebook", debug: "Controllers.js 210. OAuth.login"});
   };
   
   // Global Logout Handler
@@ -172,7 +223,7 @@ angular.module('Plitto.controllers', [])
     
     // Clear local storage
     
-    $state.go('login');
+    // TODO1 - Restore this, most likely. $state.go("login");
     /*
     
     .state('login', {
@@ -205,7 +256,7 @@ angular.module('Plitto.controllers', [])
     /* When this screen loads, if there is a token, go home. */
     if(typeof $rootScope.token === 'string' && $rootScope.token !== 'loading'){
       console.log('Loading, go home!');
-      $state.go('app.home');
+      $rootScope.$broadcast("broadcast",{ command: "state", path: "app.home", debug: "Controllers.js 260. Go home."} );
     }
      
     $scope.showToken = function(){
@@ -236,7 +287,7 @@ angular.module('Plitto.controllers', [])
   
 
   $scope.getSome = function(typeFilter){
-      $rootScope.bite = [];
+    $rootScope.bite = [];
     $rootScope.nav.homeView = typeFilter;
     $scope.bite = 'this was reloaded';
       // dbGetSome = function (theScope, userfilter, listfilter, sharedFilter)
@@ -459,9 +510,10 @@ angular.module('Plitto.controllers', [])
     if(provider === 'facebook'){
       // Do that.
       
-      $rootScope.message = "<h3>2. Call OAuth.login</h3>";
+      $rootScope.message = "<h3>2. Call OAuth.login('facebook')</h3>";
       // 
-      OAuth.login('facebook');
+      $rootScope.$broadcast('broadcast',{ command: "login", platform: "facebook", debug: "controller.js 506 login with facebook."});
+      
       
       $state.go('loading');      // TODO 1 - Is this working?
       // Facebook.login();

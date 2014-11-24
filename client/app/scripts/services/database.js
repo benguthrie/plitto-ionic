@@ -11,7 +11,7 @@ angular.module('Services.database', [])
   var checkToken = function(token){
     // console.log('check the token to see if we should proceed.');
     if(typeof token ==='undefined' || token.length === 0){
-      $state.go('login');
+      // TODO1 - Conditition around this, if there is a token in the querystring. $state.go("login");
       dbInit();
     }
       
@@ -19,8 +19,6 @@ angular.module('Services.database', [])
 
   
 var dbInit = function ( fCallback ) {
-  
-  
   
   console.log('rootScope initialized! Mount up!');
   // These have been used and referenced since Nov 4.
@@ -64,7 +62,7 @@ var dbInit = function ( fCallback ) {
   
   
   if(typeof fCallback === "function"){
-    console.log('Callback made')
+    //console.log('fCallback in init made');
     fCallback("complete");
   }
 };  
@@ -217,7 +215,7 @@ var showUser = function (userId, userName, dataScope, fbuid) {
 
   // dbFactory.showUser(userId);
   //dbGetSome = function (theScope, userfilter, listfilter, sharedFilter)
-  $state.go('app.profile',{userId: userId});
+  $state.go('app.profile', { userId: userId });
   
 };
     
@@ -226,7 +224,7 @@ var showThing = function (thingId, thingName, userFilter) {
   // Clear out the rootScope.thingData to show a new thing.
   $rootScope.thingData = {thingId: thingId, thingName: thingName, items: []};
   $rootScope.nav.view = 'thing'; // To disable link when in thing view.
-  $state.go('app.thing',{thingId: thingId});
+  $state.go('app.thing', {thingId: thingId});
         
   // $rootScope.vars.modal.filter = 'all';
   var thingParams = $.param({token: $rootScope.token, thingId: thingId });
@@ -429,7 +427,7 @@ var fbTokenLogin = function(fbToken){
     dbInit();
     
     // $rootScope.$broadcast("getLoginStatus", {value:'value'});
-    $rootScope.$broadcast('getLoginStatus', { fbresponse: null});
+    // $rootScope.$broadcast('getLoginStatus', { fbresponse: null});
     $rootScope.message = "<h3>7. api/fbToken responded</h3>";
     console.log('fbTokenLogin response: ',data);
     
@@ -456,12 +454,14 @@ var fbTokenLogin = function(fbToken){
       localStorageService.set('bite', data.getSome);
 
       // FINALLY! - Load the interface
-      $state.go('app.home'); // TODO1 - This needs to be reflected in the URL.
+      // $state.go('app.home'); // TODO1 - This needs to be reflected in the URL.
+      $rootScope.$broadcast("broadcast",{ command: "state", path: "app.home", debug: "dbFactory.fbTokenLogin - Go Home."} );
+      
       
     }else{
       console.log("TODO1 There was an error. Log it.", data);
-      // window.location.replace('index.html');
-      $state.go('app.login'); // TODO1 - This needs to be reflected in the URL. 11/2014 - THIS MIGHT WORK> NEEDS TO BE TESTED>
+      // $state.go('app.login'); // TODO1 - This needs to be reflected in the URL. 11/2014 - THIS MIGHT WORK> NEEDS TO BE TESTED>
+      $rootScope.$broadcast("broadcast",{ command: "state", path: "app.login", debug: "Login unsuccessful. Go back to login" } );
       $dbInit();
     }
 
@@ -692,6 +692,7 @@ var showAList = function (listNameId, listName, userFilter) {
   
   $rootScope.nav.listView = 'ditto';
   $state.go('app.list',{listId: listNameId});
+  
   
   var existing = [];    
   // getMore ('list',listNameId, userFilter, existing);

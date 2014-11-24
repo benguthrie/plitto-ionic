@@ -19,8 +19,8 @@ angular.module('Plitto', [
   // Check to see if Facebook is giving us a code to use in the URL.
   if(QueryString.code){
     // Make the Plitto API call
-    dbFactory.fbTokenLogin(QueryString.code);
     console.log('RUN URL because we found it.', QueryString.code);
+    // TODO1 - Put this backdbFactory.fbTokenLogin(QueryString.code);
   }
   
   

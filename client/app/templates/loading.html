@@ -3,6 +3,7 @@
   <ion-content>
     <h1>Loading ...</h1>
     <h3>Status: {{$root.message}}</h3>
+    <h3>State: {{$state.current.name}} </h3>
     <!--
     <button ng-click="showToken();">Show Token</button>
     <button ng-click="clearToken();">Clear Token</button>
@@ -16,7 +17,8 @@
   <h1>Message</h1>
   <p ng-bind='$root.message'></p>
   
-  <a href='#/login'>Back to login</a>
+  
   <a href='#/app.home'>home</a> -->
+    <a href='#/login'>Back to login</a>
   </ion-content>
 </ion-modal-view>

@@ -80,7 +80,7 @@ angular.module('Services.pfb', [])
       // TODO2 - As of 11/6/2014, this shouldn't ever be called.
       $rootScope.message =  "Redirecting you to login with Facebook's login process."
       // OAuth.redirect(); // Should we go straight to oAuth? This doesn't really do anything special.
-
+      FB.login();
       // setTimeout(console.log('delay in facebook.login'),2000);
 
     },
