@@ -133,7 +133,7 @@ angular.module('Services.oauth', [])
           + '&response_type=token'
         ;
         // var authWindow = null;
-        $rootScope.message = "<h3>4. This is the web app version.</h3>";
+        $rootScope.message = "<h3>4. This is the web app version. Redirect to Facebook for authorization.</h3>";
         
         // Redirect to Facebook for authorization
         $rootScope.$broadcast('broadcast', { 

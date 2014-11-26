@@ -461,7 +461,7 @@ var fbTokenLogin = function(fbToken){
     }else{
       console.log("TODO1 There was an error. Log it.", data);
       // $state.go('app.login'); // TODO1 - This needs to be reflected in the URL. 11/2014 - THIS MIGHT WORK> NEEDS TO BE TESTED>
-      $rootScope.$broadcast("broadcast",{ command: "state", path: "app.login", debug: "Login unsuccessful. Go back to login" } );
+      $rootScope.$broadcast("broadcast",{ command: "state", path: "login", debug: "Login unsuccessful. Go back to login" } );
       dbInit();
     }
 

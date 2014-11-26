@@ -37,9 +37,11 @@ angular.module('Plitto', [
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
-  
+    // Get the access token from Facebook.
     if ( window.location.hash.indexOf("access_token") ){
       console.log("Found the token.", window.location.hash);
+      // TODO1 - Show a loading indicator
+    
       var hash = window.location.hash;
 
       var accessToken = hash.substring( hash.indexOf('access_token=') + "access_token=".length , hash.indexOf('&') ) ;
@@ -194,8 +196,8 @@ angular.module('Plitto', [
     console.log("Didn't find it.", QueryString.access_token, window.location.hash );
     console.log("REPLACeD", window.location.hash.replace("#/",""));
   //http://localhost/plitto-ionic/client/app/?#/access_token=CAAAAMD0tehMBAMUwibZCHQrzYS3v6QdLKTsIlWveB7CTSV0ZByuItJP8u7tF3xaYjGBNjeT7BDRjVWA9WwwelEjMAZCiKgi9C5dDIAUfZAUwdqPQlxxDbykoslmJs8OhyNRpXEoU0o6fC2eiYMROqOLvW8C1A0NU72YBmgcWitSom8Yw0rdEQCLktU6t1xdePnNKLLq75dlANujWVRvgcsgIuZCjZAZC9IZD&expires_in=6952
-  // #/access_token=CAAAAMD0tehMBAMp7csqzXZBUZCjRY78ayGmdJ9Rq0g9UBBjCqYG19k84V3qZAY39m09wBW7zuyaY8ZAW8X7M4oIZAhws68si6cUdVrWQNQicjEZCQVZBWhobZAMSKsS6jdcVsrv5t4al2uawJeyZBqFgIdc9L7KOUOdcNc4qXZCvVJz12MgqrkhkiFY4Wm8asuIRx5oFlLU5imeQvyTuo7mgp0hm2VGXju2loZD&expires_in=6871 
-    // TODO1 - Put this back$urlRouterProvider.otherwise('/app/home');
+
+    // TODO1 - Put this back $urlRouterProvider.otherwise('/app/home');
   }
   
 

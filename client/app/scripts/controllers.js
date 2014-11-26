@@ -23,7 +23,8 @@ angular.module('Plitto.controllers', [])
     else if (args.command === "redirect" )
     {
       console.log('args.redirect, args.path:  ', args.path );
-      // TODO1 - Restore this .window.location.assign(args.path);
+      // TODO1 - Restore this .
+      window.location = args.path;
     }
     
     else if (args.command === "state"){
@@ -525,16 +526,3 @@ angular.module('Plitto.controllers', [])
     // $window.location.href = '/auth/' + provider;
   };
 })
-
-/* TODO - Can this be deleted? What is the LoginCallBack? 
-.controller('LoginCallbackCtrl', function($scope, $state, $stateParams, $ionicViewService, LoopBackAuth) {
-  LoopBackAuth.accessTokenId = $stateParams.access_token;
-  LoopBackAuth.currentUserId = $stateParams.userId;
-  LoopBackAuth.rememberMe = true; // Force save to LocalStorage
-  LoopBackAuth.save();
-  $ionicViewService.nextViewOptions({
-    disableAnimate: true,
-    disableBack: true
-  });
-  $state.go('app.lists');
-});*/
