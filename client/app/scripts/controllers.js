@@ -28,7 +28,7 @@ angular.module('Plitto.controllers', [])
     }
     
     else if (args.command === "state"){
-      console.log( "$state.go, args.path: ", args.path );
+      console.log( "controllers.js 31 $state.go, args.path: ", args.path );
       // TODO1 - This is not working for the loading page.
       // TODO1 - Restore this . 
       $state.go(args.path);
@@ -38,74 +38,6 @@ angular.module('Plitto.controllers', [])
     
   });
   
-  
-  // Prepare the success callback.
-/*  
-  // watch for fblogin update. Should watch from the full app. broadcast sends this here.
-  $rootScope.$on('getLoginStatus', function(event, args){
-    $rootScope.message = "got request to login you in at getLoginStatus";
-    
-    console.log('event: ', event, ' and args: ', args);
-    
-   //      console.log('typeof fbresponse.status', typeof args.fbresponse.status);
-    if(args.fbresponse === null){
-      // Nothing. this was a clearing deal.
-    } else {
-       if(args.fbresponse !== null 
-       && args.fbresponse.status !== "unknown"
-       && typeof args.fbresponse.authResponse.accessToken === 'string' )
-      {
-        console.log('step 1', args.fbresponse);
-        // $rootScope.$broadcast('getLoginStatus', {fbresponse: 'test'});
-        console.log('controllers.appctrl. getLoginStatus got an access token from Facebook. Log into Plitto.');
-        dbFactory.fbTokenLogin(args.fbresponse.authResponse.accessToken);
-      } 
-      // anything from here down will need a response with a status.
-      else if (
-        typeof args === "object" 
-        && typeof args.fbresponse.status === "string" // This should be an object.
-        && args.fbresponse.status === "unknown"
-      ) {
-        $rootScope.message = "Redirect to Facebook for login from controllers37"; 
-        // Here, we build the URL that we need the user to go to. 
-        if (document.location.hostname == "localhost"){
-          var redirect_uri = "http://localhost/plitto-ionic/client/app/";
-        } else {
-          var redirect_uri = "http://plitto.com/client/app/";
-        }
-          
-        var fbAuthUrl = 'https://www.facebook.com/dialog/oauth?client_id=207184820755&redirect_uri=' + redirect_uri;
-        
-        // 
-        
-        console.log('controller.36', redirect_uri);
-        window.location = fbAuthUrl;
-        // OAuth.login('facebook'); 
-        // pFb.login();
-        
-//        if(typeof args.fbresponse.status !== "undefined"){
-//          if(args.fbresponse.status === "unknown")  {
-//            args.fbresponse.status !== "unknown"
-//            console.log('redirect to FB Login.');
-        
-//          }
-//        }
-
-
-
-      } else {
-        console.log("Handle the error. Facebook didn't logyou in ", typeof args, args.fbresponse.status);
-        $rootScope.message = "Facebook Authentication Failed. Please tweet @benguthrie. He's working on it.";
-        
-      }
-      
-    }
-        
-    
-   
-  });
-      
-  */
   
   
   
