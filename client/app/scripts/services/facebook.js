@@ -1,8 +1,8 @@
 'use strict';
-angular.module('Services.pfb', [])
+angular.module('Services.pFb', [])
 
 .factory('pFb',[ '$rootScope', 'dbFactory','$state', function ( $rootScope, dbFactory, $state ) {
-  console.log('logged pFb');
+  // console.log('logged pFb');
   /* fbAsyncInit - This tracks whether the user is logged in */
   window.fbAsyncInit = function () {
     FB.init({
@@ -74,13 +74,15 @@ angular.module('Services.pfb', [])
           console.log('rootScope done broadcasting getLoginStatus {"fbresponse":>???}: ', response );
         });
     },
-    
     login:function () {
       // console.log('Facebook login happening.');
       // TODO2 - As of 11/6/2014, this shouldn't ever be called.
       $rootScope.message =  "Redirecting you to login with Facebook's login process."
       // OAuth.redirect(); // Should we go straight to oAuth? This doesn't really do anything special.
+      // 
       FB.login();
+      // FB.init();
+      
       // setTimeout(console.log('delay in facebook.login'),2000);
 
     },
@@ -97,19 +99,23 @@ angular.module('Services.pfb', [])
         }
       });
     },
-    unsubscribe:function () {
+    deleteFBaccess:function () {
       console.log('Remove Plitto from Facebook Account');
 
       $rootScope.token = '';
       dbFactory.dbInit();
       // 
       // console.log('facebook factory unsubsubscribe');
-      FB.api("/me/permissions", "DELETE", function (response) {
+      FB.api("/v2.2/me/permissions", "DELETE", function (response) {
         console.log('Facebook Unsbscribe Plitto Succeeded');
-        $rootScope.session.plittoState = 'Facebook Remove Plitto Access Succeeded';
+        $rootScope.token = null;
+        dbFactory.init();
+        
+        // TODO2 - Clean this up.
+        // $rootScope.session.plittoState = 'Facebook Remove Plitto Access Succeeded';
         // $rootScope.$broadcast('fb_get_login_status');
         // console.log('FacebookAPI: unsubscribe response: ',response);
-        $rootScope.$broadcast('fb_plitto_access_deleted');
+        // $rootScope.$broadcast('fb_plitto_access_deleted');
       });
 
 

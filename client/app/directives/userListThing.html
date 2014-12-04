@@ -8,18 +8,73 @@
     {{list.listname}}
   </div>
   <div class="item" ng-repeat="item in list.items">
-    <div side="right" 
-         class="button"  
-         style="font-size: 2.5em; float: right;" 
-         ng-class="{'ionicons ion-ios7-bolt' : item.mykey === 0 ,'ionicons ion-ios7-checkmark-outline' : item.mykey === null , 'ionicons ion-ios7-checkmark' : item.mykey > 0 }" 
-         ng-click="ditto(item.mykey, userData.uid, list.lid, item.tid, $event,store);">
+    <div style="float: right;">
+      <div 
+        class="button" 
+        style="float: right; margin-left: 4px;"
+        ng-click="letsChat(userData.uid, list.lid, item.tid, $event, store, $index); "
+       >
+        <div class="letsChatIcon ionicons ion-ios7-chatboxes-outline"></div>
+      </div>
+      
+      <div 
+           class="button"
+           style="float: right;"
+           ng-click="ditto(item.mykey, userData.uid, list.lid, item.tid, $event, store);">
+        <div class="dittoButton"
+           ng-class="{'ionicons ion-ios7-bolt' : item.mykey === 0 ,'ionicons ion-ios7-checkmark-outline' : item.mykey === null , 
+                     'ionicons ion-ios7-checkmark' : item.mykey > 0 }">
+        </div>
+        
+      </div>
+      
     </div>
-    <div  ng-click="showThing(item.tid, item.thingname, userData.uid);">
+    
+    <div ng-click="showThing(item.tid, item.thingname, userData.uid);" class="item-text-wrap">
+      <!-- <div class="button ionicons ion-ios7-arrow-down" style="float: right;" ng-click="showButtons($event);"></div> --> 
       {{item.thingname}}
-      <h6>{{item.added}}</h6> 
-      <h6 ng-show="item.dittouser === null" class="mega-octicon octicon-pencil">TYPED</h6>
+      <h6 style="display: none;">{{item.added}}</h6> 
+      <!-- <h6 ng-show="item.dittouser === null" class="mega-octicon octicon-pencil">_</h6> -->
       <h6 ng-show="item.dittouser !== null">dittoed from {{item.dittousername}}</h6>
     </div>
+    
+    <div class="commentsSection" id="comments{{userData.uid}}{{list.lid}}{{item.tid}}">
+      Comments<br>
+      <div ng-repeat="comment in item.comments">
+        {{comment.comment}}
+      </div>
+      
+      <form name="itemComment" ng-submit="makeItemComment(newComment.theValue, userData.uid, list.lid, item.tid, store, $index);">
+        
+        <label class="item item-input">
+          <input type="text" ng-model="newComment.theValue" placeholder="Add Comment to Chat Queue">
+        </label>
+      </form>
+    </div>
+    
+      
+    <!--
+    <div class="itemButtons" style="display: none;">
+      
+      <div 
+       class="button"
+        ng-click="letsChat(userData.uid, list.lid, item.tid, $event, store); "
+       >
+         <div class="letsChatIcon"></div>
+        <div class="letsChatIcon ionicons ion-ios7-chatboxes-outline"></div>
+      </div>
+      
+      <div 
+           class="button"  
+            
+           ng-click="ditto(item.mykey, userData.uid, list.lid, item.tid, $event,store);">
+        <div class="dittoButton"
+           ng-class="{'ionicons ion-ios7-bolt' : item.mykey === 0 ,'ionicons ion-ios7-checkmark-outline' : item.mykey === null , 'ionicons ion-ios7-checkmark' : item.mykey > 0 }"></div>
+        
+      </div>
+      
+    </div>
+  -->
   </div>
   
 </div>

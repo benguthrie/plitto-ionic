@@ -328,14 +328,15 @@ var dittoParams = $.param({
       var friendsWith = data.results[0]['friendsWith'];
 
       // Update the "Friends With" 
-      $(event.target).html(friendsWith);
+      
+      $(event.target).html("+" + friendsWith).removeClass("ion-ios7-checkmark-outline").addClass("ion-ios7-checkmark");
 
       // For the user and the list, change the increments of dittoable and in common.
     } else {
       
       // It was removed. Finalize that.
       var mynewkey = null;
-        $(event.target).html("");
+        $(event.target).removeClass("ion-ios7-checkmark").addClass('ion-ios7-checkmark-outline').html("");
     }
 
     // Update my key within the correct scope.
@@ -415,7 +416,9 @@ var fbTokenLogin = function(fbToken){
   // The user has a valid Facebook token for plitto, and now wants to log into Plitto
   // Send the token to Plitto, which handles all Facebook communication from the PHP layer.
   var loginParams = $.param( { fbToken: fbToken } );
-  $rootScope.message = "<h3>6. dbFactory.fbTokenLogin: " + fbToken + "</h3>";        
+  $rootScope.message = "<h3>6. dbFactory.fbTokenLogin: " + fbToken + "</h3>";       
+  console.log( "<h3>6. dbFactory.fbTokenLogin: " + fbToken + "</h3>");
+  
   $http({
     method:'POST',
     url: apiPath + 'fbToken', 
@@ -436,6 +439,11 @@ var fbTokenLogin = function(fbToken){
     if(data.me && data.me.puid && /^\+?(0|[1-9]\d*)$/.test(data.me.puid)){
       console.log("puid is valid");
       $rootScope.message = "<h3>8. PUID valid: " + data.me.token +". Redirect to app.home</h3>";
+      
+      // TODO2 - Remove the access token from the URL.
+      // http://plitto.com/client/app/?#/access_token=CAAAAMD0tehMBALBiZB3xeZAYoM5vTVZBZCpd6s6g5RZCntzTaR9BuG5gFLGIngbGqbts2l6NEm3N4tO7l7tC0QKUyZAWn4jEEBNWZBLVaKmZAdXNJgT1ZARN1BiLpFwW48N2AoPxriHi8TgkR2mQEiYYAK2uJtB2XmmGHY9a4lUXCCeWPJPUlILzkdAxrYpBbGw6CKdG2fV7RkYZCGOcOSaeaiGvN0p3YsZCbAZD&expires_in=4734
+      
+      
       // Set the stores.
       $rootScope.user = { userId: data.me.puid, userName: data.me.username, fbuid: data.me.fbuid };
 
@@ -969,9 +977,25 @@ var refreshData = function(token){
     $rootScope.bite = localStorageService.get('bite');
   } 
   
-  // Check to make sure that the token is still valid.
-  
-  // TODO2 Now, make the HTTP calls to refresh them.
+  // TODO1 Now, make the HTTP calls to refresh them.
+  var checkParams = $.param({token: $rootScope.token});
+  $http({
+    method: "POST",
+    url: apiPath + "checktoken",
+    data: checkParams,
+    headers: {'Content-Type':'application/x-www-form-urlencoded'}
+  }).success(function (data,status,headers,config) {
+    console.log("Check token results: ",data, data.results[0].success);    
+    if(data.results[0].success === "1"){
+      console.log("Valid token");
+      // Go to the home screen.
+      $state.go("app.home");
+      
+    } else {
+      console.log("invalid token: ", data.results[0].success, data.results[0].success === "1");
+    }
+    
+  });
   
 };
 

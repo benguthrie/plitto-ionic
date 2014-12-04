@@ -1,7 +1,7 @@
 'use strict';
 angular.module('Plitto.controllers', [])
 
-.run(function($rootScope, dbFactory, $state, localStorageService, $ionicModal, $location , OAuth){
+.run(function($rootScope, dbFactory, $state, localStorageService, $ionicModal, $location , OAuth, pFb ){
   
   /* Control all the login and redirect functions */
   $rootScope.$on('broadcast', function (event, args){
@@ -16,7 +16,9 @@ angular.module('Plitto.controllers', [])
       if(args.platform === "facebook")
       {
         console.log("login with facebook");
+        // 
         OAuth.login('facebook');
+        // pFb.login();
       }
     }
     
@@ -24,6 +26,7 @@ angular.module('Plitto.controllers', [])
     {
       console.log('args.redirect, args.path:  ', args.path );
       // TODO1 - Restore this .
+      // https://www.facebook.com/dialog/oauth?client_id=207184820755&redirect_uri=http://localhost/plitto-ionic/client/app/&display=touch&scope=email,user_friends&response_type=token
       window.location = args.path;
     }
     
@@ -35,9 +38,11 @@ angular.module('Plitto.controllers', [])
       // $state.go("app.home");
       // $state.go("app.debug");
     }
-    
+    else if (args.command === "deleteFBaccess"){
+      console.log("Delete from FB");
+      pFb.deleteFBaccess();
+    }
   });
-  
   
   
   
@@ -59,11 +64,19 @@ angular.module('Plitto.controllers', [])
         $rootScope.message = "use dbFactory.refreshData to check if the token is valid.";
         dbFactory.refreshData($rootScope.token);
 
-      } else {
+      } else if (window.location.hash.indexOf("access_token") > -1){
+        console.log("Access Token: "+ window.location.hash.indexOf("access_token"),  QueryString.access_token);
+        
+      }
+        
+      else {
+        
         console.log("No token in local storage.");
         
         // $location.path('/login');
         $rootScope.message = "There is no token in local storage. What next?";
+        
+        // Only do this if there isn't an auth_token in the URL.
         $rootScope.$broadcast("broadcast",
           { command: "state", path: "login" , 
            debug: "controllers.js 127. No token in local storage at the loading screen."} 
@@ -124,6 +137,7 @@ angular.module('Plitto.controllers', [])
   
   $scope.deleteFBaccess = function() {
     console.log('deleteFBaccess in loginctrl TODO1 ');
+    $rootScope.$broadcast("broadcast", { command: "deleteFBaccess", debug: "Delete from FB"});
     // TODO1 Restore this: Facebook.unsubscribe();
   };
   
@@ -132,8 +146,7 @@ angular.module('Plitto.controllers', [])
     console.log('controllers.js - showUser 87');
     dbFactory.showUser(userId,userName, dataScope, fbuid);
   };
-  
-  
+    
   // Grab the user info here as soon as they login.
   
   $scope.login = function () {
@@ -143,7 +156,7 @@ angular.module('Plitto.controllers', [])
   // Global Logout Handler
   $scope.logout = function () {
     // TODO: Make database service call.
-    
+    console.log("logout");
     $rootScope.debug('Appctrl - TODO2: FB Logout call.');
     // $state.go('app.login',{listId: newListId});
     // TODO1 - Restore this. Facebook.logout();

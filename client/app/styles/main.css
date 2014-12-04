@@ -136,3 +136,53 @@ a.statShared {
   border: 2px solid green;
   background-color: rgba(200,255,200,0.5);
 }
+
+
+div.itemButtons > div.button {
+  width: 60px;
+  height: 35px;
+  padding: 0;
+  line-height: 0.5em;
+  
+}
+
+div.dittoButton {
+  font-size: 37px;
+}
+
+div.letsChatIcon{
+  /* background-image: url("../img/lets_chat2.png");
+  background-size: 65px 42px;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: block; */
+  font-size: 35px;
+}
+
+div.letsChatIcon , div.dittoButton {
+  height: 40px;
+  clear: both;
+}
+
+div.letsChat > active {
+  background-color: red;
+}
+
+span.buttonCaption {
+  font-size: 0.2em;
+  border: 1px solid red;
+  text-align: center;
+  font-family: sans-serif, verdana;
+}
+
+.item.wrap, .item-content.wrap {
+white-space: normal;
+}
+
+div.commentsSection {
+  clear: both;
+  border-top: 1px solid #ccc;
+  font-size: 0.8em;
+  padding: 0;
+  display: none;
+}

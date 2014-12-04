@@ -38,8 +38,8 @@ angular.module('Plitto', [
       StatusBar.styleDefault();
     }
     // Get the access token from Facebook.
-    if ( window.location.hash.indexOf("access_token") ){
-      console.log("Found the token.", window.location.hash);
+    if ( window.location.hash.indexOf("access_token") !== -1){
+      console.log("Found the token.", window.location.hash, window.location.hash.indexOf("access_token") );
       // TODO1 - Show a loading indicator
     
       var hash = window.location.hash;
@@ -51,6 +51,7 @@ angular.module('Plitto', [
       dbFactory.fbTokenLogin(accessToken);
     }
   
+    
   });
 })
 
@@ -194,7 +195,8 @@ angular.module('Plitto', [
   }
   else {
     console.log("Didn't find it.", QueryString.access_token, window.location.hash );
-    console.log("REPLACeD", window.location.hash.replace("#/",""));
+    // console.log("REPLACeD", window.location.hash.replace("#/",""));
+  
   //http://localhost/plitto-ionic/client/app/?#/access_token=CAAAAMD0tehMBAMUwibZCHQrzYS3v6QdLKTsIlWveB7CTSV0ZByuItJP8u7tF3xaYjGBNjeT7BDRjVWA9WwwelEjMAZCiKgi9C5dDIAUfZAUwdqPQlxxDbykoslmJs8OhyNRpXEoU0o6fC2eiYMROqOLvW8C1A0NU72YBmgcWitSom8Yw0rdEQCLktU6t1xdePnNKLLq75dlANujWVRvgcsgIuZCjZAZC9IZD&expires_in=6952
 
     // TODO1 - Put this back $urlRouterProvider.otherwise('/app/home');
@@ -243,6 +245,67 @@ angular.module('Plitto', [
       $scope.showThing = function(thingId, thingName, userFilter){
         dbFactory.showThing(thingId, thingName, userFilter);
       };
+  
+      /* Let's Chat
+      letsChat(userData.uid, list.lid, item.tid, $event, store); " */
+      $scope.letsChat = function(uid, lid, tid, $event, store, $index){
+        console.log('letsChat app.js directive', uid, lid, tid, $event, store, $index);
+        if($($event.target).hasClass("active")){
+          $($event.target).removeClass("active");
+          $("div#comments" + uid + lid + tid).hide();
+        } else {
+          $($event.target).addClass("active");
+          $("div#comments" + uid + lid + tid).show();
+        }
+        
+      };
+  
+      $scope.makeItemComment = function (newComment, uid, lid, tid, store, $index){
+        console.log("makeItemComment", newComment, uid, lid, tid, store, $index);
+        // Find the user, then the list, then use the index.
+        var length = eval("$rootScope." + store + ".length");
+        var tempStore = eval("$rootScope." + store);
+  
+        console.log('tempStore: ', tempStore);
+        
+  // Get the user ID number.
+        var upos = null;
+        var lpos = null;
+        var tpos = null;
+  
+        console.log('tempstore', tempStore);
+  
+        for (var j in tempStore){
+          console.log('j: ',j);
+          console.log(tempStore[j].uid);
+          console.log('Equal? ', tempStore[j].uid === uid);
+          if(tempStore[j].uid === uid){
+            var upos = j;
+            break;  
+          }
+        }
+        
+        for ( var k in tempStore[upos].lists ) {
+          if(tempStore[upos].lists[k].lid === lid ) {
+            var lpos = k;
+            break;
+          }
+        }
+
+        for ( var l in tempStore[upos].lists[lpos].items ) {
+          if( tempStore[upos].lists[lpos].items[l].tid === tid ) {
+            var tpos = l;
+          }
+        }
+        
+        console.log('upos: ', upos, lpos, tpos);
+  
+        // Add it to the UI.
+        eval("$rootScope." + store + "[" + upos +"].lists["+ lpos + "].items[" + tpos + "].comments.push({ comment: \"" + newComment + "\" })"  );
+        // How do we add it to this scope?
+        
+      };
+  
     }
   };
 }).directive('listOfLists', function($rootScope, dbFactory, $state) {
