@@ -13,9 +13,9 @@
         class="button" 
         style="float: right; margin-left: 4px;"
         ng-click="letsChat(userData.uid, list.lid, item.tid, $event, store, $index); "
-       >
+        ng-class="{'active' : item.commentActive === '1' }">
         <div class="letsChatIcon ionicons ion-ios7-chatboxes-outline"></div>
-        <div class="commentCount" ng-bind="item.comments.length"></div>
+        <!-- <div class="commentCount" ng-bind="item.commentActive"></div> --> 
       </div>
       
       <div 
@@ -33,22 +33,23 @@
     
     <div ng-click="showThing(item.tid, item.thingname, userData.uid);" class="item-text-wrap">
       <!-- <div class="button ionicons ion-ios7-arrow-down" style="float: right;" ng-click="showButtons($event);"></div> --> 
-      {{item.thingname}}
-      <h6 style="display: none;">{{item.added}}</h6> 
+      {{item.thingname}} 
+      <!-- <h6 style="display: none;">{{item.added}}</h6>  --> 
       <!-- <h6 ng-show="item.dittouser === null" class="mega-octicon octicon-pencil">_</h6> -->
       <h6 ng-show="item.dittouser !== null">dittoed from {{item.dittousername}}</h6>
     </div>
     
-    <div class="commentsSection" id="comments{{userData.uid}}{{list.lid}}{{item.tid}}">
+    <div class="commentsSection" id="comments{{userData.uid}}{{list.lid}}{{item.tid}}" 
+       ng-show=" item.commentActive !== null ">
       <span class="hint">Add a note:</span><br> 
       <!-- {{item.comment}} | {{item.comment.length === null }} | {{item.comment === null}} | {{item.comment === "null" }} | {{item.comment.length}} -->
-      <div style="clear: both;" ng-hide=" item.comment === 'null' || item.comment.length === 0 || item.comment === null " >
+      <div style="clear: both;" ng-show=" item.commentText.length > 0 " >
         <img ng-src="http://graph.facebook.com/{{$root.user.fbuid}}/picture?height=30&width=30" style="float: left; margin-right: 10px;"/>
-        <span style="float: left;"> {{item.comment}} </span> <button type="button" ng-click=" newComment.theValue = item.comment; item.comment = null; " style="float: right;">Edit</button>
+        <span style="float: left;"> {{item.commentText}} </span> <button type="button" ng-click=" newComment.theValue = item.commentText; item.commentText = null; " style="float: right;">Edit</button>
       </div>
       
       <form name="itemComment" ng-submit="makeItemComment(newComment.theValue, userData.uid, list.lid, item.tid, store, $index ); newComment.theValue = null; " style="clear: both;" 
-        ng-show=" item.comment === 'null' || item.comment.length === 0 || item.comment === null " >
+        ng-show=" item.commentText === null || item.commentText.length === 0 " >
         
         <label class="item item-input">
           <img ng-src="http://graph.facebook.com/{{$root.user.fbuid}}/picture?height=30&width=30" style="float: left; margin-right: 10px;"/>

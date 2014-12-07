@@ -250,20 +250,63 @@ angular.module('Plitto', [
       letsChat(userData.uid, list.lid, item.tid, $event, store); " */
       $scope.letsChat = function(uid, lid, tid, $event, store, $index){
         console.log('letsChat app.js directive', uid, lid, tid, $event, store, $index);
+  var length = eval("$rootScope." + store + ".length");
+        var tempStore = eval("$rootScope." + store);
+  
+        console.log('tempStore: ', tempStore);
+        
+  // Get the user ID number.
+        var upos = null;
+        var lpos = null;
+        var tpos = null;
+  
+        console.log('tempstore', tempStore);
+  
+        for (var j in tempStore){
+          console.log('j: ',j);
+          console.log(tempStore[j].uid);
+          console.log('Equal? ', tempStore[j].uid === uid);
+          if(tempStore[j].uid === uid){
+            var upos = j;
+            break;  
+          }
+        }
+        
+        for ( var k in tempStore[upos].lists ) {
+          if(tempStore[upos].lists[k].lid === lid ) {
+            var lpos = k;
+            break;
+          }
+        }
+
+        for ( var l in tempStore[upos].lists[lpos].items ) {
+          if( tempStore[upos].lists[lpos].items[l].tid === tid ) {
+            var tpos = l;
+          }
+        }
+        
+        console.log('upos: ', upos, lpos, tpos, $rootScope.user);
+
+
         var isActive = 1;
         if($($event.target).hasClass("active")){
           // User is removing this from their chat queue.
           var isActive = 0;
           $($event.target).removeClass("active");
           $("div#comments" + uid + lid + tid).hide();
+          eval("$rootScope." + store + "[" + upos +"].lists["+ lpos + "].items[" + tpos + "].commentActive = null; "  );
         } else {
           
           $($event.target).addClass("active");
           $("div#comments" + uid + lid + tid).show();
+          eval("$rootScope." + store + "[" + upos +"].lists["+ lpos + "].items[" + tpos + "].commentActive = \"1\"; "  );
+          
         }
         // Call the addComment bit to activate or deactivate the queue item
         dbFactory.addComment ( uid, lid, tid, "0", isActive );
-  
+        console.log("commentactive:  ",
+          eval("$rootScope." + store + "[" + upos +"].lists["+ lpos + "].items[" + tpos + "].commentActive; "  ) 
+        );
       };
   
       $scope.makeItemComment = function (newComment, uid, lid, tid, store, $index){
@@ -306,8 +349,8 @@ angular.module('Plitto', [
         
         console.log('upos: ', upos, lpos, tpos, $rootScope.user);
   
-        // Add it to the UI / Scope
-        eval("$rootScope." + store + "[" + upos +"].lists["+ lpos + "].items[" + tpos + "].comment = \"" + newComment + "\"; "  );
+        // Add it to the UI / Scope (only if it exists)
+        eval("$rootScope." + store + "[" + upos +"].lists["+ lpos + "].items[" + tpos + "].commentText = \"" + newComment + "\"; "  );
 
         // submit it to the database
         dbFactory.addComment ( uid, lid, tid, newComment, "1");
