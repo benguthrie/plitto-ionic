@@ -29,8 +29,23 @@ body {
 }
 */
 
+div.commentCount{
+  float: right;
+  margin-top: -47px;
+  padding: 0;
+  min-width: 20px;
+  height: 20px;
+  font-size: 0.5em;
+  
+}
+
 img.title-image {
   float: left;
+}
+
+span.hint {
+  font-size: 0.5em;
+  color: rgba(100,100,100,0.5);
 }
 
 .userLine {

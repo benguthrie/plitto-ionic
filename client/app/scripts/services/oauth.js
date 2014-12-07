@@ -30,8 +30,16 @@ angular.module('Services.oauth', [])
       // $location.path('/login');
     } else {
       // TODO1 Add some more logic to this. $state.go("login");
-      $rootScope.$broadcast("broadcast",{ command: "state", path: "login", debug: "oauth.33 No token. Login." } );
-    }
+      // If there is an access token, we can just wait.
+      if ( window.location.hash.indexOf("access_token") !== -1){
+        console.log('wait');
+      }
+      else {
+        $rootScope.$broadcast("broadcast",{ command: "state", path: "login", debug: "oauth.33 No token. Login." } );  
+      }
+      
+ 
+   }
   });
   
   // Function that is called with auth code and redirect home

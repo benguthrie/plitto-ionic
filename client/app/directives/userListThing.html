@@ -15,6 +15,7 @@
         ng-click="letsChat(userData.uid, list.lid, item.tid, $event, store, $index); "
        >
         <div class="letsChatIcon ionicons ion-ios7-chatboxes-outline"></div>
+        <div class="commentCount" ng-bind="item.comments.length"></div>
       </div>
       
       <div 
@@ -39,15 +40,19 @@
     </div>
     
     <div class="commentsSection" id="comments{{userData.uid}}{{list.lid}}{{item.tid}}">
-      Comments<br>
-      <div ng-repeat="comment in item.comments">
-        {{comment.comment}}
+      <span class="hint">Add a note:</span><br> 
+      <!-- {{item.comment}} | {{item.comment.length === null }} | {{item.comment === null}} | {{item.comment === "null" }} | {{item.comment.length}} -->
+      <div style="clear: both;" ng-hide=" item.comment === 'null' || item.comment.length === 0 || item.comment === null " >
+        <img ng-src="http://graph.facebook.com/{{$root.user.fbuid}}/picture?height=30&width=30" style="float: left; margin-right: 10px;"/>
+        <span style="float: left;"> {{item.comment}} </span> <button type="button" ng-click=" newComment.theValue = item.comment; item.comment = null; " style="float: right;">Edit</button>
       </div>
       
-      <form name="itemComment" ng-submit="makeItemComment(newComment.theValue, userData.uid, list.lid, item.tid, store, $index);">
+      <form name="itemComment" ng-submit="makeItemComment(newComment.theValue, userData.uid, list.lid, item.tid, store, $index ); newComment.theValue = null; " style="clear: both;" 
+        ng-show=" item.comment === 'null' || item.comment.length === 0 || item.comment === null " >
         
         <label class="item item-input">
-          <input type="text" ng-model="newComment.theValue" placeholder="Add Comment to Chat Queue">
+          <img ng-src="http://graph.facebook.com/{{$root.user.fbuid}}/picture?height=30&width=30" style="float: left; margin-right: 10px;"/>
+          <input type="text" ng-model="newComment.theValue" id="addCommentText" placeholder="Tell them why you want to chat">
         </label>
       </form>
     </div>

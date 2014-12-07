@@ -250,14 +250,20 @@ angular.module('Plitto', [
       letsChat(userData.uid, list.lid, item.tid, $event, store); " */
       $scope.letsChat = function(uid, lid, tid, $event, store, $index){
         console.log('letsChat app.js directive', uid, lid, tid, $event, store, $index);
+        var isActive = 1;
         if($($event.target).hasClass("active")){
+          // User is removing this from their chat queue.
+          var isActive = 0;
           $($event.target).removeClass("active");
           $("div#comments" + uid + lid + tid).hide();
         } else {
+          
           $($event.target).addClass("active");
           $("div#comments" + uid + lid + tid).show();
         }
-        
+        // Call the addComment bit to activate or deactivate the queue item
+        dbFactory.addComment ( uid, lid, tid, "0", isActive );
+  
       };
   
       $scope.makeItemComment = function (newComment, uid, lid, tid, store, $index){
@@ -298,11 +304,16 @@ angular.module('Plitto', [
           }
         }
         
-        console.log('upos: ', upos, lpos, tpos);
+        console.log('upos: ', upos, lpos, tpos, $rootScope.user);
   
-        // Add it to the UI.
-        eval("$rootScope." + store + "[" + upos +"].lists["+ lpos + "].items[" + tpos + "].comments.push({ comment: \"" + newComment + "\" })"  );
-        // How do we add it to this scope?
+        // Add it to the UI / Scope
+        eval("$rootScope." + store + "[" + upos +"].lists["+ lpos + "].items[" + tpos + "].comment = \"" + newComment + "\"; "  );
+
+        // submit it to the database
+        dbFactory.addComment ( uid, lid, tid, newComment, "1");
+
+        // TODO1 Clear the comment field
+        
         
       };
   

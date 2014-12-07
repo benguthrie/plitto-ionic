@@ -15,7 +15,36 @@ angular.module('Services.database', [])
       dbInit();
     }
       
+  };
+  
+  
+var addComment = function ( uid, lid, tid, newComment, status ){
+  console.log('dbFactory.addComment: ', uid, lid, tid, newComment, status);
+  var params = $.param({
+    token: $rootScope.token, 
+    uid: uid, 
+    lid: lid, 
+    tid: tid, 
+    comment: newComment,
+    status: status
+  });
+  
+  $http({
+    method: 'POST',
+    url: apiPath + 'addComment', 
+    data: params,
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+  })
+  .success(function (data, status, headers, config) {
+    // Do something?
+    console.log("New comment succeeded.");
+
+   
   }
+  // console.log("profile feed after showfeed",$rootScope.profileData.feed);
+  );
+  
+};
 
   
 var dbInit = function ( fCallback ) {
@@ -357,6 +386,8 @@ var dbGetSome = function (theScope, userFilter, listFilter, sharedFilter) {
   console.log('getSomeDB Scope: ',theScope, ' listfilter: ', listFilter ,' userfilter: ',userFilter, ' sharedFilter ', sharedFilter);
   // SharedFilter: 
   checkToken($rootScope.token);
+  
+  eval (theScope + " = []");
     
   var params = {
     type:'user',
@@ -990,6 +1021,7 @@ var refreshData = function(token){
       console.log("Valid token");
       // Go to the home screen.
       $state.go("app.home");
+      dbGetSome( "$rootScope.bite" , "" , "", "ditto");
       
     } else {
       console.log("invalid token: ", data.results[0].success, data.results[0].success === "1");
@@ -1023,6 +1055,7 @@ return {
   , dbInit: dbInit /* Initializes the rootscope */
   , mainFeed: mainFeed /* Updates the main feed */
   , loadFeed: loadFeed /* Loads in the feed from local storage */
+  , addComment: addComment /* Adds a comment to the item */
 };
   
 }]);
