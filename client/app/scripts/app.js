@@ -215,7 +215,18 @@ angular.module('Plitto', [
     };
   });
   
-}).directive('userListThing', function($rootScope, dbFactory, $state) {
+})
+.directive('userNav', function ($rootScope, dbFactory, $state) {
+ return {
+    restrict: "E",
+    templateUrl: "directives/userNav.html",
+    // scope: {}
+    controller: function($scope, dbFactory, $state){
+    
+    }
+  }; 
+})
+.directive('userListThing', function($rootScope, dbFactory, $state) {
   return {
     restrict: 'E',
     templateUrl: 'directives/userListThing.html',
@@ -234,7 +245,7 @@ angular.module('Plitto', [
       /* User */
       $scope.showUser = function(userId, userName, dataScope, fbuid){
         dbFactory.showUser(userId,userName, dataScope, fbuid);
-      };
+      }; 
   
       /* List */
       $scope.showList = function(listId, listName, userFilter){

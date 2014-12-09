@@ -87,6 +87,8 @@ var dbInit = function ( fCallback ) {
     shared: []
   };
   
+  
+  
   $rootScope.message = "RS initialized.";
   
   
@@ -203,7 +205,7 @@ var showFeed = function (theType, userFilter, listFilter, myState, continueKey, 
 }    
     
 /* 11.3.2014 */
-var showUser = function (userId, userName, dataScope, fbuid) {
+var showUser = function (userId, userName, dataScope, fbuid) { 
   
     //  console.log('dbFactory: show a user. vars.user: ', userId, ' uid: ',userId,' username: ',userName, 'dataScope', dataScope);
   $rootScope.profileData = {
@@ -230,7 +232,7 @@ var showUser = function (userId, userName, dataScope, fbuid) {
   // Get something to ditto 
   if($rootScope.user.userId != userId){
     dbGetSome('$rootScope.profileData.ditto', userId, '', 'ditto');
-    $rootScope.nav.view = "user.ditto";
+    $rootScope.nav.view = "user.us"; // Default to our relationship stats. Was user.ditto
     
   } else {
     // This is me
@@ -245,6 +247,9 @@ var showUser = function (userId, userName, dataScope, fbuid) {
   // dbFactory.showUser(userId);
   //dbGetSome = function (theScope, userfilter, listfilter, sharedFilter)
   $state.go('app.profile', { userId: userId });
+  
+  // Make sure that we have a valid title.
+  headerTitle();
   
 };
     
@@ -442,6 +447,13 @@ var dbGetSome = function (theScope, userFilter, listFilter, sharedFilter) {
     });
 };
   
+var headerTitle = function() {
+  console.log("Load Header");
+  // $rootScope.headerTitle = "";
+  $rootScope.headerTitle = "This";
+  console.log('rsht', $rootScope.headerTitle);
+};  
+  
 /* Created 11/2/2014 */
 var fbTokenLogin = function(fbToken){
   // The user has a valid Facebook token for plitto, and now wants to log into Plitto
@@ -474,9 +486,16 @@ var fbTokenLogin = function(fbToken){
       // TODO2 - Remove the access token from the URL.
       // http://plitto.com/client/app/?#/access_token=CAAAAMD0tehMBALBiZB3xeZAYoM5vTVZBZCpd6s6g5RZCntzTaR9BuG5gFLGIngbGqbts2l6NEm3N4tO7l7tC0QKUyZAWn4jEEBNWZBLVaKmZAdXNJgT1ZARN1BiLpFwW48N2AoPxriHi8TgkR2mQEiYYAK2uJtB2XmmGHY9a4lUXCCeWPJPUlILzkdAxrYpBbGw6CKdG2fV7RkYZCGOcOSaeaiGvN0p3YsZCbAZD&expires_in=4734
       
+      // Get the current time:
+      var d = new Date();
+      var theTime = d.getTime();
       
-      // Set the stores.
-      $rootScope.user = { userId: data.me.puid, userName: data.me.username, fbuid: data.me.fbuid };
+      // Set the stores. This is the only place where the User info is created. Otherwise, it's in local storage.
+      $rootScope.user = { userId: data.me.puid, userName: data.me.username, fbuid: data.me.fbuid, unreadChats: 10, 
+                         totalChats: 10, unreadDittos: 10, totalDittos: 10, listCount: 10, thingCount: 10, lastRefresh: theTime 
+                        };
+      
+      headerTitle();
 
       localStorageService.set('user', $rootScope.user );
 

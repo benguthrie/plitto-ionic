@@ -20,3 +20,4 @@ var QueryString = function () {
   } 
     return query_string;
 } ();
+

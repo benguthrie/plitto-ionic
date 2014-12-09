@@ -201,3 +201,30 @@ div.commentsSection {
   padding: 0;
   display: none;
 }
+section.statTable{
+  
+} 
+
+section.statTable > header {
+  background-color: #888;
+}
+
+section.statTable > div > div.theLabel {
+  
+}
+section.statTable > div > div.theStat {
+  
+  min-width: 2em;
+  text-align: right;
+}
+
+section.statTable > div > div {
+  padding: 0.3em;
+  border-bottom: 1px solid grey;
+}
+
+hr.clearBoth {
+  clear: both;
+  height: 0px;
+  border: 0px;
+}

@@ -2,7 +2,11 @@
 angular.module('Plitto.controllers', [])
 
 .run(function($rootScope, dbFactory, $state, localStorageService, $ionicModal, $location , OAuth, pFb ){
-  
+
+  var headerTitle = function() {
+    console.log("HeaderTitle");
+    return "Title from Function";
+  };
   /* Control all the login and redirect functions */
   $rootScope.$on('broadcast', function (event, args){
     console.log('heard command');
@@ -43,8 +47,6 @@ angular.module('Plitto.controllers', [])
       pFb.deleteFBaccess();
     }
   });
-  
-  
   
   // TODO1 - The below should be triggered as part of the callback.
   var initCallback = function(){
