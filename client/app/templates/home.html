@@ -1,14 +1,12 @@
-<ion-view title="Ditto Some Things">
-  <ion-nav-buttons side="left">
-    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
-  </ion-nav-buttons>
+<ion-view>
   
-  <ion-nav-buttons side="right">
-      <button class="button button-icon icon" style="background-image:url('img/130-dice.png'); background-repeat: no-repeat; background-size: 40px; width: 50px;" ng-click="getSome();"></button>
-  </ion-nav-buttons>
+  
+  <user-nav></user-nav>
+  
   
 
   <ion-content class="has-header">
+    <h3>Ditto Some Things</h3>
       <div class="button-bar">
       <a class="button" ng-class="{'active': $root.nav.homeView ==='friends'}" ng-click="getSome('friends');">
         <img ng-src="img/974-users@2x.png" style="margin-top:7px;margin-right:5px; height: 30px; width: 40px;"/>&nbsp;Friends</a>

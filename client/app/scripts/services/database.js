@@ -280,8 +280,8 @@ var showThing = function (thingId, thingName, userFilter) {
 };
 
 /* 10/3/2014 - Search */
-var search = function (searchTerm) {
-  var searchParams = $.param({token: $rootScope.token, search: searchTerm });
+var search = function (searchTerm, searchFilter) {
+  var searchParams = $.param({token: $rootScope.token, search: searchTerm , searchFilter: searchFilter });
 
   $http(
     {
@@ -293,11 +293,11 @@ var search = function (searchTerm) {
   .success(function (data,status,headers,config) {
   
     $rootScope.searchResults = data.results;
+    console.log('data.results', data.results);
 
       // For the user and the list, change the increments of dittoable and in common.
   } );
 };
-
     
     
 /* 9/4/2014 - 9/3/2014 - Handle the ditto action 

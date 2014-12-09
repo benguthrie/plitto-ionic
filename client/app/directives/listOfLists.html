@@ -2,10 +2,10 @@
   <div class="button-bar" ng-show="!listsData.length"><a class="button" ng-click="loadLists();">Reload Lists</a></div> 
 </p>
 
-<div ng-repeat="list in listsData" href="#/app/list/{{list.id}}" ng-click="showList(list.id,list.name,null);" class="gridItem">
+<div ng-repeat="list in listsData" href="#/app/list/{{list.lid}}" ng-click="showList( list.lid, list.name, null);" class="gridItem">
   <table class="gridHeader" style="background-color: #3FA8B0;">
     <tr class="listLine">
-    <td class="gridTitle" ng-bind="list.name"></td></tr>
+    <td class="gridTitle" ng-bind=" list.name "></td></tr>
   </table>
 
   <table class="gridStats">

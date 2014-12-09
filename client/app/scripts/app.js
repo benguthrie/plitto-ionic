@@ -138,6 +138,16 @@ angular.module('Plitto', [
       }
     })
   
+    .state('app.chat', {
+      url: '/chat',
+      views: {
+        'menuContent' :{
+          templateUrl: 'templates/chat.html',
+          controller: 'chatCtrl'
+        }
+      }
+    })
+  
     .state('app.debug', {
       url: '/debug',
       views: {
@@ -222,7 +232,13 @@ angular.module('Plitto', [
     templateUrl: "directives/userNav.html",
     // scope: {}
     controller: function($scope, dbFactory, $state){
-    
+      
+  
+      $scope.navFunc = function(path){
+        console.log("navFunc");
+        $state.go("app." + path);
+      };
+  
     }
   }; 
 })

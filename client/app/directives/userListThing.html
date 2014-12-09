@@ -16,17 +16,16 @@
         ng-class="{'active' : item.commentActive === '1' }">
         <div class="letsChatIcon ionicons ion-ios7-chatboxes-outline"></div>
         <!-- <div class="commentCount" ng-bind="item.commentActive"></div> --> 
-      </div>
+      </div> 
       
       <div 
-           class="button"
-           style="float: right;"
-           ng-click="ditto(item.mykey, userData.uid, list.lid, item.tid, $event, store);">
+       class="button"
+       style="float: right;"
+       ng-click="ditto(item.mykey, userData.uid, list.lid, item.tid, $event, store);">
         <div class="dittoButton"
            ng-class="{'ionicons ion-ios7-bolt' : item.mykey === 0 ,'ionicons ion-ios7-checkmark-outline' : item.mykey === null , 
                      'ionicons ion-ios7-checkmark' : item.mykey > 0 }">
         </div>
-        
       </div>
       
     </div>

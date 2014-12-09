@@ -226,14 +226,14 @@ angular.module('Plitto.controllers', [])
     }
   })
 
-.controller('HomeCtrl',function($scope, $rootScope,dbFactory) {
+.controller('HomeCtrl',function($scope, $rootScope,dbFactory, $state) {
   console.log('initiate home control');
   $scope.testFunction = function(){
     console.log('test function clicked.');
   };
-  
 
   $scope.getSome = function(typeFilter){
+    console.log("Get SSSOMe");
     $rootScope.bite = [];
     $rootScope.nav.homeView = typeFilter;
     $scope.bite = 'this was reloaded';
@@ -316,8 +316,20 @@ angular.module('Plitto.controllers', [])
 })
 
 .controller('addListCtrl', function($scope, $rootScope, $stateParams, dbFactory){
-  this.newList = {title:''};
+  $scope.newList = {title:''};
   console.log('addListCtrl called');
+  
+  // Initialize a new search.
+  $scope.$watch(function(){
+    return $scope.newList.title;
+  }, function(newValue, oldValue){
+    // console.log("Changed from " + oldValue + " to " + newValue);
+    if(typeof newValue !== 'undefined' && newValue.length > 0){
+    //   
+      dbFactory.search(newValue, "list");
+    }
+  });
+  
   
   $scope.createList = function(){
     console.log('User Clicked "Create List" with this title: ',this.newList.title);
@@ -336,7 +348,7 @@ angular.module('Plitto.controllers', [])
   
 })
 
-.controller('SearchCtrl', function($scope, $rootScope,$stateParams, dbFactory) {
+.controller('SearchCtrl', function($scope, $rootScope, $stateParams, dbFactory) {
   console.log("You have entered Search");
 
   $scope.search = {term: $stateParams.term, results: []};
@@ -355,12 +367,17 @@ angular.module('Plitto.controllers', [])
   $scope.$watch(function(){
     return $scope.search.term;
   }, function(newValue, oldValue){
-    console.log("Changed from " + oldValue + " to " + newValue);
+    // console.log("Changed from " + oldValue + " to " + newValue);
     if(typeof newValue !== 'undefined' && newValue.length > 0){
-      dbFactory.search(newValue);
+      dbFactory.search(newValue,"general");
     }
   });
 })
+
+.controller('chatCtrl', function($scope, $rootScope) {
+  // console.log("You have tried to control your friends",$rootScope.friendStore);
+})
+
 .controller('FriendsCtrl', function($scope, $rootScope) {
   // console.log("You have tried to control your friends",$rootScope.friendStore);
 })

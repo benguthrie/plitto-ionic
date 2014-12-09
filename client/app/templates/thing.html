@@ -1,9 +1,8 @@
-<ion-view title="Thing: {{thingData.thingName}}">
-  <ion-nav-buttons side="left">
-    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
-  </ion-nav-buttons>
+<ion-view>
+  <user-nav></user-nav>
+  
   <ion-content class="has-header">
-    
+    <h3 ng-bind="thingData.thingName"></h3>
     <div class="list card" ng-repeat="user in $root.thingData.items">
       <user-list-thing store="thingData.items" source="thing" user-data="user"></user-list-thing>        
     </div>

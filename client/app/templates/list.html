@@ -1,6 +1,10 @@
-<ion-view title="{{$root.list.listName}}">
- 
+<ion-view>
+  <user-nav></user-nav>
+  
+  
+  
   <ion-content class="has-header">
+    <h3 ng-bind="$root.list.listName"></h3>
     <form name="newItemForm" ng-submit="addToList(newItem.theValue);">
       <label class="item item-input">
         <input type="text" ng-model="newItem.theValue" placeholder="Add to {{$root.list.listName}}">

@@ -228,3 +228,11 @@ hr.clearBoth {
   height: 0px;
   border: 0px;
 }
+
+span.innerNo {
+  color: white;
+  text-shadow: 0 0 3px #B0B0B0;
+  position: relative;
+  top: -2px;
+  left: -26px;
+}
