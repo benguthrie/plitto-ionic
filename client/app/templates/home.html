@@ -7,13 +7,13 @@
 
   <ion-content class="has-header">
     <h3>Ditto Some Things</h3>
-      <div class="button-bar">
+    <div class="button-bar">
       <a class="button" ng-class="{'active': $root.nav.homeView ==='friends'}" ng-click="getSome('friends');">
         <img ng-src="img/974-users@2x.png" style="margin-top:7px;margin-right:5px; height: 30px; width: 40px;"/>&nbsp;Friends</a>
       <a class="button" ng-class="{'active': $root.nav.homeView ==='strangers'}" ng-click="getSome('strangers');">
         <img ng-src="img/135-hockeymask.png" style="margin-top:7px;margin-right:5px;  height: 30px; width: 25px;"/>&nbsp;Strangers</a>
-      <!-- <a class="button" ng-class="{'active': $root.nav.listView ==='shared'}" ng-click="view('shared');">Nearby</a> --> 
-  </div>
+        <!-- <a class="button" ng-class="{'active': $root.nav.listView ==='shared'}" ng-click="view('shared');">Nearby</a> --> 
+    </div>
     
   <div class="list card" ng-repeat="user in $root.bite">
     <user-list-thing store="bite" source="home" user-data="user"></user-list-thing>

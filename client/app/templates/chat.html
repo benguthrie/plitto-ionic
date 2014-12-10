@@ -2,11 +2,44 @@
   
   <user-nav></user-nav>
   
-  
+  <!-- $rootScope.nav.view --> 
 
   <ion-content class="has-header">
-    <h3>Chat Queue</h3>
-      <p>This is where your pending conversations will be shown. Hopefully, you'll pick up your phone or go see your friends. Talk to them in real time!</p>
+    <h3>Notifications</h3>
     
+    <ion-list ng-repeat="notification in notifications.feed" >
+      <ion-item class="unread" style="margin: 0; padding: 0;">
+
+        <div ng-show="notification.type === 'chat'">
+          <div style="background-color: #3FA8B0;" class="topicLine">Chat <span style="font-size: 0.8em;">{{ notification.content.date }}</span></div>
+          <span style="font-size: 0.7em;">{{notification.content.userName}}<br/>
+          {{notification.content.listName}} &rarr; {{notification.content.thingName}}</span><br/>
+          "{{notification.content.note}}"
+        </div>
+
+        <div ng-show="notification.type === 'ditto'">
+          <div style="background-color: #32868C;" class="topicLine">Ditto <span style="font-size: 0.8em;">{{ notification.content.date }}</span></div>
+          <span style="font-size: 0.7em;">{{notification.content.userName}}<br/>
+          {{notification.content.listName}} &rarr; {{notification.content.thingName}}</span><br/>
+          Dittoed
+          
+        </div>
+        <div ng-show="notification.type === 'friend' ">
+          <div style="background-color: #D86A6B;" class="topicLine">New Friend <span style="font-size: 0.8em;">{{ notification.content.date }}</span></div>
+          <span style="font-size: 1.1em;">{{notification.content.userName}}<br/>
+          
+        </div>
+        <div ng-show="notification.type === 'milestone' ">
+          <div style="background-color: #F49653;" class="topicLine">Milestone <span style="font-size: 0.8em;">{{ notification.content.date }}</span></div>
+          <span style="font-size: 1.1em;">{{notification.content.note}}</span><br/>
+          Dittoed
+        </div>
+        <div ng-show="notification.type === 'introduction' ">
+          <div style="background-color: #393E3C;" class="topicLine">Introduction Request <span style="font-size: 0.8em;">{{ notification.content.date }}</span></div>
+          <span style="font-size: 1.1em;">{{ notification.content.userName }}</span> would like to meet you.<br/>
+          <span style="font-size: 1.1em;">{{ notification.content.note }}</span>
+        </div>
+      </ion-item>
+    </ion-list>
   </ion-content>
 </ion-view>

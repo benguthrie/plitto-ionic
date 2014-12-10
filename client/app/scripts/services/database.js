@@ -50,8 +50,19 @@ var addComment = function ( uid, lid, tid, newComment, status ){
 var dbInit = function ( fCallback ) {
   
   console.log('rootScope initialized! Mount up!');
+  
+  // Constants / For checking things.
+  $rootScope.constants = {
+    version: 1.00,
+    
+  };
+  
+  // Last Login logging
+  $rootScope.initTime = Math.round(new Date().getTime() / 1000) ;
+  
   // These have been used and referenced since Nov 4.
   $rootScope.token = null;
+  
 
   $rootScope.debugOn = false; // Debug
   $rootScope.message = ''; // Also debug, but that's in how you use it.
@@ -85,6 +96,100 @@ var dbInit = function ( fCallback ) {
     feed: [],
     ditto: [],
     shared: []
+  };
+  
+  $rootScope.notifications = {
+    alerts: {
+      chats: 3,
+      dittos: 4,
+      friends: 6,
+      milestones: 7,
+      introductions: 8,
+      total: 28
+    },
+    totals: {
+      chats: 300,
+      dittos: 400,
+      friends: 600,
+      milestones: 700,
+      introductions: 80,
+      total: 2800
+    },
+    feed: [
+      {
+        type: "chat",
+        content: {
+          userName: "Emily Guthrie",
+          userId: "2",
+          listName: "Things Other People Like That I Don't",
+          listId: "2911",
+          thingName: "mayonnaise",
+          thingId: "937",
+          note: "Don't you use mayonnaise in your peanuts?",
+          read: "0",
+          date: "2014-12-10 12:15"
+        }
+      },
+      {
+        type: "ditto",
+        content: {
+          userName: "Emily Guthrie",
+          userId: "2",
+          listName: "My Children",
+          listId: "2911",
+          thingName: "Judith",
+          thingId: "937",
+          note: "",
+          read: "0",
+          date: "2014-12-10 12:15"
+        }
+      },
+      {
+        type: "friend",
+        content: {
+          userName: "Emily Guthrie",
+          userId: "2",
+          listName: "Things Other People Like That I Don't",
+          listId: "2911",
+          thingName: "mayonnaise",
+          thingId: "937",
+          note: "",
+          read: "0",
+          date: "2014-12-10 12:15"
+        }
+      },
+      {
+      type: "milestone",
+        content: {
+          userName: "Emily Guthrie",
+          userId: "2",
+          listName: "Things Other People Like That I Don't",
+          listId: "2911",
+          thingName: "",
+          thingId: "",
+          note: "You now have 20 items in this list",
+          read: "0",
+          date: "2014-12-10 12:15"
+        }
+      },
+        
+      {
+        type: "introduction",
+        content: {
+          userName: "Manuel Noriega",
+          userId: "200",
+          listName: "",
+          listId: "",
+          thingName: "",
+          thingId: "",
+          note: "I see that you need to borrow a band saw. I've got one that I'll loan you. Also, I too hate mayonnaise.",
+          read: "0",
+          date: "2014-12-10 12:15"
+        }
+      }
+    ]
+    
+    
   };
   
   
