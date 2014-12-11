@@ -3,7 +3,102 @@ angular.module('Services.database', [])
 
 // This will handle storage within local databases.
 .factory('dbFactory', ['$http', '$rootScope', 'localStorageService', '$state',  function ($http, $rootScope, localStorageService, $state ) {
+
+var userChat = function ( userId ) {
+  // 12/11/2014 - TODO1 - Return this.
+  var tempChat = demoChat;
+  var returnChat = [];
+  for (var chatMeme in tempChat) {
+    console.log('chatMeme: ', tempChat[chatMeme]);
+    
+    tempChat[chatMeme].content.userName = "I HAVE ALTERED " + tempChat[chatMeme].content.userName;
+    
+    
+    
+    returnChat.push(tempChat[chatMeme]);
+  }
   
+  
+  /*
+  console.log("Length: ", tempChat.length);
+  for (i=0; i < tempChat.length; i++) {
+    console.log('tempChatI' + i);
+  }
+  */
+  return returnChat;
+};
+  
+var demoChat = [{
+        type: "chat",
+        content: {
+          userName: "Emily Guthrie",
+          userId: "2",
+          listName: "Things Other People Like That I Don't",
+          listId: "2911",
+          thingName: "mayonnaise",
+          thingId: "937",
+          note: "Don't you use mayonnaise in your peanuts?",
+          read: "0",
+          date: "2014-12-10 12:15"
+        }
+      },
+      {
+        type: "ditto",
+        content: {
+          userName: "Emily Guthrie",
+          userId: "2",
+          listName: "My Children",
+          listId: "2911",
+          thingName: "Judith",
+          thingId: "937",
+          note: "",
+          read: "0",
+          date: "2014-12-10 12:15"
+        }
+      },
+      {
+        type: "friend",
+        content: {
+          userName: "Emily Guthrie",
+          userId: "2",
+          listName: "Things Other People Like That I Don't",
+          listId: "2911",
+          thingName: "mayonnaise",
+          thingId: "937",
+          note: "",
+          read: "0",
+          date: "2014-12-10 12:15"
+        }
+      },
+      {
+      type: "milestone",
+        content: {
+          userName: "Emily Guthrie",
+          userId: "2",
+          listName: "Things Other People Like That I Don't",
+          listId: "2911",
+          thingName: "",
+          thingId: "",
+          note: "You now have 20 items in this list",
+          read: "0",
+          date: "2014-12-10 12:15"
+        }
+      },
+        
+      {
+        type: "introduction",
+        content: {
+          userName: "Manuel Noriega",
+          userId: "200",
+          listName: "",
+          listId: "",
+          thingName: "",
+          thingId: "",
+          note: "I see that you need to borrow a band saw. I've got one that I'll loan you. Also, I too hate mayonnaise.",
+          read: "0",
+          date: "2014-12-10 12:15"
+        }
+      }];
 
  var apiPath = (window.cordova) ? 'http://plitto.com/api/2.0/' : '/api/2.0/';
 
@@ -95,7 +190,8 @@ var dbInit = function ( fCallback ) {
     userId: null,
     feed: [],
     ditto: [],
-    shared: []
+    shared: [], // TODO2: This could likely be removed
+    chat: []
   };
   
   $rootScope.notifications = {
@@ -115,79 +211,7 @@ var dbInit = function ( fCallback ) {
       introductions: 80,
       total: 2800
     },
-    feed: [
-      {
-        type: "chat",
-        content: {
-          userName: "Emily Guthrie",
-          userId: "2",
-          listName: "Things Other People Like That I Don't",
-          listId: "2911",
-          thingName: "mayonnaise",
-          thingId: "937",
-          note: "Don't you use mayonnaise in your peanuts?",
-          read: "0",
-          date: "2014-12-10 12:15"
-        }
-      },
-      {
-        type: "ditto",
-        content: {
-          userName: "Emily Guthrie",
-          userId: "2",
-          listName: "My Children",
-          listId: "2911",
-          thingName: "Judith",
-          thingId: "937",
-          note: "",
-          read: "0",
-          date: "2014-12-10 12:15"
-        }
-      },
-      {
-        type: "friend",
-        content: {
-          userName: "Emily Guthrie",
-          userId: "2",
-          listName: "Things Other People Like That I Don't",
-          listId: "2911",
-          thingName: "mayonnaise",
-          thingId: "937",
-          note: "",
-          read: "0",
-          date: "2014-12-10 12:15"
-        }
-      },
-      {
-      type: "milestone",
-        content: {
-          userName: "Emily Guthrie",
-          userId: "2",
-          listName: "Things Other People Like That I Don't",
-          listId: "2911",
-          thingName: "",
-          thingId: "",
-          note: "You now have 20 items in this list",
-          read: "0",
-          date: "2014-12-10 12:15"
-        }
-      },
-        
-      {
-        type: "introduction",
-        content: {
-          userName: "Manuel Noriega",
-          userId: "200",
-          listName: "",
-          listId: "",
-          thingName: "",
-          thingId: "",
-          note: "I see that you need to borrow a band saw. I've got one that I'll loan you. Also, I too hate mayonnaise.",
-          read: "0",
-          date: "2014-12-10 12:15"
-        }
-      }
-    ]
+    feed: demoChat
     
     
   };
@@ -1180,6 +1204,7 @@ return {
   , mainFeed: mainFeed /* Updates the main feed */
   , loadFeed: loadFeed /* Loads in the feed from local storage */
   , addComment: addComment /* Adds a comment to the item */
+  , userChat: userChat /* Returns the chat queue for a user. */
 };
   
 }]);

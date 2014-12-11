@@ -288,6 +288,11 @@ angular.module('Plitto.controllers', [])
 .controller('ProfileCtrl', function($scope,dbFactory,$rootScope) {
   // console.log("Profile Control",$scope);
   
+  // Chat with a user - Milestones, Dittos, Chat Messages
+  $scope.userChat = function( userId ){
+    console.log("Chat with userId: ", userId);
+    $scope.profileData.chat = dbFactory.userChat( userId );
+  }
   
   // Put the user info in the title bar
   $scope.profileTitle = "<img src='http://graph.facebook.com/" + $rootScope.profileData.fbuid + "/picture' class='title-image'> " + $rootScope.profileData.userName;

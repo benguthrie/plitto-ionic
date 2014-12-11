@@ -16,8 +16,9 @@
     
     <a class="button" ng-class="{'active': nav.view ==='user.feed'}" ng-click="nav.view = 'user.feed'; showFeed(profileData.userId,''); ">Feed</a>
     <a class="button" ng-class="{'active': nav.view ==='user.lists'}" ng-click="nav.view = 'user.lists'; showLists(profileData.userId); ">Lists</a>
-    <a class="button" ng-class="{'active': nav.view ==='user.shared'}" ng-hide="profileData.userId == user.userId" ng-click="nav.view = 'user.shared';getSome(profileData.userId,'shared');">Shared</a>
-    <!-- TODO1 - Restore this <a class="button" ng-class="{'active': nav.view ==='user.milestones'}" ng-click="nav.view = 'user.milestones';">Milestones</a> --> 
+    <!-- <a class="button" ng-class="{'active': nav.view ==='user.shared'}" ng-hide="profileData.userId == user.userId" ng-click="nav.view = 'user.shared';getSome(profileData.userId,'shared');">Queue</a> -->
+        <a class="button" ng-class="{'active': nav.view ==='user.chat'}" ng-click="nav.view = 'user.chat'; userChat(profileData.userId); ">Chat</a>
+    <!-- THIS HAS BEEN SUPERCEDED BY CHAT - Restore this <a class="button" ng-class="{'active': nav.view ==='user.milestones'}" ng-click="nav.view = 'user.milestones';">Milestones</a> --> 
   </div>
 <!-- End menu --> 
 
@@ -75,7 +76,14 @@
 <!-- End User Lists -->   
   
 <!-- Start Milestones -->    
-  <div ng-show="nav.view==='user.milestones'">Milestones</div>
+  <div ng-show="nav.view==='user.chat'">
+    <h3>Chat</h3>  
+    
+    
+    
+      <chat notifications-data="profileData.chat"></chat>
+    
+  </div>
 <!-- End Milestones -->       
     
   </ion-content>

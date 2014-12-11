@@ -416,5 +416,17 @@ angular.module('Plitto', [
       
     }
   };
+}).directive('chat', function($rootScope, dbFactory, $state) {
+  return {
+    restrict: 'E',
+    templateUrl: 'directives/chat.html',
+    
+    scope: {
+      notificationsData: '=notificationsData'
+    },
+    controller: function($scope, dbFactory, $state) {
+      
+    }
+  };
 });
 
