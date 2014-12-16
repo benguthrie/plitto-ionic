@@ -15,42 +15,77 @@
     ></select>
 
   </ion-item>
-  <!-- <ion-item>!! OPTIONS: {{ filterChatOptions }} !!</ion-item>
+  
+  <!-- 
+  <ion-item>Filter Chat: {{ filterChat }} x</ion-item>
+  <ion-item>!! OPTIONS: {{ filterChatOptions }} !!</ion-item>
   <ion-item>Filter Options: {{ filterChat.show }} x</ion-item>
   <ion-item>Filter Chat: {{ filterChat }} x</ion-item>
   <ion-item>THE FEED:  {{notifications.feed}} </ion-item> 
   <ion-item>{{ filterChat.value === 'me' }} - {{ filterChat }} </ion-item>
   <ion-item>{{ notification.content[0].fromUserId === user.userId }} - {{ notification.content[0] }} - {{ user.userId }} </ion-item>-->
   
-  <ion-item class="unread" style="margin: 0; padding: 0;" ng-repeat="notification in notificationsData" 
+  <ion-item 
+    ng-class=" { 'unread': notification.content[0].read === '0' } " 
+    style="margin: 0; padding: 0;" ng-repeat="notification in notificationsData" 
     ng-show=" ( filterChat.value ==='me' && notification.content[0].fromUserId === $root.user.userId ) || filterChat.value === 'us' || ( filterChat.value ==='them' && notification.content[0].fromUserId !== $root.user.userId ) "
   >
-    <div ng-show="notification.type === 'ditto'">
+    <!-- TODO1 Filter out and handle the condition for when the user is a stranger. --> 
+    <!-- Attributions --> 
+      <div class="sourceAttribution">
+        <div class="userImage" ng-click="showUser()">
+          
+          
+          <img class="bigUser" ng-src="http://graph.facebook.com/{{notification.content[0].fromFbuid}}/picture?height=60&width=60"/>
+          <img class="smallUser" ng-src="http://graph.facebook.com/{{notification.content[0].toFbuid}}/picture?height=30&width=30"/>
+        </div>
+        
+        <!-- Icons --> 
+      <div ng-show="notification.type === 'ditto'" class="ionicons ion-ios7-checkmark noteIcon"></div>
+        
+        
+        <div class="notificationContext">
+          <div class="sourceText">
+          <!-- {{ notification.content[0].fromUserId === $root.user.userId}} {{ notification.content[0].fromUserId  }} {{ notification.content[0].fromUserId  }} {{ $root.user.userId}} --> 
+            <span ng-show="notification.content[0].toUserId === $root.user.userId" class="toFrom">from {{ notification.content[0].fromUserName }}</span>
+            <span ng-show="notification.content[0].fromUserId === $root.user.userId" class="toFrom">to {{ notification.content[0].toUserName }}</span>
+
+          </div>
+          
+          <div class="dittoList item-text-wrap">List: {{ notification.content[0].listName }}</div>
+          <div class="dittoThing item-text-wrap">Thing {{ notification.content[0].thingName }}</div>
+          <span class="notificationNote" ng-show=" notification.content[0].note.length > 0">Note: <br/>{{ notification.content[0].note }}</span>
+        </div>
+        
+        <span class="notificationDate" ng-bind="notification.content[0].added"></span>
+        
+      </div>
+<!--       
       <div style="background-color: #32868C;" class="topicLine">Ditto <span style="font-size: 0.8em; float: right;">{{ notification.content[0].added }}</span><hr>
         <div style="height: 50px;">
           <div style="font-size: 0.5em; float: left; height: 80px; width: 80px;">
             <img ng-src="http://graph.facebook.com/{{notification.content[0].fromFbuid}}/picture?height=60&width=60"/><br/>
-            {{notification.content[0].fromUserName}}
+            <span class="nameFromUser">{{notification.content[0].fromUserName}}</span>
           </div>
           <div style="float: left; margin: 5px;"> from </div>
           <div style="font-size: 0.5em; float: left;">
             <img ng-src="http://graph.facebook.com/{{notification.content[0].toFbuid}}/picture?height=20&width=20"/><br/>
-            {{notification.content[0].toUserName}}
+            <span class="nameToUser">{{notification.content[0].toUserName}}</span>
           </div>
         </div>
-      </div>
+      </div><!-- 
       <span style="font-size: 0.7em; display: none; ">
         {{notification.content[0].fromUserName}} {{notification.content[0].fromUserId}} {{ notification.content[0].fromFbuid }} 
         {{notification.content[0].toUserName}} {{notification.content[0].toUserId}} {{ notification.content[0].toFbuid }}
         {{notification.content[0].hidden}} {{notification.content[0].read }} {{ notification.content[0].toFbuid }}
       </span>
         <br/>
-        
-      {{notification.content[0].listName}} &rarr; {{notification.content[0].thingName}}<br/>
-    </div>
+      <span class="dittoList">List: {{notification.content[0].listName}}</span><br/>
+      <span class="dittoThing">{{notification.content[0].thingName}}</span><br/>
+ -->     
     
     
-    
+    <!-- 
     
     <div ng-show="notification.type === 'chat'">
       <div style="background-color: #3FA8B0;" class="topicLine">Chat <span style="font-size: 0.8em;">{{ notification.content[0].date }}</span></div>
@@ -78,6 +113,7 @@
       <span style="font-size: 1.1em;">{{ notification.content[0].note }}</span>
     </div>
   </ion-item>
+  --> 
 </ion-list>
 
   

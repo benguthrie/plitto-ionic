@@ -71,7 +71,7 @@ a.userLine > img {
   margin: 0;
 }
 
-div.listLIne {
+div.listLine {
   background-color: #3FA8B0;
 }
 
@@ -243,6 +243,89 @@ div.topicLine {
   color: white;
 }
 
-.unread {
-  background-color: rgba(200,255,200,0.5);
+/* Notifications Section */
+  .noteIcon {
+    padding: 0.2em;
+    font-size: 2em;
+    position: relative;
+    left: -25px;
+    top: 20px;
+    float: left;
+  }
+
+  /* The div for users to show */
+  div.sourceAttribution {
+    
+    
+  }
+  
+  div.userImage {
+    
+    float: left;
+  }
+
+  img.bigUser {
+    position: relative;
+    left: 0px;
+    top: 0px;
+    z-index: 1;
+  }
+
+  img.smallUser {
+    position: relative;
+    left: -30px;
+    top: 5px;
+    z-index: 2;
+  }
+
+
+  .unread {
+    background-color: rgba(200,255,200,0.5);
+  }
+
+  span.notificationDate {
+    color: #999;
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    font-size: 0.8em;
+    float: right;
+    display: block;
+  }
+
+  div.notificationContext {
+    position: relative;
+    vertical-align: text-top;
+    padding-bottom: 20px;
+    padding-left: 120px;
+    margin-left: 0px;
+  }
+
+  div.dittoList, div.dittoThing {
+
+  }
+
+  div.sourceText {
+    padding: 0.1em;
+    font-size: 0.8em;
+    background-color: #32868C;
+    width: 100%;
+    margin-left: -60px;
+    float: left;
+    color: white;
+  }
+
+
+div.dittoList {
+  
+  
+  
+  width: auto;
+  padding-top: 26px;
+}
+
+div.dittoThing {
+  vertical-align: text-top;
+  font-size: 1.2em;
+  padding: 0.2em;
 }
