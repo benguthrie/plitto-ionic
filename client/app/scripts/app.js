@@ -232,16 +232,24 @@ angular.module('Plitto', [
     templateUrl: "directives/userNav.html",
     // scope: {}
     controller: function($scope, dbFactory, $state){
-      
+      // Reload the navigation
+      // dbFactory.userChat(-1);
   
+      // Load the notifications
       $scope.navFunc = function(path){
         console.log("navFunc");
+        
         $state.go("app." + path);
+        
+        dbFactory.userChat(-1).then(function(response){
+          $rootScope.notifications.feed = response;
+        });
       };
   
     }
   }; 
 })
+  
 .directive('userListThing', function($rootScope, dbFactory, $state) {
   return {
     restrict: 'E',
@@ -416,7 +424,7 @@ angular.module('Plitto', [
       
     }
   };
-}).directive('chat', function($rootScope, dbFactory, $state) {
+}).directive('chat', function($rootScope, dbFactory, $state ) {
   return {
     restrict: 'E',
     templateUrl: 'directives/chat.html',
@@ -424,8 +432,16 @@ angular.module('Plitto', [
     scope: {
       notificationsData: '=notificationsData'
     },
-    controller: function($scope, dbFactory, $state) {
+    controller: function ( $scope, dbFactory, $state ) {
+      // Debug
+      $scope.changeFilter = function( filterNew ){
+        console.log("TEST", filterNew );
+        $scope.filterChat = filterNew;
+      };
       
+      // $scope.filterChatOptions = [ { filter: "them", selected: true }, { filter: "us", selected: false }, { filter: "me", selected: false } ];
+      $scope.filterChatOptions = [ {show: "Them", value: "them" } , {show: "Us", value: "us"}, { show: "Me", value: "me" } ];
+      $scope.filterChat = $scope.filterChatOptions[0];
     }
   };
 });

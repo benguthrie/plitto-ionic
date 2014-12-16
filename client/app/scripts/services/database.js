@@ -4,7 +4,58 @@ angular.module('Services.database', [])
 // This will handle storage within local databases.
 .factory('dbFactory', ['$http', '$rootScope', 'localStorageService', '$state',  function ($http, $rootScope, localStorageService, $state ) {
 
+function processNotification ( theData , theUserId ) {
+  console.log('this is the data: ', theData , theUserId );
+  var notificationFeed = [];
+  for (var i in theData){
+    // console.log('entry: ', entry);
+    var theType = theData[i].theType;
+    // console.log('find type: ', theData.theType, theData[i].theType );
+    delete theData[i].theType;
+    notificationFeed.push({ type: theType, content:[ theData[i] ]  })
+  }
+  // 
+  console.log( "Return this: ", notificationFeed );
+  
+  
+  return notificationFeed;
+  
+  // TODO1 - If theUserId is null, or -1, then count the notifications and put it in the number for notifications.
+  
+  
+}
+  
 var userChat = function ( userId ) {
+  // Populate the notifications from an api call..
+  var params = $.param({
+    token: $rootScope.token, 
+    userId: userId
+  });
+  
+  
+  var promise = $http({
+    method: 'POST',
+    url: apiPath + 'loadNotifications', 
+    data: params,
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+  })
+  .then(function (response) {
+    // Do something?
+
+    // console.log("Load Notifications", response.data.results);
+     // $rootScope.notificationFeed = processNotification( data.results , userId );
+   // console.log('nf',notificationFeed);
+    // return notificationFeed;
+    console.log("49", response.data.results);
+    return processNotification( response.data.results , userId );
+    
+  }
+  // console.log("profile feed after showfeed",$rootScope.profileData.feed);
+  );
+  console.log("The Promise: ", promise );
+  return promise;
+  
+/*  
   // 12/11/2014 - TODO1 - Return this.
   var tempChat = demoChat;
   var returnChat = [];
@@ -19,13 +70,8 @@ var userChat = function ( userId ) {
   }
   
   
-  /*
-  console.log("Length: ", tempChat.length);
-  for (i=0; i < tempChat.length; i++) {
-    console.log('tempChatI' + i);
-  }
-  */
   return returnChat;
+*/  
 };
   
 var demoChat = [{
@@ -211,7 +257,7 @@ var dbInit = function ( fCallback ) {
       introductions: 80,
       total: 2800
     },
-    feed: demoChat
+    feed: []
     
     
   };
@@ -620,9 +666,14 @@ var fbTokenLogin = function(fbToken){
       var theTime = d.getTime();
       
       // Set the stores. This is the only place where the User info is created. Otherwise, it's in local storage.
-      $rootScope.user = { userId: data.me.puid, userName: data.me.username, fbuid: data.me.fbuid, unreadChats: 10, 
-                         totalChats: 10, unreadDittos: 10, totalDittos: 10, listCount: 10, thingCount: 10, lastRefresh: theTime 
-                        };
+      $rootScope.user = { 
+        userId: data.me.puid, userName: data.me.username, 
+        fbuid: data.me.fbuid, 
+        unreadNotifications: 10, 
+        listCount: 10, 
+        thingCount: 10, 
+        lastRefresh: theTime 
+      };
       
       headerTitle();
 

@@ -1,35 +1,84 @@
-<ion-list ng-repeat="notification in notificationsData" >
-  <ion-item class="unread" style="margin: 0; padding: 0;">
-    <div ng-show="notification.type === 'chat'">
-      <div style="background-color: #3FA8B0;" class="topicLine">Chat <span style="font-size: 0.8em;">{{ notification.content.date }}</span></div>
-      <span style="font-size: 0.7em;">{{notification.content.userName}}<br/>
-      {{notification.content.listName}} &rarr; {{notification.content.thingName}}</span><br/>
-      "{{notification.content.note}}"
-    </div>
 
+
+<ion-list >
+  
+  <ion-item class="item item-input item-select">
+    <div class="input-label">
+      Filter
+    </div>
+    
+    <select name="filterChatOptions" 
+      ng-init = " filter[0] " 
+      ng-model = " filterChat " 
+      ng-options = " filter as filter.show for filter in filterChatOptions "
+      ng-change = " changeFilter( filterChat ); "
+    ></select>
+
+  </ion-item>
+  <!-- <ion-item>!! OPTIONS: {{ filterChatOptions }} !!</ion-item>
+  <ion-item>Filter Options: {{ filterChat.show }} x</ion-item>
+  <ion-item>Filter Chat: {{ filterChat }} x</ion-item>
+  <ion-item>THE FEED:  {{notifications.feed}} </ion-item> 
+  <ion-item>{{ filterChat.value === 'me' }} - {{ filterChat }} </ion-item>
+  <ion-item>{{ notification.content[0].fromUserId === user.userId }} - {{ notification.content[0] }} - {{ user.userId }} </ion-item>-->
+  
+  <ion-item class="unread" style="margin: 0; padding: 0;" ng-repeat="notification in notificationsData" 
+    ng-show=" ( filterChat.value ==='me' && notification.content[0].fromUserId === $root.user.userId ) || filterChat.value === 'us' || ( filterChat.value ==='them' && notification.content[0].fromUserId !== $root.user.userId ) "
+  >
     <div ng-show="notification.type === 'ditto'">
-      <div style="background-color: #32868C;" class="topicLine">Ditto <span style="font-size: 0.8em;">{{ notification.content.date }}</span></div>
-      <span style="font-size: 0.7em;">{{notification.content.userName}}<br/>
-      {{notification.content.listName}} &rarr; {{notification.content.thingName}}</span><br/>
-      Dittoed
-
+      <div style="background-color: #32868C;" class="topicLine">Ditto <span style="font-size: 0.8em; float: right;">{{ notification.content[0].added }}</span><hr>
+        <div style="height: 50px;">
+          <div style="font-size: 0.5em; float: left; height: 80px; width: 80px;">
+            <img ng-src="http://graph.facebook.com/{{notification.content[0].fromFbuid}}/picture?height=60&width=60"/><br/>
+            {{notification.content[0].fromUserName}}
+          </div>
+          <div style="float: left; margin: 5px;"> from </div>
+          <div style="font-size: 0.5em; float: left;">
+            <img ng-src="http://graph.facebook.com/{{notification.content[0].toFbuid}}/picture?height=20&width=20"/><br/>
+            {{notification.content[0].toUserName}}
+          </div>
+        </div>
+      </div>
+      <span style="font-size: 0.7em; display: none; ">
+        {{notification.content[0].fromUserName}} {{notification.content[0].fromUserId}} {{ notification.content[0].fromFbuid }} 
+        {{notification.content[0].toUserName}} {{notification.content[0].toUserId}} {{ notification.content[0].toFbuid }}
+        {{notification.content[0].hidden}} {{notification.content[0].read }} {{ notification.content[0].toFbuid }}
+      </span>
+        <br/>
+        
+      {{notification.content[0].listName}} &rarr; {{notification.content[0].thingName}}<br/>
     </div>
+    
+    
+    
+    
+    <div ng-show="notification.type === 'chat'">
+      <div style="background-color: #3FA8B0;" class="topicLine">Chat <span style="font-size: 0.8em;">{{ notification.content[0].date }}</span></div>
+      <span style="font-size: 0.7em;">{{notification.content[0].userName}}<br/>
+      {{notification.content[0].listName}} &rarr; {{notification.content[0].thingName}}</span><br/>
+      "{{notification.content[0].note}}"
+    </div>
+
+    
     <div ng-show="notification.type === 'friend' ">
-      <div style="background-color: #D86A6B;" class="topicLine">New Friend <span style="font-size: 0.8em;">{{ notification.content.date }}</span></div>
-      <span style="font-size: 1.1em;">{{notification.content.userName}}<br/>
+      <div style="background-color: #D86A6B;" class="topicLine">New Friend <span style="font-size: 0.8em;">{{ notification.content[0].date }}</span></div>
+      <span style="font-size: 1.1em;">{{notification.content[0].userName}}<br/>
 
     </div>
     <div ng-show="notification.type === 'milestone' ">
-      <div style="background-color: #F49653;" class="topicLine">Milestone <span style="font-size: 0.8em;">{{ notification.content.date }}</span></div>
-      <span style="font-size: 1.1em;">{{notification.content.note}}</span><br/>
+      <div style="background-color: #F49653;" class="topicLine">Milestone <span style="font-size: 0.8em;">{{ notification.content[0].date }}</span></div>
+      <span style="font-size: 1.1em;">{{notification.content[0].note}}</span><br/>
       Dittoed
     </div>
     <div ng-show="notification.type === 'introduction' ">
       <div style="background-color: #393E3C;" class="topicLine">
-        Introduction Request <span style="font-size: 0.8em;">{{ notification.content.date }}</span>
+        Introduction Request <span style="font-size: 0.8em;">{{ notification.content[0].date }}</span>
       </div>
-      <span style="font-size: 1.1em;">{{ notification.content.userName }}</span> would like to meet you.<br/>
-      <span style="font-size: 1.1em;">{{ notification.content.note }}</span>
+      <span style="font-size: 1.1em;">{{ notification.content[0].userName }}</span> would like to meet you.<br/>
+      <span style="font-size: 1.1em;">{{ notification.content[0].note }}</span>
     </div>
   </ion-item>
 </ion-list>
+
+  
+  <!--  $scope.filterChatOptions = [ { filter: "them", selected: true }, { filter: "us", selected: false }, { filter: "me", selected: false } ]; -->

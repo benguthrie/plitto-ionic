@@ -291,7 +291,12 @@ angular.module('Plitto.controllers', [])
   // Chat with a user - Milestones, Dittos, Chat Messages
   $scope.userChat = function( userId ){
     console.log("Chat with userId: ", userId);
-    $scope.profileData.chat = dbFactory.userChat( userId );
+
+    dbFactory.userChat( userId ).then(function(response){
+      $scope.profileData.chat = response;
+    });
+    
+    
   }
   
   // Put the user info in the title bar
@@ -379,8 +384,18 @@ angular.module('Plitto.controllers', [])
   });
 })
 
-.controller('chatCtrl', function($scope, $rootScope) {
+.controller('chatCtrl', function($scope, $rootScope, dbFactory) {
   // console.log("You have tried to control your friends",$rootScope.friendStore);
+  console.log("CHAT CONTROL INITIALIZED.");
+  console.log("rsnf", $rootScope.notifications.feed );
+  $rootScope.notifications.feed = dbFactory.userChat().then(function (response) {
+    console.log("chatCtrl", response);
+    return response;
+  }).then(function (response) {
+    console.log("401", response);
+    return response;
+  });
+  
 })
 
 .controller('FriendsCtrl', function($scope, $rootScope) {
