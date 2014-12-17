@@ -233,8 +233,12 @@ span.innerNo {
   color: white;
   text-shadow: 0 0 3px #B0B0B0;
   position: relative;
+  z-index: 2;
   top: -2px;
   left: -26px;
+  text-align: right;
+  width: 30px;
+  
 }
 
 div.topicLine {
@@ -276,6 +280,9 @@ div.topicLine {
     left: -30px;
     top: 5px;
     z-index: 2;
+    height: 30px;
+    width: 30px;
+      
   }
 
 
@@ -315,6 +322,9 @@ div.topicLine {
     color: white;
   }
 
+span.notificationNote {
+  font-style: italic;
+}
 
 div.dittoList {
   

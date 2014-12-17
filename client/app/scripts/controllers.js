@@ -387,8 +387,8 @@ angular.module('Plitto.controllers', [])
 .controller('chatCtrl', function($scope, $rootScope, dbFactory) {
   // console.log("You have tried to control your friends",$rootScope.friendStore);
   console.log("CHAT CONTROL INITIALIZED.");
-  console.log("rsnf", $rootScope.notifications.feed );
-  $rootScope.notifications.feed = dbFactory.userChat().then(function (response) {
+  console.log("rsnf", $rootScope.stats.feed );
+  $rootScope.stats.feed = dbFactory.userChat().then(function (response) {
     console.log("chatCtrl", response);
     return response;
   }).then(function (response) {

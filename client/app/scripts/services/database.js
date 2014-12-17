@@ -24,6 +24,24 @@ function processNotification ( theData , theUserId ) {
   
   
 }
+
+  
+  
+var updateNotifications = function () {
+  /* update the unread alerts */ 
+  $rootScope.stats.alertCount = randNum(20);
+  $rootScope.stats.dailyActivity = randNum( 200 );
+  
+  $rootScope.stats.alerts.friendRequests = randNum(1) -1 ;
+  $rootScope.stats.friends = randNum(500);
+  $rootScope.stats.lists = randNum(100);
+  $rootScope.stats.dailyActivity = randNum(200);
+  
+  
+  
+  
+  console.log("New Alert Count: ", $rootScope.stats.alerts.total);
+}; 
   
 var userChat = function ( userId ) {
   // Populate the notifications from an api call..
@@ -179,8 +197,6 @@ var addComment = function ( uid, lid, tid, newComment, status ){
   .success(function (data, status, headers, config) {
     // Do something?
     console.log("New comment succeeded.");
-
-   
   }
   // console.log("profile feed after showfeed",$rootScope.profileData.feed);
   );
@@ -195,6 +211,7 @@ var dbInit = function ( fCallback ) {
   // Constants / For checking things.
   $rootScope.constants = {
     version: 1.00,
+    lastBuild: '20141216'
     
   };
   
@@ -232,7 +249,7 @@ var dbInit = function ( fCallback ) {
   $rootScope.listStore = [];
   $rootScope.friendStore = [];
   $rootScope.profileData = {
-    lists: [],
+    lists: [], // It seems inefficient to have this be part of the profileData as the RootScope. Call it when it's needed? 
     userId: null,
     feed: [],
     ditto: [],
@@ -240,29 +257,31 @@ var dbInit = function ( fCallback ) {
     chat: []
   };
   
-  $rootScope.notifications = {
+  $rootScope.stats = {
+    alertCount: 5,
+    dailyActity: 100,
+    
     alerts: {
       chats: 3,
       dittos: 4,
-      friends: 6,
+      friendRequests: 6,
       milestones: 7,
       introductions: 8,
       total: 28
     },
-    totals: {
-      chats: 300,
-      dittos: 400,
-      friends: 600,
-      milestones: 700,
-      introductions: 80,
-      total: 2800
-    },
+    chats: 300,
+    dittos: 400,
+    lists: 12,
+    things: 2000,
+    friends: 600,
+    
+    milestones: 700,
+    introductions: 80,
+    total: 2800,
     feed: []
     
     
   };
-  
-  
   
   $rootScope.message = "RS initialized.";
   
@@ -1256,6 +1275,7 @@ return {
   , loadFeed: loadFeed /* Loads in the feed from local storage */
   , addComment: addComment /* Adds a comment to the item */
   , userChat: userChat /* Returns the chat queue for a user. */
+  , updateNotifications: updateNotifications /* updates the notification numbers. */
 };
   
 }]);

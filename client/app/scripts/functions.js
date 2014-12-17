@@ -21,3 +21,6 @@ var QueryString = function () {
     return query_string;
 } ();
 
+var randNum = function( maxNum ) {
+  return Math.floor((Math.random() * maxNum) + 1 );
+};

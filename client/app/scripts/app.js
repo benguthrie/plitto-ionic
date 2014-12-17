@@ -238,11 +238,15 @@ angular.module('Plitto', [
       // Load the notifications
       $scope.navFunc = function(path){
         console.log("navFunc");
+  
+        if (path === "chat") {
+          dbFactory.updateNotifications();
+        }
         
         $state.go("app." + path);
         
         dbFactory.userChat(-1).then(function(response){
-          $rootScope.notifications.feed = response;
+          $rootScope.stats.feed = response;
         });
       };
   

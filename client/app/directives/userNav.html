@@ -17,12 +17,12 @@
   --> 
 
   <button 
-    class="button button-icon icon ionicons ion-chatbox" ng-click="navFunc('chat');"><span class="innerNo">15</style></button>
+    class="button button-icon icon ionicons ion-chatbox" ng-click="navFunc('chat');"><span class="innerNo" ng-bind="$root.stats.alertCount"></style></button>
   
   <button 
     class='button button-icon icon' 
     style="background-image:url('img/130-dice.png'); background-repeat: no-repeat; background-size: 40px; width: 50px;" 
-    ng-click="navFunc('home'); getSome();">15</button>
+    ng-click="navFunc('home'); getSome();"></button>
   
   <!-- href="#/app/search/" ng-click="nav.view = 'search'" --> 
   <button 

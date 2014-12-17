@@ -20,31 +20,30 @@
         </ion-item>
         
         <ion-item nav-clear menu-close href="#/app/friends">
+          <i class="icon ion-person-stalker"></i>
           Friends
+          <span class="item-note" ng-show=" $root.stats.alerts.friendRequests ===0 " ng-bind="$root.stats.friends">
+            
+          </span>
+          <span class="badge badge-assertive" ng-show=" $root.stats.alerts.friendRequests > 0 " ng-bind="$root.stats.alerts.friendRequests"></span>
         </ion-item>
           
-        <ion-item nav-clear menu-close href="#/app/home">
-          Ditto
-        </ion-item>
         
         
         <ion-item nav-clear menu-close href="#/app/lists" ng-click="loadLists(); nav.view = 'user.lists'; ">
+          <i class="icon ion-ios-list-outline"></i>
           Lists
+          <span class="item-note" ng-show =" $root.stats.lists > 0 " ng-bind="$root.stats.lists">
         </ion-item>
-        
-        <ion-item nav-clear menu-close href="#/app/search/" ng-click="nav.view = 'search'">
-          Search
-        </ion-item>
-        
         <ion-item nav-clear menu-close href="#/app/feed" ng-click="nav.view = 'feed'">
+          <i class="icon ion-android-time"></i>
           Feed
+          <span class="item-note" ng-bind="$root.stats.dailyActity"></span>
+          
         </ion-item>
         
         
         
-        <ion-item nav-clear menu-close href="#/app/addlist" ng-click="nav.view = 'addlist'">
-          Add a list
-        </ion-item>
         
         <ion-item nav-clear menu-close ng-click="logout()" href="#/login">
           Logout
@@ -61,6 +60,28 @@
           Debug
         </ion-item>
         
+        <div class="item item-divider">Duplicates from Navigation Bar</div>
+
+          <ion-item nav-clear menu-close href="#/app/addlist" ng-click="nav.view = 'addlist'">
+            <i class='icon ion-plus-circled'></i>
+            Add a list
+          </ion-item>
+        
+        
+          <ion-item nav-clear menu-close href="#/app/home">
+            <i class="icon ion-ios-checkmark"></i>
+            Ditto
+          </ion-item>
+        
+          <ion-item nav-clear menu-close href="#/app/search/" ng-click="nav.view = 'search'">
+            <i class="icon ion-ios-search-strong"></i>
+            Search
+          </ion-item>
+        
+          <ion-item nav-clear menu-close href="#/app/chat">
+            <i class="icon ion-chatbox"></i>
+            Chat
+          </ion-item>
         
 <!-- Not built / activated yet -->        
         <div class="item item-divider">Undone below</div>
