@@ -24,7 +24,7 @@
   <ion-item>{{ notification.content[0].fromUserId === user.userId }} - {{ notification.content[0] }} - {{ user.userId }} </ion-item>-->
   
   <ion-item 
-    ng-class=" { 'unread': notification.content[0].read === '0' } " 
+    ng-class=" { 'unread': notification.content[0].read === '0' && notification.content[0].toUserId === $root.user.userId } " 
     style="margin: 0; padding: 0;" ng-repeat="notification in notificationsData" 
     ng-show=" ( filterChat.value ==='me' && notification.content[0].fromUserId === $root.user.userId ) || filterChat.value === 'us' || ( filterChat.value ==='them' && notification.content[0].fromUserId !== $root.user.userId ) "
   >

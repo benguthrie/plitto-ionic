@@ -5,26 +5,60 @@ angular.module('Services.database', [])
 .factory('dbFactory', ['$http', '$rootScope', 'localStorageService', '$state',  function ($http, $rootScope, localStorageService, $state ) {
 
 function processNotification ( theData , theUserId ) {
-  console.log('this is the data: ', theData , theUserId );
+  // console.log('this is the data: ', theData , theUserId );
   var notificationFeed = [];
+  var makeRead = []
+  
   for (var i in theData){
     // console.log('entry: ', entry);
     var theType = theData[i].theType;
     // console.log('find type: ', theData.theType, theData[i].theType );
     delete theData[i].theType;
-    notificationFeed.push({ type: theType, content:[ theData[i] ]  })
+    notificationFeed.push({ type: theType, content:[ theData[i] ]  });
+    
+    // console.log("TD", theData[i].read, theData[i].toUserId, $rootScope.user.userId );
+    if(theData[i].toUserId === $rootScope.user.userId ){
+      // console.log("Match!");
+      makeRead.push( { id: theData[i].id, type: theType } );
+    }
   }
   // 
-  console.log( "Return this: ", notificationFeed );
+  if(makeRead.length > 0){
+    makeNotificationRead ( makeRead );  
+  }
+  
   
   
   return notificationFeed;
+  
+   
   
   // TODO1 - If theUserId is null, or -1, then count the notifications and put it in the number for notifications.
   
   
 }
 
+function makeNotificationRead ( makeRead ) {
+  var params = $.param({
+    token: $rootScope.token,
+    userId: $rootScope.user.userId,
+    makeRead: makeRead
+  });
+  
+  $http({
+    method: 'POST',
+    url: apiPath + 'makeNotificationRead', 
+    data: params,
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+  })
+  .success(function (data, status, headers, config) {
+    // Do something?
+    console.log("Made Read: ", data);
+  }
+  // console.log("profile feed after showfeed",$rootScope.profileData.feed);
+  );
+  
+}  
   
   
 var updateNotifications = function () {
@@ -37,7 +71,7 @@ var updateNotifications = function () {
   $rootScope.stats.lists = randNum(100);
   $rootScope.stats.dailyActivity = randNum(200);
   
-  
+   
   
   
   console.log("New Alert Count: ", $rootScope.stats.alerts.total);
@@ -91,7 +125,7 @@ var userChat = function ( userId ) {
   return returnChat;
 */  
 };
-  
+  /*
 var demoChat = [{
         type: "chat",
         content: {
@@ -162,7 +196,7 @@ var demoChat = [{
           read: "0",
           date: "2014-12-10 12:15"
         }
-      }];
+      }]; */
 
  var apiPath = (window.cordova) ? 'http://plitto.com/api/2.0/' : '/api/2.0/';
 
