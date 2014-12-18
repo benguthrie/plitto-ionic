@@ -240,7 +240,7 @@ angular.module('Plitto', [
         console.log("navFunc");
   
         if (path === "chat") {
-          dbFactory.updateNotifications();
+          dbFactory.updateCounts();
         }
         
         $state.go("app." + path);
