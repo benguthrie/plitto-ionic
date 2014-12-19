@@ -22,10 +22,10 @@
         <ion-item nav-clear menu-close href="#/app/friends">
           <i class="icon ion-person-stalker"></i>
           Friends
-          <span class="item-note" ng-show=" $root.stats.friendRequests === '0' " ng-bind="$root.stats.friends">
+          <span class="item-note" ng-show=" $root.stats.alerts.friendRequests ===0 " ng-bind="$root.stats.friends">
             
           </span>
-          <span class="badge badge-assertive" ng-show=" $root.stats.friendRequests > 0 " ng-bind="$root.stats.friendRequests"></span>
+          <span class="badge badge-assertive" ng-show=" $root.stats.alerts.friendRequests > 0 " ng-bind="$root.stats.alerts.friendRequests"></span>
         </ion-item>
           
         
@@ -35,21 +35,10 @@
           Lists
           <span class="item-note" ng-show =" $root.stats.lists > 0 " ng-bind="$root.stats.lists">
         </ion-item>
-
-        <!-- TODO1 - Directl link to MY FEED
-        <ion-item nav-clear menu-close href="#/app/feed" ng-click="nav.view = 'feed'">
-          <i class="icon ion-android-time"></i>
-          Things
-          <span class="item-note" ng-bind="$root.stats.things"></span>
-          
-        </ion-item>
-        --> 
-          
-        
         <ion-item nav-clear menu-close href="#/app/feed" ng-click="nav.view = 'feed'">
           <i class="icon ion-android-time"></i>
           Feed
-          <span class="item-note" ng-bind="$root.stats.feedCount"></span>
+          <span class="item-note" ng-bind="$root.stats.dailyActity"></span>
           
         </ion-item>
         

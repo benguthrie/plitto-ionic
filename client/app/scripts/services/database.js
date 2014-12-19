@@ -17,7 +17,7 @@ function processNotification ( theData , theUserId ) {
     notificationFeed.push({ type: theType, content:[ theData[i] ]  });
     
     // console.log("TD", theData[i].read, theData[i].toUserId, $rootScope.user.userId );
-    if(theData[i].toUserId === $rootScope.user.userId && theData[i].read == "0" ){
+    if(theData[i].toUserId === $rootScope.user.userId ){
       // console.log("Match!");
       makeRead.push( { id: theData[i].id, type: theType } );
     }
@@ -27,18 +27,23 @@ function processNotification ( theData , theUserId ) {
     makeNotificationRead ( makeRead );  
   }
   
+  
+  
   return notificationFeed;
-    
+  
+   
+  
+  // TODO1 - If theUserId is null, or -1, then count the notifications and put it in the number for notifications.
+  
   
 }
 
 function makeNotificationRead ( makeRead ) {
   var params = $.param({
     token: $rootScope.token,
+    userId: $rootScope.user.userId,
     makeRead: makeRead
   });
-  
-  // console.log("Notifications, makeRead: ", makeRead);
   
   $http({
     method: 'POST',
@@ -48,7 +53,7 @@ function makeNotificationRead ( makeRead ) {
   })
   .success(function (data, status, headers, config) {
     // Do something?
-    // console.log("Made Read: ", data);
+    console.log("Made Read: ", data);
   }
   // console.log("profile feed after showfeed",$rootScope.profileData.feed);
   );
@@ -56,40 +61,20 @@ function makeNotificationRead ( makeRead ) {
 }  
   
   
-var updateCounts = function () {
-  console.log('!!!UpdateCounts');
+var updateNotifications = function () {
+  /* update the unread alerts */ 
+  $rootScope.stats.alertCount = randNum(20);
+  $rootScope.stats.dailyActivity = randNum( 200 );
   
-  var params = $.param({
-    token: $rootScope.token
-  });
+  $rootScope.stats.alerts.friendRequests = randNum(1) -1 ;
+  $rootScope.stats.friends = randNum(500);
+  $rootScope.stats.lists = randNum(100);
+  $rootScope.stats.dailyActivity = randNum(200);
   
-  $http({
-    method: 'POST',
-    url: apiPath + 'updateCounts', 
-    data: params,
-    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-  })
-  .success(function (data, status, headers, config) {
-    // Do something?
-    console.log("updateCounts: ", data);
-    
-    $rootScope.stats.alertCount = data.results.notifications;
-    $rootScope.stats.friends = data.results.friendCount;
-    $rootScope.stats.lists = data.results.listCount;
-    $rootScope.stats.things = data.results.thingCount;
-    $rootScope.stats.unreadChats = data.results.unreadChats;
-    $rootScope.stats.unreadDittos = data.results.unreadDittos;
-    $rootScope.stats.feedCount = data.results.feedCount;
-    $rootScope.stats.friendRequests = data.results.friendRequests;
-    
-  }
-  // console.log("profile feed after showfeed",$rootScope.profileData.feed);
-  );
+   
   
   
-  
-  
-  // console.log("New Alert Count: ", $rootScope.stats.alerts.total);
+  console.log("New Alert Count: ", $rootScope.stats.alerts.total);
 }; 
   
 var userChat = function ( userId ) {
@@ -113,13 +98,13 @@ var userChat = function ( userId ) {
      // $rootScope.notificationFeed = processNotification( data.results , userId );
    // console.log('nf',notificationFeed);
     // return notificationFeed;
-    // console.log("49", response.data.results);
+    console.log("49", response.data.results);
     return processNotification( response.data.results , userId );
     
   }
   // console.log("profile feed after showfeed",$rootScope.profileData.feed);
   );
-  // console.log("The Promise: ", promise );
+  console.log("The Promise: ", promise );
   return promise;
   
 /*  
@@ -307,27 +292,26 @@ var dbInit = function ( fCallback ) {
   };
   
   $rootScope.stats = {
-    alertCount: null,
-    dailyActity: null,
-    friendRequests: null,
+    alertCount: 5,
+    dailyActity: 100,
     
     alerts: {
-      chats: null,
-      dittos: null,
-      milestones: null,
-      introductions: null,
-      total: null
+      chats: 3,
+      dittos: 4,
+      friendRequests: 6,
+      milestones: 7,
+      introductions: 8,
+      total: 28
     },
-    chats: null,
-    dittos: null,
-    lists: null,
-    things: null,
-    friends: null,
-    feedCount: null,
+    chats: 300,
+    dittos: 400,
+    lists: 12,
+    things: 2000,
+    friends: 600,
     
-    milestones: null,
-    introductions: null,
-    total: null,
+    milestones: 700,
+    introductions: 80,
+    total: 2800,
     feed: []
     
     
@@ -751,8 +735,6 @@ var fbTokenLogin = function(fbToken){
       // Make the root token and the Local Storage
       $rootScope.token = data.me.token;
       localStorageService.set('token', data.me.token);
-      
-      updateCounts();
 
       // Make the root token and the Local Storage
       $rootScope.friendStore = data.friends;
@@ -1327,7 +1309,7 @@ return {
   , loadFeed: loadFeed /* Loads in the feed from local storage */
   , addComment: addComment /* Adds a comment to the item */
   , userChat: userChat /* Returns the chat queue for a user. */
-  , updateCounts: updateCounts /* updates the notification, Friend, etc numbers. */
+  , updateNotifications: updateNotifications /* updates the notification numbers. */
 };
   
 }]);

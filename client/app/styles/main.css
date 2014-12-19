@@ -234,12 +234,11 @@ span.innerNo {
   text-shadow: 0 0 3px #B0B0B0;
   position: relative;
   z-index: 2;
-  top: -2px; 
+  top: -2px;
   left: -26px;
   text-align: right;
   width: 30px;
-  margin-right: -25px;
-  font-size: 0.9em;
+  
 }
 
 div.topicLine {
