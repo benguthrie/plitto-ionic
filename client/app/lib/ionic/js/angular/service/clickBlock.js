@@ -4,21 +4,37 @@ IonicModule
   '$ionicBody',
   '$timeout',
 function($document, $ionicBody, $timeout) {
-  var cb = $document[0].createElement('div');
-  cb.className = 'click-block';
-  return {
-    show: function() {
-      if(cb.parentElement) {
-        cb.classList.remove('hide');
+  var CSS_HIDE = 'click-block-hide';
+  var cbEle, fallbackTimer, pendingShow;
+
+  function addClickBlock() {
+    if (pendingShow) {
+      if (cbEle) {
+        cbEle.classList.remove(CSS_HIDE);
       } else {
-        $ionicBody.append(cb);
+        cbEle = $document[0].createElement('div');
+        cbEle.className = 'click-block';
+        $ionicBody.append(cbEle);
       }
-      $timeout(function(){
-        cb.classList.add('hide');
-      }, 500);
+      pendingShow = false;
+    }
+  }
+
+  function removeClickBlock() {
+    cbEle && cbEle.classList.add(CSS_HIDE);
+  }
+
+  return {
+    show: function(autoExpire) {
+      pendingShow = true;
+      $timeout.cancel(fallbackTimer);
+      fallbackTimer = $timeout(this.hide, autoExpire || 310);
+      ionic.requestAnimationFrame(addClickBlock);
     },
     hide: function() {
-      cb.classList.add('hide');
+      pendingShow = false;
+      $timeout.cancel(fallbackTimer);
+      ionic.requestAnimationFrame(removeClickBlock);
     }
   };
 }]);

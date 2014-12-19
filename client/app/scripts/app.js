@@ -27,7 +27,7 @@ angular.module('Plitto', [
   
 
     
-  $ionicPlatform.ready(function () {
+  $ionicPlatform.ready(function () { 
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if(window.cordova && window.cordova.plugins.Keyboard) {
@@ -226,13 +226,23 @@ angular.module('Plitto', [
         return $q.reject(rejection);
       }
     };
-  });
+   });
   
 })
 .directive('userNav', function ($rootScope, dbFactory, $state) {
  return {
     restrict: "E",
-    templateUrl: "directives/userNav.html",
+    // templateUrl: 'directives/userNav.html',
+    template: '<ion-nav-bar>  ' + 
+      '<ion-nav-buttons side="left"> <button menu-toggle="left" class="button button-icon ion-navicon"></button> </ion-nav-buttons> ' + 
+      '<ion-nav-buttons side="secondary"> ' + 
+        ' <button class="button button-icon  ionicons ion-plus-circled" ng-click=" navFunc(\'addlist\'); "></button> ' + 
+        ' <button class="button button-icon ion-chatbox" ng-click="navFunc(\'chat\');"> ' + 
+          ' <span class="innerNo" ng-bind="$root.stats.alertCount"></style></button>  ' + 
+        ' <button class="button button-icon iconDice" ng-click="navFunc(\'home\'); getSome();"></button> ' +
+        ' <button class="button button-icon ion-search" ng-click="navFunc(\'search\');" > </button> '+
+      '</ion-nav-buttons></ion-nav-bar>',
+   // template: '<ion-nav-bar><ion-nav-buttons side="left"><button menu-toggle="left" class="button button-icon icon ion-navicon"></button></ion-nav-buttons></ion-nav-bar>',
     // scope: {}
     controller: function($scope, dbFactory, $state){
       // Reload the navigation

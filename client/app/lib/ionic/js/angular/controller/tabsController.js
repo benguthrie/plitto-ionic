@@ -1,26 +1,24 @@
 IonicModule
 .controller('$ionicTabs', [
   '$scope',
-  '$ionicViewService',
   '$element',
-function($scope, $ionicViewService, $element) {
-  var _selectedTab = null;
+  '$ionicHistory',
+function($scope, $element, $ionicHistory) {
   var self = this;
+  var selectedTab = null;
+  var selectedTabIndex;
   self.tabs = [];
 
   self.selectedIndex = function() {
-    return self.tabs.indexOf(_selectedTab);
+    return self.tabs.indexOf(selectedTab);
   };
   self.selectedTab = function() {
-    return _selectedTab;
+    return selectedTab;
   };
 
   self.add = function(tab) {
-    $ionicViewService.registerHistory(tab);
+    $ionicHistory.registerHistory(tab);
     self.tabs.push(tab);
-    if(self.tabs.length === 1) {
-      self.select(tab);
-    }
   };
 
   self.remove = function(tab) {
@@ -45,9 +43,10 @@ function($scope, $ionicViewService, $element) {
 
   self.deselect = function(tab) {
     if (tab.$tabSelected) {
-      _selectedTab = null;
+      selectedTab = selectedTabIndex = null;
       tab.$tabSelected = false;
       (tab.onDeselect || angular.noop)();
+      tab.$broadcast && tab.$broadcast('$ionicHistory.deselect');
     }
   };
 
@@ -55,6 +54,7 @@ function($scope, $ionicViewService, $element) {
     var tabIndex;
     if (angular.isNumber(tab)) {
       tabIndex = tab;
+      if (tabIndex >= self.tabs.length) return;
       tab = self.tabs[tabIndex];
     } else {
       tabIndex = self.tabs.indexOf(tab);
@@ -64,22 +64,29 @@ function($scope, $ionicViewService, $element) {
       shouldEmitEvent = !!(tab.navViewName || tab.uiSref);
     }
 
-    if (_selectedTab && _selectedTab.$historyId == tab.$historyId) {
+    if (selectedTab && selectedTab.$historyId == tab.$historyId) {
       if (shouldEmitEvent) {
-        $ionicViewService.goToHistoryRoot(tab.$historyId);
+        $ionicHistory.goToHistoryRoot(tab.$historyId);
       }
-    } else {
+
+    } else if (selectedTabIndex !== tabIndex) {
       forEach(self.tabs, function(tab) {
         self.deselect(tab);
       });
 
-      _selectedTab = tab;
+      selectedTab = tab;
+      selectedTabIndex = tabIndex;
+
+      if (self.$scope && self.$scope.$parent) {
+        self.$scope.$parent.$activeHistoryId = tab.$historyId;
+      }
+
       //Use a funny name like $tabSelected so the developer doesn't overwrite the var in a child scope
       tab.$tabSelected = true;
       (tab.onSelect || angular.noop)();
 
       if (shouldEmitEvent) {
-        var viewData = {
+        $scope.$emit('$ionicHistory.change', {
           type: 'tab',
           tabIndex: tabIndex,
           historyId: tab.$historyId,
@@ -88,10 +95,18 @@ function($scope, $ionicViewService, $element) {
           title: tab.title,
           url: tab.href,
           uiSref: tab.uiSref
-        };
-        $scope.$emit('viewState.changeHistory', viewData);
+        });
       }
     }
   };
-}]);
 
+  self.hasActiveScope = function() {
+    for (var x = 0; x < self.tabs.length; x++) {
+      if ($ionicHistory.isActiveScope(self.tabs[x])) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+}]);

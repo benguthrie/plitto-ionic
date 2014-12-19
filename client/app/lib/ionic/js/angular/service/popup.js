@@ -1,6 +1,6 @@
 
 var POPUP_TPL =
-  '<div class="popup-container">' +
+  '<div class="popup-container" ng-class="cssClass">' +
     '<div class="popup">' +
       '<div class="popup-head">' +
         '<h3 class="popup-title" ng-bind-html="title"></h3>' +
@@ -8,7 +8,7 @@ var POPUP_TPL =
       '</div>' +
       '<div class="popup-body">' +
       '</div>' +
-      '<div class="popup-buttons">' +
+      '<div class="popup-buttons" ng-show="buttons.length">' +
         '<button ng-repeat="button in buttons" ng-click="$buttonTapped(button, $event)" class="button" ng-class="button.type || \'button-default\'" ng-bind-html="button.text"></button>' +
       '</div>' +
     '</div>' +
@@ -64,7 +64,7 @@ var POPUP_TPL =
  *             return $scope.data.wifi;
  *           }
  *         }
- *       },
+ *       }
  *     ]
  *   });
  *   myPopup.then(function(res) {
@@ -127,7 +127,7 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $ionicB
      *
      * A complex popup has a `buttons` array, with each button having a `text` and `type`
      * field, in addition to an `onTap` function.  The `onTap` function, called when
-     * the correspondingbutton on the popup is tapped, will by default close the popup
+     * the corresponding button on the popup is tapped, will by default close the popup
      * and resolve the popup promise with its return value.  If you wish to prevent the
      * default and keep the popup open on button tap, call `event.preventDefault()` on the
      * passed in tap event.  Details below.
@@ -138,11 +138,12 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $ionicB
      * ```
      * {
      *   title: '', // String. The title of the popup.
+     *   cssClass: '', // String, The custom CSS class name
      *   subTitle: '', // String (optional). The sub-title of the popup.
      *   template: '', // String (optional). The html template to place in the popup body.
      *   templateUrl: '', // String (optional). The URL of an html template to place in the popup   body.
      *   scope: null, // Scope (optional). A scope to link to the popup content.
-     *   buttons: [{ //Array[Object] (optional). Buttons to place in the popup footer.
+     *   buttons: [{ // Array[Object] (optional). Buttons to place in the popup footer.
      *     text: 'Cancel',
      *     type: 'button-default',
      *     onTap: function(e) {
@@ -176,6 +177,7 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $ionicB
      * ```
      * {
      *   title: '', // String. The title of the popup.
+     *   cssClass: '', // String, The custom CSS class name
      *   subTitle: '', // String (optional). The sub-title of the popup.
      *   template: '', // String (optional). The html template to place in the popup body.
      *   templateUrl: '', // String (optional). The URL of an html template to place in the popup   body.
@@ -204,6 +206,7 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $ionicB
      * ```
      * {
      *   title: '', // String. The title of the popup.
+     *   cssClass: '', // String, The custom CSS class name
      *   subTitle: '', // String (optional). The sub-title of the popup.
      *   template: '', // String (optional). The html template to place in the popup body.
      *   templateUrl: '', // String (optional). The URL of an html template to place in the popup   body.
@@ -242,6 +245,7 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $ionicB
      * ```
      * {
      *   title: '', // String. The title of the popup.
+     *   cssClass: '', // String, The custom CSS class name
      *   subTitle: '', // String (optional). The sub-title of the popup.
      *   template: '', // String (optional). The html template to place in the popup body.
      *   templateUrl: '', // String (optional). The URL of an html template to place in the popup   body.
@@ -272,7 +276,7 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $ionicB
     options = extend({
       scope: null,
       title: '',
-      buttons: [],
+      buttons: []
     }, options || {});
 
     var popupPromise = $ionicTemplateLoader.compile({
@@ -306,6 +310,7 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $ionicB
         title: options.title,
         buttons: options.buttons,
         subTitle: options.subTitle,
+        cssClass: options.cssClass,
         $buttonTapped: function(button, event) {
           var result = (button.onTap || angular.noop)(event);
           event = event.originalEvent || event; //jquery events
@@ -398,12 +403,14 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $ionicB
           previousPopup.show();
         } else {
           //Remove popup-open & backdrop if this is last popup
-          $timeout(function(){
+          $timeout(function() {
             // wait to remove this due to a 300ms delay native
             // click which would trigging whatever was underneath this
             $ionicBody.removeClass('popup-open');
           }, 400);
-          $ionicBackdrop.release();
+          $timeout(function() {
+            $ionicBackdrop.release();
+          }, config.stackPushDelay || 0);
           ($ionicPopup._backButtonActionDone || angular.noop)();
         }
         return result;
@@ -430,7 +437,7 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $ionicB
   }
 
   function showAlert(opts) {
-    return showPopup( extend({
+    return showPopup(extend({
       buttons: [{
         text: opts.okText || 'OK',
         type: opts.okType || 'button-positive',
@@ -438,13 +445,13 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $ionicB
           return true;
         }
       }]
-    }, opts || {}) );
+    }, opts || {}));
   }
 
   function showConfirm(opts) {
-    return showPopup( extend({
+    return showPopup(extend({
       buttons: [{
-        text: opts.cancelText || 'Cancel' ,
+        text: opts.cancelText || 'Cancel',
         type: opts.cancelType || 'button-default',
         onTap: function(e) { return false; }
       }, {
@@ -452,24 +459,24 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $ionicB
         type: opts.okType || 'button-positive',
         onTap: function(e) { return true; }
       }]
-    }, opts || {}) );
+    }, opts || {}));
   }
 
   function showPrompt(opts) {
     var scope = $rootScope.$new(true);
     scope.data = {};
     var text = '';
-    if(opts.template && /<[a-z][\s\S]*>/i.test(opts.template) === false){
-      text = '<span>'+opts.template+'</span>';
+    if (opts.template && /<[a-z][\s\S]*>/i.test(opts.template) === false) {
+      text = '<span>' + opts.template + '</span>';
       delete opts.template;
     }
-    return showPopup( extend({
-      template: text+'<input ng-model="data.response" type="' + (opts.inputType || 'text') +
+    return showPopup(extend({
+      template: text + '<input ng-model="data.response" type="' + (opts.inputType || 'text') +
         '" placeholder="' + (opts.inputPlaceholder || '') + '">',
       scope: scope,
       buttons: [{
         text: opts.cancelText || 'Cancel',
-        type: opts.cancelType|| 'button-default',
+        type: opts.cancelType || 'button-default',
         onTap: function(e) {}
       }, {
         text: opts.okText || 'OK',
@@ -478,7 +485,6 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $ionicB
           return scope.data.response || '';
         }
       }]
-    }, opts || {}) );
+    }, opts || {}));
   }
 }]);
-

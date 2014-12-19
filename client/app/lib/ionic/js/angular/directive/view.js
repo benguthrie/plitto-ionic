@@ -6,16 +6,27 @@
  * @parent ionNavView
  *
  * @description
- * A container for content, used to tell a parent {@link ionic.directive:ionNavBar}
- * about the current view.
+ * A container for view content and any navigational and header bar information. When a view
+ * enters and exists its parent {@link ionic.directive:ionNavView}, the view also emits view
+ * information, such as its title, whether the back button should show or not, whether the
+ * corresponding {@link ionic.directive:ionNavBar} should show or not, which transition the view
+ * should use to animate, and which direction to animate.
+ *
+ * *Views are cached to improve performance.* When a view is navigated away from, its element is
+ * left in the DOM, and its scope is disconnected from the `$watch` cycle. When navigating to a
+ * view that is already cached, its scope is reconnected, and the existing element, which was
+ * left in the DOM, becomes active again. This can be disabled, or the maximum number of cached
+ * views changed in {@link ionic.directive:ionicConfig}, in the view's `$state` configuration, or
+ * as an attribute on the view itself (see below).
  *
  * @usage
- * Below is an example where our page will load with a navbar containing "My Page" as the title.
+ * Below is an example where our page will load with a {@link ionic.directive:ionNavBar} containing
+ * "My Page" as the title.
  *
  * ```html
  * <ion-nav-bar></ion-nav-bar>
- * <ion-nav-view class="slide-left-right">
- *   <ion-view title="My Page">
+ * <ion-nav-view>
+ *   <ion-view view-title="My Page">
  *     <ion-content>
  *       Hello!
  *     </ion-content>
@@ -23,60 +34,86 @@
  * </ion-nav-view>
  * ```
  *
- * @param {string=} title The title to display on the parent {@link ionic.directive:ionNavBar}.
+ * ## View LifeCycle and Events
+ *
+ * Views can be cached, which means *controllers normally only load once*, which may
+ * affect your controller logic. To know when a view has entered or left, events
+ * have been added that are emitted from the view's scope. These events also
+ * contain data about the view, such as the title and whether the back button should
+ * show. Also contained is transition data, such as the transition type and
+ * direction that will be or was used.
+ *
+ * <table class="table">
+ *  <tr>
+ *   <td><code>$ionicView.loaded</code></td>
+ *   <td>The view has loaded. This event only happens once per
+ * view being created and added to the DOM. If a view leaves but is cached,
+ * then this event will not fire again on a subsequent viewing. The loaded event
+ * is good place to put your setup code for the view; however, it is not the
+ * recommended event to listen to when a view becomes active.</td>
+ *  </tr>
+ *  <tr>
+ *   <td><code>$ionicView.enter</code></td>
+ *   <td>The view has fully entered and is now the active view.
+ * This event will fire, whether it was the first load or a cached view.</td>
+ *  </tr>
+ *  <tr>
+ *   <td><code>$ionicView.leave</code></td>
+ *   <td>The view has finished leaving and is no longer the
+ * active view. This event will fire, whether it is cached or destroyed.</td>
+ *  </tr>
+ *  <tr>
+ *   <td><code>$ionicView.beforeEnter</code></td>
+ *   <td>The view is about to enter and become the active view.</td>
+ *  </tr>
+ *  <tr>
+ *   <td><code>$ionicView.beforeLeave</code></td>
+ *   <td>The view is about to leave and no longer be the active view.</td>
+ *  </tr>
+ *  <tr>
+ *   <td><code>$ionicView.afterEnter</code></td>
+ *   <td>The view has fully entered and is now the active view.</td>
+ *  </tr>
+ *  <tr>
+ *   <td><code>$ionicView.afterLeave</code></td>
+ *   <td>The view has finished leaving and is no longer the active view.</td>
+ *  </tr>
+ *  <tr>
+ *   <td><code>$ionicView.unloaded</code></td>
+ *   <td>The view's controller has been destroyed and its element has been
+ * removed from the DOM.</td>
+ *  </tr>
+ * </table>
+ *
+ * ## Caching
+ *
+ * Caching can be disabled and enabled in multiple ways. By default, Ionic will
+ * cache a maximum of 10 views. You can optionally choose to disable caching at
+ * either an individual view basis, or by global configuration. Please see the
+ * _Caching_ section in {@link ionic.directive:ionNavView} for more info.
+ *
+ * @param {string=} view-title A text-only title to display on the parent {@link ionic.directive:ionNavBar}.
+ * For an HTML title, such as an image, see {@link ionic.directive:ionNavTitle} instead.
+ * @param {boolean=} cache-view If this view should be allowed to be cached or not.
+ * Please see the _Caching_ section in {@link ionic.directive:ionNavView} for
+ * more info. Default `true`
  * @param {boolean=} hide-back-button Whether to hide the back button on the parent
  * {@link ionic.directive:ionNavBar} by default.
  * @param {boolean=} hide-nav-bar Whether to hide the parent
  * {@link ionic.directive:ionNavBar} by default.
  */
 IonicModule
-.directive('ionView', ['$ionicViewService', '$rootScope', '$animate',
-           function( $ionicViewService,   $rootScope,   $animate) {
+.directive('ionView', function() {
   return {
     restrict: 'EA',
     priority: 1000,
-    require: ['^?ionNavBar', '^?ionModal'],
-    compile: function(tElement, tAttrs, transclude) {
+    controller: '$ionicView',
+    compile: function(tElement) {
       tElement.addClass('pane');
       tElement[0].removeAttribute('title');
-
-      return function link($scope, $element, $attr, ctrls) {
-        var navBarCtrl = ctrls[0];
-        var modalCtrl = ctrls[1];
-
-        //Don't use the ionView if we're inside a modal or there's no navbar
-        if (!navBarCtrl || modalCtrl) {
-          return;
-        }
-
-        if (angular.isDefined($attr.title)) {
-
-          var initialTitle = $attr.title;
-          navBarCtrl.changeTitle(initialTitle, $scope.$navDirection);
-
-          // watch for changes in the title, don't set initial value as changeTitle does that
-          $attr.$observe('title', function(val, oldVal) {
-            navBarCtrl.setTitle(val);
-          });
-        }
-
-        var hideBackAttr = angular.isDefined($attr.hideBackButton) ?
-          $attr.hideBackButton :
-          'false';
-        $scope.$watch(hideBackAttr, function(value) {
-          // Should we hide a back button when this tab is shown
-          navBarCtrl.showBackButton(!value);
-        });
-
-        var hideNavAttr = angular.isDefined($attr.hideNavBar) ?
-          $attr.hideNavBar :
-          'false';
-        $scope.$watch(hideNavAttr, function(value) {
-          // Should the nav bar be hidden for this view or not?
-          navBarCtrl.showBar(!value);
-        });
-
+      return function link($scope, $element, $attrs, viewCtrl) {
+        viewCtrl.init();
       };
     }
   };
-}]);
+});

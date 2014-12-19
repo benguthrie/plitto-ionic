@@ -1,5 +1,3 @@
-/* Your application styles go here */
-
 body {
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
   font-weight: 300;
@@ -235,10 +233,10 @@ span.innerNo {
   position: relative;
   z-index: 2;
   top: -2px; 
-  left: -26px;
+  left: -45px;
   text-align: right;
   width: 30px;
-  margin-right: -25px;
+  margin-right: -35px;
   font-size: 0.9em;
 }
 
@@ -286,6 +284,13 @@ div.topicLine {
       
   }
 
+  button.iconDice {
+    background-image:url("../img/130-dice.png"); 
+    background-repeat: no-repeat; 
+    
+    background-size: 35px; 
+    width: 50px;
+  }
 
   .unread {
     background-color: rgba(200,255,200,0.5);

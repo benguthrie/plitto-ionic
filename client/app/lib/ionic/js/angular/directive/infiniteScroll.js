@@ -72,7 +72,9 @@ IonicModule
     restrict: 'E',
     require: ['^$ionicScroll', 'ionInfiniteScroll'],
     template: '<i class="icon {{icon()}} icon-refreshing"></i>',
-    scope: true,
+    scope: {
+      load: '&onInfinite'
+    },
     controller: ['$scope', '$attrs', function($scope, $attrs) {
       this.isLoading = false;
       this.scrollView = null; //given by link function
@@ -102,7 +104,7 @@ IonicModule
       var onInfinite = function() {
         $element[0].classList.add('active');
         infiniteScrollCtrl.isLoading = true;
-        $scope.$parent && $scope.$parent.$apply($attrs.onInfinite || '');
+        $scope.load();
       };
 
       var finishInfiniteScroll = function() {
@@ -119,14 +121,13 @@ IonicModule
       });
 
       $scope.$on('$destroy', function() {
-        console.log(scrollCtrl);
         if(scrollCtrl && scrollCtrl.$element)scrollCtrl.$element.off('scroll', checkBounds);
       });
 
       var checkBounds = ionic.animationFrameThrottle(checkInfiniteBounds);
 
       //Check bounds on start, after scrollView is fully rendered
-      setTimeout(checkBounds);
+      $timeout(checkBounds, 0, false);
       scrollCtrl.$element.on('scroll', checkBounds);
 
       function checkInfiniteBounds() {

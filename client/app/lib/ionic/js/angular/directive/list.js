@@ -75,9 +75,8 @@
 */
 IonicModule
 .directive('ionList', [
-  '$animate',
   '$timeout',
-function($animate, $timeout) {
+function($timeout) {
   return {
     restrict: 'E',
     require: ['ionList', '^?$ionicScroll'],
@@ -96,7 +95,6 @@ function($animate, $timeout) {
         $timeout(init);
 
         function init() {
-          console.log('this is the ionic init');
           var listView = listCtrl.listView = new ionic.views.ListView({
             el: $element[0],
             listEl: $element.children()[0],
@@ -115,6 +113,13 @@ function($animate, $timeout) {
             },
             canSwipe: function() {
               return listCtrl.canSwipeItems();
+            }
+          });
+
+          $scope.$on('$destroy', function() {
+            if(listView) {
+              listView.deregister && listView.deregister();
+              listView = null;
             }
           });
 

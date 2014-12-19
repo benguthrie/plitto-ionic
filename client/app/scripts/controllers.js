@@ -109,7 +109,7 @@ angular.module('Plitto.controllers', [])
   
 }) 
 // REMOVED Facebook from the injectors
-.controller('AppCtrl', function($scope, $state, dbFactory, $rootScope, localStorageService,$ionicViewService) {
+.controller('AppCtrl', function($scope, $state, dbFactory, $rootScope, localStorageService,$ionicHistory) {
   
   
 
@@ -129,7 +129,7 @@ angular.module('Plitto.controllers', [])
     $rootScope.$broadcast("broadcast",{ command: "state", path: "app.home", debug: "Valid token. Move."} ); // TODO2 -  Test this. 
     dbFactory.updateCounts();
     // TODO1 - Check this, or will that happen when requesting the first call?
-    $ionicViewService.clearHistory();
+    $ionicHistory.clearHistory();
     // $location.path('/login');
   } else {
     console.log('initial: null?');

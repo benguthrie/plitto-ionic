@@ -1,4 +1,4 @@
-[![Build Status](https://circleci.com/gh/driftyco/ionic.png?circle-token=7388822b8691078560c4f057d8eb0df0e8d7f1b5)](https://circleci.com/gh/driftyco/ionic)
+[![Circle CI](https://circleci.com/gh/driftyco/ionic.svg?style=svg)](https://circleci.com/gh/driftyco/ionic)
 
 
 [![Issues Ready](https://badge.waffle.io/driftyco/ionic.png?label=ready&title=Ready)](https://waffle.io/driftyco/ionic)
@@ -18,7 +18,7 @@ We built Ionic because we wanted a framework that focused on building hybrid nat
 It's important to realize that Ionic is not a replacement for frameworks used for building mobile web apps. There are a lot
 of great solutions that work well for websites, like [jQuery Mobile](http://jquerymobile.com/).
 
-Ionic is also not a good solution if you need to support older generation devices. Our [compatibility](http://ionicframework.com/docs/#browser-support) *starts* at iOS 6 and Android 4.1. We will never support versions earlier than those. This is a framework for the future. Learn more: [Where does the Ionic Framework fit in?](http://ionicframework.com/blog/where-does-the-ionic-framework-fit-in/)
+Ionic is also not a good solution if you need to support older generation devices. Our compatibility *starts* at iOS 6 and Android 4.1. We will never support versions earlier than those. This is a framework for the future. Learn more: [Where does the Ionic Framework fit in?](http://ionicframework.com/blog/where-does-the-ionic-framework-fit-in/)
 
 ## Quick Start
 
@@ -38,12 +38,12 @@ $ ionic start myproject
 ### Manual Start
 
 - Download the latest **stable** release from:
-  * The release folder of this repository
-  * The Ionic CDN: [Latest Release](http://code.ionicframework.com/)
-  * `bower install ionic`
+  * The `release` folder of this repository
+  * Ionic CDN: [Latest Release](http://code.ionicframework.com/)
+  * Using bower: `bower install ionic`
 - Download the **bleeding edge just-from-master release** from:
-  * The Ionic CDN: [Nightly Build](http://code.ionicframework.com/#nightly)
-  * Look in the [ionic-bower Repository](https://github.com/driftyco/ionic-bower) for the latest version, and do for example `bower install driftyco/ionic-bower#0.9.23-alpha-652` (`bower install ionic` will have the latest available soon)
+  * Ionic CDN: [Nightly Build](http://code.ionicframework.com/#nightly)
+  * Using bower: `bower install driftyco/ionic-bower#master`
 
 Once you have a release, use `js/ionic.js`, `js/ionic-angular.js`, and `css/ionic.css`.
 
@@ -105,7 +105,7 @@ For most cases, you'll need AngularJS as well.  This is bundled in `js/angular/`
     - `git clone git@github.com:driftyco/ionic-site dist/ionic-site`
   2. Start jekyll, telling it to rebuild whenever the site changes.
     - `cd dist/ionic-site && jekyll serve -w`
-  3. Go back to project root and build the docs
+  3. Go back to project root and build the docs.
     - `gulp docs [--doc-version=(versionName|nightly)]`
   4. Open localhost:4000 and see your changes! Re-run `gulp docs` again whenever you change something, and jekyll will update the site.
 

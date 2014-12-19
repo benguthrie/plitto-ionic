@@ -66,11 +66,13 @@ IonicModule
   '$log',
   '$compile',
   '$ionicPlatform',
-function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log, $compile, $ionicPlatform) {
+  '$rootScope',
+function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log, $compile, $ionicPlatform, $rootScope) {
 
   var loaderInstance;
   //default values
   var deregisterBackAction = angular.noop;
+  var deregisterStateListener = angular.noop;
   var loadingShowDelay = $q.when();
 
   return {
@@ -82,7 +84,10 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
      * @param {object} opts The options for the loading indicator. Available properties:
      *  - `{string=}` `template` The html content of the indicator.
      *  - `{string=}` `templateUrl` The url of an html template to load as the content of the indicator.
+     *  - `{object=}` `scope` The scope to be a child of. Default: creates a child of $rootScope.
      *  - `{boolean=}` `noBackdrop` Whether to hide the backdrop. By default it will be shown.
+     *  - `{boolean=}` `hideOnStateChange` Whether to hide the loading spinner when navigating
+     *    to a new state. Default false.
      *  - `{number=}` `delay` How many milliseconds to delay showing the indicator. By default there is no delay.
      *  - `{number=}` `duration` How many milliseconds to wait until automatically
      *  hiding the indicator. By default, the indicator will be shown until `.hide()` is called.
@@ -115,6 +120,7 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
             //options.content: deprecated
             $q.when(options.template || options.content || '');
 
+          self.scope = options.scope || self.scope;
 
           if (!this.isShown) {
             //options.showBackdrop: deprecated
@@ -132,6 +138,13 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
               +options.duration
             );
           }
+
+          deregisterBackAction();
+          //Disable hardware back button while loading
+          deregisterBackAction = $ionicPlatform.registerBackButtonAction(
+            angular.noop,
+            PLATFORM_BACK_BUTTON_PRIORITY_LOADING
+          );
 
           templatePromise.then(function(html) {
             if (html) {
@@ -155,6 +168,8 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
           this.isShown = true;
         };
         loader.hide = function() {
+
+          deregisterBackAction();
           if (this.isShown) {
             if (this.hasBackdrop) {
               $ionicBackdrop.release();
@@ -177,7 +192,7 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
   }
 
   function showLoader(options) {
-    options = extend($ionicLoadingConfig || {}, options || {});
+    options = extend({}, $ionicLoadingConfig || {}, options || {});
     var delay = options.delay || options.showDelay || 0;
 
     //If loading.show() was called previously, cancel it and show with our new options
@@ -185,12 +200,9 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
     loadingShowDelay = $timeout(angular.noop, delay);
 
     loadingShowDelay.then(getLoader).then(function(loader) {
-      deregisterBackAction();
-      //Disable hardware back button while loading
-      deregisterBackAction = $ionicPlatform.registerBackButtonAction(
-        angular.noop,
-        PLATFORM_BACK_BUTTON_PRIORITY_LOADING
-      );
+      if (options.hideOnStateChange) {
+        deregisterStateListener = $rootScope.$on('$stateChangeSuccess', hideLoader);
+      }
       return loader.show(options);
     });
 
@@ -208,7 +220,7 @@ function($ionicLoadingConfig, $ionicBody, $ionicTemplateLoader, $ionicBackdrop, 
   }
 
   function hideLoader() {
-    deregisterBackAction();
+    deregisterStateListener();
     $timeout.cancel(loadingShowDelay);
     getLoader().then(function(loader) {
       loader.hide();
