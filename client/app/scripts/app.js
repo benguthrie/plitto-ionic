@@ -197,6 +197,9 @@ angular.module('Plitto', [
         }
       }
     });
+  
+  $urlRouterProvider.otherwise("/home"); // Added 12.19.2014
+  
   // if none of the above states are matched, use this as the fallback
 // TODO1 - Do this. $urlRouterProvider.otherwise('/app/home');
   if(QueryString.access_token){
@@ -240,7 +243,7 @@ angular.module('Plitto', [
         console.log("navFunc");
   
         if (path === "chat") {
-          dbFactory.updateNotifications();
+          dbFactory.updateCounts();
         }
         
         $state.go("app." + path);

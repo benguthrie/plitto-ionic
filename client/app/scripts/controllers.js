@@ -127,6 +127,7 @@ angular.module('Plitto.controllers', [])
     $rootScope.debug('Appctrl - 183 Loading because the token looks good.');
     // $state.go('app.home'); // TODO1 - Diego - Should this be moved? - Not working!
     $rootScope.$broadcast("broadcast",{ command: "state", path: "app.home", debug: "Valid token. Move."} ); // TODO2 -  Test this. 
+    dbFactory.updateCounts();
     // TODO1 - Check this, or will that happen when requesting the first call?
     $ionicViewService.clearHistory();
     // $location.path('/login');
@@ -227,10 +228,7 @@ angular.module('Plitto.controllers', [])
   })
 
 .controller('HomeCtrl',function($scope, $rootScope,dbFactory, $state) {
-  console.log('initiate home control');
-  $scope.testFunction = function(){
-    console.log('test function clicked.');
-  };
+  
 
   $scope.getSome = function(typeFilter){
     console.log("Get SSSOMe");
@@ -386,13 +384,13 @@ angular.module('Plitto.controllers', [])
 
 .controller('chatCtrl', function($scope, $rootScope, dbFactory) {
   // console.log("You have tried to control your friends",$rootScope.friendStore);
-  console.log("CHAT CONTROL INITIALIZED.");
-  console.log("rsnf", $rootScope.stats.feed );
+  // console.log("CHAT CONTROL INITIALIZED.");
+  // console.log("rsnf", $rootScope.stats.feed );
   $rootScope.stats.feed = dbFactory.userChat().then(function (response) {
-    console.log("chatCtrl", response);
+    // console.log("chatCtrl", response);
     return response;
   }).then(function (response) {
-    console.log("401", response);
+    // console.log("401", response);
     return response;
   });
   
