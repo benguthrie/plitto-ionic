@@ -1,10 +1,11 @@
-<ion-view title="Search">
+<ion-view>
   <user-nav></user-nav>
   
   <ion-content class="has-header">
     <form name="searchForm" ng-submit="search(search.term,'general');">
       <label class="item item-input">
-        <input type="text" ng-model="search.term" placeholder="Search">
+        <span class="input-label">Search</span>
+        <input type="text" ng-model="search.term" placeholder="Type Here">
       </label>
       
     </form>

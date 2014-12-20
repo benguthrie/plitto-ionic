@@ -1,6 +1,6 @@
 {
   "name": "Plitto",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "main": "server/plitto-api.js",
   "scripts": {
     "pretest": "jshint .",

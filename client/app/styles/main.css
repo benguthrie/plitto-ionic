@@ -285,11 +285,13 @@ div.topicLine {
   }
 
   button.iconDice {
-    background-image:url("../img/130-dice.png"); 
-    background-repeat: no-repeat; 
+    width: 38px;
+        
     
+    background-image: url('../img/130-dice.png') !important; 
+    background-repeat: no-repeat !important; 
     background-size: 35px; 
-    width: 50px;
+    padding: 50px;
   }
 
   .unread {
@@ -319,11 +321,11 @@ div.topicLine {
   }
 
   div.sourceText {
-    padding: 0.1em;
+    padding: 0.1em 4em 0.1em 1em;
     font-size: 0.8em;
     background-color: #32868C;
-    width: 100%;
-    margin-left: -60px;
+    min-width: 1s0%;
+    margin-left: -75px;
     float: left;
     color: white;
   }
@@ -333,15 +335,12 @@ span.notificationNote {
 }
 
 div.dittoList {
-  
-  
-  
-  width: auto;
-  padding-top: 26px;
+  padding: 30px 1em 0.3em 0em;
+  border-bottom: 1px solid #c0c0c0;
 }
 
 div.dittoThing {
   vertical-align: text-top;
   font-size: 1.2em;
-  padding: 0.2em;
+  padding: 0.5em;
 }

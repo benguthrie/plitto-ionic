@@ -108,11 +108,9 @@ angular.module('Plitto.controllers', [])
   };
   
 }) 
-// REMOVED Facebook from the injectors
-.controller('AppCtrl', function($scope, $state, dbFactory, $rootScope, localStorageService,$ionicHistory) {
+// REMOVED Facebook from the injectors // 13 - ionicNavBarDelegate - 14 - $ionicHistory
+.controller('AppCtrl', function($scope, $state, dbFactory, $rootScope, localStorageService, $ionicHistory ) {
   
-  
-
   // On load, load the correct interface, based on the token.
   
   $rootScope.debug('AppCtrl load: Token: ' + $rootScope.token );
@@ -393,6 +391,7 @@ angular.module('Plitto.controllers', [])
     // console.log("401", response);
     return response;
   });
+  
   
 })
 

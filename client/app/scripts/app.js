@@ -14,6 +14,8 @@ angular.module('Plitto', [
   'Plitto.services',
 ])
 
+
+
 .run(function ($ionicPlatform, $rootScope, dbFactory,  OAuth, $state) {
   
   // Check to see if Facebook is giving us a code to use in the URL.
@@ -25,7 +27,7 @@ angular.module('Plitto', [
   }
   
   
-
+  
     
   $ionicPlatform.ready(function () { 
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -233,24 +235,39 @@ angular.module('Plitto', [
  return {
     restrict: "E",
     // templateUrl: 'directives/userNav.html',
-    template: '<ion-nav-bar>  ' + 
-      '<ion-nav-buttons side="left"> <button menu-toggle="left" class="button button-icon ion-navicon"></button> </ion-nav-buttons> ' + 
-      '<ion-nav-buttons side="secondary"> ' + 
+   // 
+   template: navigationBar(),
+   // template: '',
+/*    template: '<ion-nav-bar>  ' + 
+      '<ion-nav-buttons side="left"> ' + 
+        '<button menu-toggle="left" class="button button-icon ion-navicon"></button> ' + 
+      ' </ion-nav-buttons> ' + 
+      '<ion-nav-buttons side="right"> ' + 
         ' <button class="button button-icon  ionicons ion-plus-circled" ng-click=" navFunc(\'addlist\'); "></button> ' + 
         ' <button class="button button-icon ion-chatbox" ng-click="navFunc(\'chat\');"> ' + 
           ' <span class="innerNo" ng-bind="$root.stats.alertCount"></style></button>  ' + 
         ' <button class="button button-icon iconDice" ng-click="navFunc(\'home\'); getSome();"></button> ' +
         ' <button class="button button-icon ion-search" ng-click="navFunc(\'search\');" > </button> '+
-      '</ion-nav-buttons></ion-nav-bar>',
+      '</ion-nav-buttons>' +
+   '</ion-nav-bar>', */
    // template: '<ion-nav-bar><ion-nav-buttons side="left"><button menu-toggle="left" class="button button-icon icon ion-navicon"></button></ion-nav-buttons></ion-nav-bar>',
     // scope: {}
-    controller: function($scope, dbFactory, $state){
+    controller: function($scope, dbFactory, $state, $ionicHistory){
       // Reload the navigation
       // dbFactory.userChat(-1);
   
       // Load the notifications
       $scope.navFunc = function(path){
+        
+        $ionicHistory.nextViewOptions({
+          disableAnimate: true,
+          disableBack: true
+        });
+
         console.log("navFunc");
+        
+        // Whenever the navFunc is called, destroy the history, so no more back.
+        $ionicHistory.clearHistory();
   
         if (path === "chat") {
           dbFactory.updateCounts();
@@ -285,6 +302,7 @@ angular.module('Plitto', [
   
       /* User */
       $scope.showUser = function(userId, userName, dataScope, fbuid){
+        console.log("show User");
         dbFactory.showUser(userId,userName, dataScope, fbuid);
       }; 
   
@@ -455,6 +473,28 @@ angular.module('Plitto', [
         console.log("TEST", filterNew );
         $scope.filterChat = filterNew;
       };
+      
+      
+      // TODO2 - This should be a global.
+      // This is for the logged in user
+      $scope.showUser = function(userId, userName, dataScope, fbuid){
+        console.log('controllers.js - showUser 87');
+        dbFactory.showUser(userId,userName, dataScope, fbuid);
+      };
+      
+      /* Link to List */
+      $scope.showList = function(listId, listName, userFilter){
+        console.log("showList");
+        dbFactory.showAList(listId, listName, userFilter);
+      };
+      
+      
+      /* Thing */
+      $scope.showThing = function(thingId, thingName, userFilter){
+        console.log("showThing");
+        dbFactory.showThing(thingId, thingName, userFilter);
+      };
+      
       
       // $scope.filterChatOptions = [ { filter: "them", selected: true }, { filter: "us", selected: false }, { filter: "me", selected: false } ];
       $scope.filterChatOptions = [ {show: "Them", value: "them" } , {show: "Us", value: "us"}, { show: "Me", value: "me" } ];
