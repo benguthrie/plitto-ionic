@@ -11,7 +11,9 @@
     
 <!-- User Menu Bar menu -->
   <div class="button-bar">
-    <a class="button active" ng-class="{'active': nav.view ==='user.us'}" ng-hide="profileData.userId == user.userId" ng-click="nav.view = 'user.us'; ">Us</a>
+    <!-- 
+    <a class="button active" ng-class="{'active': nav.view ==='user.us'}" ng-hide="profileData.userId == user.userId " ng-click="nav.view = 'user.us'; ">Us</a>
+  -->
     <a class="button" ng-class="{'active': nav.view ==='user.ditto'}" ng-hide="profileData.userId == user.userId" ng-click="nav.view = 'user.ditto'; getSome(profileData.userId,'ditto');">Ditto</a>
     
     <a class="button" ng-class="{'active': nav.view ==='user.feed'}" ng-click="nav.view = 'user.feed'; showFeed(profileData.userId,''); ">Feed</a>

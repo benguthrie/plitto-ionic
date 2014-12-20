@@ -462,6 +462,8 @@ var showUser = function (userId, userName, dataScope, fbuid) {
     shared: []
   };
   
+  
+  
   // Populate from local storage.
   var lsTypes = Array('ditto','feed','lists','shared');
   for (var i in lsTypes){
@@ -475,18 +477,20 @@ var showUser = function (userId, userName, dataScope, fbuid) {
 
   // Get something to ditto 
   if($rootScope.user.userId != userId){
-    dbGetSome('$rootScope.profileData.ditto', userId, '', 'ditto');
-    $rootScope.nav.view = "user.us"; // Default to our relationship stats. Was user.ditto
+    showFeed('profile', userId, 'listFilter', '', '');
+    $rootScope.nav.view = "user.feed"; // Default to our relationship stats. Was user.ditto
+    // TODO2 -  dbGetSome('$rootScope.profileData.ditto', userId, '', 'ditto');
+    // TODO2 - Restore the "us" view. Analytics, ftw? 
     
   } else {
     // This is me
     
     // dbGetSome('$rootScope.profileData.feed', userId, '', 'all');
-    showFeed('profile', '1', 'listFilter', '', '');
+    showFeed('profile', userId, 'listFilter', '', '');
     $rootScope.nav.view = "user.feed";
   }
   
-  getUserListOfLists(userId, '$rootScope.profileData.lists');
+  getUserListOfLists( userId, '$rootScope.profileData.lists' );
 
   // dbFactory.showUser(userId);
   //dbGetSome = function (theScope, userfilter, listfilter, sharedFilter)
@@ -703,8 +707,10 @@ var fbTokenLogin = function(fbToken){
   // The user has a valid Facebook token for plitto, and now wants to log into Plitto
   // Send the token to Plitto, which handles all Facebook communication from the PHP layer.
   var loginParams = $.param( { fbToken: fbToken } );
-  $rootScope.loginMessage = "<h3>6. dbFactory.fbTokenLogin: " + fbToken + "</h3>";       
-  console.log( "<h3>6. dbFactory.fbTokenLogin: " + fbToken + "</h3>");
+  $rootScope.loginMessage = "<h3>6. dbFactory.fbTokenLogin in process</h3>";       
+  //console.log( "<h3>6. dbFactory.fbTokenLogin: " + fbToken + "</h3>");
+  
+  $rootScope.loginMessage = loginParams;
   
   $http({
     method:'POST',
@@ -713,6 +719,8 @@ var fbTokenLogin = function(fbToken){
     headers: {'Content-Type':'application/x-www-form-urlencoded'}
   })
   .success(function (data, status,headers,config) {
+    
+    
     // Initialize the rootScope.
     dbInit();
     
