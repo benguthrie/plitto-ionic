@@ -59,7 +59,7 @@ angular.module('Services.pFb', [])
           // $rootScope.session.plittoState = 'Facebook Responded 7';
           // 
         console.log('fbFactory.getLoginStatus -> FB.getLoginStatus: This function is only called when requesting the status of the app on login, and when requesting more permissions..',response);
-        // $rootScope.message = "Facebook needs to grant permissions. Open up the window.";
+        // $rootScope.loginMessage = "Facebook needs to grant permissions. Open up the window.";
         
         $rootScope.$broadcast("getLoginStatus", { 'fbresponse' : null});  
         // TODO1 - This needs to work. A callback doesn't work with this function. It has to be a broadcast.
@@ -77,7 +77,7 @@ angular.module('Services.pFb', [])
     login:function () {
       // console.log('Facebook login happening.');
       // TODO2 - As of 11/6/2014, this shouldn't ever be called.
-      $rootScope.message =  "Redirecting you to login with Facebook's login process."
+      $rootScope.loginMessage =  "Redirecting you to login with Facebook's login process."
       // OAuth.redirect(); // Should we go straight to oAuth? This doesn't really do anything special.
       // 
       FB.login();

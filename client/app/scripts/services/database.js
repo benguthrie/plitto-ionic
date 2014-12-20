@@ -272,7 +272,7 @@ var dbInit = function ( fCallback ) {
   
 
   $rootScope.debugOn = false; // Debug
-  $rootScope.message = ''; // Also debug, but that's in how you use it.
+  $rootScope.loginMessage = ''; // Also debug, but that's in how you use it.
   $rootScope.nav = {
       listView: 'ditto',
       profileView: 'ditto',
@@ -333,7 +333,7 @@ var dbInit = function ( fCallback ) {
     
   };
   
-  $rootScope.message = "RS initialized.";
+  $rootScope.loginMessage = "RS initialized.";
   
   
   if(typeof fCallback === "function"){
@@ -703,7 +703,7 @@ var fbTokenLogin = function(fbToken){
   // The user has a valid Facebook token for plitto, and now wants to log into Plitto
   // Send the token to Plitto, which handles all Facebook communication from the PHP layer.
   var loginParams = $.param( { fbToken: fbToken } );
-  $rootScope.message = "<h3>6. dbFactory.fbTokenLogin: " + fbToken + "</h3>";       
+  $rootScope.loginMessage = "<h3>6. dbFactory.fbTokenLogin: " + fbToken + "</h3>";       
   console.log( "<h3>6. dbFactory.fbTokenLogin: " + fbToken + "</h3>");
   
   $http({
@@ -718,14 +718,14 @@ var fbTokenLogin = function(fbToken){
     
     // $rootScope.$broadcast("getLoginStatus", {value:'value'});
     // $rootScope.$broadcast('getLoginStatus', { fbresponse: null});
-    $rootScope.message = "<h3>7. api/fbToken responded</h3>";
+    $rootScope.loginMessage = "<h3>7. api/fbToken responded</h3>";
     console.log('fbTokenLogin response: ',data);
     
     // console.log('response from fbToken: ',data);
     // data.me.puid is the plitto userid. That should be there.
     if(data.me && data.me.puid && /^\+?(0|[1-9]\d*)$/.test(data.me.puid)){
       console.log("puid is valid");
-      $rootScope.message = "<h3>8. PUID valid: " + data.me.token +". Redirect to app.home</h3>";
+      $rootScope.loginMessage = "<h3>8. PUID valid: " + data.me.token +". Redirect to app.home</h3>";
       
       // TODO2 - Remove the access token from the URL.
       // http://plitto.com/client/app/?#/access_token=CAAAAMD0tehMBALBiZB3xeZAYoM5vTVZBZCpd6s6g5RZCntzTaR9BuG5gFLGIngbGqbts2l6NEm3N4tO7l7tC0QKUyZAWn4jEEBNWZBLVaKmZAdXNJgT1ZARN1BiLpFwW48N2AoPxriHi8TgkR2mQEiYYAK2uJtB2XmmGHY9a4lUXCCeWPJPUlILzkdAxrYpBbGw6CKdG2fV7RkYZCGOcOSaeaiGvN0p3YsZCbAZD&expires_in=4734

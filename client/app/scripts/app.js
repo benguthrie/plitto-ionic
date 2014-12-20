@@ -39,28 +39,32 @@ angular.module('Plitto', [
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
-    // Get the access token from Facebook.
+    // Get the access token from Facebook. TODO1 - 12/20 - It looks like something is intercepting it, and removing it.
+    console.log("access_token location: ", window.location.hash.indexOf("access_token") );
     if ( window.location.hash.indexOf("access_token") !== -1){
       console.log("Found the token.", window.location.hash, window.location.hash.indexOf("access_token") );
-      // TODO1 - Show a loading indicator
+      // TODO2UX - Show a loading indicator
     
       var hash = window.location.hash;
+      
+      // Show loading.
+      $state.go('loading');
 
-      var accessToken = hash.substring( hash.indexOf('access_token=') + "access_token=".length , hash.indexOf('&') ) ;
-      console.log('at: ', accessToken);
+      var fbAccessToken = hash.substring( hash.indexOf('access_token=') + "access_token=".length , hash.indexOf('&') ) ;
+      console.log('at: ', fbAccessToken);
+      
+      $rootScope.loginMessage = "TEMP. FB Access Token: " + fbAccessToken;
 
       // Use this to make the call to login.
-      dbFactory.fbTokenLogin(accessToken);
+      dbFactory.fbTokenLogin(fbAccessToken);
     }
   
     
   });
 })
 
-.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
+.config(function ($stateProvider, $urlRouterProvider, $httpProvider ) {
   $stateProvider
-  
-
     .state('login', {
       url: '/login',
       templateUrl: 'templates/login.html',
@@ -204,12 +208,14 @@ angular.module('Plitto', [
   
   // if none of the above states are matched, use this as the fallback
 // TODO1 - Do this. $urlRouterProvider.otherwise('/app/home');
-  if(QueryString.access_token){
+  if( QueryString.access_token || window.location.hash.indexOf("access_token") > -1  ){
     console.log('found querystring access token.', QueryString.access_token);
   
   }
   else {
-    console.log("Didn't find it.", QueryString.access_token, window.location.hash );
+    
+    console.log("No access token. Let the user log in.", "access_token: ", QueryString.access_token, "Location hash: ", window.location.hash );
+    // $urlRouterProvider.otherwise('/app/home');
     // console.log("REPLACeD", window.location.hash.replace("#/",""));
   
   //http://localhost/plitto-ionic/client/app/?#/access_token=CAAAAMD0tehMBAMUwibZCHQrzYS3v6QdLKTsIlWveB7CTSV0ZByuItJP8u7tF3xaYjGBNjeT7BDRjVWA9WwwelEjMAZCiKgi9C5dDIAUfZAUwdqPQlxxDbykoslmJs8OhyNRpXEoU0o6fC2eiYMROqOLvW8C1A0NU72YBmgcWitSom8Yw0rdEQCLktU6t1xdePnNKLLq75dlANujWVRvgcsgIuZCjZAZC9IZD&expires_in=6952
