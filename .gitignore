@@ -1,7 +1,9 @@
+# Node Modules
 node_modules/
 *.log
 *.swo
 *.swp
 
-app/lib/
 
+# Ignore Libraries
+/client/app/lib
