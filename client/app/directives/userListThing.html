@@ -13,6 +13,7 @@
         class="button" 
         style="float: right; margin-left: 4px;"
         ng-click="letsChat(userData.uid, list.lid, item.tid, $event, store, $index); "
+        ng-hide=" $root.user.userId !== userData.uid "
         ng-class="{'active' : item.commentActive === '1' }">
         <div class="letsChatIcon ionicons ion-ios7-chatboxes-outline"></div>
         <!-- <div class="commentCount" ng-bind="item.commentActive"></div> --> 

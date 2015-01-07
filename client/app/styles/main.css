@@ -344,3 +344,25 @@ div.dittoThing {
   font-size: 1.2em;
   padding: 0.5em;
 }
+
+span.label {
+  font-size: 0.8em;
+}
+
+div.colStat {
+  border: 1px solid blue;
+  
+  text-align: center;
+  margin-right: 5px;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26); /* Google Material Design Clone */
+  max-width: 120px;
+}
+
+div.colPush {
+  margin-top: 30px;
+}
+
+div.row {
+  padding: 0;
+  margin: 0;
+}

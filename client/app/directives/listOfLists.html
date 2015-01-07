@@ -1,21 +1,32 @@
 <p ng-show="!listsData.length">No lists yet. Add a list using the + button 
   <div class="button-bar" ng-show="!listsData.length"><a class="button" ng-click="loadLists();">Reload Lists</a></div> 
 </p>
-<ion-list>
-  <ion-item ng-repeat="list in listData" 
-    href="#/app/list/{{list.lid}}" 
-    ng-click="showUser(friend.id,friend.name,'ditto', friend.fbuid);"
 
-  >
-    <img ng-src="http://graph.facebook.com/{{friend.fbuid}}/picture"/>
-    {{friend.name}}
-    <br/>
-    shared: {{friend.shared}}<br/>
-    dittoable: {{friend.dittoable}}<br/>
-    shared lists: {{friend.sharedLists}}<br/>
-    lists: {{friend.lists}}<br/>
+<ion-list>
+  <ion-item ng-repeat="list in listsData" ng-click="showList( list.lid, list.name, null);">
+
+    <div class="row">
+      <div class="col col+20 " style="font-weight: bold;">
+        {{list.name}}
+
+      </div>
+      <div class="col colStat">
+        <span class="label">Shared</span><br/>
+        <span class="stat">{{list.shared}}</span>
+      </div>
+      <div class="col colStat">
+        <span class="label colStat">Dittoable</span><br/>
+        <span class="stat">{{list.dittoable}}</span>
+      </div>
+      <div class="col colStat">
+        <span class="label">Newest</span><br/>
+        <span class="label">{{list.mostrecent}}</span>
+      </div>
+    </div>
+  
   </ion-item>
 </ion-list>
+
 
 <!--
 <div ng-repeat="list in listsData" href="#/app/list/{{list.lid}}" ng-click="showList( list.lid, list.name, null);" class="gridItem">
@@ -45,4 +56,3 @@
   </table>
 
 </div>
--->

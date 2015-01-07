@@ -73,6 +73,7 @@
     
 <!-- Start User Lists -->    
   <div ng-show="nav.view==='user.lists'">
+    <h3>{{ profileData.userName }}'s Lists</h3> 
     <list-of-lists store="profileData.lists" source="profile" lists-data="$root.profileData.lists"></list-of-lists>
   </div>
 <!-- End User Lists -->   

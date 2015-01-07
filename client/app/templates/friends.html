@@ -9,15 +9,53 @@
       <ion-item ng-repeat="friend in friendStore" 
         href="#/app/profile/{{friend.id}}" 
         ng-click="showUser(friend.id,friend.name,'ditto', friend.fbuid);"
-        
       >
+        <div class="row">
+          <div class="col col+20 ">
+            <span class="label">{{friend.name}}</span><br/>
+          
+            <img ng-src="http://graph.facebook.com/{{friend.fbuid}}/picture"/>
+            
+          </div>
+          <div class="col colStat colPush">
+            <span class="label">Shared</span><br/>
+            <span class="stat">{{friend.shared}}</span>
+          </div>
+          <div class="col colStat colPush">
+            <span class="label colStat">Dittoable</span><br/>
+            <span class="stat">{{friend.dittoable}}</span>
+          </div>
+          <div class="col colStat colPush">
+            <span class="label">Lists</span><br/>
+            <span class="stat">{{friend.lists}}</span>
+          </div>
+        </div> 
+        
+        <!--
         <img ng-src="http://graph.facebook.com/{{friend.fbuid}}/picture"/>
         {{friend.name}}
-        <br/>
-        shared: {{friend.shared}}<br/>
-        dittoable: {{friend.dittoable}}<br/>
-        shared lists: {{friend.sharedLists}}<br/>
-        lists: {{friend.lists}}<br/>
+        <div class="tabs">
+          <div class="tab-item">
+            <img ng-src="http://graph.facebook.com/{{friend.fbuid}}/picture"/>
+            {{friend.name}}
+          </div>
+          
+          
+          <div class="tab-item">
+            <span class="label">Shared</span><br/>
+            <span class="stat">{{friend.shared}}</span>
+          </div>
+          <div class="tab-item">
+            <span class="label">Dittoable</span><br/>
+            <span class="stat">{{friend.dittoable}}</span>
+          </div>
+          <div class="tab-item">
+            <span class="label">Lists</span><br/>
+            <span class="stat">{{friend.lists}}</span>
+          </div>
+        </div>
+        
+        -->
       </ion-item>
     </ion-list>
 
