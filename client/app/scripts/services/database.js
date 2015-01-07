@@ -1288,19 +1288,25 @@ var refreshData = function(token){
   
   // TODO1 Now, make the HTTP calls to refresh them.
   var checkParams = $.param({token: $rootScope.token});
+  
   $http({
     method: "POST",
     url: apiPath + "checktoken",
     data: checkParams,
     headers: {'Content-Type':'application/x-www-form-urlencoded'}
   }).success(function (data,status,headers,config) {
-    console.log("Check token results: ",data, data.results[0].success);    
-    if(data.results[0].success === "1"){
+    console.log('typeof: ', data );
+    if( data.error === true) {
+      console.log("SOME KIND OF TOKEN ERROR");
+      // Force log out, and clear local storage.
+      logout();
+    }
+    else if(  data.results[0].success === "1"){
+      console.log("Check token results: ",data, data.results[0].success);    
       console.log("Valid token");
       // Go to the home screen.
       $state.go("app.home");
       dbGetSome( "$rootScope.bite" , "" , "", "ditto");
-      
     } else {
       console.log("invalid token: ", data.results[0].success, data.results[0].success === "1");
     }
@@ -1309,6 +1315,17 @@ var refreshData = function(token){
   
 };
 
+var logout = function(){
+  console.log("logout");
+    $rootScope.debug('Appctrl - TODO2: FB Logout call.');
+    // $state.go('app.login',{listId: newListId});
+    // TODO1 - Restore this. Facebook.logout();
+    
+    // Clear all the stores.
+    dbInit();
+    localStorageService.clearAll();
+};  
+  
 return {
   
   fbPlittoFriends: fbPlittoFriends
@@ -1336,6 +1353,7 @@ return {
   , addComment: addComment /* Adds a comment to the item */
   , userChat: userChat /* Returns the chat queue for a user. */
   , updateCounts: updateCounts /* updates the notification, Friend, etc numbers. */
+  , logout: logout /* This is redundant, and also exists in controllers.js. That should change TODO2 */
 };
   
 }]);

@@ -1,7 +1,23 @@
 <p ng-show="!listsData.length">No lists yet. Add a list using the + button 
   <div class="button-bar" ng-show="!listsData.length"><a class="button" ng-click="loadLists();">Reload Lists</a></div> 
 </p>
+<ion-list>
+  <ion-item ng-repeat="list in listData" 
+    href="#/app/list/{{list.lid}}" 
+    ng-click="showUser(friend.id,friend.name,'ditto', friend.fbuid);"
 
+  >
+    <img ng-src="http://graph.facebook.com/{{friend.fbuid}}/picture"/>
+    {{friend.name}}
+    <br/>
+    shared: {{friend.shared}}<br/>
+    dittoable: {{friend.dittoable}}<br/>
+    shared lists: {{friend.sharedLists}}<br/>
+    lists: {{friend.lists}}<br/>
+  </ion-item>
+</ion-list>
+
+<!--
 <div ng-repeat="list in listsData" href="#/app/list/{{list.lid}}" ng-click="showList( list.lid, list.name, null);" class="gridItem">
   <table class="gridHeader" style="background-color: #3FA8B0;">
     <tr class="listLine">
@@ -29,3 +45,4 @@
   </table>
 
 </div>
+-->

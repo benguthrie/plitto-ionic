@@ -5,5 +5,5 @@ node_modules/
 *.swp
 
 
-# Ignore Libraries
+# Ignore Libraries - Will the build still work?
 /client/app/lib

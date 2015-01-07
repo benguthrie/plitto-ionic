@@ -42,10 +42,13 @@ angular.module('Plitto.controllers', [])
     
     else if (args.command === "redirect" )
     {
-      console.log('args.redirect, REDIRECT controllers.44 args.path:  ', args.path );
+      // console.log('args.redirect, REDIRECT controllers.44 args.path:  ', args.path );
       // TODO1 - Restore this .
       // https://www.facebook.com/dialog/oauth?client_id=207184820755&redirect_uri=http://localhost/plitto-ionic/client/app/&display=touch&scope=email,user_friends&response_type=token
-      window.location = args.path; // This is what should do the redirect.
+      // window.location = args.path; // This is what should do the redirect.
+      // window.location = "plitto.com/";
+      // console.log("Past window.location", args.path);
+      window.location = "" + args.path;
     }
     
     else if (args.command === "state"){
@@ -170,7 +173,7 @@ angular.module('Plitto.controllers', [])
     $rootScope.$broadcast('broadcast',{ command: "login", platform: "facebook", debug: "Controllers.js 210. OAuth.login"});
   };
   
-  // Global Logout Handler
+  // Global Logout Handler - TODO2 - This was added to functions.js and should be removed from here.
   $scope.logout = function () {
     // TODO: Make database service call.
     console.log("logout");
