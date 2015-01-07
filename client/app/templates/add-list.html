@@ -26,10 +26,11 @@
     </div>
     
     <ion-list ng-repeat="list in $root.searchResults" ng-show="newList.title.length > 0">
-      <ion-item class="item-icon-right" href="#/app/lists/{{list.lid}}" ng-click="showList(list.lid, list.listname, null);">
+      <ion-item class="item-icon-right" href="#/app/lists/{{list.lid}}" 
+          ng-click="showList(list.lid, list.listname, null);">
         <ion-option-button class="button-assertive">
           Mine</ion-option-button>
-              {{list.listname}} - ({{list.thecount}})
+        {{list.lid}} {{list.listname}} - ({{list.thecount}})
           <i class="icon ion-chevron-right icon-accessory"></i>
       </ion-item>
     </ion-list>

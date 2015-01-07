@@ -356,6 +356,14 @@ angular.module('Plitto.controllers', [])
   });
   
   
+  /* List */
+  $scope.showList = function(listId, listName, userFilter){
+    console.log("showList controllers.js 361");
+    dbFactory.showAList(listId, listName, userFilter);
+  };
+  
+  
+  
   $scope.createList = function(){
     console.log('User Clicked "Create List" with this title: ',this.newList.title);
     var success = function(listName, listId){
@@ -380,9 +388,10 @@ angular.module('Plitto.controllers', [])
 
   /* List */
   $scope.showList = function(listId, listName, userFilter){
+    console.log("showList controllers.js 383");
     dbFactory.showAList(listId, listName, userFilter);
   };
-
+  
   /* Thing */
   $scope.showThing = function(thingId, thingName, userFilter){
     dbFactory.showThing(thingId, thingName, userFilter);

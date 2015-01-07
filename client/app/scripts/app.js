@@ -314,6 +314,7 @@ angular.module('Plitto', [
   
       /* List */
       $scope.showList = function(listId, listName, userFilter){
+        console.log("showList app.js 317");
         dbFactory.showAList(listId, listName, userFilter);
       };
   
@@ -451,7 +452,7 @@ angular.module('Plitto', [
     controller: function($scope, dbFactory, $state) {
       /* Link to List */
       $scope.showList = function(listId, listName, userFilter){
-        
+        console.log("showList app.js 454");
         dbFactory.showAList(listId, listName, userFilter);
       };
   
@@ -490,7 +491,7 @@ angular.module('Plitto', [
       
       /* Link to List */
       $scope.showList = function(listId, listName, userFilter){
-        console.log("showList");
+        console.log("showList app.js 493");
         dbFactory.showAList(listId, listName, userFilter);
       };
       
