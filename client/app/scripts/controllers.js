@@ -94,7 +94,7 @@ angular.module('Plitto.controllers', [])
         console.log('No token in local storage.');
         
         // $location.path('/login');
-        $rootScope.loginMessage = 'There is no token in local storage. What next?';
+        $rootScope.loginMessage = 'There is no token in local storage. Redirect to login page.';
         $location.path('/login');
         
         // Only do this if there isn't an auth_token in the URL.
@@ -116,7 +116,7 @@ angular.module('Plitto.controllers', [])
   $rootScope.debug = function(message) {
 
     if(typeof($rootScope.loginMessage) === 'string' && $rootScope.loginMessage.length > 255){
-      $rootScope.loginMessage = 'cleared';
+      $rootScope.loginMessage = 'Login cleared';
     }
 
     if($rootScope.debugOn === true){
@@ -153,7 +153,7 @@ angular.module('Plitto.controllers', [])
     // $location.path('/login');
   } else {
     console.log('initial: null?');
-    $rootScope.loginMessage = 'Initial token is null?';
+    $rootScope.loginMessage = 'Checking for null token.';
     $rootScope.debug('Appctrl - 189 Rootscope is null?');
     // TODO1 When would this be done? $state.go("login");
   }
@@ -525,13 +525,13 @@ angular.module('Plitto.controllers', [])
 .controller('LoginCtrl', function($scope, $window, $rootScope, $state) {
   // TODO2 - OAuth was removed 1/9/2014 
   $scope.loginOAuth = function(provider) {
-    $rootScope.loginMessage = '<h3>1. loginOAuth Pressed</h3>';
+    $rootScope.loginMessage = '1. loginOAuth Pressed';
     
     // TODO1 - This is the bit that handles the login.
     if(provider === 'facebook'){
       // Do that.
       
-      $rootScope.loginMessage = '<h3>1. loginOAuth Pressed</h3>';
+      $rootScope.loginMessage = '1. Facebook loginOAuth Initiated';
       // 
       $rootScope.$broadcast('broadcast',{ command: 'login', platform: 'facebook', debug: 'controller.js 506 login with facebook.' });
       
@@ -541,7 +541,7 @@ angular.module('Plitto.controllers', [])
       
       
     } else {
-      $rootScope.loginMessage = '<h3>2. END - Unknown Provider</h3>';
+      $rootScope.loginMessage = '2. END - Unknown OAuth Provider';
       
     }
     // $window.location.href = '/auth/' + provider;

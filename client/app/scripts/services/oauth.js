@@ -73,7 +73,7 @@ angular.module('Services.oauth', [])
 
   // Event handler for the inAppBrowser plugin's `loadstart` event
   var loadstart = function (e) {
-    $rootScope.loginMessage = '<h3>6. Loadstart Started</h3>';
+    $rootScope.loginMessage = '6. Loadstart Started';
     //console.log('6. Loadstart started');
     // console.log('this is the authwindow: ', authWindow);
     
@@ -92,7 +92,7 @@ angular.module('Services.oauth', [])
     // The above should sniff the presense of an access token.
     
     if (accessToken || fbError) {
-      // $rootScope.loginMessage = "<h3>7. Loadstart Code: "+ accessToken +"</h3>";
+      // $rootScope.loginMessage = '7. Loadstart Code: ' +  accessToken;
      // console.log('7. loadstart found a code');
       //console.log('7. loadstart code: ' + accessToken);
       // authWindow.close(); // do this inside authFinished code.
@@ -114,7 +114,7 @@ angular.module('Services.oauth', [])
   this.login = function(oauthService) {
     if(oauthService === 'facebook'){
       console.log('oauth facebook');
-      $rootScope.loginMessage = '<h3>3. OAuth.login.Facebook (oauth.101) Opened. Next: Initiate FB.</h3>';
+      $rootScope.loginMessage = '3. OAuth.login.Facebook (oauth.101) Opened. Next: Initiate FB.';
            /* Cordova App: All Facebook Info gets routed through a window. */
       var authUrl = '';
       if (window.cordova) {
@@ -126,7 +126,7 @@ angular.module('Services.oauth', [])
           '&response_type=token'
         ;
         // var authWindow = null;
-        $rootScope.loginMessage = '<h3>4. This is the cordova app version.</h3>';
+        $rootScope.loginMessage = '4. This is the local app version.';
         
         /* This opens the Facebook Authorization in a new window */
         
@@ -144,7 +144,7 @@ angular.module('Services.oauth', [])
           '&response_type=token';
         
         // var authWindow = null;
-        $rootScope.loginMessage = '<h3>4. This is the web app version. Redirect to Facebook for authorization.</h3>';
+        $rootScope.loginMessage = '4. Directing to FB for web authorization';
         
         // https://www.facebook.com/v2.0/dialog/oauth?client_id={app-id}&redirect_uri={redirectUri} 
         
@@ -158,7 +158,7 @@ angular.module('Services.oauth', [])
         /* Check with Facebook to get this user's login status */
       }
     } else {
-      $rootScope.loginMessage = '<h3>END 5.1. Unknown Service Requested</h3>';
+      $rootScope.loginMessage = 'END 5.1. Unknown Service Requested';
     }
   };
 

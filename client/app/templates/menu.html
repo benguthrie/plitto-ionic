@@ -26,13 +26,11 @@
           <span class="item-note" ng-show=" $root.stats.friendRequests === '0' " ng-bind="$root.stats.friends">
             
           </span>
-          <span class="badge badge-assertive" ng-show=" $root.stats.friendRequests > 0 " ng-bind="$root.stats.friendRequests"></span>
+          <!-- TODO2 - Add once friend requests start. <span class="badge badge-assertive" ng-show=" $root.stats.friendRequests > 0 " ng-bind="$root.stats.friendRequests"></span>--> 
         </ion-item>
-          
-        
         
         <ion-item nav-clear menu-close href="#/app/lists" ng-click="loadLists(); nav.view = 'user.lists'; ">
-          <i class="icon ion-ios-list-outline"></i>
+          <i class="icon ion-ios7-albums"></i>
           Lists
           <span class="item-note" ng-show =" $root.stats.lists > 0 " ng-bind="$root.stats.lists">
         </ion-item>

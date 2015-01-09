@@ -2,8 +2,12 @@
   
   <ion-content>
     <h1>Loading ...</h1>
-    <h3>Status: {{$root.loginMessage}}</h3>
-    <h3>State: {{$state.current.name}} </h3>
+    <p>Status: </p>
+    <h3>{{$root.loginMessage}}</h3>
+    <p>State: </p>
+    <h3>{{$state.current.name}} </h3>
+    
+    <i class="icon ion-looping"></i>
     <!--
     <button ng-click="showToken();">Show Token</button>
     <button ng-click="clearToken();">Clear Token</button>

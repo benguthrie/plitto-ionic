@@ -53,7 +53,8 @@ angular.module('Plitto', [
       var fbAccessToken = hash.substring( hash.indexOf('access_token=') + 'access_token='.length , hash.indexOf('&') ) ;
       console.log('at: ', fbAccessToken);
       
-      $rootScope.loginMessage = 'TEMP. FB Access Token: ' + fbAccessToken;
+      $rootScope.loginMessage = 'Facebook Access Granted. Logging into Plitto now.';
+       //  + fbAccessToken
 
       // Use this to make the call to login.
       dbFactory.fbTokenLogin(fbAccessToken);
