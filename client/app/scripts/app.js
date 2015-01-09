@@ -29,7 +29,7 @@ angular.module('Plitto', [
   
   
     
-  $ionicPlatform.ready(function () { 
+  $ionicPlatform.ready(function () {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if(window.cordova && window.cordova.plugins.Keyboard) {
@@ -40,9 +40,9 @@ angular.module('Plitto', [
       StatusBar.styleDefault();
     }
     // Get the access token from Facebook. TODO1 - 12/20 - It looks like something is intercepting it, and removing it.
-    console.log("access_token location: ", window.location.hash.indexOf("access_token") );
-    if ( window.location.hash.indexOf("access_token") !== -1){
-      console.log("Found the token.", window.location.hash, window.location.hash.indexOf("access_token") );
+    console.log('access_token location: ', window.location.hash.indexOf('access_token') );
+    if ( window.location.hash.indexOf('access_token') !== -1){
+      console.log('Found the token.', window.location.hash, window.location.hash.indexOf('access_token') );
       // TODO2UX - Show a loading indicator
     
       var hash = window.location.hash;
@@ -50,10 +50,10 @@ angular.module('Plitto', [
       // Show loading.
       $state.go('loading');
 
-      var fbAccessToken = hash.substring( hash.indexOf('access_token=') + "access_token=".length , hash.indexOf('&') ) ;
+      var fbAccessToken = hash.substring( hash.indexOf('access_token=') + 'access_token='.length , hash.indexOf('&') ) ;
       console.log('at: ', fbAccessToken);
       
-      $rootScope.loginMessage = "TEMP. FB Access Token: " + fbAccessToken;
+      $rootScope.loginMessage = 'TEMP. FB Access Token: ' + fbAccessToken;
 
       // Use this to make the call to login.
       dbFactory.fbTokenLogin(fbAccessToken);
@@ -95,126 +95,146 @@ angular.module('Plitto', [
       }
     })
   
-  .state('loading',{
-    url:'/loading',
-    templateUrl: 'templates/loading.html',
-    controller: 'LoadingCtrl'
-  })
+    .state('loading',
+      {
+        url:'/loading',
+        templateUrl: 'templates/loading.html',
+        controller: 'LoadingCtrl'
+      }
+    )
   
-  
-  
-   .state('app.search', {
-      url: '/search/',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/search.html',
-          controller: 'SearchCtrl'
+    .state('app.search',
+      {
+        url: '/search/',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/search.html',
+            controller: 'SearchCtrl'
+          }
         }
       }
-    })
+    )
   
-  .state('app.feed', {
-      url: '/feed',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/feed.html',
-          controller: 'FeedCtrl'
+    .state('app.feed',
+      {
+        url: '/feed',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/feed.html',
+            controller: 'FeedCtrl'
+          }
         }
       }
-    })
+    )
   
-   .state('app.friends', {
-      url: '/friends',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/friends.html',
-          controller: 'FriendsCtrl'
+    .state('app.friends',
+      {
+        url: '/friends',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/friends.html',
+            controller: 'FriendsCtrl'
+          }
         }
       }
-    })
+    )
 
   
-    .state('app.profile', {
-      url: '/profile/:userId',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/profile.html',
-          controller: 'ProfileCtrl'
+    .state('app.profile',
+      {
+        url: '/profile/:userId',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/profile.html',
+            controller: 'ProfileCtrl'
+          }
         }
       }
-    })
+    )
   
-    .state('app.chat', {
-      url: '/chat',
-      views: {
-        'menuContent' :{
-          templateUrl: 'templates/chat.html',
-          controller: 'chatCtrl'
+    .state('app.chat',
+      {
+        url: '/chat',
+        views: {
+          'menuContent' :{
+            templateUrl: 'templates/chat.html',
+            controller: 'chatCtrl'
+          }
         }
       }
-    })
+    )
   
-    .state('app.debug', {
-      url: '/debug',
-      views: {
-        'menuContent' :{
-          templateUrl: 'templates/debug.html',
-          controller: 'DebugCtrl'
+    .state('app.debug',
+      {
+        url: '/debug',
+        views: {
+          'menuContent' :{
+            templateUrl: 'templates/debug.html',
+            controller: 'DebugCtrl'
+          }
         }
       }
-    })
+    )
   
-    .state('app.addlist', {
-      url: '/addlist',
-      views: {
-        'menuContent' :{
-          templateUrl: 'templates/add-list.html',
-          controller: 'addListCtrl'
+    .state('app.addlist',
+      {
+        url: '/addlist',
+        views: {
+          'menuContent' :{
+            templateUrl: 'templates/add-list.html',
+            controller: 'addListCtrl'
+          }
         }
       }
-    })
+    )
 
-    .state('app.lists', {
-      url: '/lists',
-      views: {
-        'menuContent' :{
-          templateUrl: 'templates/lists.html',
-          controller: 'ListsCtrl'
+    .state('app.lists',
+      {
+        url: '/lists',
+        views: {
+          'menuContent' :{
+            templateUrl: 'templates/lists.html',
+            controller: 'ListsCtrl'
+          }
         }
       }
-    })
+    )
   
-    .state('app.thing', {
-      url: '/thing',
-      views: {
-        'menuContent' :{
-          templateUrl: 'templates/thing.html',
-          controller: 'ThingCtrl'
+    .state('app.thing',
+      {
+        url: '/thing',
+        views: {
+          'menuContent' :{
+            templateUrl: 'templates/thing.html',
+            controller: 'ThingCtrl'
+          }
         }
       }
-    })
+    )
 
-    .state('app.list', {
-      url: '/lists/:listId',
-      views: {
-        'menuContent' :{
-          templateUrl: 'templates/list.html',
-          controller: 'ListCtrl'
+    .state('app.list',
+      {
+        url: '/lists/:listId',
+        views: {
+          'menuContent' :{
+            templateUrl: 'templates/list.html',
+            controller: 'ListCtrl'
+          }
         }
       }
-    });
+    );
   
-  $urlRouterProvider.otherwise("/home"); // Added 12.19.2014
+  $urlRouterProvider.otherwise('/home'); // Added 12.19.2014
   
   // if none of the above states are matched, use this as the fallback
 // TODO1 - Do this. $urlRouterProvider.otherwise('/app/home');
-  if( QueryString.access_token || window.location.hash.indexOf("access_token") > -1  ){
+  if( QueryString.access_token || window.location.hash.indexOf('access_token') > -1  ){
     console.log('found querystring access token.', QueryString.access_token);
   
   }
   else {
     
-    console.log("No access token. Let the user log in.", "access_token: ", QueryString.access_token, "Location hash: ", window.location.hash );
+    console.log('No access token. Let the user log in.', 'access_token: ', QueryString.access_token, 'Location hash: ', window.location.hash );
     // $urlRouterProvider.otherwise('/app/home');
     // console.log("REPLACeD", window.location.hash.replace("#/",""));
   
@@ -225,25 +245,27 @@ angular.module('Plitto', [
   
 
   // Handle 401 Unauthorized responses
-  $httpProvider.interceptors.push(function ($q, $location) {
-    return {
-      responseError: function (rejection) {
-        if (rejection.status == 401) {
-          $location.path('/login');
+  $httpProvider.interceptors.push(
+    function ($q, $location) {
+      return {
+        responseError: function (rejection) {
+          if (rejection.status === 401) {
+            $location.path('/login');
+          }
+          return $q.reject(rejection);
         }
-        return $q.reject(rejection);
-      }
-    };
-   });
+      };
+    }
+  );
   
-})
+}
+)
 .directive('userNav', function ($rootScope, dbFactory, $state) {
- return {
-    restrict: "E",
+  return {
+    restrict: 'E',
     // templateUrl: 'directives/userNav.html',
-   // 
-   template: navigationBar(),
-   // template: '',
+    template: navigationBar(),
+    // template: '',
 /*    template: '<ion-nav-bar>  ' + 
       '<ion-nav-buttons side="left"> ' + 
         '<button menu-toggle="left" class="button button-icon ion-navicon"></button> ' + 
@@ -270,16 +292,16 @@ angular.module('Plitto', [
           disableBack: true
         });
 
-        console.log("navFunc");
+        console.log('navFunc');
         
         // Whenever the navFunc is called, destroy the history, so no more back.
         $ionicHistory.clearHistory();
   
-        if (path === "chat") {
+        if (path === 'chat') {
           dbFactory.updateCounts();
         }
         
-        $state.go("app." + path);
+        $state.go('app.' + path);
         
         dbFactory.userChat(-1).then(function(response){
           $rootScope.stats.feed = response;
@@ -287,7 +309,7 @@ angular.module('Plitto', [
       };
   
     }
-  }; 
+  };
 })
   
 .directive('userListThing', function($rootScope, dbFactory, $state) {
@@ -300,7 +322,7 @@ angular.module('Plitto', [
       source: '@source',
       userData: '=userData'
     },
-    controller: function($scope, dbFactory, $state) {
+    controller: function($scope, dbFactory) {
       /* Ditto */
       $scope.ditto = function(mykey, uid, lid, tid, $event,scopeName){
         dbFactory.dbDitto(scopeName,mykey,uid,lid,tid, $event);
@@ -308,13 +330,13 @@ angular.module('Plitto', [
   
       /* User */
       $scope.showUser = function(userId, userName, dataScope, fbuid){
-        console.log("show User");
+        console.log('show User');
         dbFactory.showUser(userId,userName, dataScope, fbuid);
-      }; 
+      };
   
       /* List */
       $scope.showList = function(listId, listName, userFilter){
-        console.log("showList app.js 317");
+        console.log('showList app.js 317');
         dbFactory.showAList(listId, listName, userFilter);
       };
   
@@ -327,8 +349,8 @@ angular.module('Plitto', [
       letsChat(userData.uid, list.lid, item.tid, $event, store); " */
       $scope.letsChat = function(uid, lid, tid, $event, store, $index){
         console.log('letsChat app.js directive', uid, lid, tid, $event, store, $index);
-  var length = eval("$rootScope." + store + ".length");
-        var tempStore = eval("$rootScope." + store);
+        // var length = eval('$rootScope.' + store + '.length');
+        var tempStore = eval('$rootScope.' + store);
   
         console.log('tempStore: ', tempStore);
         
@@ -344,21 +366,21 @@ angular.module('Plitto', [
           console.log(tempStore[j].uid);
           console.log('Equal? ', tempStore[j].uid === uid);
           if(tempStore[j].uid === uid){
-            var upos = j;
-            break;  
+            upos = j;
+            break;
           }
         }
         
         for ( var k in tempStore[upos].lists ) {
           if(tempStore[upos].lists[k].lid === lid ) {
-            var lpos = k;
+            lpos = k;
             break;
           }
         }
 
         for ( var l in tempStore[upos].lists[lpos].items ) {
           if( tempStore[upos].lists[lpos].items[l].tid === tid ) {
-            var tpos = l;
+            tpos = l;
           }
         }
         
@@ -366,31 +388,31 @@ angular.module('Plitto', [
 
 
         var isActive = 1;
-        if($($event.target).hasClass("active")){
+        if($($event.target).hasClass('active')){
           // User is removing this from their chat queue.
-          var isActive = 0;
-          $($event.target).removeClass("active");
-          $("div#comments" + uid + lid + tid).hide();
-          eval("$rootScope." + store + "[" + upos +"].lists["+ lpos + "].items[" + tpos + "].commentActive = null; "  );
+          isActive = 0;
+          $($event.target).removeClass('active');
+          $('div#comments' + uid + lid + tid).hide();
+          eval('$rootScope.' + store + '[' + upos + '].lists[' + lpos + '].items[' + tpos + '].commentActive = null; ' );
         } else {
           
-          $($event.target).addClass("active");
-          $("div#comments" + uid + lid + tid).show();
-          eval("$rootScope." + store + "[" + upos +"].lists["+ lpos + "].items[" + tpos + "].commentActive = \"1\"; "  );
+          $($event.target).addClass('active');
+          $('div#comments' + uid + lid + tid).show();
+          eval('$rootScope.' + store + '[' + upos + '].lists[' + lpos + '].items[' + tpos + '].commentActive = "1"; '  );
           
         }
         // Call the addComment bit to activate or deactivate the queue item
-        dbFactory.addComment ( uid, lid, tid, "0", isActive );
-        console.log("commentactive:  ",
-          eval("$rootScope." + store + "[" + upos +"].lists["+ lpos + "].items[" + tpos + "].commentActive; "  ) 
+        dbFactory.addComment ( uid, lid, tid, '0', isActive );
+        console.log('commentactive:  ',
+          eval('$rootScope.' + store + '[' + upos + '].lists[' + lpos + '].items[' + tpos + '].commentActive; '  )
         );
       };
   
       $scope.makeItemComment = function (newComment, uid, lid, tid, store, $index){
-        console.log("makeItemComment", newComment, uid, lid, tid, store, $index);
+        console.log('makeItemComment', newComment, uid, lid, tid, store, $index);
         // Find the user, then the list, then use the index.
-        var length = eval("$rootScope." + store + ".length");
-        var tempStore = eval("$rootScope." + store);
+        // var length = eval('$rootScope.' + store + '.length' );
+        var tempStore = eval('$rootScope.' + store);
   
         console.log('tempStore: ', tempStore);
         
@@ -406,31 +428,31 @@ angular.module('Plitto', [
           console.log(tempStore[j].uid);
           console.log('Equal? ', tempStore[j].uid === uid);
           if(tempStore[j].uid === uid){
-            var upos = j;
-            break;  
+            upos = j;
+            break;
           }
         }
         
         for ( var k in tempStore[upos].lists ) {
           if(tempStore[upos].lists[k].lid === lid ) {
-            var lpos = k;
+            lpos = k;
             break;
           }
         }
 
         for ( var l in tempStore[upos].lists[lpos].items ) {
           if( tempStore[upos].lists[lpos].items[l].tid === tid ) {
-            var tpos = l;
+            tpos = l;
           }
         }
         
         console.log('upos: ', upos, lpos, tpos, $rootScope.user);
   
         // Add it to the UI / Scope (only if it exists)
-        eval("$rootScope." + store + "[" + upos +"].lists["+ lpos + "].items[" + tpos + "].commentText = \"" + newComment + "\"; "  );
+        eval('$rootScope.' + store + '[' + upos + '].lists[' + lpos + '].items[' + tpos + '].commentText = "' + newComment + '"; '  );
 
         // submit it to the database
-        dbFactory.addComment ( uid, lid, tid, newComment, "1");
+        dbFactory.addComment ( uid, lid, tid, newComment, '1');
 
         // TODO1 Clear the comment field
         
@@ -452,7 +474,7 @@ angular.module('Plitto', [
     controller: function($scope, dbFactory, $state) {
       /* Link to List */
       $scope.showList = function(listId, listName, userFilter){
-        console.log("showList app.js 454");
+        console.log('showList app.js 454');
         dbFactory.showAList(listId, listName, userFilter);
       };
   
@@ -477,7 +499,7 @@ angular.module('Plitto', [
     controller: function ( $scope, dbFactory, $state ) {
       // Debug
       $scope.changeFilter = function( filterNew ){
-        console.log("TEST", filterNew );
+        console.log('TEST', filterNew );
         $scope.filterChat = filterNew;
       };
       
@@ -491,20 +513,20 @@ angular.module('Plitto', [
       
       /* Link to List */
       $scope.showList = function(listId, listName, userFilter){
-        console.log("showList app.js 493");
+        console.log('showList app.js 493');
         dbFactory.showAList(listId, listName, userFilter);
       };
       
       
       /* Thing */
       $scope.showThing = function(thingId, thingName, userFilter){
-        console.log("showThing");
+        console.log('showThing');
         dbFactory.showThing(thingId, thingName, userFilter);
       };
       
       
       // $scope.filterChatOptions = [ { filter: "them", selected: true }, { filter: "us", selected: false }, { filter: "me", selected: false } ];
-      $scope.filterChatOptions = [ {show: "Them", value: "them" } , {show: "Us", value: "us"}, { show: "Me", value: "me" } ];
+      $scope.filterChatOptions = [ {show: 'Them', value: 'them' } , {show: 'Us', value: 'us'}, { show: 'Me', value: 'me' } ];
       $scope.filterChat = $scope.filterChatOptions[0];
     }
   };

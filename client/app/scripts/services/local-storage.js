@@ -1,7 +1,7 @@
 'use strict';
 angular.module('Services.localStorage', [])
 
-.provider('localStorageService', 
+.provider('localStorageService',
   function () {
   
   // You should set a prefix to avoid overwriting any local storage variables from the rest of your app
@@ -34,10 +34,10 @@ angular.module('Services.localStorage', [])
     this.prefix = prefix;
   };
 
-   // Setter for the storageType
-   this.setStorageType = function(storageType) {
-       this.storageType = storageType;
-   };
+  // Setter for the storageType
+  this.setStorageType = function(storageType) {
+    this.storageType = storageType;
+  };
 
   // Setter for cookie config
   this.setStorageCookie = function(exp, path) {
@@ -80,9 +80,11 @@ angular.module('Services.localStorage', [])
     if (prefix.substr(-1) !== '.') {
       prefix = !!prefix ? prefix + '.' : '';
     }
+    
     var deriveQualifiedKey = function(key) {
       return prefix + key;
-    }
+    };
+    
     // Checks the browser to see if local storage is supported
     var browserSupportsLocalStorage = (function () {
       try {
@@ -125,7 +127,7 @@ angular.module('Services.localStorage', [])
       }
 
       // Let's convert undefined values to null to get the value consistent
-      if (typeof value === "undefined") {
+      if (typeof value === 'undefined') {
         value = null;
       }
 
@@ -133,7 +135,11 @@ angular.module('Services.localStorage', [])
         if (angular.isObject(value) || angular.isArray(value)) {
           value = angular.toJson(value);
         }
-        if (webStorage) {webStorage.setItem(deriveQualifiedKey(key), value)};
+        
+        if (webStorage) {
+          webStorage.setItem(deriveQualifiedKey(key), value);
+        }
+        
         if (notify.setItem) {
           $rootScope.$broadcast('LocalStorageModule.notification.setitem', {key: key, newvalue: value, storageType: this.storageType});
         }
@@ -160,7 +166,7 @@ angular.module('Services.localStorage', [])
         return null;
       }
 
-      if (item.charAt(0) === "{" || item.charAt(0) === "[") {
+      if (item.charAt(0) === '{' || item.charAt(0) === '[') {
         return angular.fromJson(item);
       }
 
@@ -221,7 +227,7 @@ angular.module('Services.localStorage', [])
     // Should be used mostly for development purposes
     var clearAllFromLocalStorage = function (regularExpression) {
 
-      regularExpression = regularExpression || "";
+      regularExpression = regularExpression || '';
       //accounting for the '.' in the prefix when creating a regex
       var tempPrefix = prefix.slice(0, -1);
       var testRegex = new RegExp(tempPrefix + '.' + regularExpression);
@@ -251,11 +257,11 @@ angular.module('Services.localStorage', [])
     var browserSupportsCookies = function() {
       try {
         return navigator.cookieEnabled ||
-          ("cookie" in $document && ($document.cookie.length > 0 ||
-          ($document.cookie = "test").indexOf.call($document.cookie, "test") > -1));
+          ( 'cookie' in $document && ($document.cookie.length > 0 ||
+          ( $document.cookie = 'test').indexOf.call($document.cookie, 'test') > -1));
       } catch (e) {
-          $rootScope.$broadcast('LocalStorageModule.notification.error', e.message);
-          return false;
+        $rootScope.$broadcast('LocalStorageModule.notification.error', e.message);
+        return false;
       }
     };
 
@@ -264,7 +270,7 @@ angular.module('Services.localStorage', [])
     // Example use: localStorageService.cookie.add('library','angular');
     var addToCookies = function (key, value) {
 
-      if (typeof value === "undefined") {
+      if (typeof value === 'undefined' ) {
         return false;
       }
 
@@ -281,18 +287,18 @@ angular.module('Services.localStorage', [])
         if (value === null) {
           // Mark that the cookie has expired one day ago
           expiryDate.setTime(expiryDate.getTime() + (-1 * 24 * 60 * 60 * 1000));
-          expiry = "; expires=" + expiryDate.toGMTString();
+          expiry = '; expires=' + expiryDate.toGMTString();
           value = '';
         } else if (cookie.expiry !== 0) {
           expiryDate.setTime(expiryDate.getTime() + (cookie.expiry * 24 * 60 * 60 * 1000));
-          expiry = "; expires=" + expiryDate.toGMTString();
+          expiry = '; expires=' + expiryDate.toGMTString();
         }
         if (!!key) {
-          var cookiePath = "; path=" + cookie.path;
+          var cookiePath = '; path=' + cookie.path;
           if(cookie.domain){
-            cookieDomain = "; domain=" + cookie.domain;
+            cookieDomain = '; domain=' + cookie.domain;
           }
-          $document.cookie = deriveQualifiedKey(key) + "=" + encodeURIComponent(value) + expiry + cookiePath + cookieDomain;
+          $document.cookie = deriveQualifiedKey(key) + '=' + encodeURIComponent(value) + expiry + cookiePath + cookieDomain;
         }
       } catch (e) {
         $rootScope.$broadcast('LocalStorageModule.notification.error',e.message);
@@ -327,7 +333,9 @@ angular.module('Services.localStorage', [])
     };
 
     var clearAllFromCookies = function () {
-      var thisCookie = null, thisKey = null;
+      
+      var thisCookie = null;
+      // , thisKey = null REMOVED 1/9/2014
       var prefixLength = prefix.length;
       
       // console.log('cookie length: ',typeof($document.cookie) );

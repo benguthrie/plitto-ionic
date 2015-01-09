@@ -1,52 +1,33 @@
 'use strict';
 angular.module('Services.pFb', [])
 
-.factory('pFb',[ '$rootScope', 'dbFactory','$state', function ( $rootScope, dbFactory, $state ) {
+.factory('pFb',[ '$rootScope', 'dbFactory', function ( $rootScope, dbFactory ) {
   // console.log('logged pFb');
   /* fbAsyncInit - This tracks whether the user is logged in */
   window.fbAsyncInit = function () {
     FB.init({
-         appId:'207184820755',
-        // appId: '10152399335865756',
-        status: true,
-        cookie: true,
-        xfbml      : true,
-        version    : 'v2.0',
-        scope: 'email, user_likes'
-      
+      appId:'207184820755',
+      // appId: '10152399335865756',
+      status: true,
+      cookie: true,
+      xfbml      : true,
+      version    : 'v2.0',
+      scope: 'email, user_likes'
     });
-
-     /* Disabled 11/6/2014
-    FB.Event.subscribe('auth.statusChange', function (response) {
-      // At this point, we've received the element. We just need to broadcast it.
-
-      // Do different things depending on the status
-      // console.log('script.php | getLoginStatus | ',response.status);
-      // REMOVED 10/31  $rootScope.session.plittoState='28 Facebook says you are' + response.status;
-      if(response.status === 'not_authorized'){
-        $rootScope.$broadcast("getLoginStatus", {
-            'fbresponse': response
-          });
-      } else {
-          $rootScope.$broadcast("getLoginStatus", {
-            'fbresponse': response, 
-            'userID': response.authResponse.userID});
-        }
-    });
-    */
   };
 
   (function (d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "//connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) {return;}
+    js = d.createElement(s);
+    js.id = id;
+    js.src = '//connect.facebook.net/en_US/sdk.js';
+    fjs.parentNode.insertBefore(js, fjs);
+  }
+  (document, 'script', 'facebook-jssdk'));
   
-  
-	// Function to update the RootScope from anywhere.
-  var apiPath = (window.cordova) ? 'http://plitto.com/api/2.0/' : '/api/2.0/';
+  // Function to update the RootScope from anywhere.
+  // REMOVED 1/9/14 var apiPath = (window.cordova) ? 'http://plitto.com/api/2.0/' : '/api/2.0/';
   return {
     getLoginStatus:function () {
       // 
@@ -56,35 +37,31 @@ angular.module('Services.pFb', [])
       // This makes the Facebook API to Facebook. 
       FB.getLoginStatus(function ( response ) {
         
-          // $rootScope.session.plittoState = 'Facebook Responded 7';
-          // 
-        console.log('fbFactory.getLoginStatus -> FB.getLoginStatus: This function is only called when requesting the status of the app on login, and when requesting more permissions..',response);
+        // $rootScope.session.plittoState = 'Facebook Responded 7';
+        console.log('fbFactory.getLoginStatus -> FB.getLoginStatus: This function is only called when requesting the status of the app on login, and when requesting more permissions.', response);
         // $rootScope.loginMessage = "Facebook needs to grant permissions. Open up the window.";
-        
-        $rootScope.$broadcast("getLoginStatus", { 'fbresponse' : null});  
-        // TODO1 - This needs to work. A callback doesn't work with this function. It has to be a broadcast.
-        $rootScope.$broadcast("getLoginStatus", { 'fbresponse' : response });
-        
-        
-          // Update the status
-          // $rootScope.session.fbState = response.status;
-          // console.log('FB.getLoginStatus | fbState: ', response.status);
 
-          // $rootScope.nav.fb_get_login_status = response.status;
-          console.log('rootScope done broadcasting getLoginStatus {"fbresponse":>???}: ', response );
-        });
+        $rootScope.$broadcast('getLoginStatus', { 'fbresponse' : null});
+        // TODO1 - This needs to work. A callback doesn't work with this function. It has to be a broadcast.
+        $rootScope.$broadcast('getLoginStatus', { 'fbresponse' : response });
+
+        // Update the status
+        // $rootScope.session.fbState = response.status;
+        // console.log('FB.getLoginStatus | fbState: ', response.status);
+
+        // $rootScope.nav.fb_get_login_status = response.status;
+        console.log('rootScope done broadcasting getLoginStatus {"fbresponse":>???}: ', response );
+      });
     },
     login:function () {
       // console.log('Facebook login happening.');
       // TODO2 - As of 11/6/2014, this shouldn't ever be called.
-      $rootScope.loginMessage =  "Redirecting you to login with Facebook's login process."
+      $rootScope.loginMessage =  'Redirecting you to login with Facebook\'s login process.';
       // OAuth.redirect(); // Should we go straight to oAuth? This doesn't really do anything special.
-      // 
+
       FB.login();
       // FB.init();
-      
       // setTimeout(console.log('delay in facebook.login'),2000);
-
     },
     logout:function () {
       // REMOVED 10/31 $rootScope.session.plittoState = 'Logout Called.';
@@ -93,9 +70,9 @@ angular.module('Services.pFb', [])
       FB.logout(function (response) {
         // REMOVED 10/31 $rootScope.session.plittoState = 'Facebook Responded to logout.';
         if (response) {
-            $rootScope.$broadcast('fb_logout_succeded');
+          $rootScope.$broadcast('fb_logout_succeded');
         } else {
-            $rootScope.$broadcast('fb_logout_failed');
+          $rootScope.$broadcast('fb_logout_failed');
         }
       });
     },
@@ -104,9 +81,9 @@ angular.module('Services.pFb', [])
 
       $rootScope.token = '';
       dbFactory.dbInit();
-      // 
+      
       // console.log('facebook factory unsubsubscribe');
-      FB.api("/v2.2/me/permissions", "DELETE", function (response) {
+      FB.api('/v2.2/me/permissions', 'DELETE', function (response) {
         console.log('Facebook Unsbscribe Plitto Succeeded');
         $rootScope.token = null;
         dbFactory.init();
@@ -117,8 +94,6 @@ angular.module('Services.pFb', [])
         // console.log('FacebookAPI: unsubscribe response: ',response);
         // $rootScope.$broadcast('fb_plitto_access_deleted');
       });
-
-
     }
   };
 }]);

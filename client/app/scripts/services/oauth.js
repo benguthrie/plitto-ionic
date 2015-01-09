@@ -1,16 +1,18 @@
 'use strict';
 angular.module('Services.oauth', [])
 
-.service('OAuth', function ($window, $rootScope, $state, $timeout, dbFactory, $location ) {
+.service('OAuth', function ($window, $rootScope, $state, $timeout, dbFactory ) {
   
   // Need to change redirect from plitto.com if on mobile
   // otherwise we're just going to load the entire website on the phone
   // console.log('window: ',window);
-  
-  if(document.URL.indexOf("localhost") > -1)
-    {var redirect_uri = window.cordova ? 'http://plitto.com' : 'http://localhost/plitto-ionic/client/app/';}
-  else
-    {var redirect_uri = window.cordova ? 'http://plitto.com' : 'http://plitto.com/client/app/';}
+  var redirectUri = '';
+  if(document.URL.indexOf('localhost') > -1){
+    redirectUri = window.cordova ? 'http://plitto.com' : 'http://localhost/plitto-ionic/client/app/';
+  }
+  else {
+    redirectUri = window.cordova ? 'http://plitto.com' : 'http://plitto.com/client/app/';
+  }
   
   // Define the auth-window as an element within the whole scope.
   var authWindow = null;
@@ -22,29 +24,27 @@ angular.module('Services.oauth', [])
     // If token is loading, go to loading screen.
     if(typeof ($rootScope.token) === 'string' && $rootScope.token ==='loading'){
       // $state.go('loading');
-      $rootScope.$broadcast("broadcast",{ command: "state", path: "loading", debug: "oauth.25 token is 'loading'. Go there." } );
+      $rootScope.$broadcast('broadcast',{ command: 'state', path: 'loading', debug: 'oauth.25 token is "loading". Go there.' } );
     } else if (typeof ($rootScope.token) === 'string' && $rootScope.token.length > 0){
       // We will assume that the token is valid TODO1 - Test it.
-      $rootScope.$broadcast("broadcast",{ command: "state", path: "app.home", debug: "oauth.28 untested token. go to app.home." } );
+      $rootScope.$broadcast('broadcast',{ command: 'state', path: 'app.home', debug: 'oauth.28 untested token. go to app.home.' } );
       
       // $location.path('/login');
     } else {
       // TODO1 Add some more logic to this. $state.go("login");
       // If there is an access token, we can just wait.
-      if ( window.location.hash.indexOf("access_token") !== -1){
-        console.log("Found an access token.", window.location.hash );
+      if ( window.location.hash.indexOf('access_token') !== -1){
+        console.log('Found an access token.', window.location.hash );
         // This is the bit that stops things while 
-        $rootScope.$broadcast('broadcast',{ command: "login", platform: "facebookFinishLogin", tokenHash: window.location.hash, debug: "Controllers.js 210. OAuth.login"});
+        $rootScope.$broadcast('broadcast',{ command: 'login', platform: 'facebookFinishLogin', tokenHash: window.location.hash, debug: 'Controllers.js 210. OAuth.login'});
         // Go back to loading?
-        $state.go("loading");
+        $state.go('loading');
         console.log('wait');
       }
       else {
-        $rootScope.$broadcast("broadcast",{ command: "state", path: "login", debug: "oauth.33 No token. Login." } );  
+        $rootScope.$broadcast('broadcast',{ command: 'state', path: 'login', debug: 'oauth.33 No token. Login.' } );
       }
-      
- 
-   }
+    }
   });
   
   // Function that is called with auth code and redirect home
@@ -61,24 +61,19 @@ angular.module('Services.oauth', [])
     console.log('authFinished wants to closed authWindow.');
     console.log('authWindow: ',authWindow);
     authWindow.close();
-    
-    
-    // $rootScope.token = "807cfa6f392685f6d1131082d9a42276"; // Diego's hard coded token.
-    
   };
   
   function getParameterByName(name, path) {
-    var bettername = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-    var results = '';
-    var regex = new RegExp("[\\?&]" + bettername + "=([^&#]*)"),
-        results = regex.exec(path);
+    var bettername = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+    var regex = new RegExp('[\\?&]' + bettername + '=([^&#]*)'),
+    results = regex.exec(path);
     console.log('getParameterByName: name: ',name,' bettername: ',bettername, ' path: ', path);
-    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-  } 
+    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+  }
 
   // Event handler for the inAppBrowser plugin's `loadstart` event
   var loadstart = function (e) {
-    $rootScope.loginMessage = "<h3>6. Loadstart Started</h3>";
+    $rootScope.loginMessage = '<h3>6. Loadstart Started</h3>';
     //console.log('6. Loadstart started');
     // console.log('this is the authwindow: ', authWindow);
     
@@ -101,7 +96,7 @@ angular.module('Services.oauth', [])
      // console.log('7. loadstart found a code');
       //console.log('7. loadstart code: ' + accessToken);
       // authWindow.close(); // do this inside authFinished code.
-      authFinished(accessToken); 
+      authFinished(accessToken);
 
       $timeout(function () {
         // authWindow.close();
@@ -111,27 +106,27 @@ angular.module('Services.oauth', [])
       console.log('loadstart debug 72. No accessToken or error');
     }
   };
-  
+
   this.deleteFBaccess = function() {
-    console.log('oauth deleteFBaccess');
-    
-  }
+    console.log('oauth deleteFBaccess. TODO3');
+  };
 
   this.login = function(oauthService) {
     if(oauthService === 'facebook'){
       console.log('oauth facebook');
-      $rootScope.loginMessage = "<h3>3. OAuth.login.Facebook (oauth.101) Opened. Next: Initiate FB.</h3>";
+      $rootScope.loginMessage = '<h3>3. OAuth.login.Facebook (oauth.101) Opened. Next: Initiate FB.</h3>';
            /* Cordova App: All Facebook Info gets routed through a window. */
+      var authUrl = '';
       if (window.cordova) {
-        var authUrl ='https://www.facebook.com/v2.0/dialog/oauth?'
-          + 'client_id=207184820755'
-          + '&redirect_uri=' + redirect_uri // This is irrelevant, because the window should close as soon as the code is received.
-          + '&display=touch'
-          + '&scope=email,user_friends'
-          + '&response_type=token'
+        authUrl ='https://www.facebook.com/v2.0/dialog/oauth?' +
+          'client_id=207184820755' +
+          '&redirect_uri=' + redirectUri + // This is irrelevant, because the window should close as soon as the code is received.
+          '&display=touch' +
+          '&scope=email,user_friends' +
+          '&response_type=token'
         ;
         // var authWindow = null;
-        $rootScope.loginMessage = "<h3>4. This is the cordova app version.</h3>";
+        $rootScope.loginMessage = '<h3>4. This is the cordova app version.</h3>';
         
         /* This opens the Facebook Authorization in a new window */
         
@@ -139,43 +134,35 @@ angular.module('Services.oauth', [])
         console.log('111authWindow: open this URL: ', authUrl);
         authWindow.addEventListener('loadstart', loadstart);
         
-      } 
-      else {
+      } else {
         // This is for the web. For whatever reason, the FB. bit doesn't work in the cordova version.
+        authUrl ='https://www.facebook.com/v2.0/dialog/oauth?'+
+          'client_id=207184820755'+
+          '&redirect_uri=' + redirectUri + // This is irrelevant, because the window should close as soon as the code is received.
+          '&display=touch' +
+          '&scope=email,user_friends' +
+          '&response_type=token';
         
-        var authUrl ='https://www.facebook.com/v2.0/dialog/oauth?'
-          + 'client_id=207184820755'
-          + '&redirect_uri=' + redirect_uri // This is irrelevant, because the window should close as soon as the code is received.
-          + '&display=touch'
-          + '&scope=email,user_friends'
-          + '&response_type=token'
-        ;
         // var authWindow = null;
-        $rootScope.loginMessage = "<h3>4. This is the web app version. Redirect to Facebook for authorization.</h3>";
+        $rootScope.loginMessage = '<h3>4. This is the web app version. Redirect to Facebook for authorization.</h3>';
         
-        // https://www.facebook.com/v2.0/dialog/oauth?client_id={app-id}&redirect_uri={redirect-uri} 
+        // https://www.facebook.com/v2.0/dialog/oauth?client_id={app-id}&redirect_uri={redirectUri} 
         
         // Redirect to Facebook for authorization
-        $rootScope.$broadcast('broadcast', { 
-          command: "redirect", path: authUrl, debug: "oauth.js 160 - Redirect to Facebook for oauth." 
+        $rootScope.$broadcast('broadcast', {
+          command: 'redirect',
+          path: authUrl,
+          debug: 'oauth.js 160 - Redirect to Facebook for oauth.'
         } );
         
         /* Check with Facebook to get this user's login status */
-      
       }
-      
-
     } else {
-      $rootScope.loginMessage = "<h3>END 5.1. Unknown Service Requested</h3>";
+      $rootScope.loginMessage = '<h3>END 5.1. Unknown Service Requested</h3>';
     }
   };
 
-  // Access the facebook platform through FB.??? calls.
- 
-
   // Set the API path for the mobile app, and localhost:
-  var apiPath = (window.cordova) ? 'http://plitto.com/api/2.0/' : '/api/2.0/';
-  
- 
-  
+  // var apiPath = (window.cordova) ? 'http://plitto.com/api/2.0/' : '/api/2.0/'; // TODO2 - This is never used. OK?
+
 });
