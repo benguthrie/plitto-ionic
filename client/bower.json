@@ -2,10 +2,12 @@
   "name": "Plitto",
   "version": "0.0.5",
   "dependencies": {
-    "collide": "1.0.0-beta.3",
-    "ionicons": "~2.0.0",
-    "moment": "~2.8.4",
-    "lodash": "~2.4.1"
+    "angular-animate": "1.3.6",
+    "angular-resource": "1.3.8",
+    "angular-sanitize": "1.3.6",
+    "angular-ui-router": "0.2.13",
+    "ionic": "v1.0.0-beta.14",
+    "jquery": "2.1.3"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.17",
@@ -15,16 +17,16 @@
   "authors": [
     "Ben Guthrie <guthrie.ben+git@gmail.com>"
   ],
-  "description": "First public candidate",
-  "main": "bower.json",
-  "moduleType": [
-    "node"
-  ],
+  "description": "Have great conversations",
+  "main": "index.html",
   "keywords": [
     "chat",
-    "ionic",
     "conversations",
-    "connect"
+    "ditto",
+    "browser",
+    "tinder",
+    "with",
+    "words"
   ],
   "license": "MIT",
   "private": true,
