@@ -40,7 +40,7 @@ function navigationBar () {
       ' <button class="button button-icon ion-chatbox" ng-click="navFunc(\'chat\');"> ' +
         ' <span class="innerNo" ng-bind="$root.stats.alertCount"></style></button>  ' +
       // ' <button class="button button-icon iconDice" ng-click="navFunc(\'home\'); getSome();"></button> ' +
-      ' <button class="button button-icon ion-ios7-checkmark" ng-click="navFunc(\'home\'); getSome();"></button> ' +
+      ' <button class="button button-icon ion-ios7-checkmark-outline" ng-click="navFunc(\'home\'); getSome();"></button> ' +
       ' <button class="button button-icon ion-search" ng-click="navFunc(\'search\');" > </button> ' +
     '</ion-nav-buttons>' +
  '</ion-nav-bar>';

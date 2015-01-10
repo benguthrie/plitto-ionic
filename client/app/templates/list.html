@@ -12,14 +12,14 @@
     
     <!-- <h3>{{$root.list.listName}}</h3> --> 
     <div class="button-bar">
-      <a class="button" ng-class="{'active': $root.nav.listView ==='ditto'}" ng-click="view('ditto');">Ditto</a>
-      <a class="button" ng-class="{'active': $root.nav.listView ==='feed'}" ng-click="view('feed');">Feed</a>
-      <a class="button" ng-class="{'active': $root.nav.listView ==='shared'}" ng-click="view('shared');">Shared</a>
-      <a class="button" ng-class="{'active': $root.nav.listView ==='mine'}" ng-click="view('mine');">Mine</a>
-      <a class="button" ng-class="{'active': $root.nav.listView ==='strangers'}" ng-click="view('strangers');">Strangers</a>
+      <a class="button ion-ios7-checkmark-outline" ng-class="{'active': $root.nav.listView ==='ditto'}" ng-click="view('ditto');"></a>
+      <a class="button ion-ios7-checkmark" ng-class="{'active': $root.nav.listView ==='shared'}" ng-click="view('shared');"></a>
+      <a class="button ion-ios7-pulse-strong" ng-class="{'active': $root.nav.listView ==='feed'}" ng-click="view('feed');"></a>
+      <a class="button " ng-class="{'active': $root.nav.listView ==='mine'}" ng-click="view('mine');">{{ $root.user.userName }}'s</a>
+      <a class="button buttonStranger" ng-class="{'active': $root.nav.listView ==='strangers'}" ng-click="view('strangers');"></a>
       
     </div>
-    
+
     <div ng-show="$root.nav.listView ==='ditto' ">
       <div class="list card" ng-repeat="user in list.ditto">
         <user-list-thing store="list.ditto" source="list" user-data="user"></user-list-thing>

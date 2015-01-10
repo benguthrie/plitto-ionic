@@ -11,8 +11,8 @@ angular.module('Plitto', [
   //'config',
   'ngResource',
   'Plitto.controllers',
-  'Plitto.services'
-  // 'angularMoment'
+  'Plitto.services',
+  'angularMoment'
 ])
 
 
@@ -487,6 +487,7 @@ angular.module('Plitto', [
         };
       */
 
+      $scope.testAngularMoment = moment([2007,1,1]).fromNow();
       
     }
   };

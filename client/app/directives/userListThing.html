@@ -34,6 +34,7 @@
     <div ng-click="showThing(item.tid, item.thingname, userData.uid);" class="item-text-wrap">
       <!-- <div class="button ionicons ion-ios7-arrow-down" style="float: right;" ng-click="showButtons($event);"></div> --> 
       {{item.thingname}} 
+      <div class="recent" am-time-ago="item.added"></div>
       <!-- <h6 style="display: none;">{{item.added}}</h6>  --> 
       <!-- <h6 ng-show="item.dittouser === null" class="mega-octicon octicon-pencil">_</h6> -->
       <h6 ng-show="item.dittouser !== null">dittoed from {{item.dittousername}}</h6>

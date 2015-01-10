@@ -6,13 +6,13 @@
   <ion-item ng-repeat="list in listsData" ng-click="showList( list.lid, list.name, null);">
 
     <div class="row">
-      <div class="col col+20 " style="font-weight: bold;">
-        <i class="icon ion-ios7-box-outline"></i> {{list.name}}
-
-        {{ list.mostrecent }} - ammostrecent: 
-        <span ng-bind="moment(list.mostrecent).fromNow(); "></span> : end
-        
+      
+      
+      <div class="col col+20 item-text-wrap lolName">
+        <i class="icon ion-ios7-box-outline"></i> {{list.name}}<br/>
+        <div class="recent" am-time-ago="list.mostrecent"></div>
       </div>
+      
       <div class="col colStat">
         <span class="label">Shared</span><br/>
         <span class="stat">{{list.shared}}</span>
@@ -21,12 +21,7 @@
         <span class="label colStat">Dittoable</span><br/>
         <span class="stat">{{list.dittoable}}</span>
       </div>
-      <div class="col colStat">
-        <span class="label">Newest</span><br/>
-        <!-- list.mostrecent --> 
-        
-        <span class="label" am-time-ago="list.mostrecent"></span>
-      </div>
+      
     </div>
   
   </ion-item>

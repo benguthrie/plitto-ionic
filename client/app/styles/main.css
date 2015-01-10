@@ -6,6 +6,7 @@ body {
 .slider {
   height: 85%;
 }
+
 .slider-slide {
   padding-top: 80px;
   color: #000;
@@ -18,23 +19,14 @@ body {
   margin: 30px auto;
   font-size: 20px;
 }
-/* 
-#list ol {
-  margin-top: 30px;
-}
-#list ol li {
-  margin: 10px 0px; 
-}
-*/
 
-div.commentCount{
+div.commentCount {
   float: right;
   margin-top: -47px;
   padding: 0;
   min-width: 20px;
   height: 20px;
   font-size: 0.5em;
-  
 }
 
 img.title-image {
@@ -47,7 +39,7 @@ span.hint {
 }
 
 .userLine {
-  padding: 0 0 0 50px;;
+  padding: 0 0 0 50px;
   min-height: 45px !important;
   background-color: #32868C;
 }
@@ -58,7 +50,8 @@ a.userLine > h2 {
 }
 
 a.userLine > p {
-  display: none; /* This is the "in common stats" part */
+  display: none;
+  /* This is the "in common stats" part */
 }
 
 a.userLine > img {
@@ -88,11 +81,8 @@ div.gridItem {
   float: left;
   border: 1px solid rgba(100,100,100,0.5);
   margin: 3px;
-  -webkit-box-shadow: 5px 5px 2px -4px rgba(0,0,0,0.52);
-  -moz-box-shadow: 5px 5px 2px -4px rgba(0,0,0,0.52);
   box-shadow: 5px 5px 2px -4px rgba(0,0,0,0.52);
 }
-
 
 table.gridHeader {
   height: 50px;
@@ -114,16 +104,15 @@ td.gridTitle {
   text-overflow: ellipsis;
   font-size: 0.9em;
   padding-left: 0.5em;
-  text-rendering: geometricPrecision; /* Formal grammar: auto | optimizeSpeed | optimizeLegibility | geometricPrecision */
+  text-rendering: geometricPrecision;
+  /* Formal grammar: auto | optimizeSpeed | optimizeLegibility | geometricPrecision */
 }
 
 table.gridStats {
   margin: 5px;
 }
 
-table.gridStats th.statGroup {
-  
-}
+
 
 table.gridStats td.statValue {
   text-align: right;
@@ -133,7 +122,8 @@ span.statLabel {
   font-size: 0.7em;
 }
 
-a.statStandard , a.statShared {
+a.statStandard,
+a.statShared {
   width: 100px;
   display: block;
   text-align: center;
@@ -150,20 +140,18 @@ a.statShared {
   background-color: rgba(200,255,200,0.5);
 }
 
-
 div.itemButtons > div.button {
   width: 60px;
   height: 35px;
   padding: 0;
   line-height: 0.5em;
-  
 }
 
 div.dittoButton {
   font-size: 37px;
 }
 
-div.letsChatIcon{
+div.letsChatIcon {
   /* background-image: url("../img/lets_chat2.png");
   background-size: 65px 42px;
   background-repeat: no-repeat;
@@ -172,7 +160,8 @@ div.letsChatIcon{
   font-size: 35px;
 }
 
-div.letsChatIcon , div.dittoButton {
+div.letsChatIcon,
+div.dittoButton {
   height: 40px;
   clear: both;
 }
@@ -188,8 +177,9 @@ span.buttonCaption {
   font-family: sans-serif, verdana;
 }
 
-.item.wrap, .item-content.wrap {
-white-space: normal;
+.item.wrap,
+.item-content.wrap {
+  white-space: normal;
 }
 
 div.commentsSection {
@@ -199,19 +189,16 @@ div.commentsSection {
   padding: 0;
   display: none;
 }
-section.statTable{
-  
-} 
+
+
 
 section.statTable > header {
   background-color: #888;
 }
 
-section.statTable > div > div.theLabel {
-  
-}
+
+
 section.statTable > div > div.theStat {
-  
   min-width: 2em;
   text-align: right;
 }
@@ -232,7 +219,7 @@ span.innerNo {
   text-shadow: 0 0 3px #B0B0B0;
   position: relative;
   z-index: 2;
-  top: -2px; 
+  top: -2px;
   left: -45px;
   text-align: right;
   width: 30px;
@@ -247,88 +234,94 @@ div.topicLine {
 }
 
 /* Notifications Section */
-  .noteIcon {
-    padding: 0.2em;
-    font-size: 2em;
-    position: relative;
-    left: -25px;
-    top: 20px;
-    float: left;
-  }
 
-  /* The div for users to show */
-  div.sourceAttribution {
-    
-    
-  }
+.noteIcon {
+  padding: 0.2em;
+  font-size: 2em;
+  position: relative;
+  left: -25px;
+  top: 20px;
+  float: left;
+}
+
+/* The div for users to show */
+
+
+
+div.userImage {
+  float: left;
+}
+
+img.bigUser {
+  position: relative;
+  left: 0px;
+  top: 0px;
+  z-index: 1;
+}
+
+img.smallUser {
+  position: relative;
+  left: -30px;
+  top: 5px;
+  z-index: 2;
+  height: 30px;
+  width: 30px;
+}
+
+a.buttonStranger {
+  background-image: url('../img/769-male@3x.png') !important;
+  background-repeat: no-repeat;
+  background-size: 30px;
   
-  div.userImage {
-    
-    float: left;
-  }
+  background-position: center;
+  
+  
+}
 
-  img.bigUser {
-    position: relative;
-    left: 0px;
-    top: 0px;
-    z-index: 1;
-  }
 
-  img.smallUser {
-    position: relative;
-    left: -30px;
-    top: 5px;
-    z-index: 2;
-    height: 30px;
-    width: 30px;
-      
-  }
 
-  button.iconDice {
-    width: 38px;
-        
-    
-    background-image: url('../img/130-dice.png') !important; 
-    background-repeat: no-repeat !important; 
-    background-size: 35px; 
-    padding: 50px;
-  }
+button.iconDice {
+  width: 38px;
+  background-image: url('../img/130-dice.png') !important;
+  background-repeat: no-repeat !important;
+  background-size: 35px;
+  padding: 50px;
+}
 
-  .unread {
-    background-color: rgba(200,255,200,0.5);
-  }
+.unread {
+  background-color: rgba(200,255,200,0.5);
+}
 
-  span.notificationDate {
-    color: #999;
-    position: absolute;
-    right: 0px;
-    bottom: 0px;
-    font-size: 0.8em;
-    float: right;
-    display: block;
-  }
 
-  div.notificationContext {
-    position: relative;
-    vertical-align: text-top;
-    padding-bottom: 20px;
-    padding-left: 120px;
-    margin-left: 0px;
-  }
+span.notificationDate {
+  color: #999;
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  font-size: 0.8em;
+  float: right;
+  display: block;
+}
 
-  div.dittoList, div.dittoThing {
+div.notificationContext {
+  position: relative;
+  vertical-align: text-top;
+  padding-bottom: 20px;
+  padding-left: 120px;
+  margin-left: 0px;
+}
 
-  }
 
-  div.sourceText {
-    padding: 0.1em 4em 0.1em 1em;
-    font-size: 0.8em;
-    background-color: #32868C;
-    min-width: 1s0%;
-    margin-left: -75px;
-    float: left;
-    color: white;
-  }
+
+div.sourceText {
+  padding: 0.1em 4em 0.1em 1em;
+  font-size: 0.8em;
+  background-color: #32868C;
+  min-width: 1s0%;
+  margin-left: -75px;
+  float: left;
+  color: white;
+}
 
 span.notificationNote {
   font-style: italic;
@@ -346,16 +339,22 @@ div.dittoThing {
 }
 
 span.label {
-  font-size: 0.8em;
+  font-size: 0.5em;
+  font-weight: 100;
 }
 
 div.colStat {
   border: 1px solid blue;
-  
   text-align: center;
   margin-right: 5px;
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26); /* Google Material Design Clone */
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  /* Google Material Design Clone */
+  min-width: 90px;
   max-width: 120px;
+  float: right;
+  font-weight: 600;
+  font-size: 1.3em;
+  
 }
 
 div.colPush {
@@ -367,7 +366,21 @@ div.row {
   margin: 0;
 }
 
-h1.pageTitle, h3.pageTitle {
-  margin: 10px 0 5px 10px
+h1.pageTitle,
+h3.pageTitle {
+  margin: 10px 0 5px 10px;
 }
 
+div.button-bar > a.button {
+  font-size: 2em;
+}
+
+div.recent {
+  font-size: 0.8em;
+  
+  padding-left: 2em;
+  color: #bbb;
+  font-weight: 100;
+  
+  
+}
