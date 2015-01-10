@@ -7,8 +7,11 @@
 
     <div class="row">
       <div class="col col+20 " style="font-weight: bold;">
-        {{list.name}}
+        <i class="icon ion-ios7-box-outline"></i> {{list.name}}
 
+        {{ list.mostrecent }} - ammostrecent: 
+        <span ng-bind="moment(list.mostrecent).fromNow(); "></span> : end
+        
       </div>
       <div class="col colStat">
         <span class="label">Shared</span><br/>
@@ -20,7 +23,9 @@
       </div>
       <div class="col colStat">
         <span class="label">Newest</span><br/>
-        <span class="label">{{list.mostrecent}}</span>
+        <!-- list.mostrecent --> 
+        
+        <span class="label" am-time-ago="list.mostrecent"></span>
       </div>
     </div>
   

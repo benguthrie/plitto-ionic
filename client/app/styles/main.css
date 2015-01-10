@@ -366,3 +366,8 @@ div.row {
   padding: 0;
   margin: 0;
 }
+
+h1.pageTitle, h3.pageTitle {
+  margin: 10px 0 5px 10px
+}
+

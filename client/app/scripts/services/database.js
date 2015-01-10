@@ -705,7 +705,7 @@ angular.module('Services.database', [])
     $rootScope.loginMessage = 'Facebook Login in Progress';
     //console.log( "<h3>6. dbFactory.fbTokenLogin: " + fbToken + "</h3>");
 
-    $rootScope.loginMessage = loginParams;
+    // $rootScope.loginMessage = loginParams;
 
     $http({
       method:'POST',

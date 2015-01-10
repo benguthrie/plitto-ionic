@@ -5,7 +5,7 @@
 </a>
 <div class="list" ng-repeat="list in userData.lists">
   <div class="item item-divider listLIne" ng-click="showList(list.lid, list.listname, userData.uid);">
-    {{list.listname}}
+    <i class="icon ion-ios7-box-outline"></i> {{list.listname}}
   </div>
   <div class="item" ng-repeat="item in list.items">
     <div style="float: right;">

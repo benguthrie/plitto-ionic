@@ -1,11 +1,9 @@
 <ion-view title=""  align-title="left">
   <user-nav></user-nav>
   
-  
   <ion-content class="has-header">
     
-    <img style="float: left; margin: 0;" ng-src="http://graph.facebook.com/{{profileData.fbuid}}/picture">
-    <h3 style="margin: 0 0 0 1em; padding: 0;">{{profileData.userName}}</h3>
+    <h1 class="pageTitle"><img style="float: left; margin: 0;" ng-src="http://graph.facebook.com/{{profileData.fbuid}}/picture"> {{profileData.userName}}</h1>
     
     <hr class="clearBoth"/>
     
@@ -14,12 +12,12 @@
     <!-- 
     <a class="button active" ng-class="{'active': nav.view ==='user.us'}" ng-hide="profileData.userId == user.userId " ng-click="nav.view = 'user.us'; ">Us</a>
   -->
-    <a class="button" ng-class="{'active': nav.view ==='user.ditto'}" ng-hide="profileData.userId == user.userId" ng-click="nav.view = 'user.ditto'; getSome(profileData.userId,'ditto');">Ditto</a>
+    <a class="button" ng-class="{'active': nav.view ==='user.ditto'}" ng-hide="profileData.userId == user.userId" ng-click="nav.view = 'user.ditto'; getSome(profileData.userId,'ditto');"><i class="ionicons ion-ios7-checkmark-outline"></i></a>
     
-    <a class="button" ng-class="{'active': nav.view ==='user.feed'}" ng-click="nav.view = 'user.feed'; showFeed(profileData.userId,''); ">Feed</a>
-    <a class="button" ng-class="{'active': nav.view ==='user.lists'}" ng-click="nav.view = 'user.lists'; showLists(profileData.userId); ">Lists</a>
+    <a class="button" ng-class="{'active': nav.view ==='user.feed'}" ng-click="nav.view = 'user.feed'; showFeed(profileData.userId,''); "><i class="ionicons ion-ios7-pulse-strong"></i></a>
+    <a class="button" ng-class="{'active': nav.view ==='user.lists'}" ng-click="nav.view = 'user.lists'; showLists(profileData.userId); "><i class="ionicons ion-ios7-box-outline"></i></a>
     <!-- <a class="button" ng-class="{'active': nav.view ==='user.shared'}" ng-hide="profileData.userId == user.userId" ng-click="nav.view = 'user.shared';getSome(profileData.userId,'shared');">Queue</a> -->
-        <a class="button" ng-class="{'active': nav.view ==='user.chat'}" ng-click="nav.view = 'user.chat'; userChat(profileData.userId); ">Chat</a>
+        <a class="button" ng-class="{'active': nav.view ==='user.chat'}" ng-click="nav.view = 'user.chat'; userChat(profileData.userId); "><i class="ionicons ion-ios7-chatboxes-outline"></i></a>
     <!-- THIS HAS BEEN SUPERCEDED BY CHAT - Restore this <a class="button" ng-class="{'active': nav.view ==='user.milestones'}" ng-click="nav.view = 'user.milestones';">Milestones</a> --> 
   </div> 
 <!-- End menu --> 
@@ -80,7 +78,7 @@
   
 <!-- Start Milestones -->    
   <div ng-show="nav.view==='user.chat'">
-    <h3>Chat</h3>  
+    <h3 class="pageTitle"><i class="ionicons ion-ios7-chatboxes-outline"></i> Chat</h3>  
     
     
     

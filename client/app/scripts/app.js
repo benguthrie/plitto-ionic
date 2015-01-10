@@ -11,7 +11,8 @@ angular.module('Plitto', [
   //'config',
   'ngResource',
   'Plitto.controllers',
-  'Plitto.services',
+  'Plitto.services'
+  // 'angularMoment'
 ])
 
 
@@ -462,7 +463,7 @@ angular.module('Plitto', [
   
     }
   };
-}).directive('listOfLists', function($rootScope, dbFactory, $state) {
+}).directive('listOfLists', function($rootScope, dbFactory, $state ) {
   return {
     restrict: 'E',
     templateUrl: 'directives/listOfLists.html',
