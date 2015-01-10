@@ -326,8 +326,8 @@ angular.module('Plitto', [
     },
     controller: function($scope, dbFactory) {
       /* Ditto */
-      $scope.ditto = function(mykey, uid, lid, tid, $event,scopeName){
-        dbFactory.dbDitto(scopeName,mykey,uid,lid,tid, $event);
+      $scope.ditto = function(mykey, uid, lid, tid, itemKey, $event,scopeName){
+        dbFactory.dbDitto( scopeName, mykey, uid, lid, tid, itemKey, $event);
       };
   
       /* User */
@@ -348,13 +348,13 @@ angular.module('Plitto', [
       };
   
       /* Let's Chat
-      letsChat(userData.uid, list.lid, item.tid, $event, store); " */
-      $scope.letsChat = function(uid, lid, tid, $event, store, $index){
-        console.log('letsChat app.js directive', uid, lid, tid, $event, store, $index);
+      letsChat(userData.uid, list.lid, item.tid, item.ik, $event, store); " */
+      $scope.letsChat = function(uid, lid, tid, itemKey, $event, store, $index){
+        console.log('letsChat app.js directive', uid, lid, tid, itemKey, $event, store, $index);
         // var length = eval('$rootScope.' + store + '.length');
         var tempStore = eval('$rootScope.' + store);
   
-        console.log('tempStore: ', tempStore);
+        console.log('letsChat tempStore: ', tempStore);
         
   // Get the user ID number.
         var upos = null;
@@ -404,14 +404,14 @@ angular.module('Plitto', [
           
         }
         // Call the addComment bit to activate or deactivate the queue item
-        dbFactory.addComment ( uid, lid, tid, '0', isActive );
+        dbFactory.addComment ( uid, lid, tid, itemKey, '0', isActive );
         console.log('commentactive:  ',
           eval('$rootScope.' + store + '[' + upos + '].lists[' + lpos + '].items[' + tpos + '].commentActive; '  )
         );
       };
   
-      $scope.makeItemComment = function (newComment, uid, lid, tid, store, $index){
-        console.log('makeItemComment', newComment, uid, lid, tid, store, $index);
+      $scope.makeItemComment = function (newComment, uid, lid, tid, itemKey, store, $index){
+        console.log('makeItemComment', newComment, uid, lid, tid, itemKey, store, $index);
         // Find the user, then the list, then use the index.
         // var length = eval('$rootScope.' + store + '.length' );
         var tempStore = eval('$rootScope.' + store);
@@ -454,7 +454,7 @@ angular.module('Plitto', [
         eval('$rootScope.' + store + '[' + upos + '].lists[' + lpos + '].items[' + tpos + '].commentText = "' + newComment + '"; '  );
 
         // submit it to the database
-        dbFactory.addComment ( uid, lid, tid, newComment, '1');
+        dbFactory.addComment ( uid, lid, tid, itemKey, newComment, '1');
 
         // TODO1 Clear the comment field
         

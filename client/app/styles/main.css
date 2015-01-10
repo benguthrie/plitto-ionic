@@ -187,16 +187,11 @@ div.commentsSection {
   border-top: 1px solid #ccc;
   font-size: 0.8em;
   padding: 0;
-  display: none;
 }
-
-
 
 section.statTable > header {
   background-color: #888;
 }
-
-
 
 section.statTable > div > div.theStat {
   min-width: 2em;

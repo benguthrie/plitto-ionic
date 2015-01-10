@@ -14,6 +14,7 @@ module.exports = function (grunt) {
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
 
+
   // Define the configuration for all the tasks
   grunt.initConfig({
 
@@ -117,6 +118,8 @@ module.exports = function (grunt) {
         src: ['test/unit/**/*.js']
       }
     },
+
+
 
     // Empties folders to start fresh
     clean: {
@@ -511,6 +514,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('coverage', ['karma:continuous', 'connect:coverage:keepalive']);
 
+  
   grunt.registerTask('default', [
     'newer:jshint',
     'karma:continuous',

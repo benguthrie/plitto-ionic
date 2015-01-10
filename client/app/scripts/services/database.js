@@ -221,13 +221,14 @@ angular.module('Services.database', [])
 
   };
 
-  var addComment = function ( uid, lid, tid, newComment, status ){
-    console.log('dbFactory.addComment: ', uid, lid, tid, newComment, status);
+  var addComment = function ( uid, lid, tid, itemKey, newComment, status ){
+    console.log('dbFactory.addComment: ', uid, lid, tid, itemKey, newComment, status);
     var params = $.param({
       token: $rootScope.token,
       uid: uid,
       lid: lid,
       tid: tid,
+      itemKey: itemKey,
       comment: newComment,
       status: status
     });
@@ -546,10 +547,11 @@ angular.module('Services.database', [])
 
   // dbFactory.dbDitto('bite',i,j,k,mykey,uid,lid,tid);      
 
-  var dbDitto = function (scopeName, mykey, uid, lid, tid, event ) {
+  var dbDitto = function (scopeName, mykey, uid, lid, tid, itemKey, event ) {
     //  console.log('dbFactory.dbDitto | mykey: ', mykey,'| ownerid: ', uid, '| listid: ',lid, tid,i,j,k);
     var i,j,k;
 
+    // This is for updating the current scope in other places. TODO2 - Test Later.
     findItem:{
       for(i in eval('$rootScope.' + scopeName)){
         if(  eval('$rootScope.' + scopeName + '[i].uid') === uid){
@@ -580,9 +582,7 @@ angular.module('Services.database', [])
     var dittoParams = $.param(
       {
         action: action ,
-        listid: lid,
-        fromuserid: uid,
-        thingid: tid,
+        itemKey: itemKey,
         token: $rootScope.token
       }
     );
