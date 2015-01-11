@@ -364,6 +364,7 @@ div.row {
 h1.pageTitle,
 h3.pageTitle {
   margin: 10px 0 5px 10px;
+  font-size: 1.1em;
 }
 
 div.button-bar > a.button {
