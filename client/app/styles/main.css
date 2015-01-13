@@ -339,21 +339,23 @@ span.label {
 }
 
 div.colStat {
-  border: 1px solid blue;
+  
   text-align: center;
   margin-right: 5px;
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  
   /* Google Material Design Clone */
-  min-width: 90px;
-  max-width: 120px;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  
+  min-width: 50px;
+  max-width: 75px;
   float: right;
   font-weight: 600;
   font-size: 1.3em;
-  
+  padding: 3px;;
 }
 
 div.colPush {
-  margin-top: 30px;
+  
 }
 
 div.row {
@@ -361,10 +363,16 @@ div.row {
   margin: 0;
 }
 
+div.row > div.col {
+  background-color: white;
+  padding: 0;
+}
+
 h1.pageTitle,
 h3.pageTitle {
   margin: 10px 0 5px 10px;
-  font-size: 1.1em;
+  font-size: 1.7em;
+  
 }
 
 div.button-bar > a.button {
