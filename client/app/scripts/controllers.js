@@ -37,7 +37,6 @@ angular.module('Plitto.controllers', [])
         // console.log("TOKEN TO PROCESS: ", theToken);
         $rootScope.loginMessage = 'Facebook Token received. Generating Plitto Login';
         dbFactory.fbTokenLogin(theToken);
-        
       }
     }
     

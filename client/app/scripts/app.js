@@ -41,9 +41,9 @@ angular.module('Plitto', [
       StatusBar.styleDefault();
     }
     // Get the access token from Facebook. TODO1 - 12/20 - It looks like something is intercepting it, and removing it.
-    console.log('access_token location: ', window.location.hash.indexOf('access_token') );
+    console.log('ionicPlatform.run: access_token location: ', window.location.hash.indexOf('access_token') );
     if ( window.location.hash.indexOf('access_token') !== -1){
-      console.log('Found the token.', window.location.hash, window.location.hash.indexOf('access_token') );
+      console.log('ionicPlatform.run: Found the token.', window.location.hash, window.location.hash.indexOf('access_token') );
       // TODO2UX - Show a loading indicator
     
       var hash = window.location.hash;

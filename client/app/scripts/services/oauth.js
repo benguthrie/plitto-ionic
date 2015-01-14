@@ -58,8 +58,9 @@ angular.module('Services.oauth', [])
     dbFactory.fbTokenLogin(fbToken);
     
     // Close the auth window?
-    console.log('authFinished wants to closed authWindow.');
-    console.log('authWindow: ',authWindow);
+    console.log('authFinished wants to close authWindow because the login is complete.' , authWindow );
+    
+    // Close the window
     authWindow.close();
   };
   
@@ -99,9 +100,11 @@ angular.module('Services.oauth', [])
       authFinished(accessToken);
 
       $timeout(function () {
-        // authWindow.close();
-        authFinished(accessToken);
-      }, 300);
+        // 
+        authWindow.close();
+        console.log('Facebook timed out.')
+        // TODO1 - Line deactivated on 1/13/2015 authFinished(accessToken);
+      }, 3000);
     } else {
       console.log('loadstart debug 72. No accessToken or error');
     }

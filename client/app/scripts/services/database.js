@@ -4,7 +4,7 @@ angular.module('Services.database', [])
 // This will handle storage within local databases.
 .factory('dbFactory', ['$http', '$rootScope', 'localStorageService', '$state',  function ($http, $rootScope, localStorageService, $state ){
   function processNotification ( theData , theUserId ) {
-    console.log('theUserId is not used. TODO2', theUserId);
+    // console.log('theUserId is not used. TODO2', theUserId);
     // console.log('this is the data: ', theData , theUserId );
     var notificationFeed = [];
     var makeRead = [];
@@ -47,7 +47,7 @@ angular.module('Services.database', [])
     .success(function (data, status, headers, config) {
       // Do something?
       // 
-      console.log('TODO2 use db line 50', data, status, headers, config );
+      console.log('TODO2 use db line 50. Do something?', data, status, headers, config );
     }
     // console.log("profile feed after showfeed",$rootScope.profileData.feed);
     );
@@ -56,7 +56,7 @@ angular.module('Services.database', [])
 
 
   var updateCounts = function () {
-    console.log('!!!UpdateCounts');
+    // console.log('!!!UpdateCounts');
 
     var params = $.param({
       token: $rootScope.token
@@ -70,7 +70,7 @@ angular.module('Services.database', [])
     })
     .success(function (data, status, headers, config) {
       // Do something?
-      console.log('updateCounts: ', data, 'TODO2 use status, headers, config: ', status, headers, config );
+      // console.log('updateCounts return: ', data, 'TODO2 use status, headers, config: ', status, headers, config );
 
       $rootScope.stats.alertCount = data.results.notifications;
       $rootScope.stats.friends = data.results.friendCount;
@@ -119,15 +119,13 @@ angular.module('Services.database', [])
     return promise;
 
   /*  
-    // 12/11/2014 - TODO1 - Return this.
+    // 12/11/2014 - TODO2 - Return this. What is this? 
     var tempChat = demoChat;
     var returnChat = [];
     for (var chatMeme in tempChat) {
-      console.log('chatMeme: ', tempChat[chatMeme]);
+      // console.log('chatMeme: ', tempChat[chatMeme]);
 
       tempChat[chatMeme].content.userName = "I HAVE ALTERED " + tempChat[chatMeme].content.userName;
-
-
 
       returnChat.push(tempChat[chatMeme]);
     }
@@ -222,7 +220,7 @@ angular.module('Services.database', [])
   };
 
   var addComment = function ( uid, lid, tid, itemKey, newComment, status ){
-    console.log('dbFactory.addComment: ', uid, lid, tid, itemKey, newComment, status);
+    // console.log('dbFactory.addComment log: ', uid, lid, tid, itemKey, newComment, status);
     var params = $.param({
       token: $rootScope.token,
       uid: uid,
@@ -241,7 +239,7 @@ angular.module('Services.database', [])
     })
     .success(function (data, status, headers, config) {
       // Do something?
-      console.log('New comment succeeded.', data, 'TODO2 use status, headers, config: ', status, headers, config );
+      console.log('New comment succeeded. Do something?', data, 'TODO2 use status, headers, config: ', status, headers, config );
     }
     // console.log("profile feed after showfeed",$rootScope.profileData.feed);
     );
@@ -251,7 +249,7 @@ angular.module('Services.database', [])
 
   var dbInit = function ( fCallback ) {
 
-    console.log('rootScope initialized! Mount up!');
+    // console.log('database.dbInit called. rootScope initialized! Mount up!');
 
     // Constants / For checking things.
     $rootScope.constants = {
@@ -601,8 +599,8 @@ angular.module('Services.database', [])
         var mynewkey = null;
         if(action === 'ditto') {
 
-          mynewkey  = data.results[0]['thekey']; // TODO2 Convert to dot notation. 1/9/14
-          var friendsWith = data.results[0]['friendsWith']; // TODO2 Convert to dot notation. 1/9/14
+          mynewkey  = data.results[0].thekey; 
+          var friendsWith = data.results[0].friendsWith;
 
           // Update the "Friends With" 
           $(event.target).html('+' + friendsWith).removeClass('ion-ios7-checkmark-outline').addClass('ion-ios7-checkmark');
@@ -723,7 +721,7 @@ angular.module('Services.database', [])
         // $rootScope.$broadcast("getLoginStatus", {value:'value'});
         // $rootScope.$broadcast('getLoginStatus', { fbresponse: null});
         $rootScope.loginMessage = 'Plitto FB Login Complete';
-        console.log('fbTokenLogin response: ',data);
+        console.log('database.fbTokenLogin response: TODO1 - DO NOT CALL TWICE ',data);
 
         // console.log('response from fbToken: ',data);
         // data.me.puid is the plitto userid. That should be there.
@@ -823,7 +821,7 @@ angular.module('Services.database', [])
       )
       .success(
         function (data,status,headers,config) {
-          console.log('TODO2 Use shc', status, headers, config);
+          // console.log('TODO2 database.pFriends Use shc', status, headers, config);
           
           // Handle the users, lists and things.
           // Add it to the scope, so it can be shown
@@ -835,7 +833,7 @@ angular.module('Services.database', [])
       );
     } else {
       var response = 'You should invite your friends to Plitto';
-      console.log('TODO2 use response',response);
+      // console.log('TODO2 use response? ',response);
     }
   };
 
@@ -844,14 +842,14 @@ angular.module('Services.database', [])
   */
   var getUserListOfLists = function (friendId, theScope) {
     // TODO2 - load from local storage, if it's there 
-    console.log('getUserListOfLists: friendId: ',friendId, ' theScope: ', theScope);
+    // console.log('database.getUserListOfLists: getUserListOfLists: friendId: ',friendId, ' theScope: ', theScope);
 
     // Get from local storage first, then populate.
     if(localStorageService.get('user'+friendId +'lists')){
-      console.log('load user lists from local storage');
+      // console.log('database.getUserListOfLists load user lists from local storage');
       $rootScope.profileData.lists = localStorageService.get('user' + friendId + 'lists');
     }else{
-      console.log('local storage not set');
+      console.log('database.getUserListOfLists: local storage not set');
     }
 
     var params = $.param({userfilter:friendId, token: $rootScope.token });
@@ -866,7 +864,7 @@ angular.module('Services.database', [])
     )
     .success(
       function (data,status,headers,config) {
-        console.log('TODO2 Use shc', status, headers, config);
+        console.log('TODO3 database.listOfLists: Use shc', status, headers, config);
         // console.log("testlogin: ",data, data.puid);
         // Handle the users, lists and things.
         // TODO - Come up with a strategy of where to store this better than Rootscope. Also, for each user, when navigating around, this could change.
@@ -915,7 +913,7 @@ angular.module('Services.database', [])
     )
     .success(
       function (data,status,headers,config) {
-        console.log('TODO2 Use shc', status, headers, config);
+        console.log('Database.addToList:TODO3 Use shc', status, headers, config);
         //
         // console.log("addtolistdata: ",data);
         // console.log('detailed',data.results[0].thekey);
@@ -938,7 +936,7 @@ angular.module('Services.database', [])
         var myThingAlready = -1;
 
         var i = 0;
-        console.log( 'what is in this new lsit? ', $rootScope.list, $rootScope.list.mine );
+        // console.log( 'database.addToList: what is in this new list? ', $rootScope.list, $rootScope.list.mine );
 
         for(i in $rootScope.list.mine[0].lists[0]){
           if($rootScope.list.mine[0].lists[0].tid === item.thingid){
@@ -986,7 +984,7 @@ angular.module('Services.database', [])
   /* 9/3/2014 */
   var showAList = function (listNameId, listName, userFilter) {
     // 
-    console.log('showAList: ',listNameId, listName , userFilter);
+    // console.log('database.showAList: ',listNameId, listName , userFilter);
 
     $rootScope.list = {
       listId: listNameId,
@@ -1013,12 +1011,12 @@ angular.module('Services.database', [])
 
     // Load from local storage, if it exists.
     var viewTypes = new Array('ditto','shared','feed','strangers','mine');
-    console.log('ls get mine: ',localStorageService.get('listId' + listNameId + 'mine'));
+    // console.log('database.showAList: ls get mine: ',localStorageService.get('listId' + listNameId + 'mine'));
 
     for(var i in viewTypes){
       if(localStorageService.get('listId' + listNameId + viewTypes[i])){
         if(viewTypes[i] === 'mine'){
-          console.log(' this is mine.');
+          console.log('database.showAList: TODO3 this is mine. Why do we care?');
 
         }
         eval('$rootScope.list.' + viewTypes[i] + ' = localStorageService.get("listId" + listNameId + "" + viewTypes[i] )' );
@@ -1036,7 +1034,7 @@ angular.module('Services.database', [])
 
   /* Populate a list with all the different views, if they're there. */
   var loadList = function(listNameId, listName, userIdFilter, type, sharedFilter, oldestKey){
-    console.log('loadList573 - rs.list before: ',$rootScope.list);
+    // console.log('database.loadList - rs.list before: ',$rootScope.list);
     var params = $.param({
       id: listNameId,
       type: type,
@@ -1055,8 +1053,8 @@ angular.module('Services.database', [])
       }
     ).success(
       function(data, status, headers, config){
-        console.log('loadList: ', data.results);
-        console.log('TODO2 Use shc', status, headers, config);
+        // console.log('loadList: ', data.results);
+        // console.log('database.loadlist: TODO3 Use shc', status, headers, config);
 
         var viewTypes = new Array('ditto','shared','feed','strangers','mine');
 
@@ -1065,7 +1063,7 @@ angular.module('Services.database', [])
             // console.log('i: ',i, type[i]);
 
             // Build each type, but only clear the store if the request type was "all"
-            console.log('Type response: ', typeof data.results[ viewTypes[i] ], viewTypes[i], data.results[ viewTypes[i] ], ' typeof: ',typeof (data.results[ viewTypes[i] ].rowcount) );
+            // console.log('database.loadList Type response: ', typeof data.results[ viewTypes[i] ], viewTypes[i], data.results[ viewTypes[i] ], ' typeof: ',typeof (data.results[ viewTypes[i] ].rowcount) );
 
             if( typeof eval('data.results.' + viewTypes[i]) !== 'undefined' && typeof (data.results[ viewTypes[i] ].rowcount) !== 'undefined')
               // Clean out the store if there were no results
@@ -1079,7 +1077,7 @@ angular.module('Services.database', [])
               }
             }
             else {
-              console.log('make type: ',viewTypes[i]);
+              // console.log('database.loadList - make type: ',viewTypes[i]);
               // Build the view
               eval('$rootScope.list.' + viewTypes[i] + '= data.results.' + viewTypes[i]);
               // Create the local storage
@@ -1128,7 +1126,7 @@ angular.module('Services.database', [])
     )
     .success(
       function (data,status,headers,config) {
-        console.log('TODO2 Use shc', status, headers, config);
+        // console.log('database.getMore TODO3 Use shc', status, headers, config);
         // Append the data to the proper place.
         // console.log('data.results size',data.results,data.results.length);
 
@@ -1142,7 +1140,7 @@ angular.module('Services.database', [])
           console.log('rootScope.list built by getMore: ',$rootScope.list.items);
 
         } else if(type==='user') {
-          console.log('TODO1 - Build the place to store user information');
+          console.log('database.getMore TODO2 - Build the place to store user information');
         }
 
       }
