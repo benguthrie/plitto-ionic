@@ -92,13 +92,14 @@ angular.module('Services.database', [])
     // Populate the notifications from an api call..
     var params = $.param({
       token: $rootScope.token,
-      userId: userId
+      userFilter: userId
     });
 
 
     var promise = $http({
       method: 'POST',
-      url: apiPath + 'loadNotifications',
+      // url: apiPath + 'loadNotifications',
+      url: apiPath + 'chatabout',
       data: params,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
@@ -118,94 +119,7 @@ angular.module('Services.database', [])
     // console.log("The Promise: ", promise );
     return promise;
 
-  /*  
-    // 12/11/2014 - TODO2 - Return this. What is this? 
-    var tempChat = demoChat;
-    var returnChat = [];
-    for (var chatMeme in tempChat) {
-      // console.log('chatMeme: ', tempChat[chatMeme]);
-
-      tempChat[chatMeme].content.userName = "I HAVE ALTERED " + tempChat[chatMeme].content.userName;
-
-      returnChat.push(tempChat[chatMeme]);
-    }
-
-
-    return returnChat;
-  */
   };
-    /*
-  var demoChat = [{
-          type: "chat",
-          content: {
-            userName: "Emily Guthrie",
-            userId: "2",
-            listName: "Things Other People Like That I Don't",
-            listId: "2911",
-            thingName: "mayonnaise",
-            thingId: "937",
-            note: "Don't you use mayonnaise in your peanuts?",
-            read: "0",
-            date: "2014-12-10 12:15"
-          }
-        },
-        {
-          type: "ditto",
-          content: {
-            userName: "Emily Guthrie",
-            userId: "2",
-            listName: "My Children",
-            listId: "2911",
-            thingName: "Judith",
-            thingId: "937",
-            note: "",
-            read: "0",
-            date: "2014-12-10 12:15"
-          }
-        },
-        {
-          type: "friend",
-          content: {
-            userName: "Emily Guthrie",
-            userId: "2",
-            listName: "Things Other People Like That I Don't",
-            listId: "2911",
-            thingName: "mayonnaise",
-            thingId: "937",
-            note: "",
-            read: "0",
-            date: "2014-12-10 12:15"
-          }
-        },
-        {
-        type: "milestone",
-          content: {
-            userName: "Emily Guthrie",
-            userId: "2",
-            listName: "Things Other People Like That I Don't",
-            listId: "2911",
-            thingName: "",
-            thingId: "",
-            note: "You now have 20 items in this list",
-            read: "0",
-            date: "2014-12-10 12:15"
-          }
-        },
-
-        {
-          type: "introduction",
-          content: {
-            userName: "Manuel Noriega",
-            userId: "200",
-            listName: "",
-            listId: "",
-            thingName: "",
-            thingId: "",
-            note: "I see that you need to borrow a band saw. I've got one that I'll loan you. Also, I too hate mayonnaise.",
-            read: "0",
-            date: "2014-12-10 12:15"
-          }
-        }]; */
 
   var apiPath = (window.cordova) ? 'http://plitto.com/api/2.0/' : '/api/2.0/';
 
@@ -603,13 +517,20 @@ angular.module('Services.database', [])
           var friendsWith = data.results[0].friendsWith;
 
           // Update the "Friends With" 
-          $(event.target).html('+' + friendsWith).removeClass('ion-ios7-checkmark-outline').addClass('ion-ios7-checkmark');
+          // $(event.target).html('+' + friendsWith +' <i style="ionicon ion-ios7-checkmark"></i>').removeClass('ion-ios7-checkmark-outline').addClass('ion-ios7-checkmark');
+          
+          
+          $(event.target).addClass('ion-ios7-checkmark').removeClass('ion-ios7-checkmark-outline');
+          
+          // Update this item's new "Friends With"
+          eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].friendsWith = "+ ' +friendsWith + '"');
 
           // For the user and the list, change the increments of dittoable and in common.
         } else {
 
           // It was removed. Finalize that.
-          $(event.target).removeClass('ion-ios7-checkmark').addClass('ion-ios7-checkmark-outline').html('');
+          $(event.target).removeClass('ion-ios7-checkmark').addClass('ion-ios7-checkmark-outline');
+          eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].friendsWith = ""');
         }
 
         // Update my key within the correct scope.
@@ -617,6 +538,7 @@ angular.module('Services.database', [])
        //  console.log('rs sn: ',scopeName, $rootScope[scopeName]);
         // $rootScope[scopeName][i].lists[j].items[k].mykey = mynewkey;
         eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].mykey = ' +mynewkey);
+        
 
       }
     );

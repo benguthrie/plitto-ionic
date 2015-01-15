@@ -2,8 +2,8 @@
   <user-nav></user-nav>
   
   <ion-content class="has-header">
-    
-    <h1 class="pageTitle"><img style="float: left; margin: 0;" ng-src="http://graph.facebook.com/{{profileData.fbuid}}/picture"> {{profileData.userName}}</h1>
+    <img style="float: left; margin: 0;" ng-src="http://graph.facebook.com/{{profileData.fbuid}}/picture">  
+    <h1 class="pageTitle" style="margin-left: 10px;" ng-bind="profileData.userName"></h1>
     
     <hr class="clearBoth"/>
     
@@ -63,6 +63,7 @@
   
 <!-- Start Shared -->  
   <div class="list card" ng-repeat="user in $root.profileData.shared" ng-show="nav.view==='user.shared'">
+    
     <user-list-thing store="profileData.shared" source="profile" user-data="user"></user-list-thing>
   </div>
 <!-- End Shared Section --> 
@@ -78,11 +79,8 @@
   
 <!-- Start Milestones -->    
   <div ng-show="nav.view==='user.chat'">
-    <h3 class="pageTitle"><i class="ionicons ion-ios7-chatboxes-outline"></i> Chat</h3>  
-    
-    
-    
-      <chat notifications-data="profileData.chat"></chat>
+    <h3 class="pageTitle"><i class="ionicons ion-ios7-chatboxes-outline"></i> Our Dittos &amp; Chats</h3>  
+    <user-list-thing store="profileData.chat" source="profile" user-data="user"></user-list-thing>
     
   </div>
 <!-- End Milestones -->       

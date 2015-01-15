@@ -1,69 +1,145 @@
-<a class="item item-avatar userLine" ng-click="showUser(userData.uid,userData.username,'ditto', userData.fbuid);">
-  <img ng-src="{{ userData.uid === '0' && 'img/769-male@3x.png' || 'http://graph.facebook.com/' + userData.fbuid + '/picture' }}"/>
-  <h2>{{userData.username}}</h2>
-  <p>IN COMMON STATS?</p>
-</a>
-<div class="list" ng-repeat="list in userData.lists">
-  <div class="item item-divider listLIne" ng-click="showList(list.lid, list.listname, userData.uid);">
-    <i class="icon ion-ios7-box-outline"></i> {{list.listname}}
+<!-- Begin the block for the list. --> 
+<div class="listBlock" ng-repeat="list in userData.lists">
+  <!-- BEGIN User Row -->
+  <a class="item item-avatar userLine" ng-click="showUser(userData.uid,userData.username,'ditto', userData.fbuid);">
+    <img ng-src="{{ userData.uid === '0' && 'img/769-male@3x.png' || 'http://graph.facebook.com/' + userData.fbuid + '/picture' }}"/>
+    <h2>{{userData.username}}</h2>
+  </a>
+
+  <!-- BEGIN List Line --> 
+  <div class="item item-divider listLine" ng-click="showList(list.lid, list.listname, userData.uid);">
+    <i class="listIcon icon ion-ios7-box-outline"></i><span ng-bind="list.listname"></span>
   </div>
-  <div class="item" ng-repeat="item in list.items">
-    <div style="float: right;">
-      <div 
-        class="button" 
-        style="float: right; margin-left: 4px;"
-        ng-click="letsChat( userData.uid, list.lid, item.tid, item.ik, $event, store, $index); "
-        ng-hide=" $root.user.userId === userData.uid "
-        ng-class="{'active' : item.commentActive === '1' }">
-        <div class="letsChatIcon ionicons ion-ios7-chatboxes-outline"></div>
-        <!-- <div class="commentCount" ng-bind="item.commentActive"></div> --> 
-      </div> 
-      
-      <div 
-       class="button"
-       style="float: right;" 
-       ng-click="ditto(item.mykey, userData.uid, list.lid, item.tid, item.ik, $event, store);">
-        <div class="dittoButton"
-           ng-class="{'ionicons ion-ios7-bolt' : item.mykey === 0 ,'ionicons ion-ios7-checkmark-outline' : item.mykey === null , 
-                     'ionicons ion-ios7-checkmark' : item.mykey > 0 }">
+  <!-- END List Line -->
+
+  <!-- Begin the item (repeating) --> 
+  <div class="item listItem card" ng-repeat="item in list.items">
+    <!-- BEGIN Item Name / Ditto / Date Row -->
+    <div class="row thingNameRow">
+      <div class="col col-80">
+
+        <div 
+          ng-click="showThing(item.tid, item.thingname, userData.uid);" 
+          class="item-text-wrap">
+          {{item.thingname}} 
+          <div class="recent" am-time-ago="item.added"></div>
+          <!-- <h6 style="display: none;">{{item.added}}</h6>  --> 
+          <!-- <h6 ng-show="item.dittouser === null" class="mega-octicon octicon-pencil">_</h6> -->
+          <h6 ng-show="item.dittouser !== null">dittoed from {{item.dittousername}}</h6>
         </div>
       </div>
-      
-    </div>
-    
-    <div ng-click="showThing(item.tid, item.thingname, userData.uid);" class="item-text-wrap">
-      <!-- <div class="button ionicons ion-ios7-arrow-down" style="float: right;" ng-click="showButtons($event);"></div> --> 
-      {{item.thingname}} 
-      <div class="recent" am-time-ago="item.added"></div>
-      <!-- <h6 style="display: none;">{{item.added}}</h6>  --> 
-      <!-- <h6 ng-show="item.dittouser === null" class="mega-octicon octicon-pencil">_</h6> -->
-      <h6 ng-show="item.dittouser !== null">dittoed from {{item.dittousername}}</h6>
-    </div>
-    
-    
-    
-    <div class="commentsSection" id="comments{{userData.uid}}{{list.lid}}{{item.tid}}" 
-       ng-show=" item.commentActive === '1' ">
-      
-      <div style="clear: both;" ng-show=" item.commentText.length > 0 " >
-        <span class="hint">Your Comment:</span><br> 
-        <img ng-src="http://graph.facebook.com/{{$root.user.fbuid}}/picture?height=30&width=30" style="float: left; margin-right: 10px;"/>
-        <span style="float: left;"> {{item.commentText}} </span> 
-        <button type="button" ng-click=" newComment.theValue = item.commentText; item.commentText = null; " style="float: right;">Edit</button>
-        
+      <div class="col col-10" ng-bind="item.friendsWith"></div>
+      <div class="col col-10">
+        <div 
+          ng-click="ditto(item.mykey, userData.uid, list.lid, item.tid, item.ik, $event, store);">
+
+          <div class="dittoButton"
+            ng-class="
+              {
+               'ionicons ion-ios7-bolt' : item.mykey === 0 , 
+               'ionicons ion-ios7-checkmark-outline' : item.mykey === null , 
+               'ionicons ion-ios7-checkmark' : item.mykey > 0 
+            }">
+          </div>
+        </div>
       </div>
-      <!-- TODO1 - This needs to submit on change --> 
-      <form name="itemComment" ng-submit="makeItemComment(newComment.theValue, userData.uid, list.lid, item.tid, item.ik, store, $index ); newComment.theValue = null; " style="clear: both;" 
-        ng-show=" item.commentText === null || item.commentText.length === 0 " >
-        <span class="hint">Add a note:</span><br> 
-        <label class="item item-input">
-          <img ng-src="http://graph.facebook.com/{{$root.user.fbuid}}/picture?height=30&width=30" style="float: left; margin-right: 10px;"/>
-          <input type="text" ng-model="newComment.theValue" id="addCommentText" placeholder="Tell them why you want to chat">
-        </label>
-      </form>
+
     </div>
-    
-      
+    <!-- END Item Name / Ditto / Date Row -->
+
+    <!-- BEGIN Comment Line -->
+
+    <div class="row commentRow" ng-hide=" userData.uid === $root.user.userId ">
+      <!-- BEGIN - My Comment --> 
+      <!-- Begin - Comment Button --> 
+      <div 
+        class="col col-10 commentButton"
+
+        ng-click="letsChat( userData.uid, list.lid, item.tid, item.ik, $event, store, $index ); "
+        ng-hide=" $root.user.userId === userData.uid "
+        ng-class="{
+          'ion-ios7-chatboxes' : item.commentActive === '1' ,
+          'ion-ios7-chatboxes-outline' : item.commentActive !== '1' }"
+         >
+
+      </div>
+      <!-- End - Comment Button --> 
+      <div class="col col-10" ng-show="item.commentActive !== '1' " ng-click="letsChat( userData.uid, list.lid, item.tid, item.ik, $event, store, $index ); ">
+        <!-- This is a button so adding the comment takes the whole line. --> 
+      </div>
+
+      <div class="col col-10 commentProfile" ng-show=" item.commentActive==='1' ">
+        <img  
+          ng-show="item.commentActive==='1'" 
+          ng-src=" {{'http://graph.facebook.com/' + $root.user.fbuid + '/picture?height=20&width=20'}}" />
+      </div>
+
+      <!-- Begin My Comment Text --> 
+      <div class="col col-100" ng-show="item.commentActive==='1'">
+
+        <div class="commentsSection" id="comments{{userData.uid}}{{list.lid}}{{item.tid}}" 
+           ng-show=" item.commentActive === '1' ">
+
+          <div style="clear: both; " 
+               ng-click=" newComment.theValue = item.commentText; item.commentText = null; "
+               class="item-text-wrap" ng-show=" item.commentText.length > 0 " >
+            <button type="button" 
+                ng-click=" newComment.theValue = item.commentText;  "
+                  style="float: right; margin">
+              Edit
+            </button>
+            {{item.commentText}}
+            <!-- Button to edit existing comment --> 
+
+
+          </div>
+          <!-- TODO1 - This needs to submit on change --> 
+          <form 
+            name="itemComment" 
+            ng-submit="makeItemComment(newComment.theValue, userData.uid, list.lid, item.tid, item.ik, store, $index ); newComment.theValue = null; " style="clear: both;" 
+            ng-show=" item.commentText === null || item.commentText.length === 0 " >
+
+            <label class="item item-input">
+
+              <input 
+                  type="textarea" 
+                  class="item-text-wrap" 
+                     ng-model="newComment.theValue" 
+                     id="addCommentText" 
+                     placeholder="Your Comment Text"/>
+              <!-- Button to submit edit --> 
+              <button type="submit" 
+                ng-click=" console.log('text: ',newComment.theValue); "
+                  style="float: right;">
+                Done
+              </button>
+
+            </label>
+          </form>
+        </div>
+
+      </div>
+      <!-- END - My Comment Text --> 
+
+
+
+    </div>
+
+    <!-- END Comment Line -->
+
+    <!-- Begin the right button section --> 
+    <div style="float: right;">
+
+
+
+
+    </div>
+    <!-- End the right button section-->
+
+
   </div>
-  
+  <!-- Item End --> 
+
+  <div class="endOfList"></div>
+
 </div>

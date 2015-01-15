@@ -38,10 +38,14 @@ span.hint {
   color: rgba(100,100,100,0.5);
 }
 
-.userLine {
-  padding: 0 0 0 50px;
+div.userLine, a.userLine {
+  padding: 0 0 0 2.6em;
   min-height: 45px !important;
   background-color: #32868C;
+  border: 0;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  
 }
 
 a.userLine > h2 {
@@ -49,21 +53,13 @@ a.userLine > h2 {
   padding: 5px;
 }
 
-a.userLine > p {
-  display: none;
-  /* This is the "in common stats" part */
-}
-
 a.userLine > img {
   top: 0px !important;
   left: 0px !important;
-  border-radius: 0;
+  /* border-radius: 0; */
   padding: 0;
   margin: 0;
-}
-
-div.listLine {
-  background-color: #3FA8B0;
+  float: left;
 }
 
 div.button-bar > a.active {
@@ -147,28 +143,6 @@ div.itemButtons > div.button {
   line-height: 0.5em;
 }
 
-div.dittoButton {
-  font-size: 37px;
-}
-
-div.letsChatIcon {
-  /* background-image: url("../img/lets_chat2.png");
-  background-size: 65px 42px;
-  background-repeat: no-repeat;
-  background-position: center;
-  display: block; */
-  font-size: 35px;
-}
-
-div.letsChatIcon,
-div.dittoButton {
-  height: 40px;
-  clear: both;
-}
-
-div.letsChat > active {
-  background-color: red;
-}
 
 span.buttonCaption {
   font-size: 0.2em;
@@ -182,12 +156,6 @@ span.buttonCaption {
   white-space: normal;
 }
 
-div.commentsSection {
-  clear: both;
-  border-top: 1px solid #ccc;
-  font-size: 0.8em;
-  padding: 0;
-}
 
 section.statTable > header {
   background-color: #888;
@@ -358,21 +326,50 @@ div.colPush {
   
 }
 
-div.row {
-  padding: 0;
+h1.pageTitle,
+h3.pageTitle {
+  padding: 10px 0 5px 10px;
+  font-size: 1.7em;
   margin: 0;
 }
 
-div.row > div.col {
-  background-color: white;
-  padding: 0;
+
+/* User / List / Thing Styling */
+
+
+div.userBlock > a.item, div.listBlock > div.item {
+  border: 0;
 }
 
-h1.pageTitle,
-h3.pageTitle {
-  margin: 10px 0 5px 10px;
-  font-size: 1.7em;
+
+div.listBlock {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  border: 1px solid #3FA8B0;
+  margin: 3px;
+  padding: 0;
+  border-radius: 10px;
+  background-color: #ccc;
   
+}
+
+div.listBlock > div.item {
+  
+  
+  
+}
+
+div.listLine, div.endOfList {
+  background-color: #3FA8B0;
+  margin: 0;
+  padding: 4px; 
+  border: 0px;
+  /* TODO2 - Pad the listline */
+}
+
+div.endOfList {
+  height: 10px;
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
 }
 
 div.button-bar > a.button {
@@ -380,11 +377,132 @@ div.button-bar > a.button {
 }
 
 div.recent {
-  font-size: 0.8em;
+  font-size: 0.7em;
   
-  padding-left: 2em;
+  margin-left: 1em;
   color: #bbb;
   font-weight: 100;
   
   
+}
+
+div.thingRow {
+  padding-bottom: 5px;
+  margin: 0;
+  padding: 4px;
+  border: 1px solid red;
+}
+
+div.row {
+  padding: 0;
+  margin: 0;
+}
+
+div.row > div.col {
+  padding: 0;
+  
+}
+
+div.commentsSection {
+  font-style: italic;
+  font-size: 0.8em;
+  padding: 0;
+}
+
+div.commentsSection > button {
+  background-color: blue;
+}
+
+div.dittoButton {
+  font-size: 37px;
+  float: right;
+  margin-right: 0;
+}
+
+div.letsChatIcon {
+  /* background-image: url("../img/lets_chat2.png");
+  background-size: 65px 42px;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: block; */
+  font-size: 35px;
+}
+
+div.commentButton {
+  margin-top: 5px;
+  margin-left: 5px;
+  font-size: 25px;
+  padding: 1em;
+}
+
+div.friendsWith {
+  float: left;
+  font-size: 0.8em;
+}
+
+div.commentRow {
+  border-top: 1px solid #ddd;
+  margin-top: 5px;
+  padding: 5px;
+}
+
+div.letsChat > active {
+  background-color: #bcc;
+}
+
+div.commentProfile {
+  padding: 0;
+  margin: 7px 0 0 0;
+  height: 20px;
+  
+}
+
+div.commentsSection > form {
+  background-color: red;
+  padding: 0;
+  margin-top: 1px;
+}
+
+div.commentProfile > img {
+  height: 20px;
+  width: 20px;
+}
+
+input#addCommentText {
+  font-style: normal;
+}
+
+div.thingNameRow {
+  padding: 10px;
+}
+
+div.commentsSection  > div > button , div.commentsSection  > form > label > button {
+  width: 3.3em;
+  margin: 0.3em;
+  
+}
+
+div.listLine > i {
+  font-size: 1.8em;
+  float: left;
+  margin-right: 0.3em;
+}
+
+div.listLine > span {
+  vertical-align: middle;
+  font-size: 1.2em;
+}
+
+/* list item */
+div.list > div.listItem {
+  margin: 3px;
+  /* border-radius: 0.3em; */ 
+  /* box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26); */
+}
+
+
+
+div.card {
+  padding: 0px;
+  margin: 5px;
 }
