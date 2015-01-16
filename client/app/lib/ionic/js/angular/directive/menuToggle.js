@@ -5,40 +5,36 @@
  * @restrict AC
  *
  * @description
- * Toggle a side menu on the given side.
+ * Toggle a side menu on the given side
  *
  * @usage
- * Below is an example of a link within a nav bar. Tapping this button
- * would open the given side menu, and tapping it again would close it.
+ * Below is an example of a link within a nav bar. Tapping this link would
+ * automatically open the given side menu
  *
  * ```html
- * <ion-nav-bar>
+ * <ion-view>
  *   <ion-nav-buttons side="left">
  *    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
  *   </ion-nav-buttons>
- * </ion-nav-bar>
+ *  ...
+ * </ion-view>
  * ```
  */
 IonicModule
-.directive('menuToggle', function() {
+.directive('menuToggle', ['$ionicViewService', function($ionicViewService) {
   return {
     restrict: 'AC',
-    link: function($scope, $element, $attr) {
-      $scope.$on('$ionicView.beforeEnter', function(ev, viewData) {
-        if (viewData.enableBack) {
-          var sideMenuCtrl = $element.inheritedData('$ionSideMenusController');
-          if (!sideMenuCtrl.enableMenuWithBackViews()) {
-            $element.addClass('hide');
-          }
-        } else {
-          $element.removeClass('hide');
+    require: '^ionSideMenus',
+    link: function($scope, $element, $attr, sideMenuCtrl) {
+      var side = $attr.menuToggle || 'left';
+      $element.bind('click', function(){
+        if(side === 'left') {
+          sideMenuCtrl.toggleLeft();
+        } else if(side === 'right') {
+          sideMenuCtrl.toggleRight();
         }
-      });
-
-      $element.bind('click', function() {
-        var sideMenuCtrl = $element.inheritedData('$ionSideMenusController');
-        sideMenuCtrl && sideMenuCtrl.toggle($attr.menuToggle);
       });
     }
   };
-});
+}]);
+

@@ -17,7 +17,7 @@
  * <ion-content ng-controller="MyCtrl">
  *   <button class="button" ng-click="showDeleteButtons()"></button>
  *   <ion-list>
- *     <ion-item ng-repeat="i in items">
+ *     <ion-item ng-repeat="i in items">>
  *       {% raw %}Hello, {{i}}!{% endraw %}
  *       <ion-delete-button class="ion-minus-circled"></ion-delete-button>
  *     </ion-item>
@@ -33,7 +33,7 @@
  * ```
  */
 IonicModule
-.service('$ionicListDelegate', ionic.DelegateService([
+.service('$ionicListDelegate', delegateService([
   /**
    * @ngdoc method
    * @name $ionicListDelegate#showReorder
@@ -44,14 +44,14 @@ IonicModule
   /**
    * @ngdoc method
    * @name $ionicListDelegate#showDelete
-   * @param {boolean=} showDelete Set whether or not this list is showing its delete buttons.
+   * @param {boolean=} showReorder Set whether or not this list is showing its delete buttons.
    * @returns {boolean} Whether the delete buttons are shown.
    */
   'showDelete',
   /**
    * @ngdoc method
    * @name $ionicListDelegate#canSwipeItems
-   * @param {boolean=} canSwipeItems Set whether or not this list is able to swipe to show
+   * @param {boolean=} showReorder Set whether or not this list is able to swipe to show
    * option buttons.
    * @returns {boolean} Whether the list is able to swipe to show option buttons.
    */
@@ -77,43 +77,39 @@ IonicModule
 .controller('$ionicList', [
   '$scope',
   '$attrs',
+  '$parse',
   '$ionicListDelegate',
-  '$ionicHistory',
-function($scope, $attrs, $ionicListDelegate, $ionicHistory) {
-  var self = this;
+function($scope, $attrs, $parse, $ionicListDelegate) {
+
   var isSwipeable = true;
   var isReorderShown = false;
   var isDeleteShown = false;
 
-  var deregisterInstance = $ionicListDelegate._registerInstance(
-    self, $attrs.delegateHandle, function() {
-      return $ionicHistory.isActiveScope($scope);
-    }
-  );
+  var deregisterInstance = $ionicListDelegate._registerInstance(this, $attrs.delegateHandle);
   $scope.$on('$destroy', deregisterInstance);
 
-  self.showReorder = function(show) {
+  this.showReorder = function(show) {
     if (arguments.length) {
       isReorderShown = !!show;
     }
     return isReorderShown;
   };
 
-  self.showDelete = function(show) {
+  this.showDelete = function(show) {
     if (arguments.length) {
       isDeleteShown = !!show;
     }
     return isDeleteShown;
   };
 
-  self.canSwipeItems = function(can) {
+  this.canSwipeItems = function(can) {
     if (arguments.length) {
       isSwipeable = !!can;
     }
     return isSwipeable;
   };
 
-  self.closeOptionButtons = function() {
-    self.listView && self.listView.clearDragEffects();
+  this.closeOptionButtons = function() {
+    this.listView && this.listView.clearDragEffects();
   };
 }]);

@@ -55,8 +55,6 @@
  * refresher.
  * @param {string=} refreshing-text The text to display after the user lets go of
  * the refresher.
- * @param {boolean=} disable-pulling-rotation Disables the rotation animation of the pulling
- * icon when it reaches its activated threshold. To be used with a custom `pulling-icon`.
  *
  */
 IonicModule
@@ -66,20 +64,20 @@ IonicModule
     replace: true,
     require: '^$ionicScroll',
     template:
-    '<div class="scroll-refresher" collection-repeat-ignore>' +
+    '<div class="scroll-refresher">' +
       '<div class="ionic-refresher-content" ' +
       'ng-class="{\'ionic-refresher-with-text\': pullingText || refreshingText}">' +
-        '<div class="icon-pulling" ng-class="{\'pulling-rotation-disabled\':disablePullingRotation}">' +
+        '<div class="icon-pulling">' +
           '<i class="icon {{pullingIcon}}"></i>' +
         '</div>' +
         '<div class="text-pulling" ng-bind-html="pullingText"></div>' +
-        '<div class="icon-refreshing"><i class="icon {{refreshingIcon}}"></i></div>' +
+        '<i class="icon {{refreshingIcon}} icon-refreshing"></i>' +
         '<div class="text-refreshing" ng-bind-html="refreshingText"></div>' +
       '</div>' +
     '</div>',
     compile: function($element, $attrs) {
       if (angular.isUndefined($attrs.pullingIcon)) {
-        $attrs.$set('pullingIcon', 'ion-ios7-arrow-down');
+        $attrs.$set('pullingIcon', 'ion-arrow-down-c');
       }
       if (angular.isUndefined($attrs.refreshingIcon)) {
         $attrs.$set('refreshingIcon', 'ion-loading-d');
@@ -90,16 +88,14 @@ IonicModule
           pullingText: '@',
           refreshingIcon: '@',
           refreshingText: '@',
-          disablePullingRotation: '@',
           $onRefresh: '&onRefresh',
           $onPulling: '&onPulling'
         });
 
         scrollCtrl._setRefresher($scope, $element[0]);
         $scope.$on('scroll.refreshComplete', function() {
-          $scope.$evalAsync(function() {
-            scrollCtrl.scrollView.finishPullToRefresh();
-          });
+          $element[0].classList.remove('active');
+          scrollCtrl.scrollView.finishPullToRefresh();
         });
       };
     }

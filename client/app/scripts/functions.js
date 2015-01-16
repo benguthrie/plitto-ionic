@@ -44,5 +44,5 @@ function navigationBar () {
       '<button class="button button-icon ion-ios7-checkmark-outline" ng-click="navFunc(\'home\'); getSome();"></button>' +
       '<button class="button button-icon ion-search" ng-click="navFunc(\'search\');"></button>' +
     '</ion-nav-buttons>' +
- '</ion-nav-bar>';
+ '</ion-nav-bar>'; 
 }

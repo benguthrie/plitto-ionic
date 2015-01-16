@@ -1,5 +1,5 @@
 var ITEM_TPL_REORDER_BUTTON =
-  '<div data-prevent-scroll="true" class="item-right-edit item-reorder enable-pointer-events">' +
+  '<div data-prevent-scroll="true" class="item-right-edit item-reorder ng-hide">' +
   '</div>';
 
 /**
@@ -14,21 +14,20 @@ var ITEM_TPL_REORDER_BUTTON =
 *
 * Can be dragged to reorder items in the list. Takes any ionicon class.
 *
-* Note: Reordering works best when used with `ng-repeat`.  Be sure that all `ion-item` children of an `ion-list` are part of the same `ng-repeat` expression.
+* When an item reorder is complete, the `on-reorder` callback given in the attribute is called
+* (see below).
 *
-* When an item reorder is complete, the expression given in the `on-reorder` attribute is called. The `on-reorder` expression is given two locals that can be used: `$fromIndex` and `$toIndex`.  See below for an example.
-*
-* Look at {@link ionic.directive:ionList} for more examples.
+* See {@link ionic.directive:ionList} for a complete example.
 *
 * @usage
 *
 * ```html
-* <ion-list ng-controller="MyCtrl" show-reorder="true">
+* <ion-list ng-controller="MyCtrl">
 *   <ion-item ng-repeat="item in items">
-*     Item {{item}}
+*     Item {{$index}}
 *     <ion-reorder-button class="ion-navicon"
 *                         on-reorder="moveItem(item, $fromIndex, $toIndex)">
-*     </ion-reorder-button>
+*     </ion-reorder>
 *   </ion-item>
 * </ion-list>
 * ```
@@ -47,10 +46,10 @@ var ITEM_TPL_REORDER_BUTTON =
 * Parameters given: $fromIndex, $toIndex.
 */
 IonicModule
-.directive('ionReorderButton', ['$parse', function($parse) {
+.directive('ionReorderButton', ['$animate', function($animate) {
   return {
     restrict: 'E',
-    require: ['^ionItem', '^?ionList'],
+    require: ['^ionItem', '^ionList'],
     priority: Number.MAX_VALUE,
     compile: function($element, $attr) {
       $attr.$set('class', ($attr['class'] || '') + ' button icon button-icon', true);
@@ -58,26 +57,19 @@ IonicModule
       return function($scope, $element, $attr, ctrls) {
         var itemCtrl = ctrls[0];
         var listCtrl = ctrls[1];
-        var onReorderFn = $parse($attr.onReorder);
-
         $scope.$onReorder = function(oldIndex, newIndex) {
-          onReorderFn($scope, {
+          $scope.$eval($attr.onReorder, {
             $fromIndex: oldIndex,
             $toIndex: newIndex
           });
         };
 
-        // prevent clicks from bubbling up to the item
-        if(!$attr.ngClick && !$attr.onClick && !$attr.onclick){
-          $element[0].onclick = function(e){e.stopPropagation(); return false;};
-        }
-
         var container = jqLite(ITEM_TPL_REORDER_BUTTON);
         container.append($element);
         itemCtrl.$element.append(container).addClass('item-right-editable');
 
-        if (listCtrl && listCtrl.showReorder()) {
-          container.addClass('visible active');
+        if (listCtrl.showReorder()) {
+          $animate.removeClass(container, 'ng-hide');
         }
       };
     }

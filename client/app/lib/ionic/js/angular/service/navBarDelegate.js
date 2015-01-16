@@ -20,13 +20,20 @@
  * ```js
  * function MyCtrl($scope, $ionicNavBarDelegate) {
  *   $scope.setNavTitle = function(title) {
- *     $ionicNavBarDelegate.title(title);
+ *     $ionicNavBarDelegate.setTitle(title);
  *   }
  * }
  * ```
  */
 IonicModule
-.service('$ionicNavBarDelegate', ionic.DelegateService([
+.service('$ionicNavBarDelegate', delegateService([
+  /**
+   * @ngdoc method
+   * @name $ionicNavBarDelegate#back
+   * @description Goes back in the view history.
+   * @param {DOMEvent=} event The event object (eg from a tap event)
+   */
+  'back',
   /**
    * @ngdoc method
    * @name $ionicNavBarDelegate#align
@@ -40,7 +47,7 @@ IonicModule
    * @name $ionicNavBarDelegate#showBackButton
    * @description
    * Set/get whether the {@link ionic.directive:ionNavBackButton} is shown
-   * (if it exists and there is a previous view that can be navigated to).
+   * (if it exists).
    * @param {boolean=} show Whether to show the back button.
    * @returns {boolean} Whether the back button is shown.
    */
@@ -56,18 +63,41 @@ IonicModule
   'showBar',
   /**
    * @ngdoc method
-   * @name $ionicNavBarDelegate#title
+   * @name $ionicNavBarDelegate#setTitle
    * @description
    * Set the title for the {@link ionic.directive:ionNavBar}.
    * @param {string} title The new title to show.
    */
-  'title',
-
-  // DEPRECATED, as of v1.0.0-beta14 -------
-  'changeTitle',
   'setTitle',
+  /**
+   * @ngdoc method
+   * @name $ionicNavBarDelegate#changeTitle
+   * @description
+   * Change the title, transitioning the new title in and the old one out in a given direction.
+   * @param {string} title The new title to show.
+   * @param {string} direction The direction to transition the new title in.
+   * Available: 'forward', 'back'.
+   */
+  'changeTitle',
+  /**
+   * @ngdoc method
+   * @name $ionicNavBarDelegate#getTitle
+   * @returns {string} The current title of the navbar.
+   */
   'getTitle',
-  'back',
+  /**
+   * @ngdoc method
+   * @name $ionicNavBarDelegate#getPreviousTitle
+   * @returns {string} The previous title of the navbar.
+   */
   'getPreviousTitle'
-  // END DEPRECATED -------
+  /**
+   * @ngdoc method
+   * @name $ionicNavBarDelegate#$getByHandle
+   * @param {string} handle
+   * @returns `delegateInstance` A delegate instance that controls only the
+   * navBars with delegate-handle matching the given handle.
+   *
+   * Example: `$ionicNavBarDelegate.$getByHandle('myHandle').setTitle('newTitle')`
+   */
 ]));

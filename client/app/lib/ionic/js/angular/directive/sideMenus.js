@@ -8,29 +8,15 @@ IonicModule
  * @restrict E
  *
  * @description
- * A container element for side menu(s) and the main content. Allows the left and/or right side menu
- * to be toggled by dragging the main content area side to side.
- *
- * To automatically close an opened menu, you can add the {@link ionic.directive:menuClose} attribute
- * directive. The `menu-close` attribute is usually added to links and buttons within
- * `ion-side-menu-content`, so that when the element is clicked, the opened side menu will
- * automatically close.
- *
- * By default, side menus are hidden underneath their side menu content and can be opened by swiping
- * the content left or right or by toggling a button to show the side menu. Additionally, by adding the
- * {@link ionic.directive:exposeAsideWhen} attribute directive to an
- * {@link ionic.directive:ionSideMenu} element directive, a side menu can be given instructions about
- * "when" the menu should be exposed (always viewable).
+ * A container element for side menu(s) and the main content. Allows the left
+ * and/or right side menu to be toggled by dragging the main content area side
+ * to side.
  *
  * ![Side Menu](http://ionicframework.com.s3.amazonaws.com/docs/controllers/sidemenu.gif)
  *
- * For more information on side menus, check out:
- *
- * - {@link ionic.directive:ionSideMenuContent}
- * - {@link ionic.directive:ionSideMenu}
- * - {@link ionic.directive:menuToggle}
- * - {@link ionic.directive:menuClose}
- * - {@link ionic.directive:exposeAsideWhen}
+ * For more information on side menus, check out the documenation for
+ * {@link ionic.directive:ionSideMenuContent} and
+ * {@link ionic.directive:ionSideMenu}.
  *
  * @usage
  * To use side menus, add an `<ion-side-menus>` parent element,
@@ -60,44 +46,16 @@ IonicModule
  * }
  * ```
  *
- * @param {bool=} enable-menu-with-back-views Determines whether the side menu is enabled when the
- * back button is showing. When set to `false`, any {@link ionic.directive:menuToggle} will be hidden,
- * and the user cannot swipe to open the menu. When going back to the root page of the side menu (the
- * page without a back button visible), then any menuToggle buttons will show again, and menus will be
- * enabled again.
  * @param {string=} delegate-handle The handle used to identify this side menu
  * with {@link ionic.service:$ionicSideMenuDelegate}.
  *
  */
-.directive('ionSideMenus', ['$ionicBody', function($ionicBody) {
+.directive('ionSideMenus', [function() {
   return {
     restrict: 'ECA',
+    replace: true,
+    transclude: true,
     controller: '$ionicSideMenus',
-    compile: function(element, attr) {
-      attr.$set('class', (attr['class'] || '') + ' view');
-
-      return { pre: prelink };
-      function prelink($scope, $element, $attrs, ctrl) {
-
-        ctrl.enableMenuWithBackViews($scope.$eval($attrs.enableMenuWithBackViews));
-
-        $scope.$on('$ionicExposeAside', function(evt, isAsideExposed) {
-          if (!$scope.$exposeAside) $scope.$exposeAside = {};
-          $scope.$exposeAside.active = isAsideExposed;
-          $ionicBody.enableClass(isAsideExposed, 'aside-open');
-        });
-
-        $scope.$on('$ionicView.beforeEnter', function(ev, d){
-          if (d.historyId) {
-            $scope.$activeHistoryId = d.historyId;
-          }
-        });
-
-        $scope.$on('$destroy', function() {
-          $ionicBody.removeClass('menu-open', 'aside-open');
-        });
-
-      }
-    }
+    template: '<div class="view" ng-transclude></div>'
   };
 }]);

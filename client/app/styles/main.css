@@ -174,7 +174,7 @@ section.statTable > div > div {
 hr.clearBoth {
   clear: both;
   height: 0px;
-  border: 0px;
+  border: 0px; 
 }
 
 span.innerNo {
@@ -182,13 +182,13 @@ span.innerNo {
   text-shadow: 0 0 3px #B0B0B0;
   position: relative;
   z-index: 2;
-  top: -2px;
-  left: -45px;
+  top: -34px;
+  left: -17px;
   text-align: right;
   width: 30px;
   margin-right: -35px;
   font-size: 0.9em;
-}
+} 
 
 div.topicLine {
   width: 100%;

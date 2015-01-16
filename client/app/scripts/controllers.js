@@ -130,7 +130,16 @@ angular.module('Plitto.controllers', [])
   
 })
 // REMOVED Facebook from the injectors // 13 - ionicNavBarDelegate - 14 - $ionicHistory
-.controller('AppCtrl', function($scope, $state, dbFactory, $rootScope, localStorageService, $ionicHistory ) {
+.controller(
+  'AppCtrl',
+  function( 
+    $scope, 
+    $state,
+    dbFactory,
+    $rootScope,
+    localStorageService
+//     $ionicHistory 
+    ) {
   
   // On load, load the correct interface, based on the token.
   
@@ -148,7 +157,7 @@ angular.module('Plitto.controllers', [])
     $rootScope.$broadcast('broadcast',{ command: 'state', path: 'app.home', debug: 'Valid token. Move.'} ); // TODO2 -  Test this. 
     dbFactory.updateCounts();
     // TODO1 - Check this, or will that happen when requesting the first call?
-    $ionicHistory.clearHistory();
+//     $ionicHistory.clearHistory();
     // $location.path('/login');
   } else {
     console.log('initial: null?');
@@ -312,9 +321,7 @@ angular.module('Plitto.controllers', [])
     $scope.userChat = function( userId ){
       console.log('Chat with userId: ', userId);
 
-      dbFactory.userChat( userId ).then(function(response){
-        $scope.profileData.chat = response;
-      });
+      dbFactory.userChat( userId );
 
 
     };
@@ -420,13 +427,10 @@ angular.module('Plitto.controllers', [])
   // console.log("You have tried to control your friends",$rootScope.friendStore);
   // console.log("CHAT CONTROL INITIALIZED.");
   // console.log("rsnf", $rootScope.stats.feed );
-  $rootScope.stats.feed = dbFactory.userChat().then(function (response) {
-    // console.log("chatCtrl", response);
-    return response;
-  }).then(function (response) {
-    // console.log("401", response);
-    return response;
-  });
+  $rootScope.stats.feed = dbFactory.userChat();
+  console.log("rsnf", $rootScope.stats.feed );
+  
+  /* TODO1 - Update the notification count ? */
   
   
 })

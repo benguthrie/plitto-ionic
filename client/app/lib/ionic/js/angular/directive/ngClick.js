@@ -13,9 +13,7 @@ IonicModule
  */
 .factory('$ionicNgClick', ['$parse', function($parse) {
   return function(scope, element, clickExpr) {
-    var clickHandler = angular.isFunction(clickExpr) ?
-      clickExpr :
-      $parse(clickExpr);
+    var clickHandler = $parse(clickExpr);
 
     element.on('click', function(event) {
       scope.$apply(function() {
@@ -35,10 +33,10 @@ IonicModule
   };
 }])
 
-.directive('ionStopEvent', function() {
+.directive('ionStopEvent', function () {
   return {
     restrict: 'A',
-    link: function(scope, element, attr) {
+    link: function (scope, element, attr) {
       element.bind(attr.ionStopEvent, eventStopPropagation);
     }
   };

@@ -39,7 +39,7 @@ IonicModule
         $scope.side = $attr.side || 'left';
 
         var sideMenu = sideMenuCtrl[$scope.side] = new ionic.views.SideMenu({
-          width: attr.width,
+          width: 275,
           el: $element[0],
           isEnabled: true
         });
@@ -57,4 +57,3 @@ IonicModule
     }
   };
 });
-

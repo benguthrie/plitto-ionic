@@ -6,4 +6,9 @@ node_modules/
 
 
 # Ignore Libraries - Will the build still work? 
-#/client/app/lib
+#
+/client/app/lib
+/client/app/www
+client/app/lib
+client/app/lib/
+/client/app/lib/

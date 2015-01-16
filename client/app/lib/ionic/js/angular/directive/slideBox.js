@@ -12,14 +12,14 @@
  *
  * @usage
  * ```html
- * <ion-slide-box on-slide-changed="slideHasChanged($index)">
+ * <ion-slide-box>
  *   <ion-slide>
  *     <div class="box blue"><h1>BLUE</h1></div>
  *   </ion-slide>
  *   <ion-slide>
  *     <div class="box yellow"><h1>YELLOW</h1></div>
  *   </ion-slide>
- *   <ion-slide>
+ *   <ion-slide on-slide-changed="slideHasChanged(index)">
  *     <div class="box pink"><h1>PINK</h1></div>
  *   </ion-slide>
  * </ion-slide-box>
@@ -27,12 +27,11 @@
  *
  * @param {string=} delegate-handle The handle used to identify this slideBox
  * with {@link ionic.service:$ionicSlideBoxDelegate}.
- * @param {boolean=} does-continue Whether the slide box should loop.
- * @param {boolean=} auto-play Whether the slide box should automatically slide. Default true if does-continue is true.
+ * @param {boolean=} does-continue Whether the slide box should automatically slide.
  * @param {number=} slide-interval How many milliseconds to wait to change slides (if does-continue is true). Defaults to 4000.
  * @param {boolean=} show-pager Whether a pager should be shown for this slide box.
  * @param {expression=} pager-click Expression to call when a pager is clicked (if show-pager is true). Is passed the 'index' variable.
- * @param {expression=} on-slide-changed Expression called whenever the slide is changed.  Is passed an '$index' variable.
+ * @param {expression=} on-slide-changed Expression called whenever the slide is changed.  Is passed an 'index' variable.
  * @param {expression=} active-slide Model to bind the current slide to.
  */
 IonicModule
@@ -40,14 +39,12 @@ IonicModule
   '$timeout',
   '$compile',
   '$ionicSlideBoxDelegate',
-  '$ionicHistory',
-function($timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory) {
+function($timeout, $compile, $ionicSlideBoxDelegate) {
   return {
     restrict: 'E',
     replace: true,
     transclude: true,
     scope: {
-      autoPlay: '=',
       doesContinue: '@',
       slideInterval: '@',
       showPager: '@',
@@ -60,8 +57,7 @@ function($timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory) {
       var _this = this;
 
       var continuous = $scope.$eval($scope.doesContinue) === true;
-      var shouldAutoPlay = isDefined($attrs.autoPlay) ? !!$scope.autoPlay : false;
-      var slideInterval = shouldAutoPlay ? $scope.$eval($scope.slideInterval) || 4000 : 0;
+      var slideInterval = continuous ? $scope.$eval($scope.slideInterval) || 4000 : 0;
 
       var slider = new ionic.views.Slider({
         el: $element[0],
@@ -76,7 +72,7 @@ function($timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory) {
         },
         callback: function(slideIndex) {
           $scope.currentSlide = slideIndex;
-          $scope.onSlideChanged({ index: $scope.currentSlide, $index: $scope.currentSlide});
+          $scope.onSlideChanged({index:$scope.currentSlide});
           $scope.$parent.$broadcast('slideBox.slideChanged', slideIndex);
           $scope.activeSlide = slideIndex;
           // Try to trigger a digest
@@ -107,11 +103,7 @@ function($timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory) {
       //Exposed for testing
       this.__slider = slider;
 
-      var deregisterInstance = $ionicSlideBoxDelegate._registerInstance(
-        slider, $attrs.delegateHandle, function() {
-          return $ionicHistory.isActiveScope($scope);
-        }
-      );
+      var deregisterInstance = $ionicSlideBoxDelegate._registerInstance(slider, $attrs.delegateHandle);
       $scope.$on('$destroy', deregisterInstance);
 
       this.slidesCount = function() {

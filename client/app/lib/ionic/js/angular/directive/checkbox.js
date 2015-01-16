@@ -15,22 +15,20 @@
  * <ion-checkbox ng-model="isChecked">Checkbox Label</ion-checkbox>
  * ```
  */
-
 IonicModule
-.directive('ionCheckbox', ['$ionicConfig', function($ionicConfig) {
+.directive('ionCheckbox', function() {
   return {
     restrict: 'E',
     replace: true,
     require: '?ngModel',
     transclude: true,
-    template:
-      '<label class="item item-checkbox">' +
-        '<div class="checkbox checkbox-input-hidden disable-pointer-events">' +
-          '<input type="checkbox">' +
-          '<i class="checkbox-icon"></i>' +
-        '</div>' +
-        '<div class="item-content disable-pointer-events" ng-transclude></div>' +
-      '</label>',
+    template: '<label class="item item-checkbox">' +
+                '<div class="checkbox checkbox-input-hidden disable-pointer-events">' +
+                  '<input type="checkbox">' +
+                  '<i class="checkbox-icon"></i>' +
+                '</div>' +
+                '<div class="item-content disable-pointer-events" ng-transclude></div>' +
+              '</label>',
     compile: function(element, attr) {
       var input = element.find('input');
       forEach({
@@ -47,8 +45,7 @@ IonicModule
           input.attr(name, value);
         }
       });
-      var checkboxWrapper = element[0].querySelector('.checkbox');
-      checkboxWrapper.classList.add('checkbox-' + $ionicConfig.form.checkbox());
     }
+
   };
-}]);
+});

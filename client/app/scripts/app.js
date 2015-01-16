@@ -262,11 +262,11 @@ angular.module('Plitto', [
   
 }
 )
-.directive('userNav', function ($rootScope, dbFactory, $state) {
+.directive('userNav', function ($rootScope, dbFactory, $state ) {
   return {
     restrict: 'E',
-    // templateUrl: 'directives/userNav.html',
-    template: navigationBar(),
+    templateUrl: 'directives/userNav.html',
+    // template: navigationBar(),
     // template: '',
 /*    template: '<ion-nav-bar>  ' + 
       '<ion-nav-buttons side="left"> ' + 
@@ -282,22 +282,24 @@ angular.module('Plitto', [
    '</ion-nav-bar>', */
    // template: '<ion-nav-bar><ion-nav-buttons side="left"><button menu-toggle="left" class="button button-icon icon ion-navicon"></button></ion-nav-buttons></ion-nav-bar>',
     // scope: {}
-    controller: function($scope, dbFactory, $state, $ionicHistory){
+  
+    controller: function( 
+      $scope, dbFactory, $state){
       // Reload the navigation
       // dbFactory.userChat(-1);
   
       // Load the notifications
       $scope.navFunc = function(path){
         
-        $ionicHistory.nextViewOptions({
-          disableAnimate: true,
-          disableBack: true
-        });
+//        $ionicHistory.nextViewOptions({
+//          disableAnimate: true,
+//          disableBack: true
+//        });
 
-        console.log('navFunc');
+        console.log('app.299 navFunc path: ', path);
         
         // Whenever the navFunc is called, destroy the history, so no more back.
-        $ionicHistory.clearHistory();
+//        $ionicHistory.clearHistory();
   
         if (path === 'chat') {
           dbFactory.updateCounts();
@@ -305,9 +307,12 @@ angular.module('Plitto', [
         
         $state.go('app.' + path);
         
-        dbFactory.userChat(-1).then(function(response){
+        $rootScope.stats.feed = dbFactory.userChat(-1); 
+        
+        /* TODO2 Remove: 
+        .then(function(response){
           $rootScope.stats.feed = response;
-        });
+        }); */
       };
   
     }
@@ -373,18 +378,23 @@ angular.module('Plitto', [
           }
         }
         
-        for ( var k in tempStore[upos].lists ) {
-          if(tempStore[upos].lists[k].lid === lid ) {
-            lpos = k;
-            break;
+        if(upos !== null){
+          
+          for ( var k in tempStore[upos].lists ) {
+            if(tempStore[upos].lists[k].lid === lid ) {
+              lpos = k;
+              break;
+            }
           }
-        }
-
-        for ( var l in tempStore[upos].lists[lpos].items ) {
-          if( tempStore[upos].lists[lpos].items[l].tid === tid ) {
-            tpos = l;
+          if (lpos !== null){
+            for ( var l in tempStore[upos].lists[lpos].items ) {
+              if( tempStore[upos].lists[lpos].items[l].tid === tid ) {
+                tpos = l;
+              }
+            } 
           }
-        }
+          
+        } 
         
         console.log('upos: ', upos, lpos, tpos, $rootScope.user);
 
@@ -451,6 +461,7 @@ angular.module('Plitto', [
         console.log('upos: ', upos, lpos, tpos, $rootScope.user);
   
         // Add it to the UI / Scope (only if it exists)
+        console.log('464 store: ', store);
         eval('$rootScope.' + store + '[' + upos + '].lists[' + lpos + '].items[' + tpos + '].commentText = "' + newComment + '"; '  );
 
         // submit it to the database

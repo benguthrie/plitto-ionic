@@ -17,13 +17,14 @@ angular.module('Services.database', [])
   };
   
   function checkLogout (data) {
-    if (data.logout === true){
+    if (typeof data.logout !== 'unknown' && data.logout === true){
       return true;
     } else {
       return false;
     }
   };
   
+  /* TODO2 1/16/2015 it looks like this can be removed. This custom data format is obsolete. */
   function processNotification ( theData , theUserId ) {
     // console.log('theUserId is not used. TODO2', theUserId);
     // console.log('this is the data: ', theData , theUserId );
@@ -125,6 +126,8 @@ angular.module('Services.database', [])
   };
 
   var userChat = function ( userId ) {
+    // userId of -1 is passed for all, wit hnewest for this user. 
+    
     // Populate the notifications from an api call..
     var params = $.param({
       token: $rootScope.token,
@@ -132,26 +135,37 @@ angular.module('Services.database', [])
     });
 
 
-    var promise = $http({
+    $http({
       method: 'POST',
       // url: apiPath + 'loadNotifications',
       url: apiPath + 'chatabout',
       data: params,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
-    .then(function (response) {
+    .success(function (data) {
       
-      if( checkLogout(response.data) === true ) {
+      if( checkLogout(data) === true ) {
         logout();
       } else {
+        console.log('filter userid; ', userId);
+        // console.log("Chat Data: ",data.results);
         // Do something?
+        
+        if( userId === -1){
+          $rootScope.stats.feed = data.results;
+        } else {
+          $rootScope.profileData.chat = data.results;
+        }
+          
+        
+        
 
         // console.log("Load Notifications", response.data.results);
         // $rootScope.notificationFeed = processNotification( data.results , userId );
         // console.log('nf',notificationFeed);
         // return notificationFeed;
         // console.log("49", response.data.results);
-        return processNotification( response.data.results , userId );
+        // return processNotification( response.data.results , userId );
 
       }
       
@@ -160,7 +174,7 @@ angular.module('Services.database', [])
     // console.log("profile feed after showfeed",$rootScope.profileData.feed);
     );
     // console.log("The Promise: ", promise );
-    return promise;
+    
 
   };
 
@@ -687,7 +701,7 @@ angular.module('Services.database', [])
           if( checkLogout(data) === true ) {
             logout();
           } else {
-            console.log('TODO2 Use shc', status, headers, config);
+            // console.log('database.getSome TODO2 Use shc', status, headers, config);
            
               // eval('console.log("net Results",' + theScope +');'); 
               // This makes the scope that was passed in that part of the root scope.
@@ -1448,7 +1462,7 @@ angular.module('Services.database', [])
         if( checkLogout(data) === true ) {
           logout();
         } else {
-          console.log('TODO2 Use shc', status, headers, config);
+          // console.log('TODO2 Use shc', status, headers, config);
           console.log('typeof: ', data );
           if( data.error === true) {
             console.log('SOME KIND OF TOKEN ERROR');

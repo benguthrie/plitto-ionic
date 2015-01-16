@@ -34,13 +34,18 @@
  * ```
  */
 IonicModule
-.service('$ionicTabsDelegate', ionic.DelegateService([
+.service('$ionicTabsDelegate', delegateService([
   /**
    * @ngdoc method
    * @name $ionicTabsDelegate#select
    * @description Select the tab matching the given index.
    *
    * @param {number} index Index of the tab to select.
+   * @param {boolean=} shouldChangeHistory Whether this selection should load this tab's
+   * view history (if it exists) and use it, or just load the default page.
+   * Default false.
+   * Hint: you probably want this to be true if you have an
+   * {@link ionic.directive:ionNavView} inside your tab.
    */
   'select',
   /**

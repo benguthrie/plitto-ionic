@@ -1,5 +1,5 @@
 var ITEM_TPL_CONTENT_ANCHOR =
-  '<a class="item-content" ng-href="{{$href()}}" target="{{$target()}}"></a>';
+  '<a class="item-content" ng-href="{{$href()}}"></a>';
 var ITEM_TPL_CONTENT =
   '<div class="item-content"></div>';
 /**
@@ -21,14 +21,14 @@ var ITEM_TPL_CONTENT =
 * ```html
 * <ion-list>
 *   <ion-item>Hello!</ion-item>
-*   <ion-item href="#/detail">
-*     Link to detail page
-*   </ion-item>
 * </ion-list>
 * ```
 */
 IonicModule
-.directive('ionItem', function() {
+.directive('ionItem', [
+  '$animate',
+  '$compile',
+function($animate, $compile) {
   return {
     restrict: 'E',
     controller: ['$scope', '$element', function($scope, $element) {
@@ -38,8 +38,8 @@ IonicModule
     scope: true,
     compile: function($element, $attrs) {
       var isAnchor = angular.isDefined($attrs.href) ||
-                     angular.isDefined($attrs.ngHref) ||
-                     angular.isDefined($attrs.uiSref);
+        angular.isDefined($attrs.ngHref) ||
+        angular.isDefined($attrs.uiSref);
       var isComplexItem = isAnchor ||
         //Lame way of testing, but we have to know at compile what to do with the element
         /ion-(delete|option|reorder)-button/i.test($element.html());
@@ -58,10 +58,8 @@ IonicModule
           $scope.$href = function() {
             return $attrs.href || $attrs.ngHref;
           };
-          $scope.$target = function() {
-            return $attrs.target || '_self';
-          };
         };
     }
   };
-});
+}]);
+
