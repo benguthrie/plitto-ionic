@@ -174,8 +174,10 @@ angular.module('Plitto.controllers', [])
   
   // This is for the logged in user
   $scope.showUser = function(userId, userName, dataScope, fbuid){
+    
     console.log('controllers.js - showUser 87');
     dbFactory.showUser(userId,userName, dataScope, fbuid);
+
   };
     
   // Grab the user info here as soon as they login.
@@ -472,6 +474,12 @@ angular.module('Plitto.controllers', [])
       }
     });
   };
+})
+
+
+.controller('DocsCtrl', function() {
+ 
+  
 })
 
 .controller('FeedCtrl', function($scope, $stateParams, $rootScope, dbFactory) {

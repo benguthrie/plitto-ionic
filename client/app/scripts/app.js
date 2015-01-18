@@ -116,6 +116,28 @@ angular.module('Plitto', [
         }
       }
     )
+    .state('app.about',
+      {
+        url: '/about',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/about.html',
+            controller: 'DocsCtrl'
+          }
+        }
+      }
+    )
+    .state('app.docs',
+      {
+        url: '/docs',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/docs.html',
+            controller: 'DocsCtrl'
+          }
+        }
+      }
+    )
   
     .state('app.feed',
       {
@@ -284,7 +306,7 @@ angular.module('Plitto', [
     // scope: {}
   
     controller: function( 
-      $scope, dbFactory, $state){
+      $scope, dbFactory, $state ){
       // Reload the navigation
       // dbFactory.userChat(-1);
   
@@ -295,6 +317,9 @@ angular.module('Plitto', [
 //          disableAnimate: true,
 //          disableBack: true
 //        });
+        
+        // Clear history, if possible. 
+        
 
         console.log('app.299 navFunc path: ', path);
         
@@ -337,6 +362,7 @@ angular.module('Plitto', [
   
       /* User */
       $scope.showUser = function(userId, userName, dataScope, fbuid){
+       
         console.log('show User');
         dbFactory.showUser(userId,userName, dataScope, fbuid);
       };

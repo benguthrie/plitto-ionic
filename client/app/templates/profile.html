@@ -80,7 +80,9 @@
 <!-- Start User Chat -->    
   <div ng-show="nav.view==='user.chat'">
     <h3 class="pageTitle"><i class="ionicons ion-ios7-chatboxes-outline"></i> Our Dittos &amp; Chats</h3>  
+    
 
+    
     <div class="list " ng-repeat="user in profileData.chat">
       
       <user-list-thing store="profileData.chat" source="profile" user-data="user"></user-list-thing>        

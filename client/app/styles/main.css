@@ -144,12 +144,12 @@ div.itemButtons > div.button {
 }
 
 
-span.buttonCaption {
-  font-size: 0.2em;
-  border: 1px solid red;
-  text-align: center;
-  font-family: sans-serif, verdana;
+div.dittoButton {
+  font-size: 37px;
+  float: right;
+  margin-right: 0;
 }
+
 
 .item.wrap,
 .item-content.wrap {
@@ -386,12 +386,6 @@ div.recent {
   
 }
 
-div.thingRow {
-  padding-bottom: 5px;
-  margin: 0;
-  padding: 4px;
-  border: 1px solid red;
-}
 
 div.row {
   padding: 0;
@@ -403,84 +397,20 @@ div.row > div.col {
   
 }
 
-div.commentsSection {
-  font-style: italic;
-  font-size: 0.8em;
-  padding: 0;
-}
-
-div.commentsSection > button {
-  background-color: blue;
-}
-
-div.dittoButton {
-  font-size: 37px;
-  float: right;
-  margin-right: 0;
-}
-
-div.letsChatIcon {
-  /* background-image: url("../img/lets_chat2.png");
-  background-size: 65px 42px;
-  background-repeat: no-repeat;
-  background-position: center;
-  display: block; */
-  font-size: 35px;
-}
-
-div.commentButton {
-  margin-top: 5px;
-  margin-left: 5px;
-  font-size: 25px;
-  padding: 1em;
-}
 
 div.friendsWith {
   float: left;
   font-size: 0.8em;
 }
 
-div.commentRow {
-  border-top: 1px solid #ddd;
-  margin-top: 5px;
-  padding: 5px;
-}
-
 div.letsChat > active {
   background-color: #bcc;
-}
-
-div.commentProfile {
-  padding: 0;
-  margin: 7px 0 0 0;
-  height: 20px;
-  
-}
-
-div.commentsSection > form {
-  background-color: red;
-  padding: 0;
-  margin-top: 1px;
-}
-
-div.commentProfile > img {
-  height: 20px;
-  width: 20px;
-}
-
-input#addCommentText {
-  font-style: normal;
 }
 
 div.thingNameRow {
   padding: 10px;
 }
 
-div.commentsSection  > div > button , div.commentsSection  > form > label > button {
-  width: 3.3em;
-  margin: 0.3em;
-  
-}
 
 div.listLine > i {
   font-size: 1.8em;
@@ -494,15 +424,143 @@ div.listLine > span {
 }
 
 /* list item */
-div.list > div.listItem {
-  margin: 3px;
+div.listBlock > div.listItem {
+  margin: 5px;
+  padding: 0;
+  
   /* border-radius: 0.3em; */ 
   /* box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26); */
 }
 
 
 
-div.card {
-  padding: 0px;
-  margin: 5px;
+
+div.right-buttons > span > button {
+  
+  font-size: 5em;
+  max-height: 35px;
+}
+
+/* Ditto icon - Potential; */
+div.dittoQ {
+  color: #000;
+}
+
+/* Ditto icon - Waiting for server response; */
+div.dittoW {
+  color: #999;
+}
+
+/* Ditto icon - You have this in common; */
+div.dittoA {
+  color: green;
+  
+}
+
+/* Docs */
+div.docIcon {
+  font-size: 4em;
+  text-align: left; 
+}
+
+
+/* Comment Row within User List Thing */
+
+
+  /* This contains the entire comment row */
+  div.commentRow {
+    
+    
+    
+    border-top: 1px solid #ddd;
+    
+    width: 100%;
+    
+  }
+
+  div.commentRow > div.commentButton,
+  div.commentRow > div.commentProfile,
+  div.commentRow > div.commentTextSection,
+  div.commentRow > div.commentButtonRow,
+  div.commentRow > div.commentTextSection,
+  div.commentRow > div.commentTextSection > div.commentsSection
+  {
+    margin: 0.3em 0.3em 0.3em 0.3em;
+  }
+
+  div.commentRow > div.commentButton {
+    font-size: 1.5em;
+    
+    float: left;
+  }
+
+  div.commentRow > div.commentButtonRow {
+    width: 100%;
+    padding: 1em;
+    display: block;
+  }
+
+  div.commentRow > div.commentTextSection {
+    width: 100%;
+  }
+
+  div.commentRow > div.commentTextSection > div.commentsSection {
+    font-style: italic;
+    font-size: 0.9em;
+    padding: 0 1em 0 0;
+    width: inherit;
+    
+    
+  }
+
+  /* The buttons in the comment section */
+  div.commentRow > div.commentsSection, div.item-text-wrap > button, 
+  div.commentRow > div.commentTextSection > div.commentsSection > form > label > button {
+    margin: 1em;
+    
+    width: 4em;
+    float: right;
+  }
+
+  div.commentRow > div.commentButton {
+    font-size: 1.5em;
+    
+    float: left;
+  }
+
+  div.commentRow > div.commentProfile {
+    
+    height: 20px;
+    float: left;
+  }
+
+  div.commentRow > div.commentProfile > img {
+    height: 23px;
+    width: 23px;
+    margin-top: 0.2em ;
+  }
+
+div.commentsSection > form {
+  border: 0px;
+  padding: 0;
+}
+
+input#addCommentText {
+  font-style: normal;
+  margin: 0;
+}
+
+form > label.item {
+  padding: 0em;
+  
+  border: 0;
+}
+
+div.letsChatIcon {
+  /* background-image: url("../img/lets_chat2.png");
+  background-size: 65px 42px;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: block; */
+  font-size: 35px;
 }

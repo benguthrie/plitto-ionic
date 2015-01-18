@@ -17,7 +17,7 @@ angular.module('Services.database', [])
   };
   
   function checkLogout (data) {
-    if (typeof data.logout !== 'unknown' && data.logout === true){
+    if (typeof data.logout !== 'unknown' && data.logout === "1"){
       return true;
     } else {
       return false;
@@ -460,7 +460,12 @@ angular.module('Services.database', [])
 
   /* 11.3.2014 */
   var showUser = function (userId, userName, dataScope, fbuid) {
-
+    // TODO2 - Handle this if it's a stranger. For now, quit.
+    if (userId === 0 || userId ==='0'){
+      console.log('Linking to Strangers is not currently supported');
+      return;
+    }
+    
     //  console.log('dbFactory: show a user. vars.user: ', userId, ' uid: ',userId,' username: ',userName, 'dataScope', dataScope);
     $rootScope.profileData = {
       userName: userName,
