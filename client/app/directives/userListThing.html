@@ -18,28 +18,26 @@
   <!-- END List Line -->
 
   <!-- Begin the item (repeating) --> 
-  <div class="item listItem card" ng-repeat="item in list.items">
+  <div class="item listItem " ng-repeat="item in list.items">
     <!-- BEGIN Item Name / Ditto / Date Row -->
-    <div class="row thingNameRow">
-      <div class="col col-80">
-
-        <div 
+    <div class="thingTable">
+      <div class="thingNameRow">
+        <div class="thingNameCol"
           ng-click="showThing(item.tid, item.thingname, userData.uid);" 
-          class="item-text-wrap">
-          <span class="thingName">{{item.thingname}} </span>
-          <div class="recent" am-time-ago="item.added"></div>
-          <!-- <h6 style="display: none;">{{item.added}}</h6>  --> 
-          <!-- <h6 ng-show="item.dittouser === null" class="mega-octicon octicon-pencil">_</h6> -->
-          <h6 ng-show="item.dittouser !== null">dittoed from {{item.dittousername}}</h6>
-        </div>
-      </div>
-      <div class="col col-10" ng-bind="item.friendsWith"></div>
-      <div class="col col-10">
-        <div 
-          ng-click="ditto(item.mykey, userData.uid, list.lid, item.tid, item.ik, $event, store);">
+          >
 
-          <div class="dittoButton"
-           
+
+
+          <span class="thingNameText item-text-wrap">{{item.thingname}} </span>
+          
+          <div class="recent" am-time-ago="item.added"></div>
+          <!-- <h6 ng-show="item.dittouser === null" class="mega-octicon octicon-pencil">_</h6> -->
+          <!-- <h6 ng-show="item.dittouser !== null">dittoed from {{item.dittousername}}</h6> --> 
+        
+        </div>
+        <div class="thingWithCol" ng-bind="item.friendsWith"></div>
+        <div class="dittoCol"
+            ng-click="ditto(item.mykey, userData.uid, list.lid, item.tid, item.ik, $event, store);"
             ng-class="
               {
                'ionicons ion-ios7-bolt dittoW ' : item.mykey === 0 , 
@@ -47,10 +45,10 @@
                'ionicons ion-ios7-checkmark dittoA ' : item.mykey > 0 
               }"
           >
-          </div>
+      
+         
         </div>
       </div>
-
     </div>
     <!-- END Item Name / Ditto / Date Row -->
 
@@ -101,7 +99,7 @@
               ng-click=" newComment.theValue = item.commentText; ">
               Edit
             </button>
-            <span>{{item.commentText}}</span>
+            <span class="item-text-wrap">{{item.commentText}}</span>
           </div>
           <!-- TODO1 - This needs to submit on change --> 
           <form 
@@ -116,7 +114,7 @@
                 class="item-text-wrap" 
                 ng-model="newComment.theValue" 
                 id="addCommentText" 
-                placeholder="Your Comment Text"/>
+                placeholder="Context"/>
               <!-- Button to submit edit --> 
               <button 
                 type="submit" 

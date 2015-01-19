@@ -1,8 +1,3 @@
-body {
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-  font-weight: 300;
-}
-
 .slider {
   height: 85%;
 }
@@ -13,20 +8,10 @@ body {
   background-color: #fff;
   text-align: center;
 }
-
 #list {
   width: 170px;
   margin: 30px auto;
   font-size: 20px;
-}
-
-div.commentCount {
-  float: right;
-  margin-top: -47px;
-  padding: 0;
-  min-width: 20px;
-  height: 20px;
-  font-size: 0.5em;
 }
 
 img.title-image {
@@ -38,30 +23,6 @@ span.hint {
   color: rgba(100,100,100,0.5);
 }
 
-div.userLine, a.userLine {
-  padding: 0 0 0 2.6em;
-  min-height: 45px !important;
-  background-color: #32868C;
-  border: 0;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  
-}
-
-a.userLine > h2 {
-  color: #fff;
-  padding: 5px;
-}
-
-a.userLine > img {
-  top: 0px !important;
-  left: 0px !important;
-  /* border-radius: 0; */
-  padding: 0;
-  margin: 0;
-  float: left;
-}
-
 div.button-bar > a.active {
   border: solid 3px #F49653;
   padding: -3px;
@@ -71,48 +32,25 @@ ion-nav-bar.nav-bar {
   background-color: #DEDDD9 !important;
 }
 
-div.gridItem {
-  width: 155px;
-  height: 190px;
-  float: left;
-  border: 1px solid rgba(100,100,100,0.5);
-  margin: 3px;
-  box-shadow: 5px 5px 2px -4px rgba(0,0,0,0.52);
-}
+/* Buttons in the nav bar */
+  div.right-buttons {
+    margin: 0;
+    padding: 0;
+    height: 3em;
+  }
 
-table.gridHeader {
-  height: 50px;
-  max-height: 50px;
-  width: 100%;
-  border-bottom: 1px solid rgba(150,150,150, 0.8);
-  padding: 5px;
-  color: #000;
-}
+  div.right-buttons > span > button.button {
+    /*  */
+    max-height: 35px;
+    padding: 0 0.2em 0 0.2em !important;
+    
+  }
 
-td.gridProfile {
-  height: 50px;
-  width: 50px;
-  background-repeat: no-repeat;
-  background-size: 50px;
-}
-
-td.gridTitle {
-  text-overflow: ellipsis;
-  font-size: 0.9em;
-  padding-left: 0.5em;
-  text-rendering: geometricPrecision;
-  /* Formal grammar: auto | optimizeSpeed | optimizeLegibility | geometricPrecision */
-}
-
-table.gridStats {
-  margin: 5px;
-}
-
-
-
-table.gridStats td.statValue {
-  text-align: right;
-}
+  a.button > div.buttonRefresh {
+    float: right;  
+    font-size: 0.8em;
+    margin-top: 0.3em;
+  }
 
 span.statLabel {
   font-size: 0.7em;
@@ -144,11 +82,6 @@ div.itemButtons > div.button {
 }
 
 
-div.dittoButton {
-  font-size: 37px;
-  float: right;
-  margin-right: 0;
-}
 
 
 .item.wrap,
@@ -182,12 +115,12 @@ span.innerNo {
   text-shadow: 0 0 3px #B0B0B0;
   position: relative;
   z-index: 2;
-  top: -34px;
+  top: -36px;
   left: -17px;
   text-align: right;
   width: 30px;
   margin-right: -35px;
-  font-size: 0.9em;
+  font-size: 0.6em;
 } 
 
 div.topicLine {
@@ -243,14 +176,6 @@ a.buttonStranger {
 
 
 
-button.iconDice {
-  width: 38px;
-  background-image: url('../img/130-dice.png') !important;
-  background-repeat: no-repeat !important;
-  background-size: 35px;
-  padding: 50px;
-}
-
 .unread {
   background-color: rgba(200,255,200,0.5);
 }
@@ -268,7 +193,7 @@ span.notificationDate {
 
 div.notificationContext {
   position: relative;
-  vertical-align: text-top;
+  vertical-align: text-top !important;
   padding-bottom: 20px;
   padding-left: 120px;
   margin-left: 0px;
@@ -296,7 +221,7 @@ div.dittoList {
 }
 
 div.dittoThing {
-  vertical-align: text-top;
+  vertical-align: text-top ;
   font-size: 1.2em;
   padding: 0.5em;
 }
@@ -334,38 +259,77 @@ h3.pageTitle {
 }
 
 
+/* User List Things touched after 1/19/2015 */
+
+
 /* User / List / Thing Styling */
 
 
 div.userBlock > a.item, div.listBlock > div.item {
-  border: 0;
+  
 }
 
 
 div.listBlock {
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
-  border: 1px solid #3FA8B0;
-  margin: 3px;
-  padding: 0;
-  border-radius: 10px;
+  margin: 0.9em 0.5em 0.1em 0.5em; /* Determines the spacing between each user/list pair. */
   background-color: #ccc;
-  
+  border-radius: 0.3em;
 }
 
-div.listBlock > div.item {
-  
+div.userLine, a.userLine {
+  padding: 0.2em 0 0.2em 2.6em;
+  min-height: 2.1em;
+  background-color: #32868C;
+  border: 0 !important;
+  border-bottom: 1px solid #32868C !important;
+  border-top-left-radius: 5px !important;
+  border-top-right-radius: 5px !important;
+  margin-left: -1px !important;
+  margin-right: -1px !important;
 }
 
-div.item {
-  margin-bottom: 1em;
+div.endOfList {
+  background-color: #32868C;
+  margin: 5px -2px 0 -2px;
+  padding: 6px;
 }
 
-div.listLine, div.endOfList {
-  background-color: #3FA8B0;
+a.userLine > h2 {
+  color: #fff;
+  padding: 7px;
+}
+
+a.userLine > img {
+  top: 0px !important;
+  left: 0px !important;
+  /* border-radius: 0; */
+  padding: 0;
   margin: 0;
-  padding: 4px; 
+  float: left;
+  border-top-left-radius: 5px !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+
+div.listLine {
+  background-color: #393E3C;
+  border: 0;
+  color: #fff;
+  margin: 0;
+  z-index: 0;
+  font-weight: 100;
   border: 0px;
+  font-size: 1.0em;
   /* TODO2 - Pad the listline */
+}
+
+/* This is the list name. */
+div.listLine > span {
+  
+  
 }
 
 div.endOfList {
@@ -374,31 +338,27 @@ div.endOfList {
   border-bottom-left-radius: 4px;
 }
 
-div.button-bar > a.button {
-  font-size: 2em;
-}
+/* The button bar is used on the profile and list.  */
+  div.button-bar > a.button {
+    font-size: 2em;
+  }
+
+  div.button-bar > a.button > div.buttonBarRefresh {
+    background-color: blue;
+  }
 
 div.recent {
   font-size: 0.7em;
   
-  margin-left: 1em;
   color: #bbb;
   font-weight: 100;
-  
-  
+  padding-left: 1em;
 }
 
-
-div.row {
-  padding: 0;
-  margin: 0;
-}
-
-div.row > div.col {
-  padding: 0;
-  
-}
-
+div.dittoCol {
+  padding: 2em;
+  font-size: 3em;
+} 
 
 div.friendsWith {
   float: left;
@@ -407,14 +367,6 @@ div.friendsWith {
 
 div.letsChat > active {
   background-color: #bcc;
-}
-
-div.thingNameRow > div > div > span.thingName {
-  font-size: 1.2em;
-}
-
-div.thingNameRow {
-  padding: 10px;
 }
 
 
@@ -431,21 +383,14 @@ div.listLine > span {
 
 /* list item */
 div.listBlock > div.listItem {
-  margin: 5px;
+  margin: 0.3em 0.3em 0.6em 0.3em;
   padding: 0;
-  
-  /* border-radius: 0.3em; */ 
-  /* box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26); */
+  border: 0;
+  border-radius: 0.3em;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26); 
 }
 
 
-
-
-div.right-buttons > span > button {
-  
-  font-size: 5em;
-  max-height: 35px;
-}
 
 /* Ditto icon - Potential; */
 div.dittoQ {
@@ -469,6 +414,53 @@ div.docIcon {
   text-align: left; 
 }
 
+/* Thing Name Row within Thing Name */
+div.thingTable { display: table; } 
+
+  div.thingNameRow {
+    display: table-row;
+    width: 100%;
+  }
+
+  div.thingNameRow > div {
+    display: table-cell;
+  }
+
+    div.thingNameRow > div.thingNameCol {
+      width: inherit;
+      
+      /* Todo2 - Better Formatting on this. */
+      padding: 0;
+      margin: 0;
+      
+      vertical-align: top;
+    }
+
+    /* Thing Name Formatting */
+    div.thingNameRow > div.thingNameCol > span.thingNameText {
+      font-size: 1.2em;
+      /* Todo2 - Better Formatting on this. */
+      padding: 0.7em;
+      float:inherit;
+      display: block;
+      margin: 0;
+    }
+
+  /* friends with count styling */
+  div.thingNameRow > div.thingWithCol {
+    
+    
+  }
+
+  div.thingNameRow > div.dittoCol {
+    
+  }
+
+  div.thingNameRow > div {
+    padding: 5px;
+    
+  }
+
 
 /* Comment Row within User List Thing */
 div.commentRow {
@@ -479,27 +471,34 @@ div.commentRow {
 div.commentRow > div {
   padding: 0.3em;
   border-top: 1px solid #ccc;
+  display: table-cell;
 }
 
   div.commentRow > div.commentButton {
-    display: table-cell;    
+    
     width: 1em;
     font-size: 1.5em;
   }
 
   div.commentRow > div.commentInactiveButton {
-    display: table-cell;
     
     width: inherit;
   }
   
   div.commentRow > div.commentProfile {
-    display: table-cell;
+    
   }
   
   div.commentRow > div.commentText {
-    display: table-cell;
+    /* TODO2 there is an inexplicable 15px padding at the top of this seciton */
     width: inherit; /* makes it take the whole line. */
+    padding: 0;
+    margin: 0;
+  }
+
+
+  div.commentRow > div.commentText > div.commentsSection   {
+    
   }
 
   div.commentRow > div.commentText > div.commentsSection > form > label.item > button.button,
@@ -509,31 +508,21 @@ div.commentRow > div {
   }
 
 /* Comment Edit Button */
-
 div.commentRow > div.commentText > div.commentsSection > div > button.button {
-  
-  margin: 0;
+  margin: 0.3em;
   padding: 0;
-  width: 4em;
-  
+  width: 3em;
 }
 
-
-div.commentRow > div.commentText, 
-div.commentRow > div.commentText > div.commentsSection   {
+div.commentRow > div.commentText {
   padding: 0;
-  margin: 0;
-  
-}
-
-div.commentRow > div.commentText > div.commentsSection {
-  
-  
+  margin: 0; 
 }
 
 /* Comment Text */
 div.commentRow > div.commentText > div.commentsSection > div > span {
-  padding: 10px;
+  padding: 12px;
+  display: block;
   font-style: italic;
 }
 
@@ -542,14 +531,28 @@ div.commentRow > div.commentText > div.commentsSection > div {
   height: inherit;
 }
 
-div.commentRow > div.commentText > div.commentsSection > form > label.item  {
-  padding: 0;
+div.commentRow > div.commentText > div.commentsSection > form   {
+  
+}
+
+/* Done Button */
+div.commentRow > div.commentText > div.commentsSection > form > label.item > button  {
   margin: 0;
+  float: right;
+}
+
+
+
+div.commentRow > div.commentText > div.commentsSection > form > label.item  {
+  margin: 0;
+  padding: 12px;
 }
 
 /* removes the border around the text being edited. */
 div.commentRow > div.commentText > div.commentsSection > form > label.item > input#addCommentText {
   margin: 0;
-  padding: 0.4em;
-  font-size: 1.2em;
+  padding: 0;
+  font-size: 1.0em;
+  height: 3em;
+  width: inherit;
 }

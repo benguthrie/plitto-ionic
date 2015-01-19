@@ -18,21 +18,26 @@
       <!-- <a class="button" ng-class="{'active': $root.nav.listView ==='shared'}" ng-click="view('shared');">Nearby</a> --> 
     </div>
     
+    <!-- Just their friends. --> 
+      <div class="list " ng-repeat="user in $root.feed.friends" ng-show="nav.feedView ==='friends'">
+        <user-list-thing store="feed.friends" source="feed" user-data="user"></user-list-thing>
+      </div>
+
+      <!-- TODO1 - Restore this 
+      <div ng-show="nav.feedView ==='friends'">
+        <button ng-click="feed('friends','older','older');">Load Older</button>
+      </div>
     
-    <div class="list card" ng-repeat="user in $root.feed.friends" ng-show="nav.feedView ==='friends'">
-      <user-list-thing store="feed.friends" source="feed" user-data="user"></user-list-thing>
-    </div>
-    <div ng-show="nav.feedView ==='friends'">
-      <button ng-click="feed('friends','older','older');">Load Older</button>
-    </div>
-    
-    <div class="list card" ng-repeat="user in $root.feed.strangers" ng-show="nav.feedView ==='strangers'">
-      <user-list-thing store="feed.strangers" source="feed" user-data="user"></user-list-thing>
-      
-    </div>
-    <div ng-show="nav.feedView ==='strangers' ">
-      <button ng-click="feed('strangers','older','older');">Load Older</button>
-    </div>
+    <!--strangers -->   
+      <div class="list " ng-repeat="user in $root.feed.strangers" ng-show="nav.feedView ==='strangers'">
+        <user-list-thing store="feed.strangers" source="feed" user-data="user"></user-list-thing>
+
+      </div>
+      <!-- TODO1 - Restore this 
+      <div ng-show="nav.feedView ==='strangers' ">
+        <button ng-click="feed('strangers','older','older');">Load Older</button>
+      </div>
+      -->
     
     
   </ion-content>

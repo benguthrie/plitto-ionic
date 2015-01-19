@@ -3,7 +3,7 @@
   
   <ion-content class="has-header">
     <h1 class="pageTitle" ng-bind="thingData.thingName"></h3>
-    <div class="list card" ng-repeat="user in $root.thingData.items">
+    <div class="list" ng-repeat="user in $root.thingData.items">
       <user-list-thing store="thingData.items" source="thing" user-data="user"></user-list-thing>        
     </div>
     
