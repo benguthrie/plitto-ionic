@@ -354,8 +354,10 @@ div.listBlock {
 
 div.listBlock > div.item {
   
-  
-  
+}
+
+div.item {
+  margin-bottom: 1em;
 }
 
 div.listLine, div.endOfList {
@@ -407,6 +409,10 @@ div.letsChat > active {
   background-color: #bcc;
 }
 
+div.thingNameRow > div > div > span.thingName {
+  font-size: 1.2em;
+}
+
 div.thingNameRow {
   padding: 10px;
 }
@@ -452,7 +458,7 @@ div.dittoW {
 }
 
 /* Ditto icon - You have this in common; */
-div.dittoA {
+div > a.dittoA, div.dittoA {
   color: green;
   
 }
@@ -465,102 +471,85 @@ div.docIcon {
 
 
 /* Comment Row within User List Thing */
-
-
-  /* This contains the entire comment row */
-  div.commentRow {
-    
-    
-    
-    border-top: 1px solid #ddd;
-    
-    width: 100%;
-    
-  }
-
-  div.commentRow > div.commentButton,
-  div.commentRow > div.commentProfile,
-  div.commentRow > div.commentTextSection,
-  div.commentRow > div.commentButtonRow,
-  div.commentRow > div.commentTextSection,
-  div.commentRow > div.commentTextSection > div.commentsSection
-  {
-    margin: 0.3em 0.3em 0.3em 0.3em;
-  }
-
-  div.commentRow > div.commentButton {
-    font-size: 1.5em;
-    
-    float: left;
-  }
-
-  div.commentRow > div.commentButtonRow {
-    width: 100%;
-    padding: 1em;
-    display: block;
-  }
-
-  div.commentRow > div.commentTextSection {
-    width: 100%;
-  }
-
-  div.commentRow > div.commentTextSection > div.commentsSection {
-    font-style: italic;
-    font-size: 0.9em;
-    padding: 0 1em 0 0;
-    width: inherit;
-    
-    
-  }
-
-  /* The buttons in the comment section */
-  div.commentRow > div.commentsSection, div.item-text-wrap > button, 
-  div.commentRow > div.commentTextSection > div.commentsSection > form > label > button {
-    margin: 1em;
-    
-    width: 4em;
-    float: right;
-  }
-
-  div.commentRow > div.commentButton {
-    font-size: 1.5em;
-    
-    float: left;
-  }
-
-  div.commentRow > div.commentProfile {
-    
-    height: 20px;
-    float: left;
-  }
-
-  div.commentRow > div.commentProfile > img {
-    height: 23px;
-    width: 23px;
-    margin-top: 0.2em ;
-  }
-
-div.commentsSection > form {
-  border: 0px;
-  padding: 0;
+div.commentRow {
+  display: table-row;
+  width: 100%;
 }
 
-input#addCommentText {
-  font-style: normal;
+div.commentRow > div {
+  padding: 0.3em;
+  border-top: 1px solid #ccc;
+}
+
+  div.commentRow > div.commentButton {
+    display: table-cell;    
+    width: 1em;
+    font-size: 1.5em;
+  }
+
+  div.commentRow > div.commentInactiveButton {
+    display: table-cell;
+    
+    width: inherit;
+  }
+  
+  div.commentRow > div.commentProfile {
+    display: table-cell;
+  }
+  
+  div.commentRow > div.commentText {
+    display: table-cell;
+    width: inherit; /* makes it take the whole line. */
+  }
+
+  div.commentRow > div.commentText > div.commentsSection > form > label.item > button.button,
+  div.commentRow > div.commentText > div.commentsSection > div > button.button {
+    float: right;
+    
+  }
+
+/* Comment Edit Button */
+
+div.commentRow > div.commentText > div.commentsSection > div > button.button {
+  
+  margin: 0;
+  padding: 0;
+  width: 4em;
+  
+}
+
+
+div.commentRow > div.commentText, 
+div.commentRow > div.commentText > div.commentsSection   {
+  padding: 0;
+  margin: 0;
+  
+}
+
+div.commentRow > div.commentText > div.commentsSection {
+  
+  
+}
+
+/* Comment Text */
+div.commentRow > div.commentText > div.commentsSection > div > span {
+  padding: 10px;
+  font-style: italic;
+}
+
+div.commentRow > div.commentText > div.commentsSection > div {
+  min-height: 3.2em; /* Makes the text clickable anywhere on the line */
+  height: inherit;
+}
+
+div.commentRow > div.commentText > div.commentsSection > form > label.item  {
+  padding: 0;
   margin: 0;
 }
 
-form > label.item {
-  padding: 0em;
-  
-  border: 0;
-}
-
-div.letsChatIcon {
-  /* background-image: url("../img/lets_chat2.png");
-  background-size: 65px 42px;
-  background-repeat: no-repeat;
-  background-position: center;
-  display: block; */
-  font-size: 35px;
+/* removes the border around the text being edited. */
+div.commentRow > div.commentText > div.commentsSection > form > label.item > input#addCommentText {
+  margin: 0;
+  padding: 0.4em;
+  font-size: 1.2em;
 }

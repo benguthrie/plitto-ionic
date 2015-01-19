@@ -5,18 +5,35 @@
     <h1 class="pageTitle"><i class="icon ion-ios7-box-outline"></i> {{$root.list.listName}}</h1>
     <form name="newItemForm" ng-submit="addToList(newItem.theValue);">
       <label class="item item-input">
-        <input type="text" ng-model="newItem.theValue" placeholder="Add to {{$root.list.listName}}">
+        <input 
+          type="text" 
+          ng-model="newItem.theValue" 
+          placeholder="Add to {{$root.list.listName}}">
       </label>
       
     </form>
     
     <!-- <h3>{{$root.list.listName}}</h3> --> 
     <div class="button-bar">
-      <a class="button ion-ios7-checkmark-outline" ng-class="{'active': $root.nav.listView ==='ditto'}" ng-click="view('ditto');"></a>
-      <a class="button ion-ios7-checkmark" ng-class="{'active': $root.nav.listView ==='shared'}" ng-click="view('shared');"></a>
-      <a class="button ion-ios7-pulse-strong" ng-class="{'active': $root.nav.listView ==='feed'}" ng-click="view('feed');"></a>
-      <a class="button " ng-class="{'active': $root.nav.listView ==='mine'}" ng-click="view('mine');">{{ $root.user.userName }}'s</a>
-      <a class="button buttonStranger" ng-class="{'active': $root.nav.listView ==='strangers'}" ng-click="view('strangers');"></a>
+      <a 
+         class="button ion-ios7-checkmark-outline" 
+         ng-class="{'active': $root.nav.listView ==='ditto'}" 
+         ng-click="view('ditto');"></a>
+      <a 
+         class="button ion-ios7-checkmark dittoA" 
+         ng-class="{'active': $root.nav.listView ==='shared'}" 
+         ng-click="view('shared');"></a>
+      <a class="button ion-ios7-pulse-strong" 
+         ng-class="{'active': $root.nav.listView ==='feed'}" 
+         ng-click="view('feed');"></a>
+      <a class="button " 
+         ng-class="{'active': $root.nav.listView ==='mine'}" 
+         ng-click="view('mine');">
+        <img ng-src="{{'http://graph.facebook.com/' + $root.user.fbuid + '/picture?height=20&width=20'}}">
+        <!-- {{ $root.user.userName }}'s --> </a>
+      <a class="button buttonStranger" 
+         ng-class="{'active': $root.nav.listView ==='strangers'}" 
+         ng-click="view('strangers');"></a>
       
     </div>
 

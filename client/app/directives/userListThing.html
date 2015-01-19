@@ -7,8 +7,13 @@
   </a>
 
   <!-- BEGIN List Line --> 
-  <div class="item item-divider listLine" ng-click="showList(list.lid, list.listname, userData.uid);">
-    <i class="listIcon icon ion-ios7-box-outline"></i><span ng-bind="list.listname"></span>
+  <div 
+    class="item item-divider listLine " 
+    ng-click="showList(list.lid, list.listname, userData.uid);">
+    <i class="listIcon icon ion-ios7-box-outline"></i>
+    <span 
+      ng-bind="list.listname"
+      class="item-text-wrap"></span>
   </div>
   <!-- END List Line -->
 
@@ -21,7 +26,7 @@
         <div 
           ng-click="showThing(item.tid, item.thingname, userData.uid);" 
           class="item-text-wrap">
-          {{item.thingname}} 
+          <span class="thingName">{{item.thingname}} </span>
           <div class="recent" am-time-ago="item.added"></div>
           <!-- <h6 style="display: none;">{{item.added}}</h6>  --> 
           <!-- <h6 ng-show="item.dittouser === null" class="mega-octicon octicon-pencil">_</h6> -->
@@ -52,97 +57,84 @@
     <!-- BEGIN Comment Line -->
 
     <div class="commentRow" ng-hide=" userData.uid === $root.user.userId ">
-      <!-- BEGIN - My Comment --> 
-      <!-- Begin - Comment Button --> 
-      <div 
-        class="commentButton"
-
+      <!-- The Comment Button -->
+      <div class="commentButton"
         ng-click="letsChat( userData.uid, list.lid, item.tid, item.ik, $event, store, $index ); "
         ng-hide=" $root.user.userId === userData.uid "
         ng-class="{
           'ion-ios7-chatboxes dittoA' : item.commentActive === '1' ,
           'ion-ios7-chatboxes-outline' : item.commentActive !== '1' 
         }"
-         >
-
-      </div>
-      <!-- End - Comment Button --> 
-      
-      <div class="commentButtonRow" ng-show="item.commentActive !== '1' " ng-click="letsChat( userData.uid, list.lid, item.tid, item.ik, $event, store, $index ); ">
-        <!-- This is a button so adding the comment takes the whole line. --> 
+        >
+        
       </div>
 
-      <div class="commentProfile" ng-show=" item.commentActive==='1' ">
+      <!-- When inactive, the whole row is a button -->
+      <div 
+        class="commentInactiveButton"
+        ng-show="item.commentActive !== '1' " 
+        ng-click="letsChat( userData.uid, list.lid, item.tid, item.ik, $event, store, $index ); ">
+        &nbsp;
+        
+      </div>
+
+      <!-- The comment Profile Section --> 
+      <div 
+        class="commentProfile" 
+        ng-show=" item.commentActive==='1' ">
         <img  
           ng-show="item.commentActive==='1'" 
           ng-src=" {{'http://graph.facebook.com/' + $root.user.fbuid + '/picture?height=20&width=20'}}" />
       </div>
 
-      <!-- Begin My Comment Text --> 
-      <div class="commentTextSection" ng-show="item.commentActive==='1'">
-        <!-- This is the active comments section --> 
+      <div class="commentText" ng-show="item.commentActive==='1'">
         <div class="commentsSection" id="comments{{userData.uid}}{{list.lid}}{{item.tid}}" 
            ng-show=" item.commentActive === '1' ">
-
-          <div style="clear: both; " 
-               ng-click=" newComment.theValue = item.commentText; item.commentText = null; "
-               class="item-text-wrap" ng-show=" item.commentText.length > 0 " >
-            <button 
-              type="button" 
+          <div 
+            ng-click=" newComment.theValue = item.commentText; item.commentText = null; "
+            class="item-text-wrap"
+            ng-show=" item.commentText.length > 0 ">
+               <!-- Button to edit existing comment --> 
+            <button
+              type="button"
               class="button"
-              ng-click=" newComment.theValue = item.commentText;  "
-              style="float: right; margin">
+              ng-click=" newComment.theValue = item.commentText; ">
               Edit
             </button>
-            {{item.commentText}}
-            <!-- Button to edit existing comment --> 
-
-
+            <span>{{item.commentText}}</span>
           </div>
           <!-- TODO1 - This needs to submit on change --> 
           <form 
             name="itemComment" 
             ng-submit="makeItemComment(newComment.theValue, userData.uid, list.lid, item.tid, item.ik, store, $index ); newComment.theValue = null; " 
-            style="clear: both;" 
             ng-show=" item.commentText === null || item.commentText.length === 0 " >
 
             <label class="item item-input">
 
               <input 
-                  type="textarea" 
-                  class="item-text-wrap" 
-                   ng-model="newComment.theValue" 
-                   id="addCommentText" 
-                   placeholder="Your Comment Text"/>
+                type="textarea" 
+                class="item-text-wrap" 
+                ng-model="newComment.theValue" 
+                id="addCommentText" 
+                placeholder="Your Comment Text"/>
               <!-- Button to submit edit --> 
-              <button type="submit" 
-                ng-click=" console.log('text: ',newComment.theValue); "
-                  style="float: right;"
-                  class="button">
+              <button 
+                type="submit" 
+                class="button"
+                ng-click=" console.log('text: ',newComment.theValue); ">
                 Done
               </button>
 
             </label>
           </form>
         </div>
-
       </div>
-      <!-- END - My Comment Text --> 
-
 
 
     </div>
 
     <!-- END Comment Line -->
 
-    <!-- Begin the right button section --> 
-    <div style="float: right;">
-
-
-
-
-    </div>
-    <!-- End the right button section-->
 
 
   </div>
