@@ -9,6 +9,7 @@ angular.module('Plitto.controllers', [])
     return 'Title from Function';
   };
   */
+
   
   /* Control all the login and redirect functions */
   $rootScope.$on('broadcast', function (event, args){
@@ -41,16 +42,12 @@ angular.module('Plitto.controllers', [])
         dbFactory.fbTokenLogin(theToken);
       }
     }
-    
     else if (args.command === 'redirect' )
     {
-      // console.log('args.redirect, REDIRECT controllers.44 args.path:  ', args.path );
-      // TODO1 - Restore this .
-      // https://www.facebook.com/dialog/oauth?client_id=207184820755&redirect_uri=http://localhost/plitto-ionic/client/app/&display=touch&scope=email,user_friends&response_type=token
-      // window.location = args.path; // This is what should do the redirect.
-      // window.location = "plitto.com/";
-      // console.log("Past window.location", args.path);
-      window.location = '' + args.path;
+      // 
+      console.log('args.redirect, REDIRECT controllers.47 args.path:  ', args.path );
+      plainJsRedirect(args.path); /* Global function in functions.js */
+      
     }
     
     else if (args.command === 'state' ){
@@ -85,13 +82,17 @@ angular.module('Plitto.controllers', [])
         $rootScope.loginMessage = 'use dbFactory.refreshData to check if the token is valid.';
         dbFactory.refreshData($rootScope.token);
 
-      } else if ( window.location.hash.indexOf('access_token') !== 'undefined' && window.location.hash.indexOf('access_token') !== -1 ){
-        console.log('Access Token: Querystring? ' + window.location.hash.indexOf('access_token') , ',  QueryString.access_token ');
-        
+      } else if (
+        window.location.hash.indexOf('access_token') !== 'undefined' &&
+        window.location.hash.indexOf('access_token') !== -1
+      ){
+        console.log('Access Token: Querystring? ' +
+          window.location.hash.indexOf('access_token'),
+          ',  QueryString.access_token '
+        );
       }
-        
       else {
-        
+
         console.log('No token in local storage.');
         
         // $location.path('/login');
@@ -131,6 +132,8 @@ angular.module('Plitto.controllers', [])
   };
   
 })
+
+
 // REMOVED Facebook from the injectors // 13 - ionicNavBarDelegate - 14 - $ionicHistory
 .controller(
   'AppCtrl',
@@ -185,7 +188,13 @@ angular.module('Plitto.controllers', [])
   // Grab the user info here as soon as they login.
   
   $scope.login = function () {
-    $rootScope.$broadcast('broadcast',{ command: 'login', platform: 'facebook', debug: 'Controllers.js 210. OAuth.login' } );
+    $rootScope.$broadcast('broadcast',
+      {
+        command: 'login',
+        platform: 'facebook',
+        debug: 'Controllers.js 210. OAuth.login'
+      }
+    );
   };
   
   // Global Logout Handler - TODO2 - This was added to functions.js and should be removed from here.
@@ -536,22 +545,28 @@ angular.module('Plitto.controllers', [])
 })
 
 .controller('LoginCtrl', function($scope, $window, $rootScope, $state) {
-  // TODO2 - OAuth was removed 1/9/2014 
   $scope.loginOAuth = function(provider) {
     $rootScope.loginMessage = '1. loginOAuth Pressed';
     
     // TODO1 - This is the bit that handles the login.
     if(provider === 'facebook'){
+      
       // Do that.
       
+      
+      /* RETURN 1/19/2015 */
       $rootScope.loginMessage = '1. Facebook loginOAuth Initiated';
-      // 
-      $rootScope.$broadcast('broadcast',{ command: 'login', platform: 'facebook', debug: 'controller.js 506 login with facebook.' });
-      
-      
+      // Go to controllers.26
+      $rootScope.$broadcast('broadcast',
+        {
+          command: 'login',
+          platform: 'facebook',
+          debug: 'controller.js 506 login with facebook.'
+        }
+      );
+
       $state.go('loading');      // TODO 1 - Is this working?
       // Facebook.login();
-      
       
     } else {
       $rootScope.loginMessage = '2. END - Unknown OAuth Provider';

@@ -27,3 +27,10 @@ function randNum( maxNum ) {
   'use strict';
   return Math.floor((Math.random() * maxNum) + 1 );
 }
+
+function plainJsRedirect(url){
+  console.log('plainJsRedirect: ', url);
+  // window.location.href = url;
+  // window.location.assign(url);
+  setTimeout(function(){location.href=url} , 5000);   
+}

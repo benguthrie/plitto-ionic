@@ -43,7 +43,11 @@ angular.module('Plitto', [
     // Get the access token from Facebook. TODO1 - 12/20 - It looks like something is intercepting it, and removing it.
     console.log('ionicPlatform.run: access_token location: ', window.location.hash.indexOf('access_token') );
     if ( window.location.hash.indexOf('access_token') !== -1){
-      console.log('ionicPlatform.run: Found the token.', window.location.hash, window.location.hash.indexOf('access_token') );
+      /* What does this mean? */ 
+      console.log('ionicPlatform.run: Found the token.',
+        window.location.hash,
+        window.location.hash.indexOf('access_token')
+      );
       // TODO2UX - Show a loading indicator
     
       var hash = window.location.hash;
@@ -288,7 +292,23 @@ angular.module('Plitto', [
   return {
     restrict: 'E',
     templateUrl: 'directives/userNav.html',
-
+    // template: navigationBar(),
+    // template: '',
+/*    template: '<ion-nav-bar>  ' + 
+      '<ion-nav-buttons side="left"> ' + 
+        '<button menu-toggle="left" class="button button-icon ion-navicon"></button> ' + 
+      ' </ion-nav-buttons> ' + 
+      '<ion-nav-buttons side="right"> ' + 
+        ' <button class="button button-icon  ionicons ion-plus-circled" ng-click=" navFunc(\'addlist\'); "></button> ' + 
+        ' <button class="button button-icon ion-chatbox" ng-click="navFunc(\'chat\');"> ' + 
+          ' <span class="innerNo" ng-bind="$root.stats.alertCount"></style></button>  ' + 
+        ' <button class="button button-icon iconDice" ng-click="navFunc(\'home\'); getSome();"></button> ' +
+        ' <button class="button button-icon ion-search" ng-click="navFunc(\'search\');" > </button> '+
+      '</ion-nav-buttons>' +
+   '</ion-nav-bar>', */
+   // template: '<ion-nav-bar><ion-nav-buttons side="left"><button menu-toggle="left" class="button button-icon icon ion-navicon"></button></ion-nav-buttons></ion-nav-bar>',
+    // scope: {}
+  
     controller: function(
       $scope, dbFactory, $state ){
       // Reload the navigation
