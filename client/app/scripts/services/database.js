@@ -14,15 +14,15 @@ angular.module('Services.database', [])
     // Clear all the stores.
     dbInit();
     localStorageService.clearAll();
-  };
+  }
   
   function checkLogout (data) {
-    if (typeof data.logout !== 'unknown' && data.logout === "1"){
+    if (typeof data.logout !== 'undefined' && data.logout === '1'){
       return true;
     } else {
       return false;
     }
-  };
+  }
   
   /* TODO2 1/16/2015 it looks like this can be removed. This custom data format is obsolete. */
   function processNotification ( theData , theUserId ) {
@@ -435,7 +435,7 @@ angular.module('Services.database', [])
         if( typeof data.logout !== 'undefined'){
           console.log( 'API ERROR', data );
           if(data.logout === true){
-            console.log("showFeed.database: We should log out 364");
+            console.log('showFeed.database: We should log out 364.');
             logout();
           }
         }
@@ -534,17 +534,18 @@ angular.module('Services.database', [])
         headers: { 'Content-Type':'application/x-www-form-urlencoded' }
       }
     )
-    .success(function (data,status,headers,config){
-      if( checkLogout(data) === true ) {
-        logout();
-      } else {
-        console.log('TODO2 Use shc', status, headers, config);
-        // $rootScope.modal.listStore = data.results;
-        $rootScope.thingData.items = data.results;
-        console.log('database.showThing',$rootScope.thingData);
+    .success(function (data,status,headers,config)
+      {
+        if( checkLogout(data) === true ) {
+          logout();
+        } else {
+          console.log('TODO2 Use shc', status, headers, config);
+          // $rootScope.modal.listStore = data.results;
+          $rootScope.thingData.items = data.results;
+          console.log('database.showThing',$rootScope.thingData);
+        }
       }
-      
-    });
+    );
 
   };
 
@@ -642,7 +643,7 @@ angular.module('Services.database', [])
           var mynewkey = null;
           if(action === 'ditto') {
 
-            mynewkey  = data.results[0].thekey; 
+            mynewkey  = data.results[0].thekey;
             var friendsWith = data.results[0].friendsWith;
 
             // Update the "Friends With" 
@@ -667,7 +668,8 @@ angular.module('Services.database', [])
           // $rootScope[scopeName][i].lists[j].items[k].mykey = mynewkey;
           eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].mykey = ' +mynewkey);
         }
-    });
+      }
+    );
 
   };
 
@@ -710,26 +712,27 @@ angular.module('Services.database', [])
            
               // eval('console.log("net Results",' + theScope +');'); 
               // This makes the scope that was passed in that part of the root scope.
-              eval(theScope + ' = data.results;');
+            eval(theScope + ' = data.results;');
 
-              if(userFilter !== '0' && userFilter !== ''){
-                // We know it's a user, so let's set local storage.
-                localStorageService.set('user' + userFilter + sharedFilter, data.results);
-              }
+            if(userFilter !== '0' && userFilter !== ''){
+              // We know it's a user, so let's set local storage.
+              localStorageService.set('user' + userFilter + sharedFilter, data.results);
+            }
 
-              if(listFilter !== '0' && listFilter !== ''){
-                // We know it's a user, so let's set local storage.
-                localStorageService.set('list' + listFilter + sharedFilter, data.results);
-              }
+            if(listFilter !== '0' && listFilter !== '')
+            {
+              // We know it's a user, so let's set local storage.
+              localStorageService.set('list' + listFilter + sharedFilter, data.results);
+            }
 
-              // Testing returning it so it can be part of the rootScope:
-              // return data.results;
+            // Testing returning it so it can be part of the rootScope:
+            // return data.results;
             
             // console.log('dbFactory.getActivity data: ',data);
 
           }
 
-          }
+        }
           
       );
   };
@@ -822,8 +825,8 @@ angular.module('Services.database', [])
               {
                 command: 'state',
                 path: 'app.home',
-                debug: 'dbFactory.fbTokenLogin - Go Home.' 
-              } 
+                debug: 'dbFactory.fbTokenLogin - Go Home.'
+              }
             );
 
           } else {
@@ -833,8 +836,8 @@ angular.module('Services.database', [])
               {
                 command: 'state',
                 path: 'login',
-                debug: 'Login unsuccessful. Go back to login' 
-              } 
+                debug: 'Login unsuccessful. Go back to login'
+              }
             );
             
             dbInit();
@@ -1111,7 +1114,11 @@ angular.module('Services.database', [])
           console.log('database.showAList: TODO3 this is mine. Why do we care?');
 
         }
-        eval('$rootScope.list.' + viewTypes[i] + ' = localStorageService.get("listId" + listNameId + "" + viewTypes[i] )' );
+        eval(
+          '$rootScope.list.' +
+          viewTypes[i] +
+          ' = localStorageService.get("listId" + listNameId + "" + viewTypes[i] )'
+        );
       }
     }
 
@@ -1171,9 +1178,9 @@ angular.module('Services.database', [])
                   // Create an empty list so my item can be added.
                   $rootScope.list.mine = [
                     {
-                      username: $rootScope.user.userName, 
-                      uid: $rootScope.user.userId, 
-                      fbuid: $rootScope.user.fbuid, 
+                      username: $rootScope.user.userName,
+                      uid: $rootScope.user.userId,
+                      fbuid: $rootScope.user.fbuid,
                       lists: [
                         {
                           lid: listNameId,

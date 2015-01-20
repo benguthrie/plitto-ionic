@@ -102,7 +102,7 @@ angular.module('Services.oauth', [])
       $timeout(function () {
         // 
         authWindow.close();
-        console.log('Facebook timed out.')
+        console.log('Facebook timed out.');
         // TODO1 - Line deactivated on 1/13/2015 authFinished(accessToken);
       }, 3000);
     } else {

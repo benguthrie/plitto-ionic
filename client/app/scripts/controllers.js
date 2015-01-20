@@ -3,10 +3,12 @@ angular.module('Plitto.controllers', [])
 
 .run(function($rootScope, dbFactory, $state, localStorageService, $ionicModal, $location , OAuth, pFb ){
 
+  /* disabled 1/19/2015
   var headerTitle = function() {
     //console.log('HeaderTitle');
     return 'Title from Function';
   };
+  */
   
   /* Control all the login and redirect functions */
   $rootScope.$on('broadcast', function (event, args){
@@ -132,8 +134,8 @@ angular.module('Plitto.controllers', [])
 // REMOVED Facebook from the injectors // 13 - ionicNavBarDelegate - 14 - $ionicHistory
 .controller(
   'AppCtrl',
-  function( 
-    $scope, 
+  function(
+    $scope,
     $state,
     dbFactory,
     $rootScope,
@@ -430,7 +432,7 @@ angular.module('Plitto.controllers', [])
   // console.log("CHAT CONTROL INITIALIZED.");
   // console.log("rsnf", $rootScope.stats.feed );
   $rootScope.stats.feed = dbFactory.userChat();
-  console.log("rsnf", $rootScope.stats.feed );
+  console.log('rsnf', $rootScope.stats.feed );
   
   /* TODO1 - Update the notification count ? */
   
