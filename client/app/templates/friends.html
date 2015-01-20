@@ -5,38 +5,44 @@
     <h1 class="pageTitle">Friends</h1>
     <p ng-show="!friendStore.length">None of your Facebook friends have a Plitto account.</p>
     
-    <ion-list>
+    <ion-list class="friendList">
       <ion-item ng-repeat="friend in friendStore" 
         href="#/app/profile/{{friend.id}}" 
         ng-click="showUser(friend.id,friend.name,'ditto', friend.fbuid);"
-        style="padding: 0;"
-      >
-        <div class="row">
-          <div class="col">
-            <img ng-src="http://graph.facebook.com/{{friend.fbuid}}/picture"/><br/>
-            <span class="label item-text-wrap">{{friend.name}}</span>
-          </div>
-        <!--
-        </div>
         
-        <div class="row">
-        -->
-          <div class="col colStat colPush">
-            <span class="label">Shared</span><br/>
-            <span class="stat">{{friend.shared}}</span>
+      >
+        <div class="statTable">
+          <div class="statRow">
+            <div class="friendPicture">
+              <img ng-src="http://graph.facebook.com/{{friend.fbuid}}/picture"/>
+            </div>
+            <div class="groupStats">
+              <div ng-bind=" friend.name " class="friendName"></div>
+              <div class="statBlock">
+                
+                <div class=" colStat ">
+                  <i class="ionicons ion-ios7-checkmark " style="color: green;"></i>
+                  <span class="label">Shared</span><br/>
+                  <span class="stat">{{friend.shared}}</span>
+                </div>
+                <div class=" colStat ">
+                  <i class="ionicons ion-ios7-checkmark-outline dittoQ"></i>
+                  <span class="label colStat">Dittoable</span><br/>
+                  <span class="stat">{{friend.dittoable}}</span>
+                </div>
+                <div class=" colStat ">
+                  <i class="ionicons ion-ios7-box-outline"></i>
+                  <span class="label">Lists</span><br/>
+                  <span class="stat">{{friend.lists}}</span>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="col colStat colPush">
-            <span class="label colStat">Dittoable</span><br/>
-            <span class="stat">{{friend.dittoable}}</span>
-          </div>
-          <div class="col colStat colPush">
-            <span class="label">Lists</span><br/>
-            <span class="stat">{{friend.lists}}</span>
-          </div>
-        </div> 
+        </div>
         
       </ion-item>
     </ion-list>
 
   </ion-content>
 </ion-view>
+ 

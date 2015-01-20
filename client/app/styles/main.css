@@ -231,26 +231,6 @@ span.label {
   font-weight: 100;
 }
 
-div.colStat {
-  
-  text-align: center;
-  margin-right: 5px;
-  
-  /* Google Material Design Clone */
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
-  
-  min-width: 50px;
-  max-width: 75px;
-  float: right;
-  font-weight: 600;
-  font-size: 1.3em;
-  padding: 3px;;
-}
-
-div.colPush {
-  
-}
-
 h1.pageTitle,
 h3.pageTitle {
   padding: 10px 0 5px 10px;
@@ -556,3 +536,99 @@ div.commentRow > div.commentText > div.commentsSection > form > label.item > inp
   height: 3em;
   width: inherit;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Friend & List of List Styling */
+
+
+div.statTable {
+  display: table;
+  width: 100%;
+}
+
+div.statTable > div.statRow {
+  display: table-row;
+}
+
+div.statTable > div.statRow > div.listIcon {
+  font-size: 2em;
+  margin-right: -0.3em;
+}
+
+
+div.statTable > div.statRow > div.friendPicture { 
+  display: table-cell;  
+  width: 3em;
+} 
+
+div.statTable > div.statRow > div.groupStats { 
+  padding: 0 0 0 0.5em;
+  display: table-cell;  
+  vertical-align: top;
+  text-align: left;
+  
+} 
+
+
+
+div.statTable > div.statRow > div.groupStats > div.listName { 
+  
+  width: inherit;
+  padding: 0.3em;
+  background-color: #393E3C;
+  color: white;
+}
+
+div.statTable > div.statRow > div.groupStats > div.friendName { 
+  background-color: blue;
+  width: inherit;
+  padding: 0.3em;
+  background-color: #32868C;
+  color: white;
+}
+
+div.statTable > div.statRow > div.groupStats > div.statBlock { 
+  padding: 0.5em;
+}
+
+div.statTable > div.statRow > div.groupStats > div.statBlock  { 
+  display: table;
+}
+
+/* Colstat Icon */
+div.statTable > div.statRow > div.groupStats > div.statBlock > div.colStat > i {
+  float: left;
+  font-size: 2em;
+  margin-right: 0.2em;
+}
+
+div.statTable > div.statRow > div.groupStats > div.statBlock > div.colStat {
+  float: left;
+  text-align: center;
+  margin-right: 1em;
+  
+  /* Google Material Design Clone */
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  font-weight: 600;
+  font-size: 1.3em;
+  padding: 0.2em 1em 0.2em 0.2em;
+}
+
+
