@@ -288,24 +288,8 @@ angular.module('Plitto', [
   return {
     restrict: 'E',
     templateUrl: 'directives/userNav.html',
-    // template: navigationBar(),
-    // template: '',
-/*    template: '<ion-nav-bar>  ' + 
-      '<ion-nav-buttons side="left"> ' + 
-        '<button menu-toggle="left" class="button button-icon ion-navicon"></button> ' + 
-      ' </ion-nav-buttons> ' + 
-      '<ion-nav-buttons side="right"> ' + 
-        ' <button class="button button-icon  ionicons ion-plus-circled" ng-click=" navFunc(\'addlist\'); "></button> ' + 
-        ' <button class="button button-icon ion-chatbox" ng-click="navFunc(\'chat\');"> ' + 
-          ' <span class="innerNo" ng-bind="$root.stats.alertCount"></style></button>  ' + 
-        ' <button class="button button-icon iconDice" ng-click="navFunc(\'home\'); getSome();"></button> ' +
-        ' <button class="button button-icon ion-search" ng-click="navFunc(\'search\');" > </button> '+
-      '</ion-nav-buttons>' +
-   '</ion-nav-bar>', */
-   // template: '<ion-nav-bar><ion-nav-buttons side="left"><button menu-toggle="left" class="button button-icon icon ion-navicon"></button></ion-nav-buttons></ion-nav-bar>',
-    // scope: {}
-  
-    controller: function( 
+
+    controller: function(
       $scope, dbFactory, $state ){
       // Reload the navigation
       // dbFactory.userChat(-1);
@@ -332,7 +316,7 @@ angular.module('Plitto', [
         
         $state.go('app.' + path);
         
-        $rootScope.stats.feed = dbFactory.userChat(-1); 
+        $rootScope.stats.feed = dbFactory.userChat(-1);
         
         /* TODO2 Remove: 
         .then(function(response){
@@ -417,10 +401,9 @@ angular.module('Plitto', [
               if( tempStore[upos].lists[lpos].items[l].tid === tid ) {
                 tpos = l;
               }
-            } 
+            }
           }
-          
-        } 
+        }
         
         console.log('upos: ', upos, lpos, tpos, $rootScope.user);
 

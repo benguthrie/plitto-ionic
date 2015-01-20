@@ -51,7 +51,7 @@ ion-nav-bar.nav-bar {
     font-size: 0.8em;
     margin-top: 0.3em;
   }
-
+/*
 span.statLabel {
   font-size: 0.7em;
 }
@@ -88,7 +88,12 @@ div.itemButtons > div.button {
 .item-content.wrap {
   white-space: normal;
 }
+*/ 
 
+span.stat {
+  overflow: hidden;
+  
+}
 
 section.statTable > header {
   background-color: #888;
@@ -617,18 +622,22 @@ div.statTable > div.statRow > div.groupStats > div.statBlock > div.colStat > i {
   float: left;
   font-size: 2em;
   margin-right: 0.2em;
+  
 }
 
 div.statTable > div.statRow > div.groupStats > div.statBlock > div.colStat {
   float: left;
   text-align: center;
-  margin-right: 1em;
+  margin-right: 0.3em;
+  margin-bottom: 0.3em;
   
   /* Google Material Design Clone */
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
   font-weight: 600;
   font-size: 1.3em;
-  padding: 0.2em 1em 0.2em 0.2em;
+  padding: 0.2em 0.7em 0.2em 0.2em;
+  overflow: hidden;
+  
 }
 
 
