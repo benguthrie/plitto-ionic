@@ -43,7 +43,7 @@ angular.module('Plitto', [
     // Get the access token from Facebook. TODO1 - 12/20 - It looks like something is intercepting it, and removing it.
     console.log('ionicPlatform.run: access_token location: ', window.location.hash.indexOf('access_token') );
     if ( window.location.hash.indexOf('access_token') !== -1){
-      /* What does this mean? */ 
+      /* What does this mean? */
       console.log('ionicPlatform.run: Found the token.',
         window.location.hash,
         window.location.hash.indexOf('access_token')
@@ -372,9 +372,9 @@ angular.module('Plitto', [
       };
   
       /* List */
-      $scope.showList = function(listId, listName, userFilter){
+      $scope.showList = function(listId, listName, userFilter, focus){
         console.log('showList app.js 317');
-        dbFactory.showAList(listId, listName, userFilter);
+        dbFactory.showAList(listId, listName, userFilter, focus);
       };
   
       /* Thing */

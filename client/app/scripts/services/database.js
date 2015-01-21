@@ -1027,45 +1027,67 @@ angular.module('Services.database', [])
 
           var myThingAlready = -1;
 
+          console.log('Existing List: ', $rootScope.list.mine);
+          if(!$rootScope.list.mine.length){
+            console.log('DEBUG1032no length');
+          }
+          if($rootScope.list.mine.length === 0){
+            console.log('DEBUG1035 ZERO');
+          }
+          // Add my list if it's not already there.
+          if(!$rootScope.list.mine.length || $rootScope.list.mine.length === 0) {
+            console.log('make my list');
+            // Make my list.
+            var myList = {
+              uid: $rootScope.user.userId,
+              fbuid: $rootScope.user.fbuid,
+              username: $rootScope.user.userName,
+              lists: [ 
+                { 
+                  lid: addToListObj.lid, 
+                  listname: $rootScope.list.listName,
+                  items: [ myNewItem ] 
+                } 
+              ]
+            };
+
+            // Make my list first 
+            $rootScope.list.mine[0] = myList;
+            
+            console.log('my list: ', $rootScope.list.mine);
+
+          } else {
+            console.log(' This should exist: ',$rootScope.list.mine);
+          }
+          
+          
           var i = 0;
           // console.log( 'database.addToList: what is in this new list? ', $rootScope.list, $rootScope.list.mine );
 
-          for(i in $rootScope.list.mine[0].lists[0]){
-            if($rootScope.list.mine[0].lists[0].tid === item.thingid){
+          // We need to look in my own list to see if the item is already there. If so, just activate it.
+          for(i in $rootScope.list.mine[0].lists[0].items){
+            if($rootScope.list.mine[0].lists[0].items[i].tid === item.thingid){
               myThingAlready = i;
             }
           }
           // console.log('didList',didList, 'myListPosition', myListPosition, 'myThingAlready', myThingAlready);
 
-          // If my list doesn't exist yet, create it.
-          if($rootScope.list.mine.length === 0 ) {
-            // Make my list.
-            var myList = {
-              uid: $rootScope.user.userId,
-              fbuid: $rootScope.user.fbuid,
-              username: $rootScope.user.username,
-              lists: [ { lid: addToListObj.lid, listname: $rootScope.list.listName, items: [ myNewItem ] } ]
-            };
 
-            // Make my list first 
-            $rootScope.list.mine = myList;
+        // If my list doesn't exist yet, create it.
 
+          console.log('my existing list: ', $rootScope.list.mine[0], $rootScope.list.mine[0].lists[0]);
+
+          // Add my item to my list, but only if it's not already there.
+          if(myThingAlready === -1) {
+            // console.log($rootScope.modal.listStore[0]);
+
+            // console.log('RootStore before I build', $rootScope.list.items);
+            $rootScope.list.mine[0].lists[0].items.unshift(myNewItem);
           } else {
-
-            // Add my item to my list, but only if it's not already there.
-            if(myThingAlready === -1) {
-              // console.log($rootScope.modal.listStore[0]);
-
-              // console.log('RootStore before I build', $rootScope.list.items);
-              $rootScope.list.mine[0].lists[0].items.unshift(myNewItem);
-            } else {
-              // Move my old item to the top of your list & remove the old one.
-              $rootScope.list.mine[0].lists[0].items.splice(myThingAlready, 1);
-              // Insert the new one with "now"
-              $rootScope.list.mine[0].lists[0].items.unshift(myNewItem);
-            }
-
-            /* End the Success Function */
+            // Move my old item to the top of your list & remove the old one.
+            $rootScope.list.mine[0].lists[0].items.splice(myThingAlready, 1);
+            // Insert the new one with "now"
+            $rootScope.list.mine[0].lists[0].items.unshift(myNewItem);
           }
 
         }
@@ -1077,9 +1099,11 @@ angular.module('Services.database', [])
 
 
   /* 9/3/2014 */
-  var showAList = function (listNameId, listName, userFilter) {
+  var showAList = function (listNameId, listName, userFilter, focus) {
     // 
     // console.log('database.showAList: ',listNameId, listName , userFilter);
+    
+    console.log('todo1 - When focus - go straight to adding to a user list and open the keyboard');
 
     $rootScope.list = {
       listId: listNameId,
@@ -1152,7 +1176,9 @@ angular.module('Services.database', [])
       }
     ).success(
       function(data, status, headers, config){
-        // console.log('loadList: ', data.results);
+        
+        // console.log('loadList: ', data.results, data.results.length);
+        // console.log('test ditto results', type, data.results['ditto'], data.results[type]);
         // console.log('database.loadlist: TODO3 Use shc', status, headers, config);
         
         if( checkLogout(data) === true ) {
@@ -1160,17 +1186,34 @@ angular.module('Services.database', [])
         } else {
           
           var viewTypes = new Array('ditto','shared','feed','strangers','mine');
-
-          if(type === 'all'){
+          // console.log( 'loadlist view types: ' , viewTypes, 'type: ', typeof (data.results[type].length));
+          
+          /* Must not be all, and  */
+          if (
+//             (type !== 'all' && data.results.length === 0) ||
+            type !== 'all'
+          )
+          {
+            console.log('loadList type: ',type,'empty', data.results[type] );
+            // eval('$rootScope.list.' + type + ' = "empty";');
+            $rootScope.list[type] = data.results[type];
+            localStorageService.set('listId' + listNameId + type, data.results[type]);
+            
+          }
+          else if (type === 'all') {
             for(var i in viewTypes){
               // console.log('i: ',i, type[i]);
 
               // Build each type, but only clear the store if the request type was "all"
               // console.log('database.loadList Type response: ', typeof data.results[ viewTypes[i] ], viewTypes[i], data.results[ viewTypes[i] ], ' typeof: ',typeof (data.results[ viewTypes[i] ].rowcount) );
-
-              if( typeof eval('data.results.' + viewTypes[i]) !== 'undefined' && typeof (data.results[ viewTypes[i] ].rowcount) !== 'undefined')
+                
+              console.log('DEBUG1179: ', viewTypes[i], typeof (data.results[ viewTypes[i] ].rowcount) );
+              
+              
+              if( !data.results[ viewTypes[i] ].length )
                 // Clean out the store if there were no results
               {
+                console.log('loadlist SHOW!!! type: ', viewTypes[i], data.results[viewTypes[i]]);
                 if(viewTypes[i] !== 'mine')
                 {
                   $rootScope.list[ viewTypes[i] ] = [];
@@ -1193,17 +1236,16 @@ angular.module('Services.database', [])
                 }
               }
               else {
+                console.log('loadList ignore section:', viewTypes[i], data.results[ viewTypes[i]]);
                 // console.log('database.loadList - make type: ',viewTypes[i]);
                 // Build the view
-                eval('$rootScope.list.' + viewTypes[i] +
-                     '= data.results.' + viewTypes[i]);
-                // Create the local storage
-                eval('localStorageService.set("listId' +
+                $rootScope.list[viewTypes[i]] = data.results[viewTypes[i]];
+                // Add this item to local storega.
+                localStorageService.set('listId' +
                      listNameId +
-                     viewTypes[i] +
-                     '", data.results.' +
-                     viewTypes[i] +
-                     ');');
+                     viewTypes[i],
+                     data.results[viewTypes[i]]);
+                      
               }
 
               if(localStorageService.get('listId' + listNameId + 'ditto')){
@@ -1215,8 +1257,7 @@ angular.module('Services.database', [])
             // Only update this specific part of the view.
             // console.log("EVAL THIS: " + "localStorageService.set('listId" + listNameId + type + "' , data.results." + type + ");");
 
-            eval('$rootScope.list.' + type + ' = data.results.' +  type + ';');
-            eval('localStorageService.set("listId' + listNameId + type + '" , data.results.' + type + ');');
+            console.log('db1239 - This should not happen.');
             // And update the local storage
             // eval("localStorageService.set('listId' + listNameId +'" +  sharedFilter + "' , data.results." + sharedFilter + ");");
           }

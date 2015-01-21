@@ -9,11 +9,15 @@
   <!-- BEGIN List Line --> 
   <div 
     class="item item-divider listLine " 
-    ng-click="showList(list.lid, list.listname, userData.uid);">
+    ng-click="showList(list.lid, list.listname, userData.uid, 'moreUser');">
     <i class="listIcon icon ion-ios7-box-outline"></i>
+    <i class="icon ion-plus-round listIconAdd"></i>
+    
     <span 
       ng-bind="list.listname"
       class="item-text-wrap"></span>
+    
+    
   </div>
   <!-- END List Line -->
 

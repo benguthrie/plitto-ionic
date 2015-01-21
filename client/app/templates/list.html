@@ -36,32 +36,46 @@
          ng-click="view('strangers');"></a>
       
     </div>
-
+    <!-- <h2>Ditto length: {{list.ditto.length}}</h2>
+    <span style="font-size: 0.1em; max-height: 15em;"> ::START::{{list}} ::END:: </span>
+    -->
+    
     <div ng-show="$root.nav.listView ==='ditto' ">
+      <div ng-show="!list.ditto.length" class="noShow">No Dittoable Items to Show</div>
+
       <div class="list " ng-repeat="user in list.ditto">
         <user-list-thing store="list.ditto" source="list" user-data="user"></user-list-thing>
       </div>
     </div>
     
     <div ng-show="$root.nav.listView ==='shared' ">
+      <div ng-show="!list.shared.length" class="noShow">No Shared Items to Show</div>
+      
       <div class="list " ng-repeat="user in list.shared">
         <user-list-thing store="list.shared" source="list" user-data="user"></user-list-thing>
       </div>
     </div>
     
     <div ng-show="$root.nav.listView ==='strangers' ">
+      <div ng-show="!list.strangers.length" class="noShow">No Strangers Have Items Worth Showing</div>
+      
+      <!-- ::START::{{list.strangers}} ::END:: -->
       <div class="list " ng-repeat="user in list.strangers">
         <user-list-thing store="list.strangers" source="list" user-data="user"></user-list-thing>
       </div>
     </div>
     
     <div ng-show="$root.nav.listView ==='mine' ">
+      <!-- ::START::{{list.mine}} ::END:: -->
+      <div ng-show="!list.mine.length" class="noShow">You have not items yet.</div>
       <div class="list " ng-repeat="user in list.mine">
         <user-list-thing store="list.mine" source="list" user-data="user"></user-list-thing>
       </div>
     </div>
     
     <div ng-show="$root.nav.listView ==='feed' ">
+      <div ng-show="!list.feed.length" class="noShow">No Recent Items</div>
+      <!-- ::START::{{list.feed}} ::END:: -->
       <div class="list " ng-repeat="user in list.feed">
         <user-list-thing store="list.feed" source="list" user-data="user"></user-list-thing>
       </div>

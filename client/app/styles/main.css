@@ -388,7 +388,7 @@ div.dittoW {
 }
 
 /* Ditto icon - You have this in common; */
-div > a.dittoA, div.dittoA {
+div > a.dittoA, div.dittoA , div.button-bar > a.button > i.dittoA  {
   color: green;
   
 }
@@ -556,7 +556,11 @@ div.commentRow > div.commentText > div.commentsSection > form > label.item > inp
 
 
 
-
+/* No Items to Show */
+div.noShow {
+  padding: 1em;
+  font-size: 1.4em;
+}
 
 
 
@@ -572,10 +576,29 @@ div.statTable > div.statRow {
   display: table-row;
 }
 
-div.statTable > div.statRow > div.listIcon {
+div.listBlock > div.listLine > i.listIcon {
   font-size: 2em;
-  margin-right: -0.3em;
+  
 }
+
+div.listBlock > div.listLine > i.listIconAdd {
+  font-size: 1.4em;
+  margin-right: -0.1em;
+  color: #ddd;
+  border: 2px solid #ddd;
+  float: right;
+  box-shadow: 0 2px 5px 0 rgba(200, 200, 200, 0.26);
+  border-radius: 0.9em;
+  background-color: rgba(100, 190, 100, 0.5);
+  
+  display: block;
+  height: 1.3em;
+  width: 1.3em;
+  padding-top: 0.1em;  
+  padding-left: 0.178em;
+  
+}
+
 
 
 div.statTable > div.statRow > div.friendPicture { 
@@ -609,12 +632,10 @@ div.statTable > div.statRow > div.groupStats > div.friendName {
   color: white;
 }
 
-div.statTable > div.statRow > div.groupStats > div.statBlock { 
-  padding: 0.5em;
-}
 
 div.statTable > div.statRow > div.groupStats > div.statBlock  { 
   display: table;
+  padding: 0.5em;
 }
 
 /* Colstat Icon */

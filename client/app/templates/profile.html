@@ -12,11 +12,19 @@
     <!-- 
     <a class="button active" ng-class="{'active': nav.view ==='user.us'}" ng-hide="profileData.userId == user.userId " ng-click="nav.view = 'user.us'; ">Us</a>
   -->
+    <!-- 
+     <a class="button active" ng-class="{'active': nav.view ==='user.us'}" ng-hide="profileData.userId == user.userId " ng-click="nav.view = 'user.us'; "><i class="ionicons ion-ios7-checkmark dittoA"></</a> -->
+    
     <a class="button" ng-class="{'active': nav.view ==='user.ditto'}" ng-hide="profileData.userId == user.userId" ng-click="nav.view = 'user.ditto'; getSome(profileData.userId,'ditto');"><i class="ionicons ion-ios7-checkmark-outline"></i></a>
+    <a class="button" 
+       ng-class="{'active': nav.view ==='user.shared'}" 
+       ng-hide="profileData.userId == user.userId" ng-click="nav.view = 'user.shared'; getSome(profileData.userId,'shared');">
+      <i class="ionicons ion-ios7-checkmark dittoA"></i>
+    </a>
     
     <a class="button" ng-class="{'active': nav.view ==='user.feed'}" ng-click="nav.view = 'user.feed'; showFeed(profileData.userId,''); "><i class="ionicons ion-ios7-pulse-strong"></i></a>
     <a class="button" ng-class="{'active': nav.view ==='user.lists'}" ng-click="nav.view = 'user.lists'; showLists(profileData.userId); "><i class="ionicons ion-ios7-box-outline"></i></a>
-    <!-- <a class="button" ng-class="{'active': nav.view ==='user.shared'}" ng-hide="profileData.userId == user.userId" ng-click="nav.view = 'user.shared';getSome(profileData.userId,'shared');">Queue</a> -->
+    
         <a class="button" ng-class="{'active': nav.view ==='user.chat'}" ng-click="nav.view = 'user.chat'; userChat(profileData.userId); "><i class="ionicons ion-ios7-chatboxes-outline"></i></a>
     <!-- THIS HAS BEEN SUPERCEDED BY CHAT - Restore this <a class="button" ng-class="{'active': nav.view ==='user.milestones'}" ng-click="nav.view = 'user.milestones';">Milestones</a> --> 
   </div> 
@@ -50,20 +58,25 @@
 <!-- End US --> 
     
 <!-- Start the Feed-->
-  <div class="list card" ng-repeat="user in $root.profileData.feed" ng-show="nav.view==='user.feed'">
+  <div class="list card" ng-repeat="user in profileData.feed" ng-show="nav.view==='user.feed'">
     <user-list-thing store="profileData.feed" source="profile" user-data="user"></user-list-thing>   
+    <div ng-show="!profileData.feed.length" class="noShow">{{$root.profileData.userName}} has no recent items.</div>
   </div>
 <!-- End the Feed -->
    
 <!-- Start Ditto -->  
-  <div class="list card" ng-repeat="user in $root.profileData.ditto" ng-show=" nav.view==='user.ditto' ">
+  <div class="list card" ng-repeat="user in $root.profileData.ditto" 
+       ng-show=" nav.view==='user.ditto' ">
     <user-list-thing store="profileData.ditto" source="profile" user-data="user"></user-list-thing>  
+    <div ng-show="!profileData.ditto.length" class="noShow">{{$root.profileData.userName}} has nothing for you to ditto.</div>
   </div>
 <!-- End Ditto Section --> 
   
 <!-- Start Shared -->  
-  <div class="list card" ng-repeat="user in $root.profileData.shared" ng-show="nav.view==='user.shared'">
-    
+  <div class="list card" ng-repeat="user in $root.profileData.shared" 
+       ng-show="nav.view==='user.shared'">
+    <user-list-thing store="profileData.shared" source="profile" user-data="user"></user-list-thing>  
+    <div ng-show="!profileData.shared.length" class="noShow">{{$root.profileData.userName}} has nothing shared with you.</div>
     <user-list-thing store="profileData.shared" source="profile" user-data="user"></user-list-thing>
   </div>
 <!-- End Shared Section --> 
@@ -74,6 +87,7 @@
   <div ng-show="nav.view==='user.lists'">
     <h3>{{ profileData.userName }}'s Lists</h3> 
     <list-of-lists store="profileData.lists" source="profile" lists-data="$root.profileData.lists"></list-of-lists>
+    <div ng-show="!profileData.lists.length" class="noItems">{{$root.profileData.userName}} has no lists.</div>
   </div>
 <!-- End User Lists -->   
   
@@ -82,7 +96,7 @@
     <h3 class="pageTitle"><i class="ionicons ion-ios7-chatboxes-outline"></i> Our Dittos &amp; Chats</h3>  
     
 
-    
+    <div ng-show="!profileData.chat.length" class="noItems">You and {{$root.profileData.userName}} don't have any dittos or chats yet.</div>
     <div class="list " ng-repeat="user in profileData.chat">
       
       <user-list-thing store="profileData.chat" source="profile" user-data="user"></user-list-thing>        
