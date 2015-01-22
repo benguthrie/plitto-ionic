@@ -8,9 +8,9 @@
     <ion-nav-view name="menuContent" animation="slide-left-right"></ion-nav-view>
   </ion-pane>
 
-  <ion-side-menu side="left">
+  <ion-side-menu side="left" expose-aside-when="large">
     <header class="bar bar-header bar-stable">
-      <h1 class="title"><img src="img/plitto_icon_36.png" height /> Plitto</h1>
+      <h1 class="appTitle"><img src="img/plitto_icon_36.png"/> Plitto</h1>
     </header>
     <ion-content class="has-header">
       <ion-list>
@@ -34,7 +34,7 @@
         <ion-item nav-clear menu-close href="#/app/lists" ng-click="loadLists(); nav.view = 'user.lists'; ">
           <i class="icon ion-ios7-box-outline"></i>
           My Lists
-          <span class="item-note" ng-show =" $root.stats.lists > 0 " ng-bind="$root.stats.lists">
+          <span class="item-note" ng-show =" $root.stats.lists > 0 " ng-bind="$root.stats.lists"></span>
         </ion-item>
 
         <!-- TODO1 - Directl link to MY FEED

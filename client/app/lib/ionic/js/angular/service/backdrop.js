@@ -34,8 +34,8 @@
  */
 IonicModule
 .factory('$ionicBackdrop', [
-  '$document',
-function($document) {
+  '$document', '$timeout',
+function($document, $timeout) {
 
   var el = jqLite('<div class="backdrop">');
   var backdropHolds = 0;
@@ -56,12 +56,15 @@ function($document) {
      * Releases the backdrop.
      */
     release: release,
+
+    getElement: getElement,
+
     // exposed for testing
     _element: el
   };
 
   function retain() {
-    if ( (++backdropHolds) === 1 ) {
+    if ((++backdropHolds) === 1) {
       el.addClass('visible');
       ionic.requestAnimationFrame(function() {
         backdropHolds && el.addClass('active');
@@ -69,11 +72,16 @@ function($document) {
     }
   }
   function release() {
-    if ( (--backdropHolds) === 0 ) {
+    if ((--backdropHolds) === 0) {
       el.removeClass('active');
-      setTimeout(function() {
+      $timeout(function() {
         !backdropHolds && el.removeClass('visible');
-      }, 100);
+      }, 400, false);
     }
   }
+
+  function getElement() {
+    return el;
+  }
+
 }]);

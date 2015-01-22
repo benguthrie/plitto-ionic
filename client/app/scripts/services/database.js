@@ -4,7 +4,12 @@ angular.module('Services.database', [])
 // This will handle storage within local databases.
 .factory('dbFactory', ['$http', '$rootScope', 'localStorageService', '$state',  function ($http, $rootScope, localStorageService, $state ){
   
-
+  /* Clean Scope. Keep the scope reasonably small. As tue user navigates around, clean the scope. */
+  function cleanOtherScope (dontClean, source){
+    console.log('Clean the scope for everything other than ', dontClean, source);
+  }
+  
+  
   function logout () {
     console.log('logout');
     $rootScope.debug('Appctrl - TODO2: FB Logout call.');
@@ -386,7 +391,7 @@ angular.module('Services.database', [])
           }
 
         }
-        // Update local storage 
+        // Update local storage TODO2
         // eval('localStorageService.set("feed'+ (theType && theType[0].toUpperCase() + theType.slice(1) ) + '", data.results)');
 
         // console.log('feed.Friends: ', $rootScope.feed.friends);
@@ -413,6 +418,8 @@ angular.module('Services.database', [])
       newerOrOlder: newerOrOlder,
       token: $rootScope.token
     });
+    
+    
 
   // Load from local storage first.
     if(userFilter !== '0' && userFilter !== '' && localStorageService.get('user' + userFilter + 'feed') ) {
@@ -460,6 +467,8 @@ angular.module('Services.database', [])
 
   /* 11.3.2014 */
   var showUser = function (userId, userName, dataScope, fbuid) {
+    cleanOtherScope('user','dbShowUser');
+    
     // TODO2 - Handle this if it's a stranger. For now, quit.
     if (userId === 0 || userId ==='0'){
       console.log('Linking to Strangers is not currently supported');
@@ -481,7 +490,9 @@ angular.module('Services.database', [])
     var lsTypes = new Array('ditto','feed','lists','shared');
     for (var i in lsTypes){
       if(localStorageService.get('user' + userId + lsTypes[i])){
-        eval('$rootScope.profileData.' + lsTypes[i] + ' = localStorageService.get("user' + userId + '' + lsTypes[i] + '");');
+        // eval('$rootScope.profileData.' + lsTypes[i] + ' = localStorageService.get("user' + userId + '' + lsTypes[i] + '");');
+        $rootScope.profileData[ lsTypes[i] ] = localStorageService.get('user' + userId + lsTypes[i] ); /* TODO2 - Test Show User. */
+
       }
     }
 
@@ -504,7 +515,11 @@ angular.module('Services.database', [])
 
     // dbFactory.showUser(userId);
     //dbGetSome = function (theScope, userfilter, listfilter, sharedFilter)
-    $state.go('app.profile', { userId: userId });
+    // Only navigate if it's not currently there.
+    if($state.current.name !== 'app.profile'){
+      $state.go('app.profile', { userId: userId });  
+    }
+    
 
     // Make sure that we have a valid title.
     headerTitle();
@@ -513,6 +528,7 @@ angular.module('Services.database', [])
 
   /* 10/4/2014, 11/3/2014 */
   var showThing = function (thingId, thingName, userFilter) {
+    cleanOtherScope('thing','showThing');
     console.log('TODO2 Use showThing - userFilter', userFilter );
     // Clear out the rootScope.thingData to show a new thing.
     $rootScope.thingData = {thingId: thingId, thingName: thingName, items: []};
@@ -591,7 +607,10 @@ angular.module('Services.database', [])
 
     // This is for updating the current scope in other places. TODO2 - Test Later.
     findItem:{
+      // 
       for(i in eval('$rootScope.' + scopeName)){
+      console.log('scopeName', scopeName);
+      // for(i in $rootScope[scopeName]){
         if(  eval('$rootScope.' + scopeName + '[i].uid') === uid){
           for(j in eval('$rootScope.' + scopeName + '[i]["lists"]') ){
             if(  eval('$rootScope.' + scopeName + '[i]["lists"][j].lid')  === lid){
@@ -652,21 +671,27 @@ angular.module('Services.database', [])
             $(event.target).addClass('ion-ios7-checkmark').removeClass('ion-ios7-checkmark-outline');
 
             // Update this item's new "Friends With"
+              // 
             eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].friendsWith = "+ ' +friendsWith + '"');
+            console.log('scopeName', scopeName);  
+            // $rootScope[scopeName][i]["lists"][j]["items"][k].friendsWith = friendsWith;
 
             // For the user and the list, change the increments of dittoable and in common.
           } else {
 
             // It was removed. Finalize that.
             $(event.target).removeClass('ion-ios7-checkmark').addClass('ion-ios7-checkmark-outline');
+            // 
             eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].friendsWith = ""');
+            // $rootScope[scopeName][i]["lists"][j]["items"][k].friendsWith = "";
           }
 
           // Update my key within the correct scope.
           // Results update
           //  console.log('rs sn: ',scopeName, $rootScope[scopeName]);
-          // $rootScope[scopeName][i].lists[j].items[k].mykey = mynewkey;
+          // This must be an eval, because scopeName can be profileData.feed, or someother multi-parter. 
           eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].mykey = ' +mynewkey);
+          // $rootScope[scopeName][i]["lists"][j]["items"][k].mykey = mynewkey;
         }
       }
     );
@@ -774,7 +799,7 @@ angular.module('Services.database', [])
           // $rootScope.$broadcast("getLoginStatus", {value:'value'});
           // $rootScope.$broadcast('getLoginStatus', { fbresponse: null});
           $rootScope.loginMessage = 'Plitto FB Login Complete';
-          console.log('database.fbTokenLogin response: TODO1 - DO NOT CALL TWICE ',data);
+          // console.log('database.fbTokenLogin response: TODO1 - DO NOT CALL TWICE ',data);
 
           // console.log('response from fbToken: ',data);
           // data.me.puid is the plitto userid. That should be there.
@@ -782,9 +807,6 @@ angular.module('Services.database', [])
             console.log('puid is valid');
             // $rootScope.loginMessage = '<h3>8. PUID valid: ' + data.me.token + '. Redirect to app.home</h3>';
             $rootScope.loginMessage = 'Plitto User Information Received. Open App.';
-
-            // TODO2 - Remove the access token from the URL.
-            // http://plitto.com/client/app/?#/access_token=CAAAAMD0tehMBALBiZB3xeZAYoM5vTVZBZCpd6s6g5RZCntzTaR9BuG5gFLGIngbGqbts2l6NEm3N4tO7l7tC0QKUyZAWn4jEEBNWZBLVaKmZAdXNJgT1ZARN1BiLpFwW48N2AoPxriHi8TgkR2mQEiYYAK2uJtB2XmmGHY9a4lUXCCeWPJPUlILzkdAxrYpBbGw6CKdG2fV7RkYZCGOcOSaeaiGvN0p3YsZCbAZD&expires_in=4734
 
             // Get the current time:
             var d = new Date();
@@ -902,7 +924,6 @@ angular.module('Services.database', [])
 
             // Update the local storage.
             localStorageAppend('fbLogin',data.result);
-
           }
           
         }
@@ -1100,11 +1121,20 @@ angular.module('Services.database', [])
 
   /* 9/3/2014 */
   var showAList = function (listNameId, listName, userFilter, focus) {
+    cleanOtherScope('list','db.showAList');
     // 
     // console.log('database.showAList: ',listNameId, listName , userFilter);
     
-    console.log('todo1 - When focus - go straight to adding to a user list and open the keyboard');
+    console.log('todo1 - When focus - go straight to adding to a user list and open the keyboard. Focus: ', focus);
 
+    if(focus === 'addToList'){
+      console.log('DEBUG FOCUS addToList');
+      $('input#newListItemField').css('border','5px solid red');
+      $('input#newListItemField').focus();
+    } else {
+      $('input#newListItemField').css('border','0');
+    }
+    
     $rootScope.list = {
       listId: listNameId,
       listName: listName,
@@ -1525,9 +1555,14 @@ angular.module('Services.database', [])
           else if(  data.results[0].success === '1'){
             console.log('Check token results: ',data, data.results[0].success);
             console.log('Valid token');
-            // Go to the home screen.
-            $state.go('app.home');
-            dbGetSome( '$rootScope.bite' , '' , '', 'ditto');
+            
+            // Go to the home screen, but only if at login?.
+            console.log('current state when token verified', $state.current.name);
+            if($state.current.name === 'login' || $state.current.name === 'loading' ){
+              dbGetSome( '$rootScope.bite' , '' , '', 'ditto');
+            }
+            
+            
           } else {
             console.log('invalid token: ', data.results[0].success, data.results[0].success === '1');
           }

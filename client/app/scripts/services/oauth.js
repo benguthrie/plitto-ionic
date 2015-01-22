@@ -35,7 +35,14 @@ angular.module('Services.oauth', [])
       $rootScope.$broadcast('broadcast',{ command: 'state', path: 'loading', debug: 'oauth.25 token is "loading". Go there.' } );
     } else if (typeof ($rootScope.token) === 'string' && $rootScope.token.length > 0){
       // We will assume that the token is valid TODO1 - Test it.
-      $rootScope.$broadcast('broadcast',{ command: 'state', path: 'app.home', debug: 'oauth.28 untested token. go to app.home.' } );
+      $rootScope.$broadcast(
+        'broadcast',
+        {
+          command: 'state',
+          path: 'app.home',
+          debug: 'oauth.43 untested token. go to app.home.'
+        }
+      );
       
       // $location.path('/login');
     } else {

@@ -7,27 +7,31 @@
   --> 
   
   <ion-content class="has-header">
-    <h3 class="pageTitle"><i class="ionicons ion-plus-circled"></i> Add a List / To a List</h3>
-    <div class="list list-inset">
+    <h1 class="pageTitle"><i class="ionicons ion-plus"></i> Add a List / To a List</h1>
+    <div class="list list-inset addList">
       <form name="listForm">
+        <div class="formText">
         <label class="item item-input">
           <input type="text" name="title"
             placeholder="New List Title"
             ng-model="newList.title"
-            required>
+            required/>
+           
         </label>
-
-        <button class="button button-block button-energized"
-          ng-disabled="listForm.$invalid"
-          ng-click="createList()">
-          Create
-        </button>
+        </div> 
+        <div class="formButton">
+          <button class="button button-block button-positive"
+            ng-disabled="listForm.$invalid"
+            ng-click="createList()">
+            Create
+          </button>
+        </div> 
       </form>
     </div>
     
     <ion-list ng-repeat="list in $root.searchResults" ng-show="newList.title.length > 0">
       <ion-item class="item-icon-right" href="#/app/lists/{{list.lid}}" 
-          ng-click="showList(list.lid, list.listname, null);">
+          ng-click="showList(list.lid, list.listname, null, 'addToList');">
         <ion-option-button class="button-assertive">
           Mine</ion-option-button>
         {{list.listname}} - ({{list.thecount}})

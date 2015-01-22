@@ -35,7 +35,7 @@
  * ```
  */
 IonicModule
-.service('$ionicSlideBoxDelegate', delegateService([
+.service('$ionicSlideBoxDelegate', ionic.DelegateService([
   /**
    * @ngdoc method
    * @name $ionicSlideBoxDelegate#update
@@ -51,6 +51,7 @@ IonicModule
    * @param {number=} speed The number of milliseconds for the change to take.
    */
   'slide',
+  'select',
   /**
    * @ngdoc method
    * @name $ionicSlideBoxDelegate#enableSlide
@@ -77,18 +78,28 @@ IonicModule
    * explicitly told to do so.
    */
   'stop',
+  'autoPlay',
+  /**
+   * @ngdoc method
+   * @name $ionicSlideBoxDelegate#start
+   * @description Start sliding again if the slideBox was stopped.
+   */
+  'start',
   /**
    * @ngdoc method
    * @name $ionicSlideBoxDelegate#currentIndex
    * @returns number The index of the current slide.
    */
   'currentIndex',
+  'selected',
   /**
    * @ngdoc method
    * @name $ionicSlideBoxDelegate#slidesCount
    * @returns number The number of slides there are currently.
    */
-  'slidesCount'
+  'slidesCount',
+  'count',
+  'loop',
   /**
    * @ngdoc method
    * @name $ionicSlideBoxDelegate#$getByHandle

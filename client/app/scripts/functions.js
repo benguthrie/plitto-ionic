@@ -38,3 +38,48 @@ function plainJsRedirect(url){
   setTimeout(function(){ location.href=url; } , 5000);
 
 }
+
+function navigationBar(){
+  var jan21 = '<ion-nav-buttons side="primary">' +
+    '<ion-nav-back-button class="button-clear">' +
+      '<i class="ion-arrow-left-c"></i>' +
+    '</ion-nav-back-button>' +
+
+    '<button menu-toggle="left" class="button button-icon ion-navicon"></button>' +
+  '</ion-nav-buttons>' +
+
+  '<ion-nav-buttons side="right" class=\'userNavButtons\'>' +
+
+    '<button class="button button-icon ionicons ion-plus-circled" ng-click=" navFunc(\'addlist\');"></button> ' +
+
+    '<button class="button button-icon ion-chatbox" ng-click="navFunc(\'chat\');" >' +
+      '<span class="innerNo" ng-bind="$root.stats.alertCount"></span>' +
+    '</button>' +
+
+    '<button class="button button-icon ion-ios7-checkmark-outline" ng-click="navFunc(\'home\'); getSome();"></button> ' +
+
+    '<button class="button button-icon ion-search" ng-click="navFunc(\'search\');"></button>' + 
+
+  '</ion-nav-buttons>';
+  
+  var ionicb14 = 
+    '<ion-nav-bar class="bar-stable">'+ 
+      '<ion-nav-back-button></ion-nav-back-button>' +
+      '<ion-nav-buttons side="primary">' +
+        
+        '<button menu-toggle="left" class="button button-icon icon ion-navicon"></button>' +
+        // '<ion-nav-back-button></ion-nav-back-button>' +
+      '</ion-nav-buttons>' +
+        '<ion-nav-buttons side="secondary" class="navSecond">' +
+          '<button class="button button-icon ion-chatbox" ng-click="navFunc(\'chat\');" >' +
+            '<span class="innerNo" ng-bind="$root.stats.alertCount"></span>' +
+          '</button>' +
+          '<button class="button button-icon ionicons ion-plus-circled" ng-click=" navFunc(\'addlist\');"></button> ' +
+          '<button class="button button-icon ion-ios7-checkmark-outline" ng-click="navFunc(\'home\'); getSome();"></button> ' +
+          '<button class="button button-icon ion-search" ng-click="navFunc(\'search\');"></button>' + 
+        '</ion-nav-buttons>' +
+    '</ion-nav-bar>';
+  
+  return ionicb14;
+
+}

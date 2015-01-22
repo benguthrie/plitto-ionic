@@ -2,15 +2,30 @@
   <user-nav></user-nav>
   
   <ion-content class="has-header">
-    <form name="searchForm" ng-submit="search(search.term,'general');">
-      <label class="item item-input">
-        <span class="input-label" style="font-weight: bold; max-width: 80px;font-size: 0.9em;">Search</span>
-        <input type="text" ng-model="search.term" style="font-size: 1.2em;" placeholder="Type Here">
-      </label>
-      
-    </form>
+    <div class="searchLine">
+      <div class="searchCell">
+        <form name="searchForm" ng-submit="search(search.term,'general');">
+          <label class="item item-input">
+            <span class="input-label" style="font-weight: bold; max-width: 80px;font-size: 0.9em;">Search</span>
+            <input 
+              type="text" 
+              ng-model="search.term" 
+              style="font-size: 1.2em;" 
+              placeholder="Search Here"
+              id="searchField"
+              autofocus
+            />
+
+
+          </label>
+
+
+        </form>
+        </div>
+        <div class="icon ion-close-circled clearSearch" ng-click="clearSearch();"></div>
+    </div>
     
-    <div ng-show="$root.searchResults.length === 0 && search.term.length > 0" ><h2>No Results for that term</h2></div>
+    <div ng-show="$root.searchResults.length === 0 && search.term.length > 0" ><h2>No Results for <i ng-bind="search.term"></i></h2></div>
     <div ng-show="search.term.length === 0" ><h2>Search To See Results</h2></div>
 <!-- Start Search Results -->     
     <div ng-repeat="section in $root.searchResults" ng-show="search.term.length > 0">
@@ -25,7 +40,11 @@
       </ion-list>
       
       <ion-list can-swipe="true" ng-show="section.type === 'list' ">
-        <ion-item class="item-icon-right" ng-repeat="list in section.results" href="#/app/lists/{{list.nameId}}" ng-click="showList(list.nameId, list.itemName, null);">
+        <ion-item 
+                  class="item-icon-right" 
+                  ng-repeat="list in section.results" 
+                  href="#/app/lists/{{list.nameId}}" 
+                  ng-click="showList(list.nameId, list.itemName, null, 'addToList');">
             <ion-option-button class="button-assertive"
               ng-click="">Mine</ion-option-button>
               {{list.itemName}} - {{item.itemCount}}

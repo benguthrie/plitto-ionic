@@ -3,27 +3,39 @@
  * @name $ionicModal
  * @module ionic
  * @description
+ *
+ * Related: {@link ionic.controller:ionicModal ionicModal controller}.
+ *
  * The Modal is a content pane that can go over the user's main view
- * temporarily.  Usually used for making a choice or editing an item. 
- * Note that you need to put the content of the modal inside a div with the class `modal`.
+ * temporarily.  Usually used for making a choice or editing an item.
+ *
+ * Put the content of the modal inside of an `<ion-modal-view>` element.
+ *
+ * **Notes:**
+ * - A modal will broadcast 'modal.shown', 'modal.hidden', and 'modal.removed' events from its originating
+ * scope, passing in itself as an event argument. Both the modal.removed and modal.hidden events are
+ * called when the modal is removed.
+ *
+ * - This example assumes your modal is in your main index file or another template file. If it is in its own
+ * template file, remove the script tags and call it by file name.
  *
  * @usage
  * ```html
  * <script id="my-modal.html" type="text/ng-template">
- *   <div class="modal">
+ *   <ion-modal-view>
  *     <ion-header-bar>
  *       <h1 class="title">My Modal title</h1>
  *     </ion-header-bar>
  *     <ion-content>
  *       Hello!
  *     </ion-content>
- *   </div>
+ *   </ion-modal-view>
  * </script>
  * ```
  * ```js
  * angular.module('testApp', ['ionic'])
  * .controller('MyController', function($scope, $ionicModal) {
- *   $ionicModal.fromTemplateUrl('modal.html', {
+ *   $ionicModal.fromTemplateUrl('my-modal.html', {
  *     scope: $scope,
  *     animation: 'slide-in-up'
  *   }).then(function(modal) {
@@ -40,7 +52,7 @@
  *     $scope.modal.remove();
  *   });
  *   // Execute action on hide modal
- *   $scope.$on('modal.hide', function() {
+ *   $scope.$on('modal.hidden', function() {
  *     // Execute action
  *   });
  *   // Execute action on remove modal
@@ -53,13 +65,14 @@
 IonicModule
 .factory('$ionicModal', [
   '$rootScope',
-  '$document',
+  '$ionicBody',
   '$compile',
   '$timeout',
   '$ionicPlatform',
   '$ionicTemplateLoader',
   '$q',
-function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTemplateLoader, $q) {
+  '$log',
+function($rootScope, $ionicBody, $compile, $timeout, $ionicPlatform, $ionicTemplateLoader, $q, $log) {
 
   /**
    * @ngdoc controller
@@ -68,11 +81,12 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
    * @description
    * Instantiated by the {@link ionic.service:$ionicModal} service.
    *
-   * Hint: Be sure to call [remove()](#remove) when you are done with each modal
+   * Be sure to call [remove()](#remove) when you are done with each modal
    * to clean it up and avoid memory leaks.
    *
-   * Note: a modal will broadcast 'modal.shown' and 'modal.hidden' events from its originating
-   * scope, passing in itself as an event argument.
+   * Note: a modal will broadcast 'modal.shown', 'modal.hidden', and 'modal.removed' events from its originating
+   * scope, passing in itself as an event argument. Note: both modal.removed and modal.hidden are
+   * called when the modal is removed.
    */
   var ModalView = ionic.views.Modal.inherit({
     /**
@@ -86,8 +100,10 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
      *    Default: 'slide-in-up'
      *  - `{boolean=}` `focusFirstInput` Whether to autofocus the first input of
      *    the modal when shown.  Default: false.
-     *  - `{boolean=} `backdropClickToClose` Whether to close the modal on clicking the backdrop.
+     *  - `{boolean=}` `backdropClickToClose` Whether to close the modal on clicking the backdrop.
      *    Default: true.
+     *  - `{boolean=}` `hardwareBackButtonClose` Whether the modal can be closed using the hardware
+     *    back button on Android and similar devices.  Default: true.
      */
     initialize: function(opts) {
       ionic.views.Modal.prototype.initialize.call(this, opts);
@@ -100,36 +116,54 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
      * @description Show this modal instance.
      * @returns {promise} A promise which is resolved when the modal is finished animating in.
      */
-    show: function() {
+    show: function(target) {
       var self = this;
+
+      if (self.scope.$$destroyed) {
+        $log.error('Cannot call ' +  self.viewType + '.show() after remove(). Please create a new ' +  self.viewType + ' instance.');
+        return;
+      }
+
       var modalEl = jqLite(self.modalEl);
 
       self.el.classList.remove('hide');
-      $timeout(function(){
-        $document[0].body.classList.add('modal-open');
+      $timeout(function() {
+        $ionicBody.addClass(self.viewType + '-open');
       }, 400);
 
-
-      if(!self.el.parentElement) {
+      if (!self.el.parentElement) {
         modalEl.addClass(self.animation);
-        $document[0].body.appendChild(self.el);
+        $ionicBody.append(self.el);
+      }
+
+      if (target && self.positionView) {
+        self.positionView(target, modalEl);
+        // set up a listener for in case the window size changes
+        ionic.on('resize',function() {
+          ionic.off('resize',null,window);
+          self.positionView(target,modalEl);
+        },window);
       }
 
       modalEl.addClass('ng-enter active')
              .removeClass('ng-leave ng-leave-active');
 
       self._isShown = true;
-      self._deregisterBackButton = $ionicPlatform.registerBackButtonAction(function(){
-        self.hide();
-      }, 200);
+      self._deregisterBackButton = $ionicPlatform.registerBackButtonAction(
+        self.hardwareBackButtonClose ? angular.bind(self, self.hide) : angular.noop,
+        PLATFORM_BACK_BUTTON_PRIORITY_MODAL
+      );
+
       self._isOpenPromise = $q.defer();
 
       ionic.views.Modal.prototype.show.call(self);
 
-      $timeout(function(){
+      $timeout(function() {
         modalEl.addClass('ng-enter-active');
-        self.scope.$parent && self.scope.$parent.$broadcast('modal.shown', self);
+        ionic.trigger('resize');
+        self.scope.$parent && self.scope.$parent.$broadcast(self.viewType + '.shown', self);
         self.el.classList.add('active');
+        self.scope.$broadcast('$ionicHeader.align');
       }, 20);
 
       return $timeout(function() {
@@ -155,22 +189,27 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
       self.el.classList.remove('active');
       modalEl.addClass('ng-leave');
 
-      $timeout(function(){
+      $timeout(function() {
         modalEl.addClass('ng-leave-active')
                .removeClass('ng-enter ng-enter-active active');
       }, 20);
 
       self.$el.off('click');
       self._isShown = false;
-      self.scope.$parent && self.scope.$parent.$broadcast('modal.hidden', self);
+      self.scope.$parent && self.scope.$parent.$broadcast(self.viewType + '.hidden', self);
       self._deregisterBackButton && self._deregisterBackButton();
 
       ionic.views.Modal.prototype.hide.call(self);
 
-      return $timeout(function(){
-        $document[0].body.classList.remove('modal-open');
+      // clean up event listeners
+      if (self.positionView) {
+        ionic.off('resize',null,window);
+      }
+
+      return $timeout(function() {
+        $ionicBody.removeClass(self.viewType + '-open');
         self.el.classList.add('hide');
-      }, 500);
+      }, self.hideDelay || 320);
     },
 
     /**
@@ -181,7 +220,7 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
      */
     remove: function() {
       var self = this;
-      self.scope.$parent && self.scope.$parent.$broadcast('modal.removed', self);
+      self.scope.$parent && self.scope.$parent.$broadcast(self.viewType + '.removed', self);
 
       return self.hide().then(function() {
         self.scope.$destroy();
@@ -203,6 +242,8 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
     // Create a new scope for the modal
     var scope = options.scope && options.scope.$new() || $rootScope.$new(true);
 
+    options.viewType = options.viewType || 'modal';
+
     extend(scope, {
       $hasHeader: false,
       $hasSubheader: false,
@@ -213,19 +254,19 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
     });
 
     // Compile the template
-    var element = $compile('<ion-modal>' + templateString + '</ion-modal>')(scope);
+    var element = $compile('<ion-' + options.viewType + '>' + templateString + '</ion-' + options.viewType + '>')(scope);
 
     options.$el = element;
     options.el = element[0];
-    options.modalEl = options.el.querySelector('.modal');
+    options.modalEl = options.el.querySelector('.' + options.viewType);
     var modal = new ModalView(options);
 
     modal.scope = scope;
 
-    // If this wasn't a defined scope, we can assign 'modal' to the isolated scope
+    // If this wasn't a defined scope, we can assign the viewType to the isolated scope
     // we created
-    if(!options.scope) {
-      scope.modal = modal;
+    if (!options.scope) {
+      scope[ options.viewType ] = modal;
     }
 
     return modal;

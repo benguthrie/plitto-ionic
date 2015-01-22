@@ -10,7 +10,9 @@
  * the user gets to the bottom of the page or near the bottom of the page.
  *
  * The expression you pass in for `on-infinite` is called when the user scrolls
- * greater than `distance` away from the bottom of the content.
+ * greater than `distance` away from the bottom of the content.  Once `on-infinite`
+ * is done loading new data, it should broadcast the `scroll.infiniteScrollComplete`
+ * event from your controller (see below example).
  *
  * @param {expression} on-infinite What to call when the scroller reaches the
  * bottom.
@@ -21,6 +23,11 @@
  * @usage
  * ```html
  * <ion-content ng-controller="MyController">
+ *   <ion-list>
+ *   ....
+ *   ....
+ *   </ion-list>
+ *
  *   <ion-infinite-scroll
  *     on-infinite="loadMore()"
  *     distance="1%">
@@ -37,7 +44,7 @@
  *     });
  *   };
  *
- *   $scope.$on('stateChangeSuccess', function() {
+ *   $scope.$on('$stateChangeSuccess', function() {
  *     $scope.loadMore();
  *   });
  * }
@@ -58,24 +65,21 @@ IonicModule
 .directive('ionInfiniteScroll', ['$timeout', function($timeout) {
   function calculateMaxValue(distance, maximum, isPercent) {
     return isPercent ?
-      maximum * (1 - parseInt(distance,10) / 100) :
-      maximum - parseInt(distance, 10);
+      maximum * (1 - parseFloat(distance,10) / 100) :
+      maximum - parseFloat(distance, 10);
   }
   return {
     restrict: 'E',
     require: ['^$ionicScroll', 'ionInfiniteScroll'],
-    template:
-      '<div class="scroll-infinite">' +
-        '<div class="scroll-infinite-content">' +
-          '<i class="icon {{icon()}} icon-refreshing"></i>' +
-        '</div>' +
-      '</div>',
-    scope: true,
+    template: '<i class="icon {{icon()}} icon-refreshing"></i>',
+    scope: {
+      load: '&onInfinite'
+    },
     controller: ['$scope', '$attrs', function($scope, $attrs) {
       this.isLoading = false;
       this.scrollView = null; //given by link function
       this.getMaxScroll = function() {
-        var distance = ($attrs.distance || '1%').trim();
+        var distance = ($attrs.distance || '2.5%').trim();
         var isPercent = distance.indexOf('%') !== -1;
         var maxValues = this.scrollView.getScrollMax();
         return {
@@ -100,13 +104,14 @@ IonicModule
       var onInfinite = function() {
         $element[0].classList.add('active');
         infiniteScrollCtrl.isLoading = true;
-        $scope.$parent && $scope.$parent.$apply($attrs.onInfinite || '');
+        $scope.load();
       };
 
       var finishInfiniteScroll = function() {
         $element[0].classList.remove('active');
         $timeout(function() {
           scrollView.resize();
+          checkBounds();
         }, 0, false);
         infiniteScrollCtrl.isLoading = false;
       };
@@ -116,13 +121,13 @@ IonicModule
       });
 
       $scope.$on('$destroy', function() {
-        scrollCtrl.$element.off('scroll', checkBounds);
+        if(scrollCtrl && scrollCtrl.$element)scrollCtrl.$element.off('scroll', checkBounds);
       });
 
       var checkBounds = ionic.animationFrameThrottle(checkInfiniteBounds);
 
       //Check bounds on start, after scrollView is fully rendered
-      setTimeout(checkBounds);
+      $timeout(checkBounds, 0, false);
       scrollCtrl.$element.on('scroll', checkBounds);
 
       function checkInfiniteBounds() {

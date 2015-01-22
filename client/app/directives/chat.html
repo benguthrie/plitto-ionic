@@ -34,8 +34,7 @@
     <!-- Attributions --> 
       <div class="sourceAttribution">
         
-        <div class="userImage" ng-click="showUser()"><!-- TODO - link to a user? --> 
-          
+        <div class="userImage" ><!-- TODO2 ng-click="showUser()" - link to a user? --> 
           
           <img class="bigUser" ng-src="http://graph.facebook.com/{{notification.content[0].fromFbuid}}/picture?height=60&width=60"/>
           
@@ -46,8 +45,8 @@
         
         <!-- Icons --> 
       
-        <div ng-show="notification.type === 'ditto'" class="ionicons ion-ios7-checkmark noteIcon"></div>
-        <div ng-show="notification.type === 'chat'" class="ionicons ion-chatbox noteIcon"></div>
+        <div ng-show="notification.type === 'ditto' " class="ionicons ion-ios7-checkmark noteIcon"></div>
+        <div ng-show="notification.type === 'chat' " class="ionicons ion-chatbox noteIcon"></div>
         
         
         <div class="notificationContext">
@@ -64,20 +63,27 @@ To: {{ notification.content[0].toUserId }} {{ notification.content[0].toUserName
 
           </div>
           
-          <div class="dittoList item-text-wrap" ng-click="showList( notification.content[0].listid , notification.content[0].listName, notification.content[0].fromUserId);">
+          <div 
+               class="dittoList item-text-wrap" 
+               ng-click="showList( notification.content[0].listid , notification.content[0].listName, notification.content[0].fromUserId, 'feed');">
             {{ notification.content[0].listName }}</div>
           
-          <div class="dittoThing item-text-wrap" 
+          <div 
+             class="dittoThing item-text-wrap" 
              ng-click="showThing( notification.content[0].thingid , notification.content[0].thingName, notification.content[0].fromUid);">
             {{ notification.content[0].thingName }}</div>
-          <span class="notificationNote item-text-wrap" ng-show=" notification.content[0].note.length > 0">
+          <span 
+                class="notificationNote item-text-wrap" 
+                ng-show=" notification.content[0].note.length > 0">
             <img ng-show="notification.content[0].toUserId !== '0' "  
               ng-src="http://graph.facebook.com/{{notification.content[0].fromFbuid}}/picture?height=30&width=30"/>
             
             "{{ notification.content[0].note }}"</span>
         </div>
         
-        <span class="notificationDate" ng-bind="notification.content[0].added"></span>
+        <span 
+              class="notificationDate" 
+              ng-bind="notification.content[0].added"></span>
         
       </div>
 </ion-list>

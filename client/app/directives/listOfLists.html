@@ -3,7 +3,9 @@
 </p>
 
 <ion-list>
-  <ion-item ng-repeat="list in listsData" ng-click="showList( list.lid, list.name, null);">
+  <ion-item 
+            ng-repeat="list in listsData" 
+            ng-click="showList( list.lid, list.name, null, 'feed');">
     <!-- 
     <div class="row">
       
@@ -25,8 +27,7 @@
     </div>
     --> 
     <ion-list class="friendList">
-      <ion-item ng-repeat="list in listsData" 
-        ng-click="showList( list.lid, list.name, null);">
+      <ion-item ng-repeat="list in listsData" >
         <div class="statTable">
           <div class="statRow">
             <div class="listIcon">
@@ -37,12 +38,15 @@
               <div class="statBlock">
                 
                 <div class=" colStat ">
-                  <i class="ionicons ion-ios7-checkmark " style="color: green;"></i>
+                  <i 
+                     class="ionicons ion-ios7-checkmark " 
+                     style="color: green;"></i>
                   <span class="label">Shared</span><br/>
                   <span class="stat">{{list.shared}}</span>
                 </div>
                 <div class=" colStat ">
-                  <i class="ionicons ion-ios7-checkmark-outline dittoQ"></i>
+                  <i 
+                     class="ionicons ion-ios7-checkmark-outline dittoQ"></i>
                   <span class="label colStat">Dittoable</span><br/>
                   <span class="stat">{{list.dittoable}}</span>
                 </div>
@@ -73,32 +77,3 @@
   </ion-item>
 </ion-list>
 
-
-<!--
-<div ng-repeat="list in listsData" href="#/app/list/{{list.lid}}" ng-click="showList( list.lid, list.name, null);" class="gridItem">
-  <table class="gridHeader" style="background-color: #3FA8B0;">
-    <tr class="listLine">
-    <td class="gridTitle" ng-bind=" list.name "></td></tr>
-  </table>
-
-  <table class="gridStats">
-    <tr>
-      <th rowspan="4" class="statGroup">Items</th>
-      <td class="statValue"><a class="statShared">{{list.shared}} <span class="statLabel">Shared</span></a></td>
-    </tr>
-
-    <tr>
-      <td class="statValue"><a class="statStandard">{{list.dittoable}} <span class="statLabel">Dittoable</span></a></td>
-    </tr>
-    
-    <tr>
-      <td class="statValue"><a class="statStandard">{{list.mymembers}} <span class="statLabel">Mine</span></a></td>
-    </tr>
-    
-    <tr>
-      <td class="statValue"><a class="statStandard" style="font-size: 0.6em;">{{list.mostrecent}} <span class="statLabel">Newest</span></a></td>
-    </tr>
-
-  </table>
-
-</div>

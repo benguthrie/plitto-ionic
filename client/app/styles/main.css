@@ -236,11 +236,48 @@ span.label {
   font-weight: 100;
 }
 
-h1.pageTitle,
-h3.pageTitle {
+h1.pageTitle {
   padding: 10px 0 5px 10px;
   font-size: 1.7em;
   margin: 0;
+}
+
+h1.pageTitle > i {
+  margin-right: 0.3em;
+}
+      
+
+/* Search */
+  div.searchLine > div.clearSearch {
+    
+    padding: 0.4em;
+    font-size: 2em;
+
+    color: #888;
+    
+    width: 1.5em;
+  }
+
+  div.searchLine {
+    padding-bottom: 1px;
+    border-bottom: 1px solid #ccc;
+    display: table;
+    width: 100%;
+    height: 4em;
+  }
+
+  div.searchLine > div {
+    display: table-cell;
+  }
+
+  div.searchLine > div.searchCell {
+    
+    
+  }
+
+  div.searchLine > div > form > label {
+    border: 0;
+
 }
 
 
@@ -299,81 +336,6 @@ a.userLine > img {
 }
 
 
-div.listLine {
-  background-color: #393E3C;
-  border: 0;
-  color: #fff;
-  margin: 0;
-  z-index: 0;
-  font-weight: 100;
-  border: 0px;
-  font-size: 1.0em;
-  /* TODO2 - Pad the listline */
-}
-
-/* This is the list name. */
-div.listLine > span {
-  
-  
-}
-
-div.endOfList {
-  height: 10px;
-  border-bottom-right-radius: 4px;
-  border-bottom-left-radius: 4px;
-}
-
-/* The button bar is used on the profile and list.  */
-  div.button-bar > a.button {
-    font-size: 2em;
-  }
-
-  div.button-bar > a.button > div.buttonBarRefresh {
-    background-color: blue;
-  }
-
-div.recent {
-  font-size: 0.7em;
-  
-  color: #bbb;
-  font-weight: 100;
-  padding-left: 1em;
-}
-
-div.dittoCol {
-  padding: 2em;
-  font-size: 3em;
-} 
-
-div.friendsWith {
-  float: left;
-  font-size: 0.8em;
-}
-
-div.letsChat > active {
-  background-color: #bcc;
-}
-
-
-div.listLine > i {
-  font-size: 1.8em;
-  float: left;
-  margin-right: 0.3em;
-}
-
-div.listLine > span {
-  vertical-align: middle;
-  font-size: 1.2em;
-}
-
-/* list item */
-div.listBlock > div.listItem {
-  margin: 0.3em 0.3em 0.6em 0.3em;
-  padding: 0;
-  border: 0;
-  border-radius: 0.3em;
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26); 
-}
 
 
 
@@ -388,9 +350,10 @@ div.dittoW {
 }
 
 /* Ditto icon - You have this in common; */
-div > a.dittoA, div.dittoA , div.button-bar > a.button > i.dittoA  {
+div > a.dittoA, 
+div.dittoA , 
+div.button-bar > a.button > i.dittoA  {
   color: green;
-  
 }
 
 /* Docs */
@@ -401,7 +364,6 @@ div.docIcon {
 
 /* Thing Name Row within Thing Name */
 div.thingTable { display: table; } 
-
   div.thingNameRow {
     display: table-row;
     width: 100%;
@@ -446,6 +408,63 @@ div.thingTable { display: table; }
     
   }
 
+/* Add a list */
+  div.addList {
+   /* DEBUT ONLY */
+    display: table;
+    width: 100%;
+    
+    margin: 0;
+    padding-bottom: 0.3em;
+    margin-bottom: 0.5em;
+  }
+
+    div.addList > form  {
+      display: table-row;
+      padding: 0;
+      border: 0;
+      
+    }
+
+      div.addList > form > div.formText  {
+        display: table-cell;
+        width: auto;
+        padding: 0;
+        margin: 0;
+      }
+
+        div.addList > form > label > input {
+          font-size: 1.2em;
+          border: 1px solid brown;
+          padding: 0;
+          margin: 0;
+          
+        }
+
+      div.addList > form > div.formButton  {
+        display: table-cell;
+        width: 4em;
+        padding: 0;
+        margin: 0;
+        vertical-align: top;
+      }
+
+      div.addList > form > div.formButton > button  {
+        margin: 0;
+        vertical-align: top;
+      }
+
+/* Side Menu */
+  h1.appTitle {
+    font-size: 1.5em;
+    vertical-align: top;
+  }
+  h1.appTitle > img {
+    height: 30px;
+    width: 30px;
+    margin: 0 0.2em 0 0 ;
+    
+  }
 
 /* Comment Row within User List Thing */
 div.commentRow {
@@ -562,7 +581,12 @@ div.noShow {
   font-size: 1.4em;
 }
 
-
+/* Subheader for profile and list */
+div.childHeader {
+  background-color: #fff;
+  width: 100%;
+  display: block;
+}
 
 /* Friend & List of List Styling */
 
@@ -576,28 +600,129 @@ div.statTable > div.statRow {
   display: table-row;
 }
 
-div.listBlock > div.listLine > i.listIcon {
-  font-size: 2em;
-  
-}
+  /* list line */ 
 
-div.listBlock > div.listLine > i.listIconAdd {
-  font-size: 1.4em;
-  margin-right: -0.1em;
-  color: #ddd;
-  border: 2px solid #ddd;
-  float: right;
-  box-shadow: 0 2px 5px 0 rgba(200, 200, 200, 0.26);
-  border-radius: 0.9em;
-  background-color: rgba(100, 190, 100, 0.5);
-  
-  display: block;
-  height: 1.3em;
-  width: 1.3em;
-  padding-top: 0.1em;  
-  padding-left: 0.178em;
-  
-}
+  div.listBlock > div.listLine {
+    background-color: #393E3C;
+    border: 0;
+    color: #fff;
+    margin: 0;
+    z-index: 0;
+    font-weight: 100;
+    border: 0px;
+    font-size: 1em;
+    display: table;
+    width: 100%;
+    padding: 0.3em;
+    /* TODO2 - Pad the listline */
+  }
+
+  div.listBlock > div.listLine > div {
+    display: table-cell;
+    
+  }
+
+  div.listBlock > div.listLine > div.listMoreUser {
+    width: inherit;
+    padding: 0.3em;
+    vertical-align: top;
+  }
+
+  /* This is the list name. */
+  div.listBlock > div.listLine > div.listMoreUser > span {
+    margin: 0;
+    vertical-align: top;
+  }
+    
+
+/* End of list styling.
+
+
+  div.endOfList {
+    height: 10px;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+  }
+
+  /* The button bar is used on the profile and list.  */
+    div.button-bar > a.button {
+      font-size: 2em;
+    }
+
+    div.button-bar > a.button > div.buttonBarRefresh {
+      background-color: blue;
+    }
+
+  div.recent {
+    font-size: 0.7em;
+
+    color: #bbb;
+    font-weight: 100;
+    padding-left: 1em;
+  }
+
+  div.dittoCol {
+    padding: 2em;
+    font-size: 3em;
+  } 
+
+  div.friendsWith {
+    float: left;
+    font-size: 0.8em;
+  }
+
+  div.letsChat > active {
+    background-color: #bcc;
+  }
+
+  div.listLine > i {
+    font-size: 1.8em;
+    float: left;
+    margin-right: 0.3em;
+  }
+
+  div.listLine > span {
+    vertical-align: middle;
+    font-size: 1.2em;
+  }
+
+  /* list item */
+  div.listBlock > div.listItem {
+    margin: 0.3em 0.3em 0.6em 0.3em;
+    padding: 0;
+    border: 0;
+    border-radius: 0.3em;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26); 
+  }
+
+  div.listBlock > div.listLine > div.listMoreUser > i.listIcon {
+    font-size: 2em;
+    margin: 0 0.3em 0 0.3em;
+  }
+
+  div.listBlock > div.listLine > div.listAddTo {
+    float: right;
+    
+    padding: 0.5em;
+    margin: 0;
+  }
+
+  div.listBlock > div.listLine > div.listAddTo > i.listIconAdd {
+    font-size: 1.4em;
+    color: #ddd;
+    border: 2px solid #ddd;
+    margin: 0;
+    box-shadow: 0 2px 5px 0 rgba(200, 200, 200, 0.26);
+    border-radius: 0.9em;
+    background-color: rgba(100, 190, 100, 0.5);
+
+    display: block;
+    height: 1.3em;
+    width: 1.3em;
+    padding-top: 0.1em;  
+    padding-left: 0.178em;
+
+  }
 
 
 

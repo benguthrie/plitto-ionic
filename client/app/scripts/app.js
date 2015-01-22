@@ -291,8 +291,10 @@ angular.module('Plitto', [
 .directive('userNav', function ($rootScope, dbFactory, $state ) {
   return {
     restrict: 'E',
-    templateUrl: 'directives/userNav.html',
-    // template: navigationBar(),
+    // 
+    // templateUrl: 'directives/userNav.html',
+    /* This function is required for the userNav directive to work in ionic#1.0.0-beta14 */
+    template: navigationBar(),
     // template: '',
 /*    template: '<ion-nav-bar>  ' + 
       '<ion-nav-buttons side="left"> ' + 
@@ -332,7 +334,7 @@ angular.module('Plitto', [
   
         if (path === 'chat') {
           dbFactory.updateCounts();
-        }
+        } 
         
         $state.go('app.' + path);
         
@@ -372,9 +374,9 @@ angular.module('Plitto', [
       };
   
       /* List */
-      $scope.showList = function(listId, listName, userFilter, focus){
+      $scope.showList = function(listId, listName, userFilter, focusTarget){
         console.log('showList app.js 317');
-        dbFactory.showAList(listId, listName, userFilter, focus);
+        dbFactory.showAList(listId, listName, userFilter, focusTarget);
       };
   
       /* Thing */
@@ -503,7 +505,9 @@ angular.module('Plitto', [
   
     }
   };
-}).directive('listOfLists', function($rootScope, dbFactory, $state ) {
+})
+
+.directive('listOfLists', function($rootScope, dbFactory, $state ) {
   return {
     restrict: 'E',
     templateUrl: 'directives/listOfLists.html',
@@ -515,9 +519,9 @@ angular.module('Plitto', [
     },
     controller: function($scope, dbFactory, $state) {
       /* Link to List */
-      $scope.showList = function(listId, listName, userFilter){
+      $scope.showList = function(listId, listName, userFilter, focusTarget){
         console.log('showList app.js 454');
-        dbFactory.showAList(listId, listName, userFilter);
+        dbFactory.showAList(listId, listName, userFilter, focusTarget);
       };
   
       /* Load up the lists 
@@ -555,9 +559,9 @@ angular.module('Plitto', [
       };
       
       /* Link to List */
-      $scope.showList = function(listId, listName, userFilter){
+      $scope.showList = function(listId, listName, userFilter, focusTarget){
         console.log('showList app.js 493');
-        dbFactory.showAList(listId, listName, userFilter);
+        dbFactory.showAList(listId, listName, userFilter, focusTarget);
       };
       
       
@@ -574,4 +578,3 @@ angular.module('Plitto', [
     }
   };
 });
-

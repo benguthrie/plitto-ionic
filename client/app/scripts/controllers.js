@@ -50,11 +50,20 @@ angular.module('Plitto.controllers', [])
       
     }
     
+    /* This is used to navigate around the app */
     else if (args.command === 'state' ){
       console.log( 'controllers.js 31 $state.go, args.path: ', args.path );
       // TODO1 - This is not working for the loading page.
       // TODO1 - Restore this . 
+      console.log('controller.js58 state.go: ', args.path);
       $state.go(args.path);
+      
+      if(args.path === 'search'){
+        /* Focus on the search */
+         // TODO2 - Do something with this? 
+        console.log('todo2 search broadcast request');
+      } 
+      
       // $state.go("app.home");
       // $state.go("app.debug");
     }
@@ -159,7 +168,14 @@ angular.module('Plitto.controllers', [])
     // We will assume that the token is valid TODO1 - Test it.
     $rootScope.debug('Appctrl - 183 Loading because the token looks good.');
     // $state.go('app.home'); // TODO1 - Diego - Should this be moved? - Not working!
-    $rootScope.$broadcast('broadcast',{ command: 'state', path: 'app.home', debug: 'Valid token. Move.'} ); // TODO2 -  Test this. 
+    
+    if(typeof $rootScope.token === 'string' && $rootScope.token !== 'loading'){
+      // Only when it's loading or home.
+      if($state.current.name === 'login' || $state.current.name === 'loading' ){
+        $rootScope.$broadcast('broadcast',{ command: 'state', path: 'app.home', debug: 'Valid token. Move.'} ); 
+      }
+      // TODO2 -  Test this. 
+    }
     dbFactory.updateCounts();
     // TODO1 - Check this, or will that happen when requesting the first call?
 //     $ionicHistory.clearHistory();
@@ -246,7 +262,7 @@ angular.module('Plitto.controllers', [])
   
     /* When this screen loads, if there is a token, go home. */
     if(typeof $rootScope.token === 'string' && $rootScope.token !== 'loading'){
-      console.log('Loading, go home!');
+      console.log('Controllers 259 Done loading. Go home.');
       $rootScope.$broadcast('broadcast', { command: 'state', path: 'app.home', debug: 'Controllers.js 260. Go home.' } );
     }
      
@@ -327,8 +343,20 @@ angular.module('Plitto.controllers', [])
 
 
 .controller('ProfileCtrl',
-  function($scope,dbFactory,$rootScope) {
-    // console.log("Profile Control",$scope);
+  function($scope,dbFactory,$rootScope, $stateParams) {
+    // 
+  console.log("Profile Control load. profileData: ",$rootScope.profileData);
+
+  // load profile data if this was direct linked to.
+  if(!$rootScope.profileData.userId) {
+    console.log('no userid set in profiledata', $stateParams.userId, typeof($stateParams.userId));
+    if(parseInt($stateParams.userId) > 0){
+      dbFactory.showUser(parseInt($stateParams.userId), null, 'profileData', null);
+    } else {
+      console.log('invalid path t oa user.');
+    }
+  }
+  console.log('start ProfileCTRL stateparams: ', $stateParams);
 
     // Chat with a user - Milestones, Dittos, Chat Messages
     $scope.userChat = function( userId ){
@@ -383,9 +411,9 @@ angular.module('Plitto.controllers', [])
   
   
   /* List */
-  $scope.showList = function(listId, listName, userFilter){
+  $scope.showList = function(listId, listName, userFilter, focusTarget){
     console.log('showList controllers.js 361');
-    dbFactory.showAList(listId, listName, userFilter);
+    dbFactory.showAList(listId, listName, userFilter, focusTarget);
   };
   
   
@@ -410,10 +438,27 @@ angular.module('Plitto.controllers', [])
 .controller('SearchCtrl', function($scope, $rootScope, $stateParams, dbFactory) {
   console.log('You have entered Search');
 
+  /* Clear out the last search */
   $scope.search = {term: $stateParams.term, results: []};
+  
+  // focus('input#searchField');
+  
+  /* On Load, make the focus the input field */
+  
+  // $('input#searchField').focus();
+  
+  /* Debug */
+  // $('input#searchField').css('border','3px solid red');
+  
+  /* Clear the Search */
+  $scope.clearSearch = function(){
+    console.log('clear Search');
+    $scope.search = { term: null, results: []};
+  };
+  
 
   /* List */
-  $scope.showList = function(listId, listName, userFilter){
+  $scope.showList = function(listId, listName, userFilter, focusTarget){
     console.log('showList controllers.js 383');
     dbFactory.showAList(listId, listName, userFilter);
   };
@@ -425,17 +470,20 @@ angular.module('Plitto.controllers', [])
   
   // Initialize a new search.
   $scope.$watch(function(){
-    console.log('search? ');
+    console.log('search watch found', $scope.search.term );
     return $scope.search.term;
   }, function(newValue, oldValue){
     // 
     console.log('TODO2 - This is where oldValue is used: ' + oldValue + ' to ' + newValue);
     if(typeof newValue !== 'undefined' && newValue.length > 0){
+      console.log('search called: ', newValue);
       dbFactory.search( newValue, 'general');
     }
   });
 })
 
+
+/* Controller in the Chat */
 .controller('chatCtrl', function($scope, $rootScope, dbFactory) {
   // console.log("You have tried to control your friends",$rootScope.friendStore);
   // console.log("CHAT CONTROL INITIALIZED.");

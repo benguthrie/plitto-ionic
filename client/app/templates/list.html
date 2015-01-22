@@ -2,13 +2,15 @@
   <user-nav></user-nav>
   
   <ion-content class="has-header">
-    <h1 class="pageTitle"><i class="icon ion-ios7-box-outline"></i> {{$root.list.listName}}</h1>
+    <h1 class="pageTitle"><i class="icon ion-clipboard"></i> {{$root.list.listName}}</h1>
     <form name="newItemForm" ng-submit="addToList(newItem.theValue);">
       <label class="item item-input">
         <input 
           type="text" 
           ng-model="newItem.theValue" 
-          placeholder="Add to {{$root.list.listName}}">
+          placeholder="Add to {{$root.list.listName}}"
+          id="newListItemField"
+        />
       </label>
       
     </form>
@@ -29,7 +31,7 @@
       <a class="button " 
          ng-class="{'active': $root.nav.listView ==='mine'}" 
          ng-click="view('mine');">
-        <img ng-src="{{'http://graph.facebook.com/' + $root.user.fbuid + '/picture?height=20&width=20'}}">
+        <img ng-src="{{'http://graph.facebook.com/' + $root.user.fbuid + '/picture?height=30&width=30'}}">
         <!-- {{ $root.user.userName }}'s --> </a>
       <a class="button buttonStranger" 
          ng-class="{'active': $root.nav.listView ==='strangers'}" 
