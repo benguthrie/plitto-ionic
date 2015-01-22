@@ -28,7 +28,7 @@ angular.module('Services.oauth', [])
   // This is the only place that controlls the navigation based on the token's presence.
   $rootScope.$watch('token',function(){
     
-    $rootScope.debug('oauth13: rootScope token changed: ' + $rootScope.token);
+    // $rootScope.debug('oauth13: rootScope token changed: ' + $rootScope.token);
     // If token is loading, go to loading screen.
     if(typeof ($rootScope.token) === 'string' && $rootScope.token ==='loading'){
       // $state.go('loading');

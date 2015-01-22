@@ -51,7 +51,7 @@
     </div>
     
     <div ng-show="$root.nav.listView ==='shared' ">
-      <div ng-show="!list.shared.length" class="noShow">No Shared Items to Show</div>
+      <div ng-show="!list.shared.length" class="noShow" ng-click="showList">No Lists? Check</div>
       
       <div class="list " ng-repeat="user in list.shared">
         <user-list-thing store="list.shared" source="list" user-data="user"></user-list-thing>

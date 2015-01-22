@@ -17,8 +17,20 @@
     <button ng-click="loadList('ditto');">Ditto</button>
     
     <h1>Debug</h1>
+    <button ng-click="localStorage('set');">Local Storage: Set</button>
+    <button ng-click="localStorage('get');">Local Storage: Get</button>
     <button ng-click="testString();">Test String</button>
     <button ng-click="testObj();">Test Object</button>
+    
+    <h1>Funny Function</h1>
+    <button ng-click="funny('stateName');">State Name</button>
+    <button ng-click="funny('rootScope');">Full RootScope</button>
+    <button ng-click="funny('clearRootscope');">Clear RootScope</button>
+    
+    <h1 >{{funnyText | json }}</h1>
+    
+    
+    <h1>Other</h1>
     
     <button ng-click="rootScopePart('token');">Token</button>
     <button ng-click="$root.token = '';">Destroy Token</button>

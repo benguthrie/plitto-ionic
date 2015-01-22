@@ -3,9 +3,14 @@
     
   <ion-content class="has-header">
     <h1 class="pageTitle">Friends</h1>
-    <p ng-show="!friendStore.length">None of your Facebook friends have a Plitto account.</p>
+    
     
     <ion-list class="friendList">
+      <ion-item ng-show="!friendStore.length" ng-click="reloadFriends();">
+        No friends in friend store. Reload?
+      </ion-item>
+        
+      </ion-item>
       <ion-item ng-repeat="friend in friendStore" 
         href="#/app/profile/{{friend.id}}" 
         ng-click="showUser(friend.id, friend.name,'ditto', friend.fbuid);"

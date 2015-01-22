@@ -28,6 +28,7 @@ function randNum( maxNum ) {
   return Math.floor((Math.random() * maxNum) + 1 );
 }
 
+
 /* 
 */
 function plainJsRedirect(url){

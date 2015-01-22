@@ -12,7 +12,8 @@ angular.module('Plitto', [
   'ngResource',
   'Plitto.controllers',
   'Plitto.services',
-  'angularMoment'
+  'angularMoment',
+  'LocalStorageModule'
 ])
 
 
@@ -70,6 +71,8 @@ angular.module('Plitto', [
 })
 
 .config(function ($stateProvider, $urlRouterProvider, $httpProvider ) {
+  
+  
   $stateProvider
     .state('login', {
       url: '/login',

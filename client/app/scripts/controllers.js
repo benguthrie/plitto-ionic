@@ -1,7 +1,7 @@
 'use strict';
 angular.module('Plitto.controllers', [])
 
-.run(function($rootScope, dbFactory, $state, localStorageService, $ionicModal, $location , OAuth, pFb ){
+.run(function($rootScope, dbFactory, $state, $ionicModal, $location , OAuth, pFb , localStorageService){
 
   /* disabled 1/19/2015
   var headerTitle = function() {
@@ -301,7 +301,35 @@ angular.module('Plitto.controllers', [])
 })
 
 
-.controller('DebugCtrl', function($scope,dbFactory, $rootScope) {
+.controller('DebugCtrl', function($scope,dbFactory, $rootScope, localStorageService, $state) {
+  $scope.localStorage = function(type){
+    if(type === 'get'){
+      localStorageService.get('debugNote'); 
+    } else if (type === 'set'){
+      localStorageService.set('debugNote', 'The Current Unix Time is: ' + Date.now());
+    }
+    console.log('test debug local Storage');
+  };
+  
+  $scope.funny = function(type, $rootScope){
+    if(type ==='rootScope'){
+      // $scope.funnyText = $rootScope.length;
+      $scope.funnyText =  50;
+    }
+    else if(type === 'stateName'){
+      $scope.funnyText = 
+        {
+          'currentTime': Date.now(),
+          'state.current.name': $state.current.name
+        } 
+    } else if (type === 'clearRootscope'){
+      $rootScope = '';
+    } else {
+      $scope.funnyText = 'note ready ' + Date.now();
+    }
+  };
+  
+  
   $scope.loadList = function(type){
     $rootScope.debug('DebugCtrl DEBUG loadList TYPE: ' +type);
     
@@ -343,15 +371,14 @@ angular.module('Plitto.controllers', [])
 
 
 .controller('ProfileCtrl',
-  function($scope,dbFactory,$rootScope, $stateParams) {
+  function($scope,dbFactory,$rootScope, $stateParams, localStorageService ) {
     // 
-  console.log("Profile Control load. profileData: ",$rootScope.profileData);
+  // console.log("Profile Control load. profileData: ",$rootScope.profileData);
 
   // load profile data if this was direct linked to.
   if(!$rootScope.profileData.userId) {
     console.log('no userid set in profiledata', $stateParams.userId, typeof($stateParams.userId));
-    if(parseInt($stateParams.userId) > 0){
-      dbFactory.showUser(parseInt($stateParams.userId), null, 'profileData', null);
+    
     } else {
       console.log('invalid path t oa user.');
     }
@@ -496,8 +523,19 @@ angular.module('Plitto.controllers', [])
   
 })
 
-.controller('FriendsCtrl', function( $rootScope ) {
-  console.log('You have tried to control your friends ', $rootScope.friendStore, 'TODO2 - Is this used / needed? ');
+.controller('FriendsCtrl', function(  dbFactory, $scope, localStorageService ) {
+  /* First - Load from Local Storage */
+  $scope.friendStore = localStorageService.get('friendStore');
+  
+  /* Second - Load from the database */
+  
+  $scope.reloadFriends = function (){
+    $scope.friendStore = dbFactory.friendsList();
+  };
+  
+  console.log('You have tried to control your friends ', $scope.friendStore, 'TODO2 - Is this used / needed? ');
+  // See if we need to load our friends.
+  console.log('friendStore length: ' + $scope.friendStore.length);
 })
 
 .controller('FriendCtrl',
@@ -507,32 +545,20 @@ angular.module('Plitto.controllers', [])
 )
 
 /* 10/21/2014 - Added RootScope to populate the list with? TODO1 - Build lists from $rootScope.lists */
-.controller('ListsCtrl', function($scope, $rootScope, dbFactory,$state, $ionicActionSheet ) {
+.controller('ListsCtrl', function($scope, dbFactory,$state, $ionicActionSheet, localStorageService, $rootScope ) {
   // On load, load up their lists.
-  dbFactory.getUserListOfLists($rootScope.user.userId,'$rootScope.lists');
+  $scope.listsData = localStorageService.get('user' + $rootScope.user.userId + 'lists');
+  
+  // Update with new data
+  $scope.listsData = dbFactory.getUserListOfLists($rootScope.user.userId,'$rootScope.lists');
   
   $scope.loadLists = function(){
    // user.userId is hard coded in lists, because it's always going to be this user's lists.
     console.log('ListsCtrl - loadLists');
-    dbFactory.getUserListOfLists($rootScope.user.userId,'$rootScope.lists');
+    $scope.listsData = dbFactory.getUserListOfLists($rootScope.user.userId,'$rootScope.lists');
   };
   
-  // Delete a list
-  $scope.deleteList = function ( list ) {
-    console.log('TODO2 - is list used in deleteList? ', list);
-    $ionicActionSheet.show({
-      destructiveText: 'Delete',
-      titleText: 'Are you sure you want to delete this list?',
-      cancelText: 'Cancel',
-      cancel: function () {
-        console.log('Cancelled');
-      },
-      destructiveButtonClicked: function () {
-        // TODO: Make database service call.
-        return true;
-      }
-    });
-  };
+  // TODO3 Delete a list
 })
 
 

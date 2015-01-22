@@ -1,13 +1,17 @@
 'use strict';
-angular.module('Services.database', [])
+angular.module('Services.database', ['LocalStorageModule'])
 
 // This will handle storage within local databases.
-.factory('dbFactory', ['$http', '$rootScope', 'localStorageService', '$state',  function ($http, $rootScope, localStorageService, $state ){
+.factory('dbFactory', ['$http', '$rootScope', '$state','localStorageService',  function ($http, $rootScope, $state, localStorageService ){
   
-  /* Clean Scope. Keep the scope reasonably small. As tue user navigates around, clean the scope. */
-  function cleanOtherScope (dontClean, source){
-    console.log('Clean the scope for everything other than ', dontClean, source);
+  
+  /* This is for when there are no records. */
+  function zeroRecords(){
+    return {'msg':'No Records', 'date':now() };
+    console.log('dbFactory.zerorecords zero records: ', now());
   }
+  
+  
   
   
   function logout () {
@@ -18,7 +22,7 @@ angular.module('Services.database', [])
 
     // Clear all the stores.
     dbInit();
-    localStorageService.clearAll();
+   localStorageService.clearAll();
   }
   
   function checkLogout (data) {
@@ -88,7 +92,72 @@ angular.module('Services.database', [])
     );
 
   }
+  
+  /* Clean Scope. Keep the scope reasonably small. As tue user navigates around, clean the scope. 1/22/2015*/
+  var cleanOtherScope = function (dontClean, source){
+    console.log('Clean the scope for everything other than ', dontClean, source);
+    if(dontClean !== 'profile'){
+      $rootScope.profileData = [];
+    }
+    if(dontClean !== 'friends'){
+      $rootScope.friendStore = [];
+    }
+    if(dontClean !== 'list'){
+      $rootScope.list = [];
+    }
+    if(dontClean !== 'chat'){
+      $rootScope.stats.feed = [];
+    }
+    if(dontClean !== 'lists'){
+      $rootScope.listsData = [];
+    }
+    if(dontClean !== 'feed'){
+      $rootScope.feed = [];
+    }
+    if(dontClean !== 'bite'){
+      $rootScope.bite = [];
+    }
+    
+    
+    
+  };
 
+  /* For the Friends Page. */
+  var friendsList = function () {
+    // console.log('!!!UpdateCounts');
+
+    var params = $.param({
+      token: $rootScope.token
+    });
+
+    $http({
+      method: 'POST',
+      url: apiPath + 'friendsList',
+      data: params,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    })
+    .success(function (data, status, headers, config) {
+      
+      if( checkLogout(data) === true ) {
+        logout();
+      } else {
+        // TODO3 - Error checking on the existance of these fields. 
+        // console.log('updateCounts return: ', data, 'TODO2 use status, headers, config: ', status, headers, config );
+
+        return data.results;
+        
+        // 
+        localStorageService.set('friendStore', data.results );
+        console.log('gotFriends');
+      }
+      
+
+    }
+    // console.log("profile feed after showfeed",$rootScope.profileData.feed);
+    );
+
+    // console.log("New Alert Count: ", $rootScope.stats.alerts.total);
+  };
 
   var updateCounts = function () {
     // console.log('!!!UpdateCounts');
@@ -422,9 +491,9 @@ angular.module('Services.database', [])
     
 
   // Load from local storage first.
-    if(userFilter !== '0' && userFilter !== '' && localStorageService.get('user' + userFilter + 'feed') ) {
+    if(userFilter !== '0' && userFilter !== '' &&localStorageService.get('user' + userFilter + 'feed') ) {
       // We know it's a user, so let's set local storage.
-      $rootScope.profileData.feed = localStorageService.get( 'user' + userFilter + 'feed' );
+      $rootScope.profileData.feed =localStorageService.get( 'user' + userFilter + 'feed' );
     }
 
     $http({
@@ -451,7 +520,7 @@ angular.module('Services.database', [])
           $rootScope.profileData.feed = data.results;
           if(userFilter !== '0' && userFilter !== ''){
             // We know it's a user, so let's set local storage.
-            localStorageService.set('user' + userFilter + 'feed', data.results);
+           localStorageService.set('user' + userFilter + 'feed', data.results);
           }
         }
         
@@ -490,8 +559,8 @@ angular.module('Services.database', [])
     var lsTypes = new Array('ditto','feed','lists','shared');
     for (var i in lsTypes){
       if(localStorageService.get('user' + userId + lsTypes[i])){
-        // eval('$rootScope.profileData.' + lsTypes[i] + ' = localStorageService.get("user' + userId + '' + lsTypes[i] + '");');
-        $rootScope.profileData[ lsTypes[i] ] = localStorageService.get('user' + userId + lsTypes[i] ); /* TODO2 - Test Show User. */
+        // eval('$rootScope.profileData.' + lsTypes[i] + ' =localStorageService.get("user' + userId + '' + lsTypes[i] + '");');
+        $rootScope.profileData[ lsTypes[i] ] =localStorageService.get('user' + userId + lsTypes[i] ); /* TODO2 - Test Show User. */
 
       }
     }
@@ -741,13 +810,13 @@ angular.module('Services.database', [])
 
             if(userFilter !== '0' && userFilter !== ''){
               // We know it's a user, so let's set local storage.
-              localStorageService.set('user' + userFilter + sharedFilter, data.results);
+             localStorageService.set('user' + userFilter + sharedFilter, data.results);
             }
 
             if(listFilter !== '0' && listFilter !== '')
             {
               // We know it's a user, so let's set local storage.
-              localStorageService.set('list' + listFilter + sharedFilter, data.results);
+             localStorageService.set('list' + listFilter + sharedFilter, data.results);
             }
 
             // Testing returning it so it can be part of the rootScope:
@@ -825,21 +894,21 @@ angular.module('Services.database', [])
 
             headerTitle();
 
-            localStorageService.set('user', $rootScope.user );
+           localStorageService.set('user', $rootScope.user );
 
             // Make the root token and the Local Storage
-            $rootScope.token = data.me.token;
-            localStorageService.set('token', data.me.token);
+           $rootScope.token = data.me.token;
+           localStorageService.set('token', data.me.token);
 
             updateCounts();
 
             // Make the root token and the Local Storage
             $rootScope.friendStore = data.friends;
-            localStorageService.set('friendStore', data.friends);
+           localStorageService.set('friendStore', data.friends);
 
             // Populate the initial "Ditto Some" view
             $rootScope.bite = data.getSome;
-            localStorageService.set('bite', data.getSome);
+           localStorageService.set('bite', data.getSome);
 
             // FINALLY! - Load the interface
             // $state.go('app.home'); // TODO1 - This needs to be reflected in the URL.
@@ -896,7 +965,7 @@ angular.module('Services.database', [])
     // FriendsData could be null. What happens then?
 
     // Load from local storage, if it's there, then update it.
-    $rootScope.friendStore = localStorageService.get('friendStore');
+    $rootScope.friendStore =localStorageService.get('friendStore');
 
     // Only request their friends if they have more than 0.
     if(friendsData.length > 0) {
@@ -937,17 +1006,10 @@ angular.module('Services.database', [])
   /* 9/7/2014
     Get the list of lists for this user, and from you and your friends
   */
-  var getUserListOfLists = function (friendId, theScope) {
+  var getUserListOfLists = function (friendId) {
     // TODO2 - load from local storage, if it's there 
     // console.log('database.getUserListOfLists: getUserListOfLists: friendId: ',friendId, ' theScope: ', theScope);
 
-    // Get from local storage first, then populate.
-    if(localStorageService.get('user'+friendId +'lists')){
-      // console.log('database.getUserListOfLists load user lists from local storage');
-      $rootScope.profileData.lists = localStorageService.get('user' + friendId + 'lists');
-    }else{
-      console.log('database.getUserListOfLists: local storage not set');
-    }
 
     var params = $.param({userfilter:friendId, token: $rootScope.token });
     // console.log('listoflists params: ',params);
@@ -966,16 +1028,12 @@ angular.module('Services.database', [])
           logout();
         } else {
           console.log('TODO3 database.listOfLists: Use shc', status, headers, config);
-          // console.log("testlogin: ",data, data.puid);
-          // Handle the users, lists and things.
-          // TODO - Come up with a strategy of where to store this better than Rootscope. Also, for each user, when navigating around, this could change.
-           //  $rootScope.lists = data.result;
-          console.log('Load this here: ',theScope + ' = data.results;');
-          eval(theScope + ' = data.results;');
-          // console.log('rootscope.lists', $rootScope.lists);
+          
+          // Let the controller handle this.
+          return data.results;
 
           // Add / Update to local storage
-          localStorageService.set('user' + friendId + 'lists', data.results);
+         localStorageService.set('user' + friendId + 'lists', data.results);
 
         }
         
@@ -989,7 +1047,7 @@ angular.module('Services.database', [])
   */
   var sharedStat = function (friendId) {
     // console.log('dbFactory.sharedState',friendId,$rootScope.friendStore);
-    var friendStore = localStorageService.get('friendStore');
+    var friendStore =localStorageService.get('friendStore');
     //This will be in local storage, and in the friendStore.
     for(var i in friendStore) {
       // console.log('sharedStat loop');
@@ -1168,20 +1226,24 @@ angular.module('Services.database', [])
           console.log('database.showAList: TODO3 this is mine. Why do we care?');
 
         }
+        
+        $rootScope.list[viewTypes[i]] =localStorageService.get('listId' + listNameId + viewTypes[i]);
+        /* Deleted 1/21/2014 
         eval(
           '$rootScope.list.' +
           viewTypes[i] +
-          ' = localStorageService.get("listId" + listNameId + "" + viewTypes[i] )'
+          ' =localStorageService.get("listId" + listNameId + "" + viewTypes[i] )'
         );
+        */
       }
     }
 
     $rootScope.nav.listView = 'ditto';
-    $state.go('app.list',{listId: listNameId});
+    $state.go('app.list', { listId: listNameId});
 
     // var existing = [];
     // getMore ('list',listNameId, userFilter, existing);
-    loadList(listNameId, listName, userFilter, 'all', 'all');
+    loadList(listNameId, listName, userFilter, 'ditto', 'all', null);
 
   };
 
@@ -1224,10 +1286,18 @@ angular.module('Services.database', [])
             type !== 'all'
           )
           {
-            console.log('loadList type: ',type,'empty', data.results[type] );
+            console.log('database.loadlist 1231 type: ',type,'empty?: ', data.results[type],  data.results[type].length);
+            
+            /* Log legit no rows */
+            if(data.results[type].length === 0 ){
+              $rootScope.list[type] = zeroRecords();  
+            } else {
+              $rootScope.list[type] = data.results[type];
+             localStorageService.set('listId' + listNameId + type, data.results[type]);  
+            }
+            
             // eval('$rootScope.list.' + type + ' = "empty";');
-            $rootScope.list[type] = data.results[type];
-            localStorageService.set('listId' + listNameId + type, data.results[type]);
+            
             
           }
           else if (type === 'all') {
@@ -1243,7 +1313,7 @@ angular.module('Services.database', [])
               if( !data.results[ viewTypes[i] ].length )
                 // Clean out the store if there were no results
               {
-                console.log('loadlist SHOW!!! type: ', viewTypes[i], data.results[viewTypes[i]]);
+                console.log('database.loadlist 1250 SHOW!!! type: ', viewTypes[i], data.results[viewTypes[i]]);
                 if(viewTypes[i] !== 'mine')
                 {
                   $rootScope.list[ viewTypes[i] ] = [];
@@ -1271,7 +1341,7 @@ angular.module('Services.database', [])
                 // Build the view
                 $rootScope.list[viewTypes[i]] = data.results[viewTypes[i]];
                 // Add this item to local storega.
-                localStorageService.set('listId' +
+               localStorageService.set('listId' +
                      listNameId +
                      viewTypes[i],
                      data.results[viewTypes[i]]);
@@ -1280,7 +1350,7 @@ angular.module('Services.database', [])
 
               if(localStorageService.get('listId' + listNameId + 'ditto')){
                 eval('$rootScope.list.' +
-                     viewTypes[i] + '= localStorageService.get("listId" + listNameId +"' +  viewTypes[i] + '");');
+                     viewTypes[i] + '=localStorageService.get("listId" + listNameId +"' +  viewTypes[i] + '");');
               }
             }
           } else {
@@ -1367,7 +1437,7 @@ angular.module('Services.database', [])
     if($rootScope.nav.modal === true && $rootScope.nav.filter === 'user') {
       thefilter = 'modalUser';
       thekey = 'userL_' + $rootScope.nav.filterId;
-      gma = localStorageService.get(thekey);
+      gma =localStorageService.get(thekey);
       if(gma && gma.length > 0) {
         $rootScope.modal.listStore = gma;
       } else {
@@ -1379,7 +1449,7 @@ angular.module('Services.database', [])
       console.log('list local storage key: ' , thekey, data);
 
       // Existing
-      var existingList = localStorageService.get(thekey);
+      var existingList =localStorageService.get(thekey);
       if(existingList) {
         console.log('list exists');
         gma = existingList;
@@ -1413,7 +1483,7 @@ angular.module('Services.database', [])
         // var localKey = $rootScope.nav.filter + 'L_' + $rootScope.nav.filterid;
         if( thekey ) {
           console.log('SET THE KEY', thekey );
-          localStorageService.set(thekey,data);
+         localStorageService.set(thekey,data);
         }
 
       } else {
@@ -1517,17 +1587,17 @@ angular.module('Services.database', [])
     // This function will be called when the app loads, and already has a token. It's kind of like login.
 
     // Populate profile information
-    if(localStorageService.get('user')){
+    if( localStorageService.get('user')){
       $rootScope.user = localStorageService.get('user');
     }
 
     // Populate the friendstore.
-    if(localStorageService.get('friendStore')){
+    if( localStorageService.get('friendStore')){
       $rootScope.friendStore = localStorageService.get('friendStore');
     }
 
     // Populate the bite.
-    if(localStorageService.get('bite')){
+    if( localStorageService.get('bite')){
       $rootScope.bite = localStorageService.get('bite');
     }
 
@@ -1557,10 +1627,18 @@ angular.module('Services.database', [])
             console.log('Valid token');
             
             // Go to the home screen, but only if at login?.
-            console.log('current state when token verified', $state.current.name);
-            if($state.current.name === 'login' || $state.current.name === 'loading' ){
-              dbGetSome( '$rootScope.bite' , '' , '', 'ditto');
+            console.log('current state when token verified', $state );
+            if($state && $state.current && $state.current.name ){
+              console.log('1581 passed');
+              if( $state.current.name === 'login' || $state.current.name === 'loading' ){
+                dbGetSome( '$rootScope.bite' , '' , '', 'ditto');
+              }  else {
+                console.log('not login or loading, but does exist.', $state.current.name );
+              }
+            } else {
+              console.log('1581 failed');
             }
+            
             
             
           } else {
@@ -1601,7 +1679,9 @@ angular.module('Services.database', [])
     addComment: addComment, /* Adds a comment to the item */
     userChat: userChat, /* Returns the chat queue for a user. */
     updateCounts: updateCounts, /* updates the notification, Friend, etc numbers. */
-    logout: logout /* This is redundant, and also exists in controllers.js. That should change TODO2 */
+    logout: logout, /* This is redundant, and also exists in controllers.js. That should change TODO2 */
+    friendsList: friendsList, /* Let a user reloat their friend store. Long facebook logins made this needed. 1/21/2015 */
+    cleanOtherScope: cleanOtherScope /* Keep RootScope clean. */
   };
   
 }]);
