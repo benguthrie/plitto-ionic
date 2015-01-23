@@ -122,6 +122,89 @@ angular.module('Services.database', ['LocalStorageModule'])
     
     
   };
+  
+  
+  var promiseDitto = function (mykey, uid, lid, tid, itemKey, event ) {
+    //  console.log('dbFactory.dbDitto | mykey: ', mykey,'| ownerid: ', uid, '| listid: ',lid, tid,i,j,k);
+   
+    // Update the action, by whether or not the first item is null or not.
+    var action = 'remove';
+    if(mykey === null) {
+      // My key is null, so this must be a ditto.
+      // console.log('update action ditto', mykey, parseInt(mykey));
+      action = 'ditto';
+    }
+
+    var dittoParams = $.param(
+      {
+        action: action ,
+        itemKey: itemKey,
+        token: $rootScope.token
+      }
+    );
+
+    var promise = $http(
+      {
+        method:'POST',
+        url: apiPath + 'ditto',
+        data: dittoParams,
+        headers: { 'Content-Type':'application/x-www-form-urlencoded' }
+      }
+    )
+    .then( function (response) {
+      console.log('promise ditto. api response: ', response);
+        
+        if( checkLogout(response.data) === true ) {
+          logout();
+        } else {
+          // console.log('Ditto Response TODO2 Use shc', status, headers, config);
+          var mynewkey = null;
+          if(action === 'ditto') {
+
+            mynewkey  = response.data.results[0].thekey;
+            var friendsWith = response.data.results[0].friendsWith;
+
+            // Update the "Friends With" 
+            // $(event.target).html('+' + friendsWith +' <i style="ionicon ion-ios7-checkmark"></i>').removeClass('ion-ios7-checkmark-outline').addClass('ion-ios7-checkmark');
+
+            $(event.target).addClass('ion-ios7-checkmark').addClass('dittoA').removeClass('ion-ios7-checkmark-outline').removeClass('dittoW');
+
+            // Update this item's new "Friends With"
+              // 
+            // eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].friendsWith = "+ ' +friendsWith + '"');
+            // console.log('scopeName', scopeName);  
+            //TODO1 - Return the friendsWith number.
+            // $rootScope[scopeName][i]["lists"][j]["items"][k].friendsWith = friendsWith;
+
+            // For the user and the list, change the increments of dittoable and in common.
+          } else {
+
+            // It was removed. Finalize that.
+            $(event.target).removeClass('ion-ios7-checkmark').removeClass('dittoW').addClass('ion-ios7-checkmark-outline').addClass('dittoA');
+            // 
+            // Remove the Friendswith info. eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].friendsWith = ""');
+            // $rootScope[scopeName][i]["lists"][j]["items"][k].friendsWith = "";
+          }
+
+          // Update my key within the correct scope.
+          // Results update
+          //  console.log('rs sn: ',scopeName, $rootScope[scopeName]);
+          // This must be an eval, because scopeName can be profileData.feed, or someother multi-parter. 
+          // eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].mykey = ' +mynewkey);
+          // TODO1 Line above. Restore it. Update that line to include my new key.
+          
+          // $rootScope[scopeName][i]["lists"][j]["items"][k].mykey = mynewkey;
+        }
+      var pDittoArray = Array(mynewkey, friendsWith, action);
+      // return pDittoArray;
+      return pDittoArray;
+      }
+    );
+    
+    return promise;
+
+  };
+
 
   /* For the Friends Page. */
   var friendsList = function () {
@@ -784,6 +867,7 @@ angular.module('Services.database', ['LocalStorageModule'])
 
   /* 9/4/2014 - 9/3/2014 - Handle the ditto action 
       10/21/2014 - Vastly improved this.
+      1/22/2015 - Should be able to disable this by 1/24. Replaced by promiseDitto
   */
 
   // dbFactory.dbDitto('bite',i,j,k,mykey,uid,lid,tid);      
@@ -1840,7 +1924,7 @@ angular.module('Services.database', ['LocalStorageModule'])
             // Force log out, and clear local storage.
             logout();
           }
-          else if(data.results[0].success &&  data.results[0].success === '1'){
+          else if(data.results && data.results[0].success &&  data.results[0].success === '1'){
             console.log('Check token results: ',data, data.results[0].success);
             
             // Update the "me" information.
@@ -1880,6 +1964,7 @@ angular.module('Services.database', ['LocalStorageModule'])
     plittoFBApiCall: plittoFBApiCall,
     dbGetSome: dbGetSome,
     dbDitto: dbDitto,
+    promiseDitto: promiseDitto, /* Replace the one above. 1/22/2015 */
     getUserListOfLists: getUserListOfLists,
     sharedStat: sharedStat, /* 9/7/2014 */
     // , modalReset: modalReset

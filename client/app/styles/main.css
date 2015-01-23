@@ -24,8 +24,8 @@ span.hint {
 }
 
 div.button-bar > a.active {
-  border: solid 3px #F49653;
-  padding: -3px;
+  border-bottom: solid 3px #F49653;
+  padding-bottom: -3px;
 }
 
 ion-nav-bar.nav-bar {

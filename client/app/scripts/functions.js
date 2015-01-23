@@ -72,8 +72,7 @@ function navigationBar(){
         // '<ion-nav-back-button></ion-nav-back-button>' +
       '</ion-nav-buttons>' +
         '<ion-nav-buttons side="secondary" class="navSecond">' +
-          '<button class="button button-icon ion-chatbox" ng-click="navFunc(\'chat\');" >' +
-            '<span class="innerNo" ng-bind="$root.stats.alertCount"></span>' +
+          // '<button class="button button-icon ion-chatbox" ng-click="navFunc(\'chat\');" >' +'<span class="innerNo" ng-bind="$root.stats.alertCount"></span>' +
           '</button>' +
           '<button class="button button-icon ionicons ion-plus-circled" ng-click=" navFunc(\'addlist\');"></button> ' +
           '<button class="button button-icon ion-ios7-checkmark-outline" ng-click="navFunc(\'home\'); getSome();"></button> ' +

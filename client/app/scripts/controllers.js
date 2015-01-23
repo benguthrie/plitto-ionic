@@ -377,6 +377,7 @@ angular.module('Plitto.controllers', [])
     // Prepare Scope Variables
    
     $scope.view = 'ditto';
+  
     $scope.store = {
       'ditto':[{loading: true}],
       'shared':[{loading: true}],
@@ -430,8 +431,10 @@ angular.module('Plitto.controllers', [])
   
     lsTypes = new Array('ditto','shared','feed','lists','chat');
   
-    if($rootScope.user.userId === $scope.userInfo.userId){
-      var lsTypes = new Array('feed','lists');
+    if( parseInt($rootScope.user.userId) === parseInt($scope.userInfo.userId) ){
+      var lsTypes = new Array('feed','lists'); // TODO2 Put in the chat bit again. 
+      $scope.view = 'feed';
+      console.log('updated scope view ? ', $scope.view);
     }
   
     for (var i in lsTypes){
@@ -461,15 +464,19 @@ angular.module('Plitto.controllers', [])
         });
         
       } else if(lsTypes[i] === 'feed' ) {
+         console.log('show the feed');
         // Load from local storage first.
         if( localStorageService.get('user' + $scope.userInfo.userId + 'feed') ) {
           // We know it's a user, so let's set local storage.
-          $scope.feed = localStorageService.get('user' + $scope.userInfo.userId + 'feed');
+          $scope.store.feed = localStorageService.get('user' + $scope.userInfo.userId + 'feed');
           
           // Pull the name from local storage, if we have it.
-          if( $scope.userInfo.userName === null ){
-            $scope.userInfo.userName = $scope.feed[0].username;
-            $scope.userInfo.fbuid = $scope.feed[0].fbuid;
+          if( !$scope.userInfo.userName ){
+            console.log( 'feed0: ', $scope.store.feed[0] );  ;
+            // console.log( typeof($scope.feed[0].username ) ) ;
+            $scope.userInfo.userName = $scope.store.feed[0].username;
+            $scope.userInfo.fbuid = $scope.store.feed[0].fbuid;
+            console.log('load feed: ', $scope.store.feed);
           }
         }
         
@@ -509,7 +516,7 @@ angular.module('Plitto.controllers', [])
       $scope.view = 'feed'; 
       console.log('profile show feed: ',userId, ' oldest: ');
       // showFeed = function(theType, userFilter, listFilter, myState, oldestKey)
-      // $scope.feed = dbFactory.showFeed('profile',userId,'','','','');
+      // $scope.store.feed = dbFactory.showFeed('profile',userId,'','','','');
       
        
       // Then Update
