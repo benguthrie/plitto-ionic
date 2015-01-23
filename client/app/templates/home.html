@@ -6,27 +6,29 @@
     
     <div class="button-bar">
       <a class="button" 
-         ng-class="{'active': $root.nav.homeView ==='friends'}" 
+         ng-class="{'active': view ==='friends'}" 
          ng-click="getSome('friends');">
         <img ng-src="img/974-users@2x.png" 
              style="margin-top:7px;margin-right:5px; height: 30px; width: 40px;"/><!--&nbsp;Friends -->
         <div class=" ionicons ion-refresh buttonRefresh" 
-             ng-show="$root.nav.homeView === 'friends' "></div>
+             ng-show="view === 'friends' "></div>
       </a>
         
       <a class="button" 
-         ng-class="{'active': $root.nav.homeView ==='strangers'}" 
+         ng-class="{'active': view ==='strangers'}" 
          ng-click="getSome('strangers');">
         <img ng-src="img/769-male@3x.png" style="margin-top:7px;margin-right:5px;  height: 30px; width: 25px;"/><!--&nbsp;Strangers -->
         <div class=" ionicons ion-refresh buttonRefresh" 
-             ng-show="$root.nav.homeView === 'strangers' "></div>
+             ng-show="view === 'strangers' "></div>
       </a>
-        <!-- <a class="button" ng-class="{'active': $root.nav.listView ==='shared'}" ng-click="view('shared');">Nearby</a> --> 
-      
     </div>
     
-  <div class="list " ng-repeat="user in $root.bite">
-    <user-list-thing store="bite" source="home" user-data="user"></user-list-thing>
+    
+  <div class="list" ng-repeat="user in store.friends" ng-show="view==='friends'">
+    <user-list-thing store="store.friends" source="home" user-data="user"></user-list-thing>
+  </div>
+  <div class="list" ng-repeat="user in store.strangers" ng-show="view==='strangers'">
+    <user-list-thing store="store.strangers" source="home" user-data="user"></user-list-thing>
   </div>
     
   </ion-content>

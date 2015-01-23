@@ -2,87 +2,81 @@
   <user-nav></user-nav>
   
   <ion-content class="has-header">
-    <h1 class="pageTitle"><i class="icon ion-clipboard"></i> {{$root.list.listName}}</h1>
+    <h1 class="pageTitle"><i class="icon ion-clipboard"></i> {{listInfo.listName}}</h1>
     <form name="newItemForm" ng-submit="addToList(newItem.theValue);">
       <label class="item item-input">
         <input 
           type="text" 
           ng-model="newItem.theValue" 
-          placeholder="Add to {{$root.list.listName}}"
+          placeholder="Add to {{listInfo.listName}}"
           id="newListItemField"
         />
       </label>
       
     </form>
     
-    <!-- <h3>{{$root.list.listName}}</h3> --> 
     <div class="button-bar">
       <a 
          class="button ion-ios7-checkmark-outline" 
-         ng-class="{'active': $root.nav.listView ==='ditto'}" 
-         ng-click="view('ditto');"></a>
+         ng-class="{'active': view ==='ditto'}" 
+         ng-click="setView('ditto');"></a>
       <a 
          class="button ion-ios7-checkmark dittoA" 
-         ng-class="{'active': $root.nav.listView ==='shared'}" 
-         ng-click="view('shared');"></a>
+         ng-class="{'active': view ==='shared'}" 
+         ng-click="setView('shared');"></a>
       <a class="button ion-ios7-pulse-strong" 
-         ng-class="{'active': $root.nav.listView ==='feed'}" 
-         ng-click="view('feed');"></a>
+         ng-class="{'active': view ==='feed'}" 
+         ng-click="setView('feed');"></a>
       <a class="button " 
-         ng-class="{'active': $root.nav.listView ==='mine'}" 
-         ng-click="view('mine');">
+         ng-class="{'active': view ==='mine'}" 
+         ng-click="setView('mine');">
         <img ng-src="{{'http://graph.facebook.com/' + $root.user.fbuid + '/picture?height=30&width=30'}}">
-        <!-- {{ $root.user.userName }}'s --> </a>
+      </a>
       <a class="button buttonStranger" 
-         ng-class="{'active': $root.nav.listView ==='strangers'}" 
-         ng-click="view('strangers');"></a>
-      
+         ng-class="{'active': view ==='strangers'}" 
+         ng-click="setView('strangers');"></a>
     </div>
-    <!-- <h2>Ditto length: {{list.ditto.length}}</h2>
-    <span style="font-size: 0.1em; max-height: 15em;"> ::START::{{list}} ::END:: </span>
-    -->
     
-    <div ng-show="$root.nav.listView ==='ditto' ">
-      <div ng-show="!list.ditto.length" class="noShow">No Dittoable Items to Show</div>
-
-      <div class="list " ng-repeat="user in list.ditto">
-        <user-list-thing store="list.ditto" source="list" user-data="user"></user-list-thing>
+    
+    <div ng-show="view ==='ditto' ">
+      <div ng-show="!store.ditto.length" class="noShow">No Dittoable Items to Show</div>
+      <div ng-show="store.ditto[0].loading" ><h1>LOADING</h1></div>
+      <div class="list " ng-repeat="user in store.ditto">
+        <user-list-thing store="store.ditto" source="list" user-data="user"></user-list-thing>
       </div>
     </div>
     
-    <div ng-show="$root.nav.listView ==='shared' ">
-      <div ng-show="!list.shared.length" class="noShow" ng-click="showList">No Lists? Check</div>
-      
-      <div class="list " ng-repeat="user in list.shared">
-        <user-list-thing store="list.shared" source="list" user-data="user"></user-list-thing>
+    <div ng-show="view ==='shared' ">
+      <div ng-show="!store.shared.length" class="noShow" ng-click="showList">You have nothing in common with your friends in <b ng-bind="listInfo.listName"></b></div>
+      <div ng-show="store.shared[0].loading" ><h1>LOADING</h1></div>
+      <div class="list " ng-repeat="user in store.shared">
+        <user-list-thing store="store.shared" source="list" user-data="user"></user-list-thing>
       </div>
     </div>
     
-    <div ng-show="$root.nav.listView ==='strangers' ">
-      <div ng-show="!list.strangers.length" class="noShow">No Strangers Have Items Worth Showing</div>
-      
-      <!-- ::START::{{list.strangers}} ::END:: -->
-      <div class="list " ng-repeat="user in list.strangers">
-        <user-list-thing store="list.strangers" source="list" user-data="user"></user-list-thing>
+    <div ng-show="view ==='feed' ">
+      <div ng-show="!store.feed.length" class="noShow">No Recent Items</div>
+      <div ng-show="store.feed[0].loading" ><h1>LOADING</h1></div>
+      <div class="list " ng-repeat="user in store.feed">
+        <user-list-thing store="store.feed" source="list" user-data="user"></user-list-thing>
       </div>
     </div>
     
-    <div ng-show="$root.nav.listView ==='mine' ">
-      <!-- ::START::{{list.mine}} ::END:: -->
-      <div ng-show="!list.mine.length" class="noShow">You have not items yet.</div>
-      <div class="list " ng-repeat="user in list.mine">
-        <user-list-thing store="list.mine" source="list" user-data="user"></user-list-thing>
+    <div ng-show="view ==='mine' ">
+      <div ng-show="!store.mine.length" class="noShow">You have not items yet.</div>
+      <div ng-show="store.mine[0].loading" ><h1>LOADING</h1></div>
+      <div class="list " ng-repeat="user in store.mine">
+        <user-list-thing store="store.mine" source="list" user-data="user"></user-list-thing>
       </div>
     </div>
     
-    <div ng-show="$root.nav.listView ==='feed' ">
-      <div ng-show="!list.feed.length" class="noShow">No Recent Items</div>
-      <!-- ::START::{{list.feed}} ::END:: -->
-      <div class="list " ng-repeat="user in list.feed">
-        <user-list-thing store="list.feed" source="list" user-data="user"></user-list-thing>
+    <div ng-show="view ==='strangers' ">
+      <div ng-show="!store.strangers.length" class="noShow">No Strangers Have Items in This List</div>
+      <div ng-show="store.strangers[0].loading" ><h1>LOADING</h1></div>
+      <div class="list " ng-repeat="user in store.strangers">
+        <user-list-thing store="store.strangers" source="list" user-data="user"></user-list-thing>
       </div>
     </div>
-    
     
   </ion-content>
 </ion-view>

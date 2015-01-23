@@ -238,12 +238,14 @@ angular.module('Plitto.controllers', [])
     })
     */
   };
-    
+
+  /* 1/23/2015
   $scope.loadLists = function(){
     $rootScope.debug('AppCtrl You want to load lists into your profile.');
     // dbFactory.getUserListOfLists($rootScope.vars.user.userId);
     dbFactory.getUserListOfLists($rootScope.user.userId , '$rootScope.lists');
   };
+   */
   
     
 })
@@ -287,15 +289,46 @@ angular.module('Plitto.controllers', [])
   })
 
 .controller('HomeCtrl',function ( $scope, $rootScope, dbFactory ) {
+  $scope.store = {
+      'friends':[{loading: true}],
+      'strangers':[{loading: true}]
+    };
   
+  // Load up some content for both views
+  if($scope.store.friends[0].loading || $scope.store.friends[0].length ===0 ){
+    dbFactory.promiseGetSome('friends', '', 'ditto').then(function(d) {
+      $scope.store.friends = d;
+    });
+  }
+  if($scope.store.strangers[0].loading || $scope.store.strangers[0].length ===0 ){
+    dbFactory.promiseGetSome('strangers', '', 'ditto').then(function(d) {
+      $scope.store.strangers = d;
+    });
+  }
+  
+  
+  
+  
+  $scope.view = 'friends';
 
   $scope.getSome = function(typeFilter){
-    // console.log("Get SSSOMe");
-    $rootScope.bite = [];
-    $rootScope.nav.homeView = typeFilter;
-    $scope.bite = 'this was reloaded';
+    
+    
       // dbGetSome = function (theScope, userfilter, listfilter, sharedFilter)
-    dbFactory.dbGetSome('$rootScope.bite', typeFilter, '', 'ditto');
+    if($scope.view === typeFilter ){
+      dbFactory.promiseGetSome(typeFilter, '', 'ditto').then(function(d) {
+        console.log('d: ',d);
+
+        $scope.store[typeFilter] = d;
+
+        // con
+      });
+    } else {
+      $scope.view = typeFilter;
+    }
+    
+    
+    
   };
 
 })
@@ -407,20 +440,10 @@ angular.module('Plitto.controllers', [])
       // Get it from the url then.
       // Get a valid user id, and pull content for it.
       if( parseInt ( $stateParams.userId) > 0){
-        // console.log('CONTROLLER.387 GOOD VALID USER ID');
-        // 
-         //console.log('profileCtrl 399', $scope.userInfo.userId);
         
         // Get user information. TODO2 
         $scope.userInfo.userId = parseInt($stateParams.userId);
-        
-        // console.log( 'db.userInfo from database: ', dbFactory.userInfo( 2 ) );
-        // dbFactory.userInfo( $scope.userInfo.userId );
-        // $scope.userInfo = dbFactory.userInfo( $scope.userInfo.userId ) ;
-        
         // console.log('413 ', $scope.userInfo.userId);
-        
-        
       } else {
         console.log('CONTROLLER.390 NO VALID USER ID');
       }
@@ -444,9 +467,7 @@ angular.module('Plitto.controllers', [])
           $scope.store.shared = d;
           // console.log('update: in promise shared: ', d);
           //console.log('sun: ', $scope.userInfo.userName.length, ' dusername: ', d[0].username);
-          
-          
-          
+              
           if( $scope.userInfo.userName === null && d[0].username){
             
             $scope.userInfo.userName = d[0].username;
@@ -586,6 +607,8 @@ angular.module('Plitto.controllers', [])
   $scope.newList = {title:''};
   console.log('addListCtrl called');
   
+  
+  
   // Initialize a new search.
   $scope.$watch(function(){
     return $scope.newList.title;
@@ -625,18 +648,10 @@ angular.module('Plitto.controllers', [])
 
 .controller('SearchCtrl', function($scope, $rootScope, $stateParams, dbFactory) {
   console.log('You have entered Search');
+  
 
   /* Clear out the last search */
   $scope.search = {term: $stateParams.term, results: []};
-  
-  // focus('input#searchField');
-  
-  /* On Load, make the focus the input field */
-  
-  // $('input#searchField').focus();
-  
-  /* Debug */
-  // $('input#searchField').css('border','3px solid red');
   
   /* Clear the Search */
   $scope.clearSearch = function(){
@@ -658,14 +673,16 @@ angular.module('Plitto.controllers', [])
   
   // Initialize a new search.
   $scope.$watch(function(){
-    console.log('search watch found', $scope.search.term );
+    // console.log('search watch found', $scope.search.term );
     return $scope.search.term;
   }, function(newValue, oldValue){
-    // 
-    console.log('TODO2 - This is where oldValue is used: ' + oldValue + ' to ' + newValue);
+    // console.log('TODO2 - This is where oldValue is used: ' + oldValue + ' to ' + newValue);
     if(typeof newValue !== 'undefined' && newValue.length > 0){
-      console.log('search called: ', newValue);
-      dbFactory.search( newValue, 'general');
+      
+      dbFactory.promiseSearch( newValue, 'general').then(function(d){  
+        $scope.search.results = d.results;
+      });
+      
     }
   });
 })
@@ -709,16 +726,24 @@ angular.module('Plitto.controllers', [])
 .controller('ListsCtrl', function($scope, dbFactory,$state, $ionicActionSheet, localStorageService, $rootScope ) {
   // On load, load up their lists.
   $scope.listsData = localStorageService.get('user' + $rootScope.user.userId + 'lists');
+
+  console.log('listsCtrl');
+  // On Load; Update with new data
   
-  // Update with new data
-  $scope.listsData = dbFactory.getUserListOfLists($rootScope.user.userId,'$rootScope.lists');
+  dbFactory.promiseListOfLists( $rootScope.user.userId ).then(function(d) {
+    $scope.listsData = d;
+
+  });
   
   $scope.loadLists = function(){
    // user.userId is hard coded in lists, because it's always going to be this user's lists.
     console.log('ListsCtrl - loadLists');
-    $scope.listsData = dbFactory.getUserListOfLists($rootScope.user.userId,'$rootScope.lists');
+    
+    dbFactory.promiseListOfLists( $rootScope.user.userId ).then(function(d) {
+      $scope.listsData = d;
+    });
   };
-  
+
   // TODO3 Delete a list
 })
 
@@ -729,15 +754,55 @@ angular.module('Plitto.controllers', [])
 })
 
 .controller('FeedCtrl', function($scope, $stateParams, $rootScope, dbFactory) {
-  // var mainFeed = function (theType, continueFrom, userFilter, listFilter, sharedFilter, scopeName, newerOrOlder){
-  dbFactory.mainFeed('friends', '', '', '', '', 'feed.friends',''); // Should only evaluate when navigating to "feed"
+  // On load, open friends.
+  $scope.view = 'friends';
+  $scope.store = {
+    friends: [{loading: true}],
+    strangers: [{loading: true}]
+  };
   
-  $scope.feed = function(filter, continueFrom, newerOrOlder){
-    // Set the active view.
-    $rootScope.nav.feedView = filter;
+  
+  
+  // Populate the feeds on load
+  if($scope.store.friends.length ===0 || $scope.store.friends[0].loading === true){
+    if(localStorageService.get('feedFriends')){
+      $scope.store.friends = localStorageService.get('feedFriends');
+    };
+      
+    $scope.store.friends[0] = {loading: true};
+    dbFactory.promiseFeed( 'friends', '', '', '', '', '').then(function(d) {
+      $scope.store.friends = d;
+      localStorageService.set('feedFriends',d);
+    });
+  }
+  
+  // Populate the feeds on load
+  if($scope.store.strangers.length ===0 || $scope.store.strangers[0].loading === true){
     
-    // Tell dbFactory what to do.
-    dbFactory.mainFeed(filter, continueFrom, filter, '', '','nav.feed.' + filter, newerOrOlder);
+    if(localStorageService.get('feedStrangers')){
+      $scope.store.strangers = localStorageService.get('feedStrangers');
+    };
+    
+    $scope.store.strangers[0] = {loading: true};
+    dbFactory.promiseFeed( 'strangers', '', '', '', '', '').then(function(d) {
+      $scope.store.strangers = d;
+      localStorageService.set('feedStrangers',d);
+    });
+  }
+  
+  // var mainFeed = function (theType, continueFrom, userFilter, listFilter, sharedFilter, scopeName, newerOrOlder){
+  // dbFactory.mainFeed('friends', '', '', '', '', 'feed.friends',''); // Should only evaluate when navigating to "feed"
+   
+  $scope.feed = function(filter, continueFrom, newerOrOlder){
+    if(filter === $scope.view){
+      /* Refresh */
+      $scope.store[filter] = [{loading: true}];
+      dbFactory.promiseFeed( filter, '', '', '', '', '').then(function(d) {
+        $scope.store[filter] = d;
+      });
+    }
+    // Set the active view.
+    $scope.view = filter;
     
   };
   
@@ -745,36 +810,208 @@ angular.module('Plitto.controllers', [])
   
 })
 
-.controller('ListCtrl', function($scope, $stateParams, $rootScope, dbFactory) {
-  $scope.listId = $stateParams.listId;
+.controller('ListCtrl', function($scope, $stateParams, $rootScope, dbFactory, localStorageService) {
   
-  $scope.navView = 'ditto';
+  console.log('listId: ', $stateParams.listId, $stateParams);
+  
+  $scope.view = 'ditto';
 
-  $scope.view = function(theView){
-    // if it's already active, then make the call.
-    // console.log('pressed view. ', theView);
-    
-    // If it is already this view, then reload this content.
-    if(theView === $rootScope.nav.listView){
-      console.log('make the call');
-      dbFactory.loadList($stateParams.listId, '', '', theView, '', '');
-    }
-    
-    $rootScope.nav.listView = theView;
+  $scope.store = {
+      'ditto':[],
+      'shared':[],
+      'feed':[],
+      'mine':[],
+      'strangers':[]
+    };
+  
+  $scope.listInfo = {
+    listId:$stateParams.listId,
+    listName: null
   };
   
+  /* Clear any previously entered text in the 'add to list' section */
   $scope.newItem = {theValue: null};
   
+  
+  // Populate the list on load.
+  var listViews = Array('ditto', 'shared', 'feed', 'mine', 'strangers');
+  
+  // TODO2 - userIdFilter is ignored. It should allow for a specific user to be viewed. 
+  var userIdFilter = 0; // TODO2 - Allow this to be set.
+  var sharedFilter = 0; // TODO2 - Allow this to be set.
+  var oldestKey = 0; // TODO2 - Allow this to be set.
+  
+  /* Load all the list view types */
+  var i = 0;
+  for (i in listViews) {
+    if(!$scope.store[listViews[i]].length){
+      $scope.store[listViews[i]][0] = {loading: true};
+    }
+    
+    /* Apply local storage if it's present */
+    if(localStorageService.get('listId' + $stateParams.listId + listViews[i])){
+      $scope.store[listViews[i]] = localStorageService.get('listId' + $stateParams.listId + listViews[i]);
+    }
+    
+    /* Load each of the views from the API */
+    dbFactory.promiseList($scope.listInfo.listId, userIdFilter, listViews[i], sharedFilter, oldestKey).then(function(d) {
+
+      /*  
+        Only apply valid responses to the scope. Types could be null. 
+         use d.type because of async responses require the data to define itself. 
+      */
+      if ( typeof(d.type) !== 'undefined') {
+        $scope.store[d.type] = d.results[d.type];
+      } else {
+        /* if no response, clear the results */
+        $scope.store[d.type] = [];
+      }
+      
+      /* If there are results, and we need a list name, then apply the list name from the data */
+      console.log('d.results', d.results);
+      if( $scope.listInfo.listName === null 
+         && typeof(d.results) !== 'undefined'
+         && typeof(d.results[d.type][0].lists[0].listname)!=='undefined')
+      {
+        $scope.listInfo.listName = d.results[d.type][0].lists[0].listname;
+      }
+
+    });
+  }
+  
+  /* If we don't have a list name at this point, it must be a new list. Force Load it. */
+  if($scope.listInfo.listName === null || $scope.listInfo.listName.length ===0){
+    console.log('force load the list info, and assume this user created the list');
+    dbFactory.promiseThingName($scope.listInfo.listId).then(function(d){
+      console.log('d.results: ', d.results, d.results.length);
+      if(d.results){
+        console.log('valid results from d.results', d.results[0].thingName);
+        $scope.listInfo.listName = d.results[0].thingName;
+        // Set the view to theirs, so they can add an item.
+        $scope.view ='mine';
+        
+      }
+      
+    });
+  }
+  
+  /* End the scope loading. */
+  
+  // TODO3 - Link directly to parts of this view. i.e. lists/400/view/shared
+
+  /* This is the function used when changing views */
+  $scope.setView = function(theView){
+    
+    /* If it is already this view, or loading, then reload this content. */ 
+    if(theView === $scope.view || $scope.store[theView].length === 0 || $scope.store[theView][0].loading === true){
+      /* The the view is passed as part of the database call */
+      dbFactory.promiseList($scope.listInfo.listId, userIdFilter, theView, sharedFilter, oldestKey).then(function(d) {
+      
+        // only add it to the scope if it's a valid response.
+        if ( typeof(d.type) !== 'undefined') {
+          $scope.store[d.type] = d.results[d.type];
+        } else {
+          /* set to no records if we got it. A message keys off of 0 records */
+          $scope.store[theView] = [];
+        }
+      });
+    }
+    /* Update the view after the check. This means that data isn't reloaded unless it's the same view */
+    $scope.view = theView;
+    
+  };
+  
+  
+  
+  
   $scope.addToList = function(newItem){
-    // console.log('submit to the list: ',newItem, 'newItemForm: ',$scope.newItemForm, ' scope: ',$scope,'Scope new Item: ',$scope.newItem);
-    // Make the active view my list, so I can see it.
-    $rootScope.nav.listView = 'mine';
+    /* Focus on my list */
+    $scope.view = 'mine';
     
-    var itemObj = {lid: $stateParams.listId, thingName: newItem};
+    /* Create a placeholder for while the API responds */
+      var tempNum = randNum(10000);
+      var tempItem = {
+        added: Date.now(),
+        commentActive: null,
+        commentRead: null,
+        commentText: null,
+        dittofbuid: null,
+        dittokey: null,
+        dittouser: null,
+        dittousername: null,
+        friendsWith: '',
+        id: tempNum,
+        ik: null,
+        mykey: 1,
+        thingname: '...' + newItem,
+        tid: null
+      };
     
+    console.log('me? ', $rootScope.user);
+    
+    /* Check to make sure that my list is there, and create it */
+      console.log('my scope', $scope.store.mine );
+      if($scope.store.mine.length === 0){
+        console.log('create my list',$scope.store.mine.length);
+        var myList = {
+          fbuid: $rootScope.user.fbuid,
+          uid: $rootScope.user.userId,
+          username: $rootScope.user.userName,
+          lists: [
+            {
+              lid: $scope.listInfo.lid,
+              listname: $scope.listInfo.listName,
+              items: []
+            }
+          ]
+        };
+        $scope.store.mine.unshift(myList);
+      } 
+    
+    /* remove the existing item from my list. */
+      var i = 0;
+    for(i in $scope.store.mine[0].lists[0].items){
+      if($scope.store.mine[0].lists[0].items[i].thingname.toUpperCase() === newItem.toUpperCase()){
+        $scope.store.mine[0].lists[0].items.splice(i,1);
+        break;
+      }
+    }
+    
+    /* Add the new item to the top of this list Temporarily */
+     $scope.store.mine[0].lists[0].items.unshift(tempItem);
+    
+    
+    
+    var itemObj = { lid: $scope.listInfo.listId, thingName: newItem};
+    var newItemPos = null;
+    /* Reset the item */
     $scope.newItem = {theValue: null};
-    
-    dbFactory.addToList(itemObj);
+    // TODO1 - Move this to a promise. 
+    dbFactory.promiseAddToList(itemObj).then(function(d){
+      console.log('new item: ', newItem, d);
+      /* Check to see if the item has a valid key */
+      if(typeof(d.mykey) !== 'undefined'){
+        
+        /* Valid results from the API. Begin processing adding this item */
+          /* Overwrite the temp value. We know that it will only have one entry. */
+          var i = 0, j=0;
+          for(i in $scope.store.mine[0].lists[0].items){
+            if($scope.store.mine[0].lists[0].items[i].id === tempNum){
+              newItemPos = i;
+              break;
+            }
+          }
+        
+      } else {
+        console.log('error. TODO2 - Handle this? ');
+      }
+      
+      /* Overwrite the temp item with the new item */
+      $scope.store.mine[0].lists[0].items[i] = d;
+      
+      
+      
+    });
   };
   
 })

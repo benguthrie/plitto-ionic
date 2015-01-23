@@ -7,7 +7,7 @@ angular.module('Services.database', ['LocalStorageModule'])
   
   /* This is for when there are no records. */
   function zeroRecords(){
-    return {'msg':'No Records', 'date':now() };
+    return {'msg':'No Records', 'time':now() };
     console.log('dbFactory.zerorecords zero records: ', now());
   }
   
@@ -170,7 +170,7 @@ angular.module('Services.database', ['LocalStorageModule'])
       return pDittoArray;
       }
     );
-    
+
     return promise;
 
   };
@@ -765,6 +765,7 @@ angular.module('Services.database', ['LocalStorageModule'])
     headerTitle();
 
   };
+  
 
   /* 10/4/2014, 11/3/2014 */
   var showThing = function (thingId, thingName, userFilter) {
@@ -805,35 +806,6 @@ angular.module('Services.database', ['LocalStorageModule'])
 
   };
 
-  /* 10/3/2014 - Search */
-  var search = function (searchTerm, searchFilter) {
-    var searchParams = $.param({token: $rootScope.token, search: searchTerm , searchFilter: searchFilter });
-
-    $http(
-      {
-        method:'POST',
-        url: apiPath + 'search',
-        data: searchParams ,
-        headers: {'Content-Type':'application/x-www-form-urlencoded'}
-      }
-    )
-    .success(
-      function (data,status,headers,config) {
-        
-        if( checkLogout(data) === true ) {
-          logout();
-        } else {
-          console.log('TODO2 Use shc', status, headers, config);
-          $rootScope.searchResults = data.results;
-          console.log('data.results', data.results);
-
-        }
-        
-        
-      // For the user and the list, change the increments of dittoable and in common.
-      }
-    );
-  };
 
   /* 9/4/2014 - 9/3/2014 - Handle the ditto action 
       10/21/2014 - Vastly improved this.
@@ -939,73 +911,10 @@ angular.module('Services.database', ['LocalStorageModule'])
 
   };
 
-  /* Get Some - things to ditto 
-    9/23/2014 - Created 
-  */
-  var dbGetSome = function ( userFilter, listFilter, sharedFilter) {
-    // 
-    console.log('getSomeDB  listfilter: ', listFilter ,' userfilter: ',userFilter, ' sharedFilter ', sharedFilter);
-    
-    // SharedFilter: 
-    // TODO2 Can this be deleted 1/22 checkToken($rootScope.token);
-
-    // eval (theScope + ' = []');
-
-    var params = {
-      type: 'user',
-      userFilter: userFilter,
-      listFilter: listFilter,
-      token: $rootScope.token,
-      sharedFilter: sharedFilter
-
-    };
-  // Fails: dbGetSome params Object {userfilter: "", listfilter: ""} 
-
-    //  console.log('dbGetSome params',params);
-
-    $http({
-        method: 'POST',
-        url: apiPath + 'getSome',
-        data: $.param(params),
-        headers: {'Content-Type':'application/x-www-form-urlencoded'}
-      })
-      .success(
-        function (data,status,headers,config) {
-          return {good: 'for you', bad: 'for me'};
-          
-          if( checkLogout(data) === true ) {
-            logout();
-          } else {
-            //             console.log('database.getSome TODO2 Use shc', status, headers, config);
-            console.log('getSome results: ', data.results);
-           
-            return data.results
-
-            if(userFilter !== '0' && userFilter !== ''){
-              // We know it's a user, so let's set local storage.
-             localStorageService.set('user' + userFilter + sharedFilter, data.results);
-            }
-
-            if(listFilter !== '0' && listFilter !== '')
-            {
-              // We know it's a user, so let's set local storage.
-             localStorageService.set('list' + listFilter + sharedFilter, data.results);
-            }
-
-            // Testing returning it so it can be part of the rootScope:
-            // return data.results;
-            
-            // console.log('dbFactory.getActivity data: ',data);
-
-          }
-
-        }
-          
-      );
-  };
     
   /* Promise Get Some - get some with a promise 
     1/22/2015 - Created 
+    userFIlter - enum('strangers','friends')
   */
   var promiseGetSome = function ( userFilter, listFilter, sharedFilter ) {
     
@@ -1270,7 +1179,7 @@ angular.module('Services.database', ['LocalStorageModule'])
   /* 9/7/2014
     Get the list of lists for this user, and from you and your friends
     1/22/2015 - This should be ready to delete on 1/24/2015
-  */
+  
   var getUserListOfLists = function (friendId) {
     // TODO2 - load from local storage, if it's there 
     // console.log('database.getUserListOfLists: getUserListOfLists: friendId: ',friendId, ' theScope: ', theScope);
@@ -1305,7 +1214,7 @@ angular.module('Services.database', ['LocalStorageModule'])
       }
     );
   };
-
+  */
 
   /* 9/7/2014
      Find shared if we don't know it.
@@ -1325,120 +1234,6 @@ angular.module('Services.database', ['LocalStorageModule'])
     }
   };
   
-  // Add to a list.
-  var addToList = function (addToListObj) {
-    var addToListParams = $.param(
-      {
-        thingName: addToListObj.thingName,
-        listnameid: addToListObj.lid,
-        token: $rootScope.token
-      }
-    );
-    // console.log('dbFactory.addToList | ',addToListParams);
-    $http(
-      {
-        method:'POST',
-        url: apiPath + 'addToList',
-        data: addToListParams ,
-        headers: {'Content-Type':'application/x-www-form-urlencoded'}
-      }
-    )
-    .success(
-      function (data,status,headers,config) {
-
-        if( checkLogout(data) === true ) {
-          logout();
-        } else {
-          console.log('Database.addToList:TODO3 Use shc', status, headers, config);
-          //
-          // console.log("addtolistdata: ",data);
-          // console.log('detailed',data.results[0].thekey);
-          // Add it to the RootScope.
-          // console.log('added a new item: ',data)
-          var item = data.results[0];
-
-          var myNewItem = {
-            mykey: item.thekey,
-            tid: item.thingid,
-            thingname: item.thingname,
-            added: 'now',
-            dittokey: 0,
-            dittouser: null,
-            dittousername: null
-          };
-
-          // Placeholder for existing list.
-
-          var myThingAlready = -1;
-
-          console.log('Existing List: ', $rootScope.list.mine);
-          if(!$rootScope.list.mine.length){
-            console.log('DEBUG1032no length');
-          }
-          if($rootScope.list.mine.length === 0){
-            console.log('DEBUG1035 ZERO');
-          }
-          // Add my list if it's not already there.
-          if(!$rootScope.list.mine.length || $rootScope.list.mine.length === 0) {
-            console.log('make my list');
-            // Make my list.
-            var myList = {
-              uid: $rootScope.user.userId,
-              fbuid: $rootScope.user.fbuid,
-              username: $rootScope.user.userName,
-              lists: [ 
-                { 
-                  lid: addToListObj.lid, 
-                  listname: $rootScope.list.listName,
-                  items: [ myNewItem ] 
-                } 
-              ]
-            };
-
-            // Make my list first 
-            $rootScope.list.mine[0] = myList;
-            
-            console.log('my list: ', $rootScope.list.mine);
-
-          } else {
-            console.log(' This should exist: ',$rootScope.list.mine);
-          }
-          
-          
-          var i = 0;
-          // console.log( 'database.addToList: what is in this new list? ', $rootScope.list, $rootScope.list.mine );
-
-          // We need to look in my own list to see if the item is already there. If so, just activate it.
-          for(i in $rootScope.list.mine[0].lists[0].items){
-            if($rootScope.list.mine[0].lists[0].items[i].tid === item.thingid){
-              myThingAlready = i;
-            }
-          }
-          // console.log('didList',didList, 'myListPosition', myListPosition, 'myThingAlready', myThingAlready);
-
-
-        // If my list doesn't exist yet, create it.
-
-          console.log('my existing list: ', $rootScope.list.mine[0], $rootScope.list.mine[0].lists[0]);
-
-          // Add my item to my list, but only if it's not already there.
-          if(myThingAlready === -1) {
-            // console.log($rootScope.modal.listStore[0]);
-
-            // console.log('RootStore before I build', $rootScope.list.items);
-            $rootScope.list.mine[0].lists[0].items.unshift(myNewItem);
-          } else {
-            // Move my old item to the top of your list & remove the old one.
-            $rootScope.list.mine[0].lists[0].items.splice(myThingAlready, 1);
-            // Insert the new one with "now"
-            $rootScope.list.mine[0].lists[0].items.unshift(myNewItem);
-          }
-
-        }
-        
-      }
-    );
-  };
 
 
 
@@ -1510,130 +1305,6 @@ angular.module('Services.database', ['LocalStorageModule'])
     // getMore ('list',listNameId, userFilter, existing);
     loadList(listNameId, listName, userFilter, 'ditto', 'all', null);
 
-  };
-
-  /* Populate a list with all the different views, if they're there. */
-  var loadList = function(listNameId, listName, userIdFilter, type, sharedFilter, oldestKey){
-    // console.log('database.loadList - rs.list before: ',$rootScope.list);
-    var params = $.param({
-      id: listNameId,
-      type: type,
-      token: $rootScope.token,
-      userIdFilter: userIdFilter,
-      oldestKey: oldestKey,
-      sharedFilter: sharedFilter
-
-    });
-    $http(
-      {
-        method: 'POST',
-        url: apiPath + 'loadList',
-        data: params,
-        headers: {'Content-Type':'application/x-www-form-urlencoded'}
-      }
-    ).success(
-      function(data, status, headers, config){
-        
-        // console.log('loadList: ', data.results, data.results.length);
-        // console.log('test ditto results', type, data.results['ditto'], data.results[type]);
-        // console.log('database.loadlist: TODO3 Use shc', status, headers, config);
-        
-        if( checkLogout(data) === true ) {
-          logout();
-        } else {
-          
-          var viewTypes = new Array('ditto','shared','feed','strangers','mine');
-          // console.log( 'loadlist view types: ' , viewTypes, 'type: ', typeof (data.results[type].length));
-          
-          /* Must not be all, and  */
-          if (
-//             (type !== 'all' && data.results.length === 0) ||
-            type !== 'all'
-          )
-          {
-            console.log('database.loadlist 1231 type: ',type,'empty?: ', data.results[type],  data.results[type].length);
-            
-            /* Log legit no rows */
-            if(data.results[type].length === 0 ){
-              $rootScope.list[type] = zeroRecords();  
-            } else {
-              $rootScope.list[type] = data.results[type];
-             localStorageService.set('listId' + listNameId + type, data.results[type]);  
-            }
-            
-            // eval('$rootScope.list.' + type + ' = "empty";');
-            
-            
-          }
-          else if (type === 'all') {
-            for(var i in viewTypes){
-              // console.log('i: ',i, type[i]);
-
-              // Build each type, but only clear the store if the request type was "all"
-              // console.log('database.loadList Type response: ', typeof data.results[ viewTypes[i] ], viewTypes[i], data.results[ viewTypes[i] ], ' typeof: ',typeof (data.results[ viewTypes[i] ].rowcount) );
-                
-              console.log('DEBUG1179: ', viewTypes[i], typeof (data.results[ viewTypes[i] ].rowcount) );
-              
-              
-              if( !data.results[ viewTypes[i] ].length )
-                // Clean out the store if there were no results
-              {
-                console.log('database.loadlist 1250 SHOW!!! type: ', viewTypes[i], data.results[viewTypes[i]]);
-                if(viewTypes[i] !== 'mine')
-                {
-                  $rootScope.list[ viewTypes[i] ] = [];
-                } else {
-                  // Create an empty list so my item can be added.
-                  $rootScope.list.mine = [
-                    {
-                      username: $rootScope.user.userName,
-                      uid: $rootScope.user.userId,
-                      fbuid: $rootScope.user.fbuid,
-                      lists: [
-                        {
-                          lid: listNameId,
-                          listname: listName,
-                          items: []
-                        }
-                      ]
-                    }
-                  ];
-                }
-              }
-              else {
-                console.log('loadList ignore section:', viewTypes[i], data.results[ viewTypes[i]]);
-                // console.log('database.loadList - make type: ',viewTypes[i]);
-                // Build the view
-                $rootScope.list[viewTypes[i]] = data.results[viewTypes[i]];
-                // Add this item to local storega.
-               localStorageService.set('listId' +
-                     listNameId +
-                     viewTypes[i],
-                     data.results[viewTypes[i]]);
-                      
-              }
-
-              if(localStorageService.get('listId' + listNameId + 'ditto')){
-                eval('$rootScope.list.' +
-                     viewTypes[i] + '=localStorageService.get("listId" + listNameId +"' +  viewTypes[i] + '");');
-              }
-            }
-          } else {
-            // Only update this specific part of the view.
-            // console.log("EVAL THIS: " + "localStorageService.set('listId" + listNameId + type + "' , data.results." + type + ");");
-
-            console.log('db1239 - This should not happen.');
-            // And update the local storage
-            // eval("localStorageService.set('listId' + listNameId +'" +  sharedFilter + "' , data.results." + sharedFilter + ");");
-          }
-
-        // console.log('type: ',type,' listNameId: ', listNameId, ' listName: ', listName, ' userIdFilter: ', userIdFilter, 'Success? rs.list: ',$rootScope.list);
-
-        }
-
-
-      }
-    );
   };
 
   /* 9/3/2014 / 9.5.2014
@@ -1928,14 +1599,423 @@ angular.module('Services.database', ['LocalStorageModule'])
     );
 
   };
+  
+  
+  /* Populate a list with all the different views, if they're there. */
+  var loadList = function(listNameId, listName, userIdFilter, type, sharedFilter, oldestKey){
+    // console.log('database.loadList - rs.list before: ',$rootScope.list);
+    var params = $.param({
+      id: listNameId,
+      type: type,
+      token: $rootScope.token,
+      userIdFilter: userIdFilter,
+      oldestKey: oldestKey,
+      sharedFilter: sharedFilter
+
+    });
+    $http(
+      {
+        method: 'POST',
+        url: apiPath + 'loadList',
+        data: params,
+        headers: {'Content-Type':'application/x-www-form-urlencoded'}
+      }
+    ).success(
+      function(data, status, headers, config){
+        
+        // console.log('loadList: ', data.results, data.results.length);
+        // console.log('test ditto results', type, data.results['ditto'], data.results[type]);
+        // console.log('database.loadlist: TODO3 Use shc', status, headers, config);
+        
+        if( checkLogout(data) === true ) {
+          logout();
+        } else {
+          
+          var viewTypes = new Array('ditto','shared','feed','strangers','mine');
+          // console.log( 'loadlist view types: ' , viewTypes, 'type: ', typeof (data.results[type].length));
+          
+          /* Must not be all, and  */
+          if (
+//             (type !== 'all' && data.results.length === 0) ||
+            type !== 'all'
+          )
+          {
+            console.log('database.loadlist 1231 type: ',type,'empty?: ', data.results[type],  data.results[type].length);
+            
+            /* Log legit no rows */
+            if(data.results[type].length === 0 ){
+              $rootScope.list[type] = zeroRecords();  
+            } else {
+              $rootScope.list[type] = data.results[type];
+             localStorageService.set('listId' + listNameId + type, data.results[type]);  
+            }
+            
+            // eval('$rootScope.list.' + type + ' = "empty";');
+            
+            
+          }
+          else if (type === 'all') {
+            for(var i in viewTypes){
+              // console.log('i: ',i, type[i]);
+
+              // Build each type, but only clear the store if the request type was "all"
+              // console.log('database.loadList Type response: ', typeof data.results[ viewTypes[i] ], viewTypes[i], data.results[ viewTypes[i] ], ' typeof: ',typeof (data.results[ viewTypes[i] ].rowcount) );
+                
+              console.log('DEBUG1179: ', viewTypes[i], typeof (data.results[ viewTypes[i] ].rowcount) );
+              
+              
+              if( !data.results[ viewTypes[i] ].length )
+                // Clean out the store if there were no results
+              {
+                console.log('database.loadlist 1250 SHOW!!! type: ', viewTypes[i], data.results[viewTypes[i]]);
+                if(viewTypes[i] !== 'mine')
+                {
+                  $rootScope.list[ viewTypes[i] ] = [];
+                } else {
+                  // Create an empty list so my item can be added.
+                  $rootScope.list.mine = [
+                    {
+                      username: $rootScope.user.userName,
+                      uid: $rootScope.user.userId,
+                      fbuid: $rootScope.user.fbuid,
+                      lists: [
+                        {
+                          lid: listNameId,
+                          listname: listName,
+                          items: []
+                        }
+                      ]
+                    }
+                  ];
+                }
+              }
+              else {
+                console.log('loadList ignore section:', viewTypes[i], data.results[ viewTypes[i]]);
+                // console.log('database.loadList - make type: ',viewTypes[i]);
+                // Build the view
+                $rootScope.list[viewTypes[i]] = data.results[viewTypes[i]];
+                // Add this item to local storega.
+               localStorageService.set('listId' +
+                     listNameId +
+                     viewTypes[i],
+                     data.results[viewTypes[i]]);
+                      
+              }
+
+              if(localStorageService.get('listId' + listNameId + 'ditto')){
+                eval('$rootScope.list.' +
+                     viewTypes[i] + '=localStorageService.get("listId" + listNameId +"' +  viewTypes[i] + '");');
+              }
+            }
+          } else {
+            // Only update this specific part of the view.
+            // console.log("EVAL THIS: " + "localStorageService.set('listId" + listNameId + type + "' , data.results." + type + ");");
+
+            console.log('db1239 - This should not happen.');
+            // And update the local storage
+            // eval("localStorageService.set('listId' + listNameId +'" +  sharedFilter + "' , data.results." + sharedFilter + ");");
+          }
+
+        // console.log('type: ',type,' listNameId: ', listNameId, ' listName: ', listName, ' userIdFilter: ', userIdFilter, 'Success? rs.list: ',$rootScope.list);
+
+        }
+
+
+      }
+    );
+  };
+
+  
+  /* Async loading of a list 1/23/2015 
+    Inputs:
+      listNameId - the int for the the list.
+      listName - The string of the list name
+      userIdFilter - Filter for a specific user. '' for friends, 'strangers' for strangers
+      $type = Array("ditto","shared","mine", "feed", "strangers");
+  */
+  var promiseList = function(listNameId, userIdFilter, viewType, sharedFilter, oldestKey){
+    //  
+    console.log('dbFactory.promiseList | listNameId, userIdFilter, viewType, sharedFilter, oldestKey',listNameId, userIdFilter, viewType, sharedFilter, oldestKey);
+   
+    
+    var params = $.param({
+      id: listNameId,
+      type: viewType,
+      token: $rootScope.token,
+      userIdFilter: userIdFilter,
+      oldestKey: oldestKey,
+      sharedFilter: sharedFilter
+    });
+
+    var promise = $http(
+      {
+        method:'POST',
+        url: apiPath + 'loadList',
+        data: params,
+        headers: { 'Content-Type':'application/x-www-form-urlencoded' }
+      }
+    )
+    .then( function (response) {
+       
+        if( checkLogout(response.data) === true ) {
+          logout();
+        } else {
+          console.log('res', response.data);
+          console.log('database.loadlist 1231 viewType: ',viewType,'empty?: ', response.data.results[viewType],  response.data.results[viewType].length);
+
+          /* Log legit no rows */
+          if(response.data.results[viewType].length === 0 ){
+            console.log('no rows');
+            localStorageService.set('listId' + listNameId + viewType, []);  
+            return [];
+          } else {
+            return response.data;
+            localStorageService.set('listId' + listNameId + viewType, response.data.results[viewType]);  
+          }
+
+        }
+      }
+    );
+
+    return promise;
+
+  };
+  
+  
+  // Add to a list. 1/23/2015 - Convert this to promise
+  var addToList = function (addToListObj) {
+    var addToListParams = $.param(
+      {
+        thingName: addToListObj.thingName,
+        listnameid: addToListObj.lid,
+        token: $rootScope.token
+      }
+    );
+    // console.log('dbFactory.addToList | ',addToListParams);
+    $http(
+      {
+        method:'POST',
+        url: apiPath + 'addToList',
+        data: addToListParams ,
+        headers: {'Content-Type':'application/x-www-form-urlencoded'}
+      }
+    )
+    .success(
+      function (data,status,headers,config) {
+
+        if( checkLogout(data) === true ) {
+          logout();
+        } else {
+          console.log('Database.addToList:TODO3 Use shc', status, headers, config);
+          //
+          // console.log("addtolistdata: ",data);
+          // console.log('detailed',data.results[0].thekey);
+          // Add it to the RootScope.
+          // console.log('added a new item: ',data)
+          var item = data.results[0];
+
+          var myNewItem = {
+            mykey: item.thekey,
+            tid: item.thingid,
+            thingname: item.thingname,
+            added: 'now',
+            dittokey: 0,
+            dittouser: null,
+            dittousername: null
+          };
+
+          // Placeholder for existing list.
+
+          var myThingAlready = -1;
+
+          console.log('Existing List: ', $rootScope.list.mine);
+          if(!$rootScope.list.mine.length){
+            console.log('DEBUG1032no length');
+          }
+          if($rootScope.list.mine.length === 0){
+            console.log('DEBUG1035 ZERO');
+          }
+          // Add my list if it's not already there.
+          if(!$rootScope.list.mine.length || $rootScope.list.mine.length === 0) {
+            console.log('make my list');
+            // Make my list.
+            var myList = {
+              uid: $rootScope.user.userId,
+              fbuid: $rootScope.user.fbuid,
+              username: $rootScope.user.userName,
+              lists: [ 
+                { 
+                  lid: addToListObj.lid, 
+                  listname: $rootScope.list.listName,
+                  items: [ myNewItem ] 
+                } 
+              ]
+            };
+
+            // Make my list first 
+            $rootScope.list.mine[0] = myList;
+            
+            console.log('my list: ', $rootScope.list.mine);
+
+          } else {
+            console.log(' This should exist: ',$rootScope.list.mine);
+          }
+          
+          
+          var i = 0;
+          // console.log( 'database.addToList: what is in this new list? ', $rootScope.list, $rootScope.list.mine );
+
+          // We need to look in my own list to see if the item is already there. If so, just activate it.
+          for(i in $rootScope.list.mine[0].lists[0].items){
+            if($rootScope.list.mine[0].lists[0].items[i].tid === item.thingid){
+              myThingAlready = i;
+            }
+          }
+          // console.log('didList',didList, 'myListPosition', myListPosition, 'myThingAlready', myThingAlready);
+
+
+        // If my list doesn't exist yet, create it.
+
+          console.log('my existing list: ', $rootScope.list.mine[0], $rootScope.list.mine[0].lists[0]);
+
+          // Add my item to my list, but only if it's not already there.
+          if(myThingAlready === -1) {
+            // console.log($rootScope.modal.listStore[0]);
+
+            // console.log('RootStore before I build', $rootScope.list.items);
+            $rootScope.list.mine[0].lists[0].items.unshift(myNewItem);
+          } else {
+            // Move my old item to the top of your list & remove the old one.
+            $rootScope.list.mine[0].lists[0].items.splice(myThingAlready, 1);
+            // Insert the new one with "now"
+            $rootScope.list.mine[0].lists[0].items.unshift(myNewItem);
+          }
+
+        }
+        
+      }
+    );
+  };
+  
+  // Add to a list. 1/23/2015 - Convert this to promise
+  var promiseAddToList = function (addToListObj) {
+    var addToListParams = $.param(
+      {
+        thingName: addToListObj.thingName,
+        listnameid: addToListObj.lid,
+        token: $rootScope.token
+      }
+    );
+    // console.log('dbFactory.addToList | ',addToListParams);
+    var promise = $http(
+      {
+        method:'POST',
+        url: apiPath + 'addToList',
+        data: addToListParams ,
+        headers: {'Content-Type':'application/x-www-form-urlencoded'}
+      }
+    )
+    .then(
+      function (response) {
+
+        if( checkLogout(response.data) === true ) {
+          logout();
+        } else {
+         
+          var item = response.data.results[0];
+
+          var myNewItem = {
+            mykey: item.thekey,
+            tid: item.thingid,
+            thingname: item.thingname,
+            added: 'now',
+            dittokey: 0,
+            dittouser: null,
+            dittousername: null
+          };
+          
+          return myNewItem;
+          
+        }
+        
+      }
+    );
+    return promise;
+  };
+  
+  // Promise Thing Info - Load a list info for when a user creates a list.
+  var promiseThingName = function (thingId) {
+    var params = $.param(
+      {
+        token: $rootScope.token,
+        thingId: thingId
+      }
+    );
+    // console.log('dbFactory.addToList | ',addToListParams);
+    var promise = $http(
+      {
+        method:'POST',
+        url: apiPath + 'thingName',
+        data: params ,
+        headers: {'Content-Type':'application/x-www-form-urlencoded'}
+      }
+    )
+    .then(
+      function (response) {
+
+        if( checkLogout(response.data) === true ) {
+          logout();
+        } else {
+         
+          return response.data;
+          
+        }
+        
+      }
+    );
+    return promise;
+  };
+  
+  
+  
+  /* 10/3/2014 - Search 
+    1/23/2015 - Converted to Promise
+  */
+  var promiseSearch = function (searchTerm, searchFilter) {
+    var searchParams = $.param({token: $rootScope.token, search: searchTerm , searchFilter: searchFilter });
+
+    var promise = $http(
+      {
+        method:'POST',
+        url: apiPath + 'search',
+        data: searchParams ,
+        headers: {'Content-Type':'application/x-www-form-urlencoded'}
+      }
+    )
+    .then(
+      function (response) {
+        
+        if( checkLogout(response.data) === true ) {
+          logout();
+        } else {
+          return response.data;
+
+        }
+        
+        
+      // For the user and the list, change the increments of dittoable and in common.
+      }
+    );
+    return promise
+  };
 
   return {
     fbPlittoFriends: fbPlittoFriends,
     plittoFBApiCall: plittoFBApiCall,
-    dbGetSome: dbGetSome,
+    /* removed 1/23/2015 dbGetSome: dbGetSome, */
     dbDitto: dbDitto,
-    promiseDitto: promiseDitto, /* Replace the one above. 1/22/2015 */
-    getUserListOfLists: getUserListOfLists,
+    
+    // getUserListOfLists: getUserListOfLists, /* Replaced on 1/23/2015 */
     sharedStat: sharedStat, /* 9/7/2014 */
     // , modalReset: modalReset
     showAList: showAList,
@@ -1943,7 +2023,7 @@ angular.module('Services.database', ['LocalStorageModule'])
     getMoreAppend: getMoreAppend,
     newList: newList,
     addToList: addToList,
-    search: search,
+    /* Removed 1/23/2015 search: search, */
     showThing: showThing,
     showUser: showUser,
     showFeed: showFeed,
@@ -1951,7 +2031,7 @@ angular.module('Services.database', ['LocalStorageModule'])
     fbTokenLogin: fbTokenLogin,
     refreshData: refreshData,
     dbInit: dbInit, /* Initializes the rootscope */
-    mainFeed: mainFeed, /* Updates the main feed */
+    /* Removed 1/23/2015 mainFeed: mainFeed, // Updates the main feed */
     loadFeed: loadFeed, /* Loads in the feed from local storage */
     addComment: addComment, /* Adds a comment to the item */
     userChat: userChat, /* Returns the chat queue for a user. */
@@ -1960,9 +2040,116 @@ angular.module('Services.database', ['LocalStorageModule'])
     friendsList: friendsList, /* Let a user reloat their friend store. Long facebook logins made this needed. 1/21/2015 */
     cleanOtherScope: cleanOtherScope, /* Keep RootScope clean. */
     userInfo: userInfo, /* Get user info for the profile page for reloading in it */
+    
+    promiseSearch: promiseSearch, /* Added 1/23/2015 */
+    promiseDitto: promiseDitto, /* Replace the one above. 1/22/2015 */
     promiseGetSome: promiseGetSome, /* Async get some */
     promiseFeed: promiseFeed, /* Async Feed */
-    promiseListOfLists: promiseListOfLists /* Async lol */
+    promiseListOfLists: promiseListOfLists, /* Async lol */
+    promiseList: promiseList, /* 1/23/2015 - Async list */
+    promiseAddToList: promiseAddToList, /* 1/23/2015 - Async add to list */
+    promiseThingName: promiseThingName /* 1/23/2015 - Async get info about a thing */
   };
   
 }]);
+
+
+
+  /* 10/3/2014 - Search - Removed 1/23/2015
+  var search = function (searchTerm, searchFilter) {
+    var searchParams = $.param({token: $rootScope.token, search: searchTerm , searchFilter: searchFilter });
+
+    $http(
+      {
+        method:'POST',
+        url: apiPath + 'search',
+        data: searchParams ,
+        headers: {'Content-Type':'application/x-www-form-urlencoded'}
+      }
+    )
+    .success(
+      function (data,status,headers,config) {
+        
+        if( checkLogout(data) === true ) {
+          logout();
+        } else {
+          console.log('TODO2 Use shc', status, headers, config);
+          $rootScope.searchResults = data.results;
+          console.log('data.results', data.results);
+
+        }
+        
+        
+      // For the user and the list, change the increments of dittoable and in common.
+      }
+    );
+  };
+  */
+
+
+  /* Get Some - things to ditto 
+    9/23/2014 - Created 
+    1/24/2015 - Removed
+  
+  var dbGetSome = function ( userFilter, listFilter, sharedFilter) {
+    // 
+    console.log('getSomeDB  listfilter: ', listFilter ,' userfilter: ',userFilter, ' sharedFilter ', sharedFilter);
+    
+    // SharedFilter: 
+    // TODO2 Can this be deleted 1/22 checkToken($rootScope.token);
+
+    // eval (theScope + ' = []');
+
+    var params = {
+      type: 'user',
+      userFilter: userFilter,
+      listFilter: listFilter,
+      token: $rootScope.token,
+      sharedFilter: sharedFilter
+
+    };
+  // Fails: dbGetSome params Object {userfilter: "", listfilter: ""} 
+
+    //  console.log('dbGetSome params',params);
+
+    $http({
+        method: 'POST',
+        url: apiPath + 'getSome',
+        data: $.param(params),
+        headers: {'Content-Type':'application/x-www-form-urlencoded'}
+      })
+      .success(
+        function (data,status,headers,config) {
+          return {good: 'for you', bad: 'for me'};
+          
+          if( checkLogout(data) === true ) {
+            logout();
+          } else {
+            //             console.log('database.getSome TODO2 Use shc', status, headers, config);
+            console.log('getSome results: ', data.results);
+           
+            return data.results
+
+            if(userFilter !== '0' && userFilter !== ''){
+              // We know it's a user, so let's set local storage.
+             localStorageService.set('user' + userFilter + sharedFilter, data.results);
+            }
+
+            if(listFilter !== '0' && listFilter !== '')
+            {
+              // We know it's a user, so let's set local storage.
+             localStorageService.set('list' + listFilter + sharedFilter, data.results);
+            }
+
+            // Testing returning it so it can be part of the rootScope:
+            // return data.results;
+            
+            // console.log('dbFactory.getActivity data: ',data);
+
+          }
+
+        }
+          
+      );
+  };
+  */

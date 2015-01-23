@@ -30,7 +30,7 @@
     </div>
     
     <ion-list ng-repeat="list in $root.searchResults" ng-show="newList.title.length > 0">
-      <ion-item class="item-icon-right" href="#/app/lists/{{list.lid}}" 
+      <ion-item class="item-icon-right" href="#/app/list/{{list.lid}}" 
           ng-click="showList(list.lid, list.listname, null, 'addToList');">
         <ion-option-button class="button-assertive">
           Mine</ion-option-button>

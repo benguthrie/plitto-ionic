@@ -245,7 +245,7 @@ angular.module('Plitto', [
 
     .state('app.list',
       {
-        url: '/lists/:listId',
+        url: '/list/:listId',
         views: {
           'menuContent' :{
             templateUrl: 'templates/list.html',
@@ -372,15 +372,19 @@ angular.module('Plitto', [
         
         var i, j,k;
         // If the list matches, and the thing matches, then update the ditto info.
-        // Traverse this user's lists
+        
+        // Traverse this user's lists to find the existing item.
         for(i in $scope.userData.lists){
 
           if(lid === $scope.userData.lists[i].lid){
             for(j in $scope.userData.lists[i].items){
               // console.log('check 426: ',$scope.userData.lists[i].items[j].tid, tid);
               if($scope.userData.lists[i].items[j].tid === tid){
-                $scope.userData.lists[i].items[j].mykey = 0;
-                $scope.userData.lists[i].items[j].friendsWith = '?';  
+                $scope.userData.lists[i].items[j].mykey = 0; // TODO - This could be causing a bug.
+                if(mykey){
+                  $scope.userData.lists[i].items[j].friendsWith = '?';  
+                }
+                /* Log the position in the array that will be used to update */
                 arrPair.push(  Array(i,j) );
                 
               }
@@ -393,11 +397,10 @@ angular.module('Plitto', [
         var dbResponse = [];
         dbFactory.promiseDitto(mykey, uid, lid, tid, itemKey, $event).then (function(d){
           
-          console.log('arrayTest: ', arrPair);
-          
           for(k in arrPair){
             if(parseInt(d[0])){
-              $scope.userData.lists[arrPair[k][0]].items[arrPair[k][1]].mykey = d[0];  
+              $scope.userData.lists[arrPair[k][0]].items[arrPair[k][1]].mykey = String(d[0]);
+              console.log('403 myKey: ', String(d[0]));
             } else {
               $scope.userData.lists[arrPair[k][0]].items[arrPair[k][1]].mykey = null;
             }
@@ -422,7 +425,8 @@ angular.module('Plitto', [
       /* List */
       $scope.showList = function(listId, listName, userFilter, focusTarget){
         console.log('showList app.js 317');
-        dbFactory.showAList(listId, listName, userFilter, focusTarget);
+        // TODO - Fix this. dbFactory.showAList(listId, listName, userFilter, focusTarget);
+        $state.go('app.list',{listId: listId});
       };
   
       /* Thing */
