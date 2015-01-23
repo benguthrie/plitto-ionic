@@ -97,11 +97,13 @@ span.stat {
 
 section.statTable > header {
   background-color: #888;
+  
 }
 
 section.statTable > div > div.theStat {
   min-width: 2em;
   text-align: right;
+  
 }
 
 section.statTable > div > div {
@@ -724,7 +726,16 @@ div.statTable > div.statRow {
 
   }
 
+div.statTable {
+  padding: 0;
+  margin: 0;
+}
 
+
+div.statTable > div.statRow {
+  padding: 0;
+  margin: 0;
+}
 
 div.statTable > div.statRow > div.friendPicture { 
   display: table-cell;  
@@ -732,7 +743,8 @@ div.statTable > div.statRow > div.friendPicture {
 } 
 
 div.statTable > div.statRow > div.groupStats { 
-  padding: 0 0 0 0.5em;
+  margin: 0;
+  padding: 0;
   display: table-cell;  
   vertical-align: top;
   text-align: left;
@@ -742,11 +754,16 @@ div.statTable > div.statRow > div.groupStats {
 
 
 div.statTable > div.statRow > div.groupStats > div.listName { 
-  
+  font-size: 1.1em;
   width: inherit;
   padding: 0.3em;
   background-color: #393E3C;
   color: white;
+}
+
+div.statTable > div.statRow > div.groupStats > div.listName > i {
+  font-size: 1.4em;
+  margin: 0.3em;
 }
 
 div.statTable > div.statRow > div.groupStats > div.friendName { 

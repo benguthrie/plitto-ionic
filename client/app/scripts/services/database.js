@@ -1173,8 +1173,49 @@ angular.module('Services.database', ['LocalStorageModule'])
     }
   };
 
+  
   /* 9/7/2014
     Get the list of lists for this user, and from you and your friends
+    1/22/2015 - Created the promise version of this.
+  */
+  var promiseListOfLists = function (friendId) {
+    // TODO2 - load from local storage, if it's there 
+    // console.log('database.getUserListOfLists: getUserListOfLists: friendId: ',friendId, ' theScope: ', theScope);
+
+
+    var params = $.param(
+      {
+        userfilter: friendId,
+        token: $rootScope.token });
+    // console.log('listoflists params: ',params);
+    var promise = $http(
+      {
+        method:'POST',
+        url: apiPath + 'listOfLists',
+        data: params,
+        headers: {'Content-Type':'application/x-www-form-urlencoded'}
+      }
+    ).then(function (response) {
+      if( checkLogout(response.data) === true ) {
+          logout();
+        } else {
+          // console.log('TODO3 database.listOfLists: Use shc', status, headers, config);
+          
+          // Let the controller handle this.
+          return response.data.results;
+
+          // Add / Update to local storage
+         localStorageService.set('user' + friendId + 'lists', data.results);
+
+        }
+    });
+    return promise;
+    
+  };
+  
+  /* 9/7/2014
+    Get the list of lists for this user, and from you and your friends
+    1/22/2015 - This should be ready to delete on 1/24/2015
   */
   var getUserListOfLists = function (friendId) {
     // TODO2 - load from local storage, if it's there 
@@ -1865,7 +1906,8 @@ angular.module('Services.database', ['LocalStorageModule'])
     cleanOtherScope: cleanOtherScope, /* Keep RootScope clean. */
     userInfo: userInfo, /* Get user info for the profile page for reloading in it */
     promiseGetSome: promiseGetSome, /* Async get some */
-    promiseFeed: promiseFeed /* Async Feed */
+    promiseFeed: promiseFeed, /* Async Feed */
+    promiseListOfLists: promiseListOfLists /* Async lol */
   };
   
 }]);

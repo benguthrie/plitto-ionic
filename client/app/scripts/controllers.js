@@ -385,9 +385,9 @@ angular.module('Plitto.controllers', [])
       'chat':[{loading: true}]
     };
     $scope.userInfo = {
-      'userId':null,
-      'userName': null,
-      'fbuid': null
+      userId:null,
+      userName: null,
+      fbuid: null
     };
 
   
@@ -439,8 +439,19 @@ angular.module('Plitto.controllers', [])
       if(lsTypes[i] === 'shared'){
         dbFactory.promiseGetSome($scope.userInfo.userId, '', 'shared').then(function(d) {
           $scope.store.shared = d;
-          console.log('update: in promise shared: ', d);
+          // console.log('update: in promise shared: ', d);
+          //console.log('sun: ', $scope.userInfo.userName.length, ' dusername: ', d[0].username);
+          
+          
+          
+          if( $scope.userInfo.userName === null && d[0].username){
+            
+            $scope.userInfo.userName = d[0].username;
+            $scope.userInfo.fbuid = d[0].fbuid;
+          }
         });
+        
+        
       }
       
       else if(lsTypes[i] === 'ditto' ){
@@ -448,19 +459,41 @@ angular.module('Plitto.controllers', [])
           $scope.store.ditto = d;
           console.log('update: in promise  ditto: ', d);
         });
+        
       } else if(lsTypes[i] === 'feed' ) {
         // Load from local storage first.
         if( localStorageService.get('user' + $scope.userInfo.userId + 'feed') ) {
           // We know it's a user, so let's set local storage.
-          localStorageService.get('user' + $scope.userInfo.userId + 'feed');
+          $scope.feed = localStorageService.get('user' + $scope.userInfo.userId + 'feed');
+          
+          // Pull the name from local storage, if we have it.
+          if( $scope.userInfo.userName === null ){
+            $scope.userInfo.userName = $scope.feed[0].username;
+            $scope.userInfo.fbuid = $scope.feed[0].fbuid;
+          }
         }
-       
+        
+        dbFactory.promiseFeed( 'profile', $scope.userInfo.userId, '', '', '', '').then(function(d) {
+          $scope.store.feed = d;
+        });
+        
+          
+      } else if(lsTypes[i] === 'lists' ) {
+        // Load from local storage first.
+        if( localStorageService.get('user' + $scope.userInfo.userId + 'lists') ) {
+          // We know it's a user, so let's set local storage.
+          $scope.store.lists = localStorageService.get('user' + $scope.userInfo.userId + 'lists');
+        }
+        
+        dbFactory.promiseListOfLists( $scope.userInfo.userId ).then(function(d) {
+          $scope.store.lists = d;
+          
+        });
           
       }
       else {
         console.log('TODO1 - Auto load this');
       }
-      
       
     }
   
@@ -472,6 +505,8 @@ angular.module('Plitto.controllers', [])
 
     $scope.showFeed = function(userId){
       // 
+      
+      $scope.view = 'feed'; 
       console.log('profile show feed: ',userId, ' oldest: ');
       // showFeed = function(theType, userFilter, listFilter, myState, oldestKey)
       // $scope.feed = dbFactory.showFeed('profile',userId,'','','','');
@@ -480,10 +515,18 @@ angular.module('Plitto.controllers', [])
       // Then Update
       dbFactory.promiseFeed ('profile', $scope.userInfo.userId, '', '', '', '') .then (function(d){
         $scope.store.feed = d;
-        console.log('update: in promise feed: ', d);
+        if( $scope.userInfo.userName === null && d[0].username){
+
+          $scope.userInfo.userName = d[0].username;
+          $scope.userInfo.fbuid = d[0].fbuid;
+        }
       });
 
     };
+  
+  $scope.userChat = function(){
+    $scope.view = 'chat';
+  };
 
     $scope.getSome = function(filter){
       /* Reload only if it's the second press of the button */
@@ -492,9 +535,16 @@ angular.module('Plitto.controllers', [])
         dbFactory.promiseGetSome($scope.userInfo.userId, '', filter).then(function(d) {
           $scope.store[filter] = d;
           console.log('update: in promise '+ filter +' : ', d);
-        });    
+          if( $scope.userInfo.userName === null && d[0].username){
+            
+            $scope.userInfo.userName = d[0].username;
+            $scope.userInfo.fbuid = d[0].fbuid;
+          }
+        });  
       }
       $scope.view = filter;
+      
+      console.log('profileScope view after getSome: ', $scope.view);
       
       console.log("Get Some for userid: ", $scope.userInfo.userId, filter, 'end');
       // $scope.store[ filter ] = dbFactory.showFeed('profile', $scope.userId, filter , '', '', '');
@@ -504,8 +554,19 @@ angular.module('Plitto.controllers', [])
     };
 
     $scope.showLists = function(userId){
-      console.log('reload lists for this user in their profile..');
-      // dbFactory.getUserListOfLists(userId, '$rootScope.profileData.lists');
+      // Only reload if it's already lists.
+      if($scope.view === 'lists' || $scope.store.lists[0].loading){
+        console.log('reload lists for this user in their profile..');
+        // dbFactory.getUserListOfLists(userId, '$rootScope.profileData.lists');
+        $scope.store.lists = [{loading: true}];
+        dbFactory.promiseListOfLists( userId ).then(function(d) {
+          $scope.store.lists = d;
+
+        });
+      
+      };
+      $scope.view = 'lists'; 
+
     };
 
     $scope.makeActive = function(){
