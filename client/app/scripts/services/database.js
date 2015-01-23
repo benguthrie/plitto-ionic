@@ -33,7 +33,7 @@ angular.module('Services.database', ['LocalStorageModule'])
     }
   }
   
-  /* TODO2 1/16/2015 it looks like this can be removed. This custom data format is obsolete. */
+  /* TODO2 1/16/2015 it looks like this can be removed. This custom data format is obsolete. 
   function processNotification ( theData , theUserId ) {
     // console.log('theUserId is not used. TODO2', theUserId);
     // console.log('this is the data: ', theData , theUserId );
@@ -60,6 +60,7 @@ angular.module('Services.database', ['LocalStorageModule'])
 
     return notificationFeed;
   }
+  */
 
   function makeNotificationRead ( makeRead ) {
     var params = $.param({
@@ -225,11 +226,15 @@ angular.module('Services.database', ['LocalStorageModule'])
         // console.log("Chat Data: ",data.results);
         // Do something?
         
+        /* REmoved 1.22.2015 
         if( userId === -1){
           $rootScope.stats.feed = data.results;
         } else {
           $rootScope.profileData.chat = data.results;
         }
+        */
+        
+        return data.results
           
         
         
@@ -476,7 +481,124 @@ angular.module('Services.database', ['LocalStorageModule'])
     });
   };
 
-  /* 10/22/2014 */
+  /* Function to return basic (public) information about a user based on their user id. */
+  var userInfo = function (userId){
+    
+    var params = $.param({
+      uid: userId,
+      token: $rootScope.token
+    });
+    
+    
+    
+    $http({
+      method: 'POST',
+      url: apiPath + 'userInfo',
+      data: params,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    })
+    .success(function (data, status, headers, config) {
+      return data;
+      
+      
+      if( checkLogout(data) === true ) {
+        logout();
+      } else {
+        
+        // console.log('TODO2 database.showfeed Use shc', data, status, headers, config);
+        // Error Handling - TODO1 - Add error handling to all calls.
+        if( typeof data.logout !== 'undefined'){
+          console.log( 'API ERROR', data );
+          if(data.logout === true){
+            console.log('showFeed.database: We should log out 364.');
+            logout();
+          }
+        }
+        
+        // Set user info based on these results.
+        // console.log('userInfo: ', userId, data);
+        console.log('UserInformation!!! - return this: ', data.results);
+        // return data;
+        
+        
+          
+        
+      }
+      
+    // console.log("profile feed after showfeed",$rootScope.profileData.feed);
+    })
+    .error(function(){
+      console.log('There was an error in database.showfeed/showFeed');
+      return 'error';
+    })
+    ;
+  };
+  
+  /* 10/22/2014 
+    1/22/2015 - Added and made async. 
+  */
+  var promiseFeed = function (theType, userFilter, listFilter, myState, continueKey, newerOrOlder) {
+    console.log('promise feed theType, userFilter, listFilter, myState, continueKey, newerOrOlder', theType, userFilter, listFilter, myState, continueKey, newerOrOlder);
+    var params = $.param({
+      theType: theType,
+      userFilter: userFilter,
+      listFilter: listFilter,
+      myState: myState,
+      continueKey: continueKey,
+      newerOrOlder: newerOrOlder,
+      token: $rootScope.token
+    });
+
+  
+
+    var promise = $http({
+      method: 'POST',
+      url: apiPath + 'showFeed',
+      data: params,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    })
+    .then(function (response) {
+      if( checkLogout(response.data) === true ) {
+        logout();
+      } else {
+        // console.log('TODO2 database.showfeed Use shc', data, status, headers, config);
+        // Error Handling - TODO1 - Add error handling to all calls.
+        if( typeof response.data.logout !== 'undefined'){
+          console.log( 'API ERROR', data );
+          if(data.logout === true){
+            console.log('showFeed.database: We should log out 364.');
+            logout();
+          }
+        }
+
+        console.log('database.showFeed: ', 
+                    ' type: ', theType, 
+                    ' userFilter: ', userFilter, 
+                    ' listFilter: ', listFilter, 
+                    ' myState: ', myState, 
+                    ' continueKey: ', continueKey, 
+                    ' orOlder: ', newerOrOlder, 
+                    ' data: ', response.data );        
+        return response.data.results;
+        
+        
+        if(userFilter !== '0' && userFilter !== ''){
+          // We know it's a user, so let's set local storage.
+         localStorageService.set('user' + userFilter + 'feed', response.data.results);
+        }
+        
+      }
+      
+    // console.log("profile feed after showfeed",$rootScope.profileData.feed);
+    });
+    return promise;
+    
+    
+  };
+  
+  /* 10/22/2014 
+    1/22/2015 - Updated. This will be called individually many more times via profileCtrl to speed up calls.
+  */
   var showFeed = function (theType, userFilter, listFilter, myState, continueKey, newerOrOlder) {
     var params = $.param({
       theType: theType,
@@ -487,8 +609,6 @@ angular.module('Services.database', ['LocalStorageModule'])
       newerOrOlder: newerOrOlder,
       token: $rootScope.token
     });
-    
-    
 
   // Load from local storage first.
     if(userFilter !== '0' && userFilter !== '' &&localStorageService.get('user' + userFilter + 'feed') ) {
@@ -506,7 +626,7 @@ angular.module('Services.database', ['LocalStorageModule'])
       if( checkLogout(data) === true ) {
         logout();
       } else {
-        console.log('TODO2 database.showfeed Use shc', data, status, headers, config);
+        // console.log('TODO2 database.showfeed Use shc', data, status, headers, config);
         // Error Handling - TODO1 - Add error handling to all calls.
         if( typeof data.logout !== 'undefined'){
           console.log( 'API ERROR', data );
@@ -516,13 +636,19 @@ angular.module('Services.database', ['LocalStorageModule'])
           }
         }
 
-        if (theType === 'profile') {
-          $rootScope.profileData.feed = data.results;
-          if(userFilter !== '0' && userFilter !== ''){
-            // We know it's a user, so let's set local storage.
-           localStorageService.set('user' + userFilter + 'feed', data.results);
-          }
+        if(userFilter !== '0' && userFilter !== ''){
+          // We know it's a user, so let's set local storage.
+         localStorageService.set('user' + userFilter + 'feed', data.results);
         }
+        console.log('database.showFeed: ', 
+                    ' type: ', theType, 
+                    ' userFilter: ', userFilter, 
+                    ' listFilter: ', listFilter, 
+                    ' myState: ', myState, 
+                    ' continueKey: ', continueKey, 
+                    ' orOlder: ', newerOrOlder, 
+                    ' data: ', data );        
+        return data.results;
         
       }
       
@@ -544,27 +670,19 @@ angular.module('Services.database', ['LocalStorageModule'])
       return;
     }
     
-    //  console.log('dbFactory: show a user. vars.user: ', userId, ' uid: ',userId,' username: ',userName, 'dataScope', dataScope);
-    $rootScope.profileData = {
-      userName: userName,
-      userId: userId,
-      fbuid: fbuid,
-      lists: [],
-      ditto: [],
-      feed: [],
-      shared: []
-    };
 
     // Populate from local storage.
     var lsTypes = new Array('ditto','feed','lists','shared');
-    for (var i in lsTypes){
-      if(localStorageService.get('user' + userId + lsTypes[i])){
-        // eval('$rootScope.profileData.' + lsTypes[i] + ' =localStorageService.get("user' + userId + '' + lsTypes[i] + '");');
-        $rootScope.profileData[ lsTypes[i] ] =localStorageService.get('user' + userId + lsTypes[i] ); /* TODO2 - Test Show User. */
+    /*
+      for (var i in lsTypes){
+        if(localStorageService.get('user' + userId + lsTypes[i])){
+          // eval('$rootScope.profileData.' + lsTypes[i] + ' =localStorageService.get("user' + userId + '' + lsTypes[i] + '");');
+          $rootScope.profileData[ lsTypes[i] ] =localStorageService.get('user' + userId + lsTypes[i] );
 
+        }
       }
-    }
-
+    */
+                       
     // Start by populating from local storage.
 
     // Get something to ditto 
@@ -770,13 +888,14 @@ angular.module('Services.database', ['LocalStorageModule'])
   /* Get Some - things to ditto 
     9/23/2014 - Created 
   */
-  var dbGetSome = function (theScope, userFilter, listFilter, sharedFilter) {
+  var dbGetSome = function ( userFilter, listFilter, sharedFilter) {
     // 
-    console.log('getSomeDB Scope: ',theScope, ' listfilter: ', listFilter ,' userfilter: ',userFilter, ' sharedFilter ', sharedFilter);
+    console.log('getSomeDB  listfilter: ', listFilter ,' userfilter: ',userFilter, ' sharedFilter ', sharedFilter);
+    
     // SharedFilter: 
-    checkToken($rootScope.token);
+    // TODO2 Can this be deleted 1/22 checkToken($rootScope.token);
 
-    eval (theScope + ' = []');
+    // eval (theScope + ' = []');
 
     var params = {
       type: 'user',
@@ -798,15 +917,15 @@ angular.module('Services.database', ['LocalStorageModule'])
       })
       .success(
         function (data,status,headers,config) {
+          return {good: 'for you', bad: 'for me'};
           
           if( checkLogout(data) === true ) {
             logout();
           } else {
-            // console.log('database.getSome TODO2 Use shc', status, headers, config);
+            //             console.log('database.getSome TODO2 Use shc', status, headers, config);
+            console.log('getSome results: ', data.results);
            
-              // eval('console.log("net Results",' + theScope +');'); 
-              // This makes the scope that was passed in that part of the root scope.
-            eval(theScope + ' = data.results;');
+            return data.results
 
             if(userFilter !== '0' && userFilter !== ''){
               // We know it's a user, so let's set local storage.
@@ -830,6 +949,57 @@ angular.module('Services.database', ['LocalStorageModule'])
           
       );
   };
+    
+  /* Promise Get Some - get some with a promise 
+    1/22/2015 - Created 
+  */
+  var promiseGetSome = function ( userFilter, listFilter, sharedFilter ) {
+    
+    console.log('getSomeDB  listfilter: ', listFilter ,' userfilter: ',userFilter, ' sharedFilter ', sharedFilter);
+    
+    // SharedFilter: 
+    // TODO2 Can this be deleted 1/22 checkToken($rootScope.token);
+
+    // eval (theScope + ' = []');
+
+    var params = {
+      type: 'user',
+      userFilter: userFilter,
+      listFilter: listFilter,
+      token: $rootScope.token,
+      sharedFilter: sharedFilter
+
+    };
+  // Fails: dbGetSome params Object {userfilter: "", listfilter: ""} 
+
+    var promise = $http({
+      method: 'POST',
+      url: apiPath + 'getSome',
+      data: $.param(params),
+      headers: {'Content-Type':'application/x-www-form-urlencoded'}
+    })
+    .then(function (response){
+      console.log('promise? ', response);
+      /*
+       if(userFilter !== '0' && userFilter !== ''){
+            // We know it's a user, so let's set local storage.
+           localStorageService.set('user' + userFilter + sharedFilter, data.results);
+          }
+
+          if(listFilter !== '0' && listFilter !== '')
+          {
+            // We know it's a user, so let's set local storage.
+           localStorageService.set('list' + listFilter + sharedFilter, data.results);
+          }
+        */
+      return response.data.results;
+    });
+    
+    //  console.log('dbGetSome params',params);
+    return promise;
+          
+  };
+
 
   var headerTitle = function() {
     console.log('Load Header');
@@ -1027,7 +1197,7 @@ angular.module('Services.database', ['LocalStorageModule'])
         if( checkLogout(data) === true ) {
           logout();
         } else {
-          console.log('TODO3 database.listOfLists: Use shc', status, headers, config);
+          // console.log('TODO3 database.listOfLists: Use shc', status, headers, config);
           
           // Let the controller handle this.
           return data.results;
@@ -1580,8 +1750,9 @@ angular.module('Services.database', ['LocalStorageModule'])
     );
   };
 
-  /* 11.4.2014 - Updates friends, lists, user info on app re-launch 
-  TODO2 - This shoud start to be used.*/
+  /*  11.4.2014 - Updates friends, lists, user info on app re-launch 
+      1/22/2015 - This mainly checks to see if the token is valid. 
+  */
   var refreshData = function(token){
     console.log('TODO2 Use refreshData.token', token );
     // This function will be called when the app loads, and already has a token. It's kind of like login.
@@ -1592,14 +1763,18 @@ angular.module('Services.database', ['LocalStorageModule'])
     }
 
     // Populate the friendstore.
+    /* Deactivated 1/22/2015 
     if( localStorageService.get('friendStore')){
-      $rootScope.friendStore = localStorageService.get('friendStore');
+      // $rootScope.friendStore = localStorageService.get('friendStore');
     }
+    */
 
-    // Populate the bite.
+    /* Deactivated 1/22/2015 
+      // Populate the bite.
     if( localStorageService.get('bite')){
       $rootScope.bite = localStorageService.get('bite');
     }
+    */
 
     // TODO1 Now, make the HTTP calls to refresh them.
     var checkParams = $.param({token: $rootScope.token});
@@ -1612,6 +1787,8 @@ angular.module('Services.database', ['LocalStorageModule'])
     }).success(
       function (data,status,headers,config) {
         
+        console.log('db.refreshData data: ', data);
+        
         if( checkLogout(data) === true ) {
           logout();
         } else {
@@ -1622,21 +1799,25 @@ angular.module('Services.database', ['LocalStorageModule'])
             // Force log out, and clear local storage.
             logout();
           }
-          else if(  data.results[0].success === '1'){
+          else if(data.results[0].success &&  data.results[0].success === '1'){
             console.log('Check token results: ',data, data.results[0].success);
-            console.log('Valid token');
+            
+            // Update the "me" information.
+            
+            
             
             // Go to the home screen, but only if at login?.
-            console.log('current state when token verified', $state );
+            
             if($state && $state.current && $state.current.name ){
-              console.log('1581 passed');
+              console.log('IRRELEVENT TEST db.refreshData 1581 passed. currentname: ',$state.current.name);
               if( $state.current.name === 'login' || $state.current.name === 'loading' ){
-                dbGetSome( '$rootScope.bite' , '' , '', 'ditto');
+                // dbGetSome( '$rootScope.bite' , '' , '', 'ditto');
+                console.log('todo2 remove this. db.refreshdata1627. Loads a bite. Should happen in the home controller.');
               }  else {
                 console.log('not login or loading, but does exist.', $state.current.name );
               }
             } else {
-              console.log('1581 failed');
+              console.log('IRRELEVENT TEST db.refreshData 1641 failed');
             }
             
             
@@ -1681,7 +1862,10 @@ angular.module('Services.database', ['LocalStorageModule'])
     updateCounts: updateCounts, /* updates the notification, Friend, etc numbers. */
     logout: logout, /* This is redundant, and also exists in controllers.js. That should change TODO2 */
     friendsList: friendsList, /* Let a user reloat their friend store. Long facebook logins made this needed. 1/21/2015 */
-    cleanOtherScope: cleanOtherScope /* Keep RootScope clean. */
+    cleanOtherScope: cleanOtherScope, /* Keep RootScope clean. */
+    userInfo: userInfo, /* Get user info for the profile page for reloading in it */
+    promiseGetSome: promiseGetSome, /* Async get some */
+    promiseFeed: promiseFeed /* Async Feed */
   };
   
 }]);

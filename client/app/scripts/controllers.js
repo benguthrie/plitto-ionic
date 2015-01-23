@@ -369,50 +369,143 @@ angular.module('Plitto.controllers', [])
 })
 
 
-
+/* Controller for user profile 
+  1/22/2015 - Request when reasonable. 
+*/
 .controller('ProfileCtrl',
-  function($scope,dbFactory,$rootScope, $stateParams, localStorageService ) {
-    // 
-  // console.log("Profile Control load. profileData: ",$rootScope.profileData);
+  function($scope, dbFactory, $rootScope, $stateParams, localStorageService ) {
+    // Prepare Scope Variables
+   
+    $scope.view = 'ditto';
+    $scope.store = {
+      'ditto':[{loading: true}],
+      'shared':[{loading: true}],
+      'feed':[{loading: true}],
+      'lists':[{loading: true}],
+      'chat':[{loading: true}]
+    };
+    $scope.userInfo = {
+      'userId':null,
+      'userName': null,
+      'fbuid': null
+    };
 
-  // load profile data if this was direct linked to.
-  if(!$rootScope.profileData.userId) {
-    console.log('no userid set in profiledata', $stateParams.userId, typeof($stateParams.userId));
-    
-    } else {
-      console.log('invalid path t oa user.');
+  
+    /* TODO2 - Diret link to a part of a user's profile through the routing 
+      
+    */
+  
+    if($stateParams.view){
+      $scope.view = $stateParams.view;
     }
-  }
-  console.log('start ProfileCTRL stateparams: ', $stateParams);
+  
+    // load profile data if this was direct linked to.
+    if(!$scope.userInfo.userId) {
+      console.log('no userid set in profiledata. Set with one of these. ', $stateParams.userId, typeof($stateParams.userId));
 
-    // Chat with a user - Milestones, Dittos, Chat Messages
-    $scope.userChat = function( userId ){
-      console.log('Chat with userId: ', userId);
+      // Get it from the url then.
+      // Get a valid user id, and pull content for it.
+      if( parseInt ( $stateParams.userId) > 0){
+        // console.log('CONTROLLER.387 GOOD VALID USER ID');
+        // 
+         //console.log('profileCtrl 399', $scope.userInfo.userId);
+        
+        // Get user information. TODO2 
+        $scope.userInfo.userId = parseInt($stateParams.userId);
+        
+        // console.log( 'db.userInfo from database: ', dbFactory.userInfo( 2 ) );
+        // dbFactory.userInfo( $scope.userInfo.userId );
+        // $scope.userInfo = dbFactory.userInfo( $scope.userInfo.userId ) ;
+        
+        // console.log('413 ', $scope.userInfo.userId);
+        
+        
+      } else {
+        console.log('CONTROLLER.390 NO VALID USER ID');
+      }
+      
+    } else {
+      console.log('ERROR controllers.ProfileCtrl 391 - invalid userId in the URL.');
+    }
+  
+    lsTypes = new Array('ditto','shared','feed','lists','chat');
+  
+    if($rootScope.user.userId === $scope.userInfo.userId){
+      var lsTypes = new Array('feed','lists');
+    }
+  
+    for (var i in lsTypes){
+      console.log('each: ', lsTypes[i]);
+      if(lsTypes[i] === 'shared'){
+        dbFactory.promiseGetSome($scope.userInfo.userId, '', 'shared').then(function(d) {
+          $scope.store.shared = d;
+          console.log('update: in promise shared: ', d);
+        });
+      }
+      
+      else if(lsTypes[i] === 'ditto' ){
+        dbFactory.promiseGetSome($scope.userInfo.userId, '', 'ditto').then(function(d) {
+          $scope.store.ditto = d;
+          console.log('update: in promise  ditto: ', d);
+        });
+      } else if(lsTypes[i] === 'feed' ) {
+        // Load from local storage first.
+        if( localStorageService.get('user' + $scope.userInfo.userId + 'feed') ) {
+          // We know it's a user, so let's set local storage.
+          localStorageService.get('user' + $scope.userInfo.userId + 'feed');
+        }
+       
+          
+      }
+      else {
+        console.log('TODO1 - Auto load this');
+      }
+      
+      
+    }
+  
 
-      dbFactory.userChat( userId );
-
-
-    };
-
+  
     // Put the user info in the title bar
-    $scope.profileTitle = '<img src="http://graph.facebook.com/' + $rootScope.profileData.fbuid + '/picture" class="title-image"> ' + $rootScope.profileData.userName;
+    $scope.profileTitle = '<img src="http://graph.facebook.com/' + $scope.fbuid + '/picture" class="title-image"> ' + $scope.userName;
 
 
-    $scope.showFeed = function(userId, oldestItem){
+    $scope.showFeed = function(userId){
       // 
-      console.log('profile show feed: ',userId, ' oldest: ',oldestItem);
+      console.log('profile show feed: ',userId, ' oldest: ');
       // showFeed = function(theType, userFilter, listFilter, myState, oldestKey)
-      dbFactory.showFeed('profile',userId,'','','','');
+      // $scope.feed = dbFactory.showFeed('profile',userId,'','','','');
+      
+       
+      // Then Update
+      dbFactory.promiseFeed ('profile', $scope.userInfo.userId, '', '', '', '') .then (function(d){
+        $scope.store.feed = d;
+        console.log('update: in promise feed: ', d);
+      });
+
     };
 
-    $scope.getSome = function(userId, filter){
-      // console.log("Get Some for userid: ",userId);
+    $scope.getSome = function(filter){
+      /* Reload only if it's the second press of the button */
+      if($scope.view === filter){
+        $scope.store[filter] = [{'loading': true}];
+        dbFactory.promiseGetSome($scope.userInfo.userId, '', filter).then(function(d) {
+          $scope.store[filter] = d;
+          console.log('update: in promise '+ filter +' : ', d);
+        });    
+      }
+      $scope.view = filter;
+      
+      console.log("Get Some for userid: ", $scope.userInfo.userId, filter, 'end');
+      // $scope.store[ filter ] = dbFactory.showFeed('profile', $scope.userId, filter , '', '', '');
+      // 
       // dbGetSome = function (theScope, userfilter, listfilter, sharedFilter)
-      dbFactory.dbGetSome('$rootScope.profileData.'+filter, userId, '', filter);
+      // dbFactory.dbGetSome('$rootScope.profileData.'+filter, userId, '', filter);
     };
 
     $scope.showLists = function(userId){
-      dbFactory.getUserListOfLists(userId, '$rootScope.profileData.lists');
+      console.log('reload lists for this user in their profile..');
+      // dbFactory.getUserListOfLists(userId, '$rootScope.profileData.lists');
     };
 
     $scope.makeActive = function(){

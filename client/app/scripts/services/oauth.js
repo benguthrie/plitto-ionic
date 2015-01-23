@@ -10,7 +10,7 @@ angular.module('Services.oauth', [])
   
   if(document.URL.indexOf('localhost') > -1){
     
-    console.log('localhost redirect found', document.URL);
+    // TODO2 - This is used for troubleshooting app login. console.log('localhost redirect found', document.URL);
     /* It is running from localhost. If it's also running from window.cordova, then don't bother with the localhost. Else, use the localhost site. */
     redirectUri = window.cordova ? 'http://plitto.com/CORDOVAWILLCLOSETHISWINDOW' : 'http://localhost/plitto-ionic/client/app/';
     
@@ -40,7 +40,7 @@ angular.module('Services.oauth', [])
         {
           command: 'state',
           path: 'app.home',
-          debug: 'oauth.43 untested token. go to app.home.'
+          debug: 'oauth.43 untested token. Assumed to be good. go to app.home suggested through broadcast: app.home .'
         }
       );
       

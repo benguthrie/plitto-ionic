@@ -3,8 +3,9 @@
   
   <ion-content class="has-header ">
     <div >
-      <img style="float: left; margin: 0;" ng-src="http://graph.facebook.com/{{profileData.fbuid}}/picture">  
-      <h1 class="pageTitle" style="margin-left: 10px;" ng-bind="profileData.userName"></h1>
+      <img style="float: left; margin: 0;" ng-src="http://graph.facebook.com/{{ userInfo.fbuid }}/picture">  
+      <h1 class="pageTitle" style="margin-left: 10px;" 
+          ng-bind="userInfo.userName"></h1>
 
       <hr class="clearBoth"/>
 
@@ -15,18 +16,24 @@
       -->
         <!-- 
          <a class="button active" ng-class="{'active': nav.view ==='user.us'}" ng-hide="profileData.userId == user.userId " ng-click="nav.view = 'user.us'; "><i class="ionicons ion-ios7-checkmark dittoA"></</a> -->
-
-        <a class="button" ng-class="{'active': nav.view ==='user.ditto'}" ng-hide="profileData.userId == user.userId" ng-click="nav.view = 'user.ditto'; getSome(profileData.userId,'ditto');"><i class="ionicons ion-ios7-checkmark-outline"></i></a>
+      <!-- Buttons --> 
         <a class="button" 
-           ng-class="{'active': nav.view ==='user.shared'}" 
-           ng-hide="profileData.userId == user.userId" ng-click="nav.view = 'user.shared'; getSome(profileData.userId,'shared');">
+           ng-class="{'active': view ==='ditto'}" 
+           ng-hide="userInfo.userId == $root.user.userId" 
+           ng-click="getSome('ditto');">
+          <i class="ionicons ion-ios7-checkmark-outline"></i></a>
+        
+        <a class="button" 
+           ng-class="{'active': view ==='shared'}" 
+           ng-hide="userInfo.userId == $root.user.userId" ng-click=" getSome('shared');">
           <i class="ionicons ion-ios7-checkmark dittoA"></i>
         </a>
 
-        <a class="button" ng-class="{'active': nav.view ==='user.feed'}" ng-click="nav.view = 'user.feed'; showFeed(profileData.userId,''); "><i class="ionicons ion-ios7-pulse-strong"></i></a>
-        <a class="button" ng-class="{'active': nav.view ==='user.lists'}" ng-click="nav.view = 'user.lists'; showLists(profileData.userId); "><i class="ionicons ion-ios7-box-outline"></i></a>
+        <a class="button" ng-class="{'active': view ==='feed'}" ng-click="view = 'feed'; showFeed(userInfo.userId); "><i class="ionicons ion-ios7-pulse-strong"></i></a>
+        
+        <a class="button" ng-class="{'active': view ==='lists'}" ng-click="view = 'lists'; showLists(userInfo.userId); "><i class="ionicons ion-clipboard"></i></a>
 
-            <a class="button" ng-class="{'active': nav.view ==='user.chat'}" ng-click="nav.view = 'user.chat'; userChat(profileData.userId); "><i class="ionicons ion-ios7-chatboxes-outline"></i></a>
+            <a class="button" ng-class="{'active': view ==='chat'}" ng-click="view = 'chat'; userChat(userInfo.userId); "><i class="ionicons ion-ios7-chatboxes-outline"></i></a>
         <!-- THIS HAS BEEN SUPERCEDED BY CHAT - Restore this <a class="button" ng-class="{'active': nav.view ==='user.milestones'}" ng-click="nav.view = 'user.milestones';">Milestones</a> --> 
       </div> 
     </div>
@@ -34,7 +41,7 @@
 
 <!-- Start US - TODO1 - Put this button back. --> 
 
-  <div class="list card" ng-show="nav.view==='user.us'">
+  <div class="list card" ng-show="view==='us'">
     <h1>Us</h1>
     <ion-list style="max-width: 500px;">
       <ion-item class="item-divider">Our Stats</ion-item> 
@@ -46,7 +53,7 @@
         <ion-item>Complete Chats<div style="float: right;">2</div></ion-item>
         <ion-item>Shared Lists<div style="float: right;">2</div></ion-item>
       
-      <ion-item class="item-divider">{{profileData.userName}}'s Stuff</ion-item> 
+      <ion-item class="item-divider">{{userInfo.userName}}'s Stuff</ion-item> 
         
         <ion-item>Things <div style="float: right;">500</div></ion-item>
         <ion-item>Lists<div style="float: right;">15</div></ion-item>
@@ -58,51 +65,75 @@
     </ion-list>
     
   </div>
-<!-- End US --> 
+<!-- End US 
+  <p>Profile Data.ditto: {{ profileData.ditto | json }} </p>
+  <p>Profile Data.shared: {{ profileData.shared | json }} </p>
+  <p>Profile Data.feed: {{ profileData.feed | json }} </p>
+  <p>Profile Data.lists: {{ profileData.lists | json }} </p>
+--> 
+  <p>UserID : {{ userInfo.userId | json }} </p>
+  <h1>View: {{ view }}</h1>
+    <h1>Feed lenth: {{ store.feed.length }}</h1>
+    <!-- <p>data for view: {{ store[view] | json }} </p>
+    <p>store: {{ store | json }}</p>
+    <p>ditto store: {{ store.ditto | json }}</p>     -->
+    
+
+<!-- Start Ditto -->  
+  <div class="list" ng-repeat="user in store.ditto" 
+       ng-show=" view === 'ditto' ">
+    <h1>ditto</h1>
+    <user-list-thing ng-show="store.ditto.length" store="store.ditto" source="profile" user-data="user"></user-list-thing>  
+    <div ng-show="!store.ditto.length" class="noShow">{{ userInfo.userName}} has nothing for you to ditto.</div>
+    <div ng-show="store.ditto[0].loading" ><h1>LOADING</h1></div>
+  </div>
+<!-- End Ditto Section --> 
+    
     
 <!-- Start the Feed-->
-  <div class="list " ng-repeat="user in profileData.feed" ng-show="nav.view==='user.feed'">
-    <user-list-thing store="profileData.feed" source="profile" user-data="user"></user-list-thing>   
-    <div ng-show="!profileData.feed.length" class="noShow">{{$root.profileData.userName}} has no recent items.</div>
+  <div class="list" 
+       ng-repeat="user in store.feed" 
+       ng-show="view === 'feed'">
+    <h1>feed</h1>
+    <user-list-thing store="store.feed" source="profile" user-data="user"></user-list-thing>   
+    <div ng-show="!store.feed.length" class="noShow">{{ userInfo.userName}} has no recent items.</div>
+    <div ng-show="store.feed[0].loading" ><h1>LOADING</h1></div>
   </div>
 <!-- End the Feed -->
    
-<!-- Start Ditto -->  
-  <div class="list " ng-repeat="user in $root.profileData.ditto" 
-       ng-show=" nav.view==='user.ditto' ">
-    <user-list-thing store="profileData.ditto" source="profile" user-data="user"></user-list-thing>  
-    <div ng-show="!profileData.ditto.length" class="noShow">{{$root.profileData.userName}} has nothing for you to ditto.</div>
-  </div>
-<!-- End Ditto Section --> 
   
 <!-- Start Shared -->  
-  <div class="list " ng-repeat="user in $root.profileData.shared" 
-       ng-show="nav.view==='user.shared'">
-    <user-list-thing store="profileData.shared" source="profile" user-data="user"></user-list-thing>  
-    <div ng-show="!profileData.shared.length" class="noShow">{{$root.profileData.userName}} has nothing shared with you.</div>
-    <user-list-thing store="profileData.shared" source="profile" user-data="user"></user-list-thing>
+  <div class="list " ng-repeat="user in store.shared" 
+       ng-show=" view === 'shared' ">
+    <h1>shared</h1>
+    <user-list-thing store="store.shared" 
+                     source="profile" user-data="user"></user-list-thing>  
+    <div ng-show="!store.shared.length" class="noShow">{{ userInfo.userName }} has nothing shared with you.</div>
+    <user-list-thing store="store.shared" source="profile" user-data="user"></user-list-thing>
+    <div ng-show="store.shared[0].loading" ><h1>LOADING</h1></div>
   </div>
 <!-- End Shared Section --> 
   
     
     
 <!-- Start User Lists -->    
-  <div ng-show="nav.view==='user.lists'">
-    <h3>{{ profileData.userName }}'s Lists</h3> 
-    <list-of-lists store="profileData.lists" source="profile" lists-data="$root.profileData.lists"></list-of-lists>
-    <div ng-show="!profileData.lists.length" class="noItems">{{$root.profileData.userName}} has no lists.</div>
+  <div ng-show="view==='lists'">
+    <h3>{{ userInfo.userName }}'s Lists</h3> 
+    <list-of-lists store="store.lists" source="profile" lists-data="store.lists"></list-of-lists>
+    <div ng-show="!store.lists.length" class="noItems">{{ userInfo.userName}} has no lists.</div>
+    <div ng-show="store.lists[0].loading" ><h1>LOADING</h1></div>
   </div>
 <!-- End User Lists -->   
   
 <!-- Start User Chat -->    
-  <div ng-show="nav.view==='user.chat'">
-    <h3 class="pageTitle"><i class="ionicons ion-ios7-chatboxes-outline"></i> Our Dittos &amp; Chats</h3>  
+  <div ng-show="view==='chat'">
+    <h3 class="pageTitle"><i class="ion-ios7-chatboxes-outline"></i> Our Dittos &amp; Chats</h3>  
     
-
-    <div ng-show="!profileData.chat.length" class="noItems">You and {{$root.profileData.userName}} don't have any dittos or chats yet.</div>
-    <div class="list " ng-repeat="user in profileData.chat">
+    <div ng-show="store.chat[0].loading" ><h1>LOADING</h1></div>
+    <div ng-show="!store.chat.length" class="noItems">You and {{ userInfo.userName }} don't have any dittos or chats yet.</div>
+    <div class="list " ng-repeat="user in store.chat">
       
-      <user-list-thing store="profileData.chat" source="profile" user-data="user"></user-list-thing>        
+      <user-list-thing store="store.chat" source="profile" user-data="user"></user-list-thing>        
     </div>
   </div>
 <!-- End User Chat -->       
