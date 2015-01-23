@@ -366,27 +366,49 @@ angular.module('Plitto', [
     controller: function($scope, dbFactory) {
       /* Ditto */
       $scope.ditto = function(mykey, uid, lid, tid, itemKey, $event ){
+        // Set them to updating 
+        // Traverse $scope.userData, and change any items, updating them with the proper info.
+        var arrPair = Array();
+        
+        var i, j,k;
+        // If the list matches, and the thing matches, then update the ditto info.
+        // Traverse this user's lists
+        for(i in $scope.userData.lists){
+
+          if(lid === $scope.userData.lists[i].lid){
+            for(j in $scope.userData.lists[i].items){
+              // console.log('check 426: ',$scope.userData.lists[i].items[j].tid, tid);
+              if($scope.userData.lists[i].items[j].tid === tid){
+                $scope.userData.lists[i].items[j].mykey = 0;
+                $scope.userData.lists[i].items[j].friendsWith = '?';  
+                arrPair.push(  Array(i,j) );
+                
+              }
+            }  
+          }
+        }
+        
 
         // Convert this to a scope return. dbFactory.dbDitto( scopeName, mykey, uid, lid, tid, itemKey, $event);
         var dbResponse = [];
         dbFactory.promiseDitto(mykey, uid, lid, tid, itemKey, $event).then (function(d){
           
-          // Traverse $scope.userData, and change any items, updating them with the proper info.
-          var i, j;
-          // If the list matches, and the thing matches, then update the ditto info.
-          // Traverse this user's lists
-          for(i in $scope.userData.lists){
-
-            if(lid === $scope.userData.lists[i].lid){
-              for(j in $scope.userData.lists[i].items){
-                // console.log('check 426: ',$scope.userData.lists[i].items[j].tid, tid);
-                if($scope.userData.lists[i].items[j].tid === tid){
-                  $scope.userData.lists[i].items[j].mykey = d[0];
-                  $scope.userData.lists[i].items[j].friendsWith = '+' + d[1];
-                }
-              }  
+          console.log('arrayTest: ', arrPair);
+          
+          for(k in arrPair){
+            if(parseInt(d[0])){
+              $scope.userData.lists[arrPair[k][0]].items[arrPair[k][1]].mykey = d[0];  
+            } else {
+              $scope.userData.lists[arrPair[k][0]].items[arrPair[k][1]].mykey = null;
+            }
+            
+            if(parseInt(d[1]) ){
+              $scope.userData.lists[arrPair[k][0]].items[arrPair[k][1]].friendsWith = '+' + d[1];  
+            } else {
+              $scope.userData.lists[arrPair[k][0]].items[arrPair[k][1]].friendsWith = '';  
             }
           }
+          
         });
       };
   

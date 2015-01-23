@@ -163,37 +163,7 @@ angular.module('Services.database', ['LocalStorageModule'])
 
             mynewkey  = response.data.results[0].thekey;
             var friendsWith = response.data.results[0].friendsWith;
-
-            // Update the "Friends With" 
-            // $(event.target).html('+' + friendsWith +' <i style="ionicon ion-ios7-checkmark"></i>').removeClass('ion-ios7-checkmark-outline').addClass('ion-ios7-checkmark');
-
-            $(event.target).addClass('ion-ios7-checkmark').addClass('dittoA').removeClass('ion-ios7-checkmark-outline').removeClass('dittoW');
-
-            // Update this item's new "Friends With"
-              // 
-            // eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].friendsWith = "+ ' +friendsWith + '"');
-            // console.log('scopeName', scopeName);  
-            //TODO1 - Return the friendsWith number.
-            // $rootScope[scopeName][i]["lists"][j]["items"][k].friendsWith = friendsWith;
-
-            // For the user and the list, change the increments of dittoable and in common.
-          } else {
-
-            // It was removed. Finalize that.
-            $(event.target).removeClass('ion-ios7-checkmark').removeClass('dittoW').addClass('ion-ios7-checkmark-outline').addClass('dittoA');
-            // 
-            // Remove the Friendswith info. eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].friendsWith = ""');
-            // $rootScope[scopeName][i]["lists"][j]["items"][k].friendsWith = "";
-          }
-
-          // Update my key within the correct scope.
-          // Results update
-          //  console.log('rs sn: ',scopeName, $rootScope[scopeName]);
-          // This must be an eval, because scopeName can be profileData.feed, or someother multi-parter. 
-          // eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].mykey = ' +mynewkey);
-          // TODO1 Line above. Restore it. Update that line to include my new key.
-          
-          // $rootScope[scopeName][i]["lists"][j]["items"][k].mykey = mynewkey;
+          } 
         }
       var pDittoArray = Array(mynewkey, friendsWith, action);
       // return pDittoArray;
