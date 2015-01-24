@@ -322,7 +322,7 @@ angular.module('Services.database', ['LocalStorageModule'])
 
   };
 
-  var addComment = function ( uid, lid, tid, itemKey, newComment, status ){
+  var promiseAddComment = function ( uid, lid, tid, itemKey, newComment, status ){
     // console.log('dbFactory.addComment log: ', uid, lid, tid, itemKey, newComment, status);
     var params = $.param({
       token: $rootScope.token,
@@ -334,18 +334,18 @@ angular.module('Services.database', ['LocalStorageModule'])
       status: status
     });
 
-    $http({
+    var promise = $http({
       method: 'POST',
       url: apiPath + 'addComment',
       data: params,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
-    .success(function (data, status, headers, config) {
+    .then(function (response) {
       
-      if( checkLogout(data) === true ) {
+      if( checkLogout(response.data) === true ) {
         logout();
       } else {
-        
+        return response.data;
         // Do something?
         console.log('New comment succeeded. Do something?',
                     data,
@@ -359,6 +359,8 @@ angular.module('Services.database', ['LocalStorageModule'])
     }
     // console.log("profile feed after showfeed",$rootScope.profileData.feed);
     );
+    
+    return promise;
 
   };
 
@@ -767,15 +769,12 @@ angular.module('Services.database', ['LocalStorageModule'])
   };
   
 
-  /* 10/4/2014, 11/3/2014 */
-  var showThing = function (thingId, thingName, userFilter) {
-    cleanOtherScope('thing','showThing');
-    console.log('TODO2 Use showThing - userFilter', userFilter );
-    // Clear out the rootScope.thingData to show a new thing.
-    $rootScope.thingData = {thingId: thingId, thingName: thingName, items: []};
-    $rootScope.nav.view = 'thing'; // To disable link when in thing view.
-    $state.go('app.thing', {thingId: thingId});
-
+  /* 10/4/2014, 11/3/2014 
+    1/23/2015 - converted to promise
+  */
+  var promiseThing = function (thingId, userFilter) {
+    // Todo2 - Enable userFilter
+    
     // $rootScope.vars.modal.filter = 'all';
     var thingParams = $.param(
       {
@@ -783,7 +782,7 @@ angular.module('Services.database', ['LocalStorageModule'])
         thingId: thingId
       }
     );
-    $http(
+    var promise = $http(
       {
         method:'POST',
         url: apiPath + 'thingDetail',
@@ -791,125 +790,24 @@ angular.module('Services.database', ['LocalStorageModule'])
         headers: { 'Content-Type':'application/x-www-form-urlencoded' }
       }
     )
-    .success(function (data,status,headers,config)
+    .then(function(response){
       {
-        if( checkLogout(data) === true ) {
+        if( checkLogout(response.data) === true ) {
           logout();
         } else {
-          console.log('TODO2 Use shc', status, headers, config);
+          console.log()
           // $rootScope.modal.listStore = data.results;
-          $rootScope.thingData.items = data.results;
-          console.log('database.showThing',$rootScope.thingData);
+          return response.data.results;
+          
         }
       }
-    );
+    });
+    
+    return promise;
 
   };
 
 
-  /* 9/4/2014 - 9/3/2014 - Handle the ditto action 
-      10/21/2014 - Vastly improved this.
-      1/22/2015 - Should be able to disable this by 1/24. Replaced by promiseDitto
-  */
-
-  // dbFactory.dbDitto('bite',i,j,k,mykey,uid,lid,tid);      
-
-  var dbDitto = function (scopeName, mykey, uid, lid, tid, itemKey, event ) {
-    //  console.log('dbFactory.dbDitto | mykey: ', mykey,'| ownerid: ', uid, '| listid: ',lid, tid,i,j,k);
-    var i,j,k;
-
-    // This is for updating the current scope in other places. TODO2 - Test Later.
-    findItem:{
-      // 
-      for(i in eval('$rootScope.' + scopeName)){
-      console.log('scopeName', scopeName);
-      // for(i in $rootScope[scopeName]){
-        if(  eval('$rootScope.' + scopeName + '[i].uid') === uid){
-          for(j in eval('$rootScope.' + scopeName + '[i]["lists"]') ){
-            if(  eval('$rootScope.' + scopeName + '[i]["lists"][j].lid')  === lid){
-              for(k in eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"]')  ){
-                if( eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].tid') === tid){
-                  // Change the state of this item.
-                  eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].mykey = 0');
-                  // There can be only one. So stop once you find it.
-                  break findItem;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-
-    // Update the action, by whether or not the first item is null or not.
-    var action = 'remove';
-    if(mykey === null) {
-      // My key is null, so this must be a ditto.
-      // console.log('update action ditto', mykey, parseInt(mykey));
-      action = 'ditto';
-    }
-
-    var dittoParams = $.param(
-      {
-        action: action ,
-        itemKey: itemKey,
-        token: $rootScope.token
-      }
-    );
-
-    $http(
-      {
-        method:'POST',
-        url: apiPath + 'ditto',
-        data: dittoParams,
-        headers: { 'Content-Type':'application/x-www-form-urlencoded' }
-      }
-    )
-    .success(
-      function (data,status,headers,config) {
-        
-        if( checkLogout(data) === true ) {
-          logout();
-        } else {
-          console.log('Ditto Response TODO2 Use shc', status, headers, config);
-          var mynewkey = null;
-          if(action === 'ditto') {
-
-            mynewkey  = data.results[0].thekey;
-            var friendsWith = data.results[0].friendsWith;
-
-            // Update the "Friends With" 
-            // $(event.target).html('+' + friendsWith +' <i style="ionicon ion-ios7-checkmark"></i>').removeClass('ion-ios7-checkmark-outline').addClass('ion-ios7-checkmark');
-
-            $(event.target).addClass('ion-ios7-checkmark').removeClass('ion-ios7-checkmark-outline');
-
-            // Update this item's new "Friends With"
-              // 
-            eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].friendsWith = "+ ' +friendsWith + '"');
-            console.log('scopeName', scopeName);  
-            // $rootScope[scopeName][i]["lists"][j]["items"][k].friendsWith = friendsWith;
-
-            // For the user and the list, change the increments of dittoable and in common.
-          } else {
-
-            // It was removed. Finalize that.
-            $(event.target).removeClass('ion-ios7-checkmark').addClass('ion-ios7-checkmark-outline');
-            // 
-            eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].friendsWith = ""');
-            // $rootScope[scopeName][i]["lists"][j]["items"][k].friendsWith = "";
-          }
-
-          // Update my key within the correct scope.
-          // Results update
-          //  console.log('rs sn: ',scopeName, $rootScope[scopeName]);
-          // This must be an eval, because scopeName can be profileData.feed, or someother multi-parter. 
-          eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].mykey = ' +mynewkey);
-          // $rootScope[scopeName][i]["lists"][j]["items"][k].mykey = mynewkey;
-        }
-      }
-    );
-
-  };
 
     
   /* Promise Get Some - get some with a promise 
@@ -1544,6 +1442,7 @@ angular.module('Services.database', ['LocalStorageModule'])
 
     // TODO1 Now, make the HTTP calls to refresh them.
     var checkParams = $.param({token: $rootScope.token});
+    
 
     $http({
       method: 'POST',
@@ -1589,7 +1488,8 @@ angular.module('Services.database', ['LocalStorageModule'])
             
             
           } else {
-            console.log('invalid token: ', data.results[0].success, data.results[0].success === '1');
+            console.log('invalid token. Db1488');
+            // ', data.results[0].success, data.results[0].success === '1');
           }
 
         }
@@ -2013,7 +1913,7 @@ angular.module('Services.database', ['LocalStorageModule'])
     fbPlittoFriends: fbPlittoFriends,
     plittoFBApiCall: plittoFBApiCall,
     /* removed 1/23/2015 dbGetSome: dbGetSome, */
-    dbDitto: dbDitto,
+    /* removed 1/23/2015     dbDitto: dbDitto, */
     
     // getUserListOfLists: getUserListOfLists, /* Replaced on 1/23/2015 */
     sharedStat: sharedStat, /* 9/7/2014 */
@@ -2024,7 +1924,7 @@ angular.module('Services.database', ['LocalStorageModule'])
     newList: newList,
     addToList: addToList,
     /* Removed 1/23/2015 search: search, */
-    showThing: showThing,
+    /* Removed 1/23/2015 showThing: showThing, */
     showUser: showUser,
     showFeed: showFeed,
     loadList: loadList,
@@ -2033,7 +1933,7 @@ angular.module('Services.database', ['LocalStorageModule'])
     dbInit: dbInit, /* Initializes the rootscope */
     /* Removed 1/23/2015 mainFeed: mainFeed, // Updates the main feed */
     loadFeed: loadFeed, /* Loads in the feed from local storage */
-    addComment: addComment, /* Adds a comment to the item */
+    
     userChat: userChat, /* Returns the chat queue for a user. */
     updateCounts: updateCounts, /* updates the notification, Friend, etc numbers. */
     logout: logout, /* This is redundant, and also exists in controllers.js. That should change TODO2 */
@@ -2041,6 +1941,9 @@ angular.module('Services.database', ['LocalStorageModule'])
     cleanOtherScope: cleanOtherScope, /* Keep RootScope clean. */
     userInfo: userInfo, /* Get user info for the profile page for reloading in it */
     
+    
+    promiseAddComment: promiseAddComment, /* Adds a comment to the item 1/23/2015 - Changed to promise */
+    promiseThing: promiseThing, /* modified to promise 1/23/2015 */
     promiseSearch: promiseSearch, /* Added 1/23/2015 */
     promiseDitto: promiseDitto, /* Replace the one above. 1/22/2015 */
     promiseGetSome: promiseGetSome, /* Async get some */
@@ -2151,5 +2054,111 @@ angular.module('Services.database', ['LocalStorageModule'])
         }
           
       );
+  };
+  */
+
+/*
+  /* 9/4/2014 - 9/3/2014 - Handle the ditto action 
+      10/21/2014 - Vastly improved this.
+      1/22/2015 - Should be able to disable this by 1/24. Replaced by promiseDitto
+  
+
+  // dbFactory.dbDitto('bite',i,j,k,mykey,uid,lid,tid);      
+
+  var dbDitto = function (scopeName, mykey, uid, lid, tid, itemKey, event ) {
+    //  console.log('dbFactory.dbDitto | mykey: ', mykey,'| ownerid: ', uid, '| listid: ',lid, tid,i,j,k);
+    var i,j,k;
+
+    // This is for updating the current scope in other places. TODO2 - Test Later.
+    findItem:{
+      // 
+      for(i in eval('$rootScope.' + scopeName)){
+      console.log('scopeName', scopeName);
+      // for(i in $rootScope[scopeName]){
+        if(  eval('$rootScope.' + scopeName + '[i].uid') === uid){
+          for(j in eval('$rootScope.' + scopeName + '[i]["lists"]') ){
+            if(  eval('$rootScope.' + scopeName + '[i]["lists"][j].lid')  === lid){
+              for(k in eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"]')  ){
+                if( eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].tid') === tid){
+                  // Change the state of this item.
+                  eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].mykey = 0');
+                  // There can be only one. So stop once you find it.
+                  break findItem;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // Update the action, by whether or not the first item is null or not.
+    var action = 'remove';
+    if(mykey === null) {
+      // My key is null, so this must be a ditto.
+      // console.log('update action ditto', mykey, parseInt(mykey));
+      action = 'ditto';
+    }
+
+    var dittoParams = $.param(
+      {
+        action: action ,
+        itemKey: itemKey,
+        token: $rootScope.token
+      }
+    );
+
+    $http(
+      {
+        method:'POST',
+        url: apiPath + 'ditto',
+        data: dittoParams,
+        headers: { 'Content-Type':'application/x-www-form-urlencoded' }
+      }
+    )
+    .success(
+      function (data,status,headers,config) {
+        
+        if( checkLogout(data) === true ) {
+          logout();
+        } else {
+          console.log('Ditto Response TODO2 Use shc', status, headers, config);
+          var mynewkey = null;
+          if(action === 'ditto') {
+
+            mynewkey  = data.results[0].thekey;
+            var friendsWith = data.results[0].friendsWith;
+
+            // Update the "Friends With" 
+            // $(event.target).html('+' + friendsWith +' <i style="ionicon ion-ios7-checkmark"></i>').removeClass('ion-ios7-checkmark-outline').addClass('ion-ios7-checkmark');
+
+            $(event.target).addClass('ion-ios7-checkmark').removeClass('ion-ios7-checkmark-outline');
+
+            // Update this item's new "Friends With"
+              // 
+            eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].friendsWith = "+ ' +friendsWith + '"');
+            console.log('scopeName', scopeName);  
+            // $rootScope[scopeName][i]["lists"][j]["items"][k].friendsWith = friendsWith;
+
+            // For the user and the list, change the increments of dittoable and in common.
+          } else {
+
+            // It was removed. Finalize that.
+            $(event.target).removeClass('ion-ios7-checkmark').addClass('ion-ios7-checkmark-outline');
+            // 
+            eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].friendsWith = ""');
+            // $rootScope[scopeName][i]["lists"][j]["items"][k].friendsWith = "";
+          }
+
+          // Update my key within the correct scope.
+          // Results update
+          //  console.log('rs sn: ',scopeName, $rootScope[scopeName]);
+          // This must be an eval, because scopeName can be profileData.feed, or someother multi-parter. 
+          eval('$rootScope.' + scopeName + '[i]["lists"][j]["items"][k].mykey = ' +mynewkey);
+          // $rootScope[scopeName][i]["lists"][j]["items"][k].mykey = mynewkey;
+        }
+      }
+    );
+
   };
   */

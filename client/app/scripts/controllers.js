@@ -197,7 +197,8 @@ angular.module('Plitto.controllers', [])
   $scope.showUser = function(userId, userName, dataScope, fbuid){
     
     console.log('controllers.js - showUser 87');
-    dbFactory.showUser(userId,userName, dataScope, fbuid);
+    /// dbFactory.showUser(userId,userName, dataScope, fbuid);'
+    $state.go('app.profile',{userId: userId});
 
   };
     
@@ -251,9 +252,34 @@ angular.module('Plitto.controllers', [])
 })
 
   .controller('ThingCtrl',
-    function($scope, $rootScope,dbFactory) {
+    function($scope,dbFactory, $stateParams, localStorageService) {
+      $scope.thing = { name: 'Loading', id: $stateParams.thingId , data: [{loading: true}]};
+      
+  
+      if(localStorageService.get('thing' + $stateParams.thingId)){
+        console.log('local storage. Found thing by id/');
+        $scope.thing.data = localStorageService.get('thing' + $scope.thing.id);
+      } else {
+        console.log('no thing in local storage: ', $stateParams.thingId);
+      }
+    
+      // console.log('thingid: ', $scope.thing.id );
+      /* Load thing information from the Api 1/23/2015 */
+      dbFactory.promiseThing($scope.thing.id, '').then(function(d) {
+        $scope.thing.data = d;
+        if(d.length){
+          $scope.thing.name = d[0].lists[0].items[0].thingname;
+        }
+        localStorageService.set('thing' + $stateParams.thingId, d);
+        
+      });
+  
+      // Update the thing info from the api
+      console.log('TODO1 - Load this from the database.');
+  
       // Control for thing goes here.
-      console.log('controllers.js.thingCtrl use scope, rootscope, dbFactory', $scope, $rootScope, dbFactory);
+      console.log('controllers.js.thingCtrl use scope, rootscope, dbFactory', $scope);
+      
     }
   )
 
@@ -461,10 +487,17 @@ angular.module('Plitto.controllers', [])
     }
   
     for (var i in lsTypes){
-      console.log('each: ', lsTypes[i]);
+      
       if(lsTypes[i] === 'shared'){
+        // Start from local storage.
+        if(localStorageService.get('user' + $scope.userInfo.userId + 'shared') ){
+          $scope.store.shared = localStorageService.get('user' + $scope.userInfo.userId + 'shared');
+        }
+        
         dbFactory.promiseGetSome($scope.userInfo.userId, '', 'shared').then(function(d) {
           $scope.store.shared = d;
+          
+          localStorageService.set('user' + $scope.userInfo.userId + 'shared', d);
           // console.log('update: in promise shared: ', d);
           //console.log('sun: ', $scope.userInfo.userName.length, ' dusername: ', d[0].username);
               
@@ -479,43 +512,45 @@ angular.module('Plitto.controllers', [])
       }
       
       else if(lsTypes[i] === 'ditto' ){
+        // Start from local storage.
+        if(localStorageService.get('user' + $scope.userInfo.userId + 'ditto' ) ){
+          $scope.store.ditto = localStorageService.get('user' + $scope.userInfo.userId + 'ditto');
+        }
+        
         dbFactory.promiseGetSome($scope.userInfo.userId, '', 'ditto').then(function(d) {
           $scope.store.ditto = d;
+          localStorageService.set('user' + $scope.userInfo.userId + 'ditto', d) ;
           console.log('update: in promise  ditto: ', d);
         });
         
       } else if(lsTypes[i] === 'feed' ) {
-         console.log('show the feed');
-        // Load from local storage first.
-        if( localStorageService.get('user' + $scope.userInfo.userId + 'feed') ) {
-          // We know it's a user, so let's set local storage.
+        if(localStorageService.get('user' + $scope.userInfo.userId + 'feed' ) ) {
           $scope.store.feed = localStorageService.get('user' + $scope.userInfo.userId + 'feed');
+        }
+        
           
-          // Pull the name from local storage, if we have it.
-          if( !$scope.userInfo.userName ){
-            console.log( 'feed0: ', $scope.store.feed[0] );  ;
-            // console.log( typeof($scope.feed[0].username ) ) ;
-            $scope.userInfo.userName = $scope.store.feed[0].username;
-            $scope.userInfo.fbuid = $scope.store.feed[0].fbuid;
-            console.log('load feed: ', $scope.store.feed);
-          }
+        // Pull the name from local storage, if we have it.
+        if( !$scope.userInfo.userName ){
+          // console.log( typeof($scope.feed[0].username ) ) ;
+          $scope.userInfo.userName = $scope.store.feed[0].username;
+          $scope.userInfo.fbuid = $scope.store.feed[0].fbuid;
+          console.log('load feed: ', $scope.store.feed);
         }
         
         dbFactory.promiseFeed( 'profile', $scope.userInfo.userId, '', '', '', '').then(function(d) {
           $scope.store.feed = d;
+          localStorageService.set('user' + $scope.userInfo.userId + 'feed', d);
         });
         
           
       } else if(lsTypes[i] === 'lists' ) {
-        // Load from local storage first.
-        if( localStorageService.get('user' + $scope.userInfo.userId + 'lists') ) {
-          // We know it's a user, so let's set local storage.
-          $scope.store.lists = localStorageService.get('user' + $scope.userInfo.userId + 'lists');
+        if(localStorageService.get('user' + $scope.userInfo.userId + 'lists') ){
+          $scope.store.feedlists = localStorageService.get('user' + $scope.userInfo.userId + 'lists');
         }
         
         dbFactory.promiseListOfLists( $scope.userInfo.userId ).then(function(d) {
           $scope.store.lists = d;
-          
+          localStorageService.set('user' + $scope.userInfo.userId + 'lists',d);
         });
           
       }
@@ -668,7 +703,8 @@ angular.module('Plitto.controllers', [])
   
   /* Thing */
   $scope.showThing = function(thingId, thingName, userFilter){
-    dbFactory.showThing( thingId, thingName, userFilter );
+    // dbFactory.showThing( thingId, thingName, userFilter );
+    $state.go('app.thing', { thingId: thingId});
   };
   
   // Initialize a new search.
@@ -753,7 +789,7 @@ angular.module('Plitto.controllers', [])
   
 })
 
-.controller('FeedCtrl', function($scope, $stateParams, $rootScope, dbFactory) {
+.controller('FeedCtrl', function($scope, $stateParams, $rootScope, dbFactory, localStorageService) {
   // On load, open friends.
   $scope.view = 'friends';
   $scope.store = {
@@ -861,6 +897,7 @@ angular.module('Plitto.controllers', [])
          use d.type because of async responses require the data to define itself. 
       */
       if ( typeof(d.type) !== 'undefined') {
+        localStorageService.set('listId' + $stateParams.listId + d.type, d.results[d.type]);
         $scope.store[d.type] = d.results[d.type];
       } else {
         /* if no response, clear the results */

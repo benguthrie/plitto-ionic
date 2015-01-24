@@ -233,7 +233,7 @@ angular.module('Plitto', [
   
     .state('app.thing',
       {
-        url: '/thing',
+        url: '/thing/:thingId',
         views: {
           'menuContent' :{
             templateUrl: 'templates/thing.html',
@@ -417,9 +417,9 @@ angular.module('Plitto', [
   
       /* User */
       $scope.showUser = function(userId, userName, dataScope, fbuid){
-       
+        $state.go('app.profile',{userId: userId});
         console.log('show User');
-        dbFactory.showUser(userId,userName, dataScope, fbuid);
+        // dbFactory.showUser(userId,userName, dataScope, fbuid);
       };
   
       /* List */
@@ -431,54 +431,34 @@ angular.module('Plitto', [
   
       /* Thing */
       $scope.showThing = function(thingId, thingName, userFilter){
-        dbFactory.showThing(thingId, thingName, userFilter);
+        $state.go('app.thing',{thingId: thingId});
+        // dbFactory.showThing(thingId, thingName, userFilter);
       };
   
       /* Let's Chat
       letsChat(userData.uid, list.lid, item.tid, item.ik, $event, store); " */
       $scope.letsChat = function(uid, lid, tid, itemKey, $event, store, $index){
-        console.log('letsChat app.js directive', uid, lid, tid, itemKey, $event, store, $index);
+        console.log('letsChat app.js directive', uid, lid, tid, itemKey, $event, $index);
         // var length = eval('$rootScope.' + store + '.length');
-        var tempStore = eval('$rootScope.' + store);
-  
-        console.log('letsChat tempStore: ', tempStore);
+      
+        console.log('letschat scope.userData', $scope.userData);
         
-  // Get the user ID number.
-        var upos = null;
-        var lpos = null;
-        var tpos = null;
-  
-        console.log('tempstore', tempStore);
-  
-        for (var j in tempStore){
-          console.log('j: ',j);
-          console.log(tempStore[j].uid);
-          console.log('Equal? ', tempStore[j].uid === uid);
-          if(tempStore[j].uid === uid){
-            upos = j;
-            break;
-          }
-        }
-        
-        if(upos !== null){
-          
-          for ( var k in tempStore[upos].lists ) {
-            if(tempStore[upos].lists[k].lid === lid ) {
-              lpos = k;
-              break;
-            }
-          }
-          if (lpos !== null){
-            for ( var l in tempStore[upos].lists[lpos].items ) {
-              if( tempStore[upos].lists[lpos].items[l].tid === tid ) {
-                tpos = l;
+        // Find the item in this list.
+        var i=0, j=0, abort = false;
+        loop1:
+          for(i in $scope.userData.lists ){
+            if(lid === $scope.userData.lists[i].lid){
+              var j=0;
+        loop2:
+              for(j in $scope.userData.lists[i].items ){
+                if(  $scope.userData.lists[i].items[j].ik === itemKey){
+                  break loop1;
+                }
               }
             }
           }
-        }
         
-        console.log('upos: ', upos, lpos, tpos, $rootScope.user);
-
+        console.log('vars: i,j',i,j);
 
         var isActive = 1;
         if($($event.target).hasClass('active')){
@@ -486,70 +466,62 @@ angular.module('Plitto', [
           isActive = 0;
           $($event.target).removeClass('active');
           $('div#comments' + uid + lid + tid).hide();
-          eval('$rootScope.' + store + '[' + upos + '].lists[' + lpos + '].items[' + tpos + '].commentActive = null; ' );
+          // RESTORE? eval('$rootScope.' + store + '[' + upos + '].lists[' + lpos + '].items[' + tpos + '].commentActive = null; ' );
+          $scope.userData.lists[i].items[j].commentActive = null;
         } else {
           
           $($event.target).addClass('active');
           $('div#comments' + uid + lid + tid).show();
-          eval('$rootScope.' + store + '[' + upos + '].lists[' + lpos + '].items[' + tpos + '].commentActive = "1"; '  );
+          // eval('$rootScope.' + store + '[' + upos + '].lists[' + lpos + '].items[' + tpos + '].commentActive = "1"; ' 
+          $scope.userData.lists[i].items[j].commentActive = '1'; 
           
         }
         // Call the addComment bit to activate or deactivate the queue item
-        dbFactory.addComment ( uid, lid, tid, itemKey, '0', isActive );
+        dbFactory.promiseAddComment ( uid, lid, tid, itemKey, '0', isActive ).then(function(d){
+          console.log('481ult added comment');
+        });
         console.log('commentactive:  ',
-          eval('$rootScope.' + store + '[' + upos + '].lists[' + lpos + '].items[' + tpos + '].commentActive; '  )
+          // eval('$rootScope.' + store + '[' + upos + '].lists[' + lpos + '].items[' + tpos + '].commentActive; '  )
+          $scope.userData.lists[i].items[j].commentActive
         );
       };
   
-      $scope.makeItemComment = function (newComment, uid, lid, tid, itemKey, store, $index){
-        console.log('makeItemComment', newComment, uid, lid, tid, itemKey, store, $index);
+      $scope.makeItemComment = function (newComment, uid, lid, tid, itemKey, $index){
+        console.log('makeItemComment', newComment, uid, lid, tid, itemKey, $index);
         // Find the user, then the list, then use the index.
         // var length = eval('$rootScope.' + store + '.length' );
-        var tempStore = eval('$rootScope.' + store);
-  
-        console.log('tempStore: ', tempStore);
         
   // Get the user ID number.
         var upos = null;
         var lpos = null;
         var tpos = null;
-  
-        console.log('tempstore', tempStore);
-  
-        for (var j in tempStore){
-          console.log('j: ',j);
-          console.log(tempStore[j].uid);
-          console.log('Equal? ', tempStore[j].uid === uid);
-          if(tempStore[j].uid === uid){
-            upos = j;
-            break;
-          }
-        }
         
-        for ( var k in tempStore[upos].lists ) {
-          if(tempStore[upos].lists[k].lid === lid ) {
-            lpos = k;
-            break;
-          }
-        }
-
-        for ( var l in tempStore[upos].lists[lpos].items ) {
-          if( tempStore[upos].lists[lpos].items[l].tid === tid ) {
-            tpos = l;
-          }
-        }
         
-        console.log('upos: ', upos, lpos, tpos, $rootScope.user);
+        // Find the item in this list.
+        var i=0, j=0, abort = false;
+        loop1:
+          for(i in $scope.userData.lists ){
+            if(lid === $scope.userData.lists[i].lid){
+              var j=0;
+        loop2:
+              for(j in $scope.userData.lists[i].items ){
+                if(  $scope.userData.lists[i].items[j].ik === itemKey){
+                  break loop1;
+                }
+              }
+            }
+          }
+        
+        console.log('vars: i,j',i,j);
+        $scope.userData.lists[i].items[j].commentText = newComment;
   
-        // Add it to the UI / Scope (only if it exists)
-        console.log('464 store: ', store);
-        eval('$rootScope.' + store + '[' + upos + '].lists[' + lpos + '].items[' + tpos + '].commentText = "' + newComment + '"; '  );
-
         // submit it to the database
-        dbFactory.addComment ( uid, lid, tid, itemKey, newComment, '1');
+        // 
+        dbFactory.promiseAddComment ( uid, lid, tid, itemKey, newComment, '1').then(function(d){
+          console.log('ult521 add comment');
+        });
 
         // TODO1 Clear the comment field
-        
         
       };
   
@@ -605,7 +577,8 @@ angular.module('Plitto', [
       // This is for the logged in user
       $scope.showUser = function(userId, userName, dataScope, fbuid){
         console.log('controllers.js - showUser 87');
-        dbFactory.showUser(userId,userName, dataScope, fbuid);
+        // dbFactory.showUser(userId,userName, dataScope, fbuid);
+        $state.go('app.profile',{userId: userId});
       };
       
       /* Link to List */
@@ -618,7 +591,8 @@ angular.module('Plitto', [
       /* Thing */
       $scope.showThing = function(thingId, thingName, userFilter){
         console.log('showThing');
-        dbFactory.showThing(thingId, thingName, userFilter);
+        // dbFactory.showThing(thingId, thingName, userFilter);
+        $state.go('app.thing',{thingId: thingId});
       };
       
       

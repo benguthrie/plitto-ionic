@@ -2,9 +2,12 @@
 <div class="listBlock" ng-repeat="list in userData.lists">
   <!-- BEGIN User Row -->
   <a class="item item-avatar userLine" ng-click="showUser(userData.uid,userData.username,'ditto', userData.fbuid);">
+    
     <img ng-src="{{ userData.uid === '0' && 'img/769-male@3x.png' || 'http://graph.facebook.com/' + userData.fbuid + '/picture' }}"/>
     <h2>{{userData.username}}</h2>
+    
   </a>
+  
 
   <!-- BEGIN List Line --> 
   <div 
@@ -33,6 +36,7 @@
     <div class="thingTable">
       <div class="thingNameRow">
         <div class="thingNameCol"
+          
           ng-click="showThing(item.tid, item.thingname, userData.uid);" 
           >
 
@@ -79,7 +83,7 @@
       <div 
         class="commentInactiveButton"
         ng-show="item.commentActive !== '1' " 
-        ng-click="letsChat( userData.uid, list.lid, item.tid, item.ik, $event, store, $index ); ">
+        ng-click="letsChat( userData.uid, list.lid, item.tid, item.ik, $event, $index ); ">
         &nbsp;
         
       </div>

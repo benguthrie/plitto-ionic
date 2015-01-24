@@ -359,9 +359,25 @@ div.button-bar > a.button > i.dittoA  {
 }
 
 /* Docs */
-div.docIcon {
+i.docIcon {
   font-size: 4em;
   text-align: left; 
+}
+
+div.docLegend {
+  display: table;
+  border-bottom: 1px solid  #bbb;
+}
+
+div.docLegend > div{
+  display: table-row;
+}
+div.docLegend > div > div{
+  display: table-cell;
+  vertical-align: top;
+  padding: 1em;
+  
+  border-top: 1px solid  #bbb;
 }
 
 /* Thing Name Row within Thing Name */

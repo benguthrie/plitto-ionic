@@ -2,9 +2,9 @@
   <user-nav></user-nav>
   
   <ion-content class="has-header">
-    <h1 class="pageTitle" ng-bind="thingData.thingName"></h3>
-    <div class="list" ng-repeat="user in $root.thingData.items">
-      <user-list-thing store="thingData.items" source="thing" user-data="user"></user-list-thing>        
+    <h1 class="pageTitle" ng-bind="thing.name"></h3>
+    <div class="list" ng-repeat="user in thing.data">
+      <user-list-thing store="thing.data" source="thing" user-data="user"></user-list-thing>        
     </div>
     
   </ion-content>
