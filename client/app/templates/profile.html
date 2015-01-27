@@ -96,39 +96,59 @@
 <!-- End Ditto Section --> 
     
     
-<!-- Start the Feed-->
+<!-- Start the Feed
   <div class="list" 
        ng-repeat="user in store.feed" 
        ng-show="view === 'feed'">
-    <!-- <h1>feed</h1> --> 
+    
     <user-list-thing store="store.feed" source="profile" user-data="user"></user-list-thing>   
     <div ng-show="!store.feed.length" class="noShow">{{ userInfo.userName}} has no recent items.</div>
     <div ng-show="store.feed[0].loading" ><h1>LOADING</h1></div>
-  </div>
+  </div>-->
+    
+  <div ng-show="view ==='feed' ">
+    
+    <h4 class="viewContext">Newest Items from {{userInfo.userName}}</h4>
+    <div ng-show="!store.feed.length" class="noShow">No Recent Items</div>
+    <div ng-show="store.feed[0].loading" ><h1>LOADING</h1></div>
+    <div class="list " ng-repeat="user in store.feed">
+      <user-list-thing store="store.feed" source="list" user-data="user"></user-list-thing>
+    </div>
+  </div>  
 <!-- End the Feed -->
    
   
-<!-- Start Shared -->  
-  <div class="list " ng-repeat="user in store.shared" 
+<!-- Start Shared  <div class="list " ng-repeat="user in store.shared" 
        ng-show=" view === 'shared' ">
-    <!-- <h1>shared</h1> --> 
     <user-list-thing store="store.shared" 
                      source="profile" user-data="user"></user-list-thing>  
     <div ng-show="!store.shared.length" class="noShow">{{ userInfo.userName }} has nothing shared with you.</div>
     <user-list-thing store="store.shared" source="profile" user-data="user"></user-list-thing>
     <div ng-show="store.shared[0].loading" ><h1>LOADING</h1></div>
   </div>
+  -->  
+  <div ng-show="view ==='shared' ">
+    <h4 class="viewContext">Shared Items from {{userInfo.userName}}</h4>
+    <div ng-show="!store.shared.length" class="noShow">No Recent Items</div>
+    <div ng-show="store.shared[0].loading" ><h1>LOADING</h1></div>
+    <div class="list " ng-repeat="user in store.shared">
+      <user-list-thing store="store.shared" source="list" user-data="user"></user-list-thing>
+    </div>
+  </div>
+    
+ 
 <!-- End Shared Section --> 
   
     
     
 <!-- Start User Lists -->    
-  <div ng-show="view==='lists'">
-    <h3>{{ userInfo.userName }}'s Lists</h3> 
+    
+  <div ng-show="view ==='lists' ">
+    <h4 class="viewContext">{{userInfo.userName}}'s Lists</h4>
     <list-of-lists store="store.lists" source="profile" lists-data="store.lists"></list-of-lists>
     <div ng-show="!store.lists.length" class="noItems">{{ userInfo.userName}} has no lists.</div>
     <div ng-show="store.lists[0].loading" ><h1>LOADING</h1></div>
-  </div>
+  </div>  
 <!-- End User Lists -->   
   
 <!-- Start User Chat -->    
