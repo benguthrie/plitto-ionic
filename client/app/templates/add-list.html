@@ -4,45 +4,38 @@
   <ion-nav-buttons side="left">
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
-  --> 
-  
+  -->
+
   <ion-content class="has-header">
     <h1 class="pageTitle"><i class="ionicons ion-plus"></i> Add a List / To a List</h1>
     <div class="list list-inset addList">
       <form name="listForm">
         <div class="formText">
-        <label class="item item-input">
-          <input type="text" name="title"
-            placeholder="New List Title"
-            ng-model="newList.title"
-            class="userInput"
-            required/>
-           
-        </label>
-        </div> 
+          <label class="item item-input">
+            <input type="text" name="title" placeholder="New List Title" ng-model="newList.title" class="userInput" required/>
+
+          </label>
+        </div>
         <div class="formButton">
-          <button class="button button-block button-positive"
-            ng-disabled="listForm.$invalid"
-            ng-click="createList()">
+          <button class="button button-block button-positive" ng-disabled="listForm.$invalid" ng-click="createList()">
             Create
           </button>
-        </div> 
+        </div>
       </form>
     </div>
-    
+
     <h4 class="viewContext" ng-show="!listResults.length && newList.title.length">No Existing Lists</h4>
     <h4 class="viewContext" ng-show="!listResults.length && !newList.title.length">Existing Lists Will Show Here</h4>
-    
+
     <h4 class="viewContext" ng-show="listResults.length">Existing Lists</h4>
     <ion-list ng-repeat="list in listResults" ng-show="newList.title.length > 0">
-      <ion-item class="item-icon-right" href="#/app/list/{{list.lid}}" 
-          ng-click="showList(list.lid, list.listname, null, 'addToList');">
+      <ion-item class="item-icon-right" href="#/app/list/{{list.lid}}" ng-click="showList(list.lid, list.listname, null, 'addToList');">
         <ion-option-button class="button-assertive">
           Mine</ion-option-button>
         {{list.listname}} - ({{list.thecount}})
-          <i class="icon ion-chevron-right icon-accessory"></i>
+        <i class="icon ion-chevron-right icon-accessory"></i>
       </ion-item>
-    </ion-list> 
-    
+    </ion-list>
+
   </ion-content>
 </ion-view>

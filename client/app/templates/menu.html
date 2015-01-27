@@ -2,7 +2,7 @@
 
   <ion-pane ion-side-menu-content>
     <ion-nav-bar class="bar-stable">
-      
+
       <ion-nav-back-button class="button-clear"><i class="icon ion-ios7-arrow-back"></i> Back</ion-nav-back-button>
     </ion-nav-bar>
     <ion-nav-view name="menuContent" animation="slide-left-right"></ion-nav-view>
@@ -14,27 +14,24 @@
     </header>
     <ion-content class="has-header">
       <ion-list>
-        
+
         <ion-item nav-clear menu-close href="#/app/profile/{{$root.user.userId}}" ng-click="showUser($root.user.userId, $root.user.userName, 'all', $root.user.fbuid);">
-          <img src='http://graph.facebook.com/{{$root.user.fbuid}}/picture' class='title-image' style='padding: 0; margin-left: -15px; margin-top: -15px; margin-bottom: -30px; margin-right: 10px;'>
-          {{user.userName}}
+          <img src='http://graph.facebook.com/{{$root.user.fbuid}}/picture' class='title-image' style='padding: 0; margin-left: -15px; margin-top: -15px; margin-bottom: -30px; margin-right: 10px;'> {{user.userName}}
         </ion-item>
-        
+
         <ion-item nav-clear menu-close href="#/app/friends">
-          <i class="icon ion-ios7-people-outline"></i>
-          Friends
+          <i class="icon ion-ios7-people-outline"></i> Friends
           <span class="item-note" ng-bind="$root.stats.friends">
             
           </span>
           <!-- TODO2 - Add once friend requests start. 
 <span class="item-note" ng-show=" $root.stats.friendRequests === '0' " ng-bind="$root.stats.friends">
-<span class="badge badge-assertive" ng-show=" $root.stats.friendRequests > 0 " ng-bind="$root.stats.friendRequests"></span>--> 
+<span class="badge badge-assertive" ng-show=" $root.stats.friendRequests > 0 " ng-bind="$root.stats.friendRequests"></span>-->
         </ion-item>
-        
+
         <ion-item nav-clear menu-close href="#/app/lists" ng-click="loadLists(); nav.view = 'user.lists'; ">
-          <i class="icon ion-clipboard"></i>
-          My Lists
-          <span class="item-note" ng-show =" $root.stats.lists > 0 " ng-bind="$root.stats.lists"></span>
+          <i class="icon ion-clipboard"></i> My Lists
+          <span class="item-note" ng-show=" $root.stats.lists > 0 " ng-bind="$root.stats.lists"></span>
         </ion-item>
 
         <!-- TODO1 - Directl link to MY FEED
@@ -44,37 +41,34 @@
           <span class="item-note" ng-bind="$root.stats.things"></span>
           
         </ion-item>
-        --> 
-        
+        -->
+
 
         <ion-item nav-clear menu-close href="#/app/feed" ng-click="nav.view = 'feed'">
-          <i class="icon ion-ios7-pulse-strong"></i>
-          Recent Activity
+          <i class="icon ion-ios7-pulse-strong"></i> Recent Activity
           <span class="item-note" ng-bind="$root.stats.feedCount"></span>
         </ion-item>
-          
+
         <ion-item nav-clear menu-close href="#/app/docs" ng-click="nav.view = 'docs'">
-          <i class="icon ion-help-circled"></i>
-          Docs
+          <i class="icon ion-help-circled"></i> Docs
         </ion-item>
-          
+
         <ion-item nav-clear menu-close href="#/app/about" ng-click="nav.view = 'about'">
-          <i class="icon ion-information-circled"></i>
-          About
+          <i class="icon ion-information-circled"></i> About
         </ion-item>
-          
-          
-        <div class="item item-divider">Account</div>  
-        
+
+
+        <div class="item item-divider">Account</div>
+
         <ion-item nav-clear menu-close ng-click="logout()" href="#/login">
           <i class="icon ion-log-out"></i> Logout
         </ion-item>
-        
-        
+
+
         <ion-item nav-clear ng-click="deleteFBaccess()">
           <i class="icon ion-heart-broken"></i> RM FB Auth
         </ion-item>
-        
+
         <!-- 
         
         <div class="item item-divider">Duplicates from Navigation Bar</div>
@@ -102,17 +96,17 @@
             Chat
           </ion-item>
         -->
-        
-<!-- Not built / activated yet -->        
-        <div class="item item-divider">Misc</div>
-          <ion-item nav-clear menu-close href="#/app/debug">
-            Debug
-          </ion-item>
 
-          <ion-item nav-clear >
-            3rd Party
-          </ion-item>
-        
+        <!-- Not built / activated yet -->
+        <div class="item item-divider">Misc</div>
+        <ion-item nav-clear menu-close href="#/app/debug">
+          Debug
+        </ion-item>
+
+        <ion-item nav-clear>
+          3rd Party
+        </ion-item>
+
       </ion-list>
     </ion-content>
   </ion-side-menu>

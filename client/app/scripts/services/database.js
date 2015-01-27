@@ -2,19 +2,20 @@
 angular.module('Services.database', ['LocalStorageModule'])
 
 // This will handle storage within local databases.
-.factory('dbFactory', ['$http', '$rootScope', '$state','localStorageService',  function ($http, $rootScope, $state, localStorageService ){
-  
-  
+.factory('dbFactory', ['$http', '$rootScope', '$state', 'localStorageService', function ($http, $rootScope, $state, localStorageService) {
+  /* configure Constants */
+  var apiPath = (window.cordova) ? 'http://plitto.com/api/2.0/' : '/api/2.0/';
+
   /* This is for when there are no records. */
-  function zeroRecords(){
-    return {'msg':'No Records', 'time':now() };
-    console.log('dbFactory.zerorecords zero records: ', now());
+  function zeroRecords() {
+    return {
+      'msg': 'No Records',
+      'time': now()
+    };
+    // console.log('dbFactory.zerorecords zero records: ', now());
   }
-  
-  
-  
-  
-  function logout () {
+
+  function logout() {
     console.log('logout');
     $rootScope.debug('Appctrl - TODO2: FB Logout call.');
     // $state.go('app.login',{listId: newListId});
@@ -22,17 +23,17 @@ angular.module('Services.database', ['LocalStorageModule'])
 
     // Clear all the stores.
     dbInit();
-   localStorageService.clearAll();
+    localStorageService.clearAll();
   }
-  
-  function checkLogout (data) {
-    if (typeof data.logout !== 'undefined' && data.logout === '1'){
+
+  function checkLogout(data) {
+    if (typeof data.logout !== 'undefined' && data.logout === '1') {
       return true;
     } else {
       return false;
     }
   }
-  
+
   /* TODO2 1/16/2015 it looks like this can be removed. This custom data format is obsolete. 
   function processNotification ( theData , theUserId ) {
     // console.log('theUserId is not used. TODO2', theUserId);
@@ -62,7 +63,7 @@ angular.module('Services.database', ['LocalStorageModule'])
   }
   */
 
-  function makeNotificationRead ( makeRead ) {
+  function makeNotificationRead(makeRead) {
     var params = $.param({
       token: $rootScope.token,
       makeRead: makeRead
@@ -71,105 +72,104 @@ angular.module('Services.database', ['LocalStorageModule'])
     // console.log("Notifications, makeRead: ", makeRead);
 
     $http({
-      method: 'POST',
-      url: apiPath + 'makeNotificationRead',
-      data: params,
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    })
-    .success(function (data, status, headers, config) {
-      
-      if( checkLogout(data) === true ) {
-        logout();
-      } else {
-        // Do something?
-        // 
-        console.log('TODO2 use db line 50. Do something?', data, status, headers, config );
+        method: 'POST',
+        url: apiPath + 'makeNotificationRead',
+        data: params,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
+      .success(function (data, status, headers, config) {
 
-      }
-      
-      
-    }
-    // console.log("profile feed after showfeed",$rootScope.profileData.feed);
-    );
+          if (checkLogout(data) === true) {
+            logout();
+          } else {
+            // Do something?
+            // 
+            console.log('TODO2 use db line 50. Do something?', data, status, headers, config);
+
+          }
+
+
+        }
+        // console.log("profile feed after showfeed",$rootScope.profileData.feed);
+      );
 
   }
-  
+
   /* Clean Scope. Keep the scope reasonably small. As tue user navigates around, clean the scope. 1/22/2015*/
-  var cleanOtherScope = function (dontClean, source){
+  var cleanOtherScope = function (dontClean, source) {
     console.log('Clean the scope for everything other than ', dontClean, source);
-    if(dontClean !== 'profile'){
+    if (dontClean !== 'profile') {
       $rootScope.profileData = [];
     }
-    if(dontClean !== 'friends'){
+    if (dontClean !== 'friends') {
       $rootScope.friendStore = [];
     }
-    if(dontClean !== 'list'){
+    if (dontClean !== 'list') {
       $rootScope.list = [];
     }
-    if(dontClean !== 'chat'){
+    if (dontClean !== 'chat') {
       $rootScope.stats.feed = [];
     }
-    if(dontClean !== 'lists'){
+    if (dontClean !== 'lists') {
       $rootScope.listsData = [];
     }
-    if(dontClean !== 'feed'){
+    if (dontClean !== 'feed') {
       $rootScope.feed = [];
     }
-    if(dontClean !== 'bite'){
+    if (dontClean !== 'bite') {
       $rootScope.bite = [];
     }
-    
-    
-    
+
+
+
   };
-  
-  
-  var promiseDitto = function (mykey, uid, lid, tid, itemKey, event ) {
+
+
+  var promiseDitto = function (mykey, uid, lid, tid, itemKey, event) {
     //  console.log('dbFactory.dbDitto | mykey: ', mykey,'| ownerid: ', uid, '| listid: ',lid, tid,i,j,k);
-   
+
     // Update the action, by whether or not the first item is null or not.
     var action = 'remove';
-    if(mykey === null) {
+    if (mykey === null) {
       // My key is null, so this must be a ditto.
       // console.log('update action ditto', mykey, parseInt(mykey));
       action = 'ditto';
     }
 
-    var dittoParams = $.param(
-      {
-        action: action ,
-        itemKey: itemKey,
-        token: $rootScope.token
-      }
-    );
+    var dittoParams = $.param({
+      action: action,
+      itemKey: itemKey,
+      token: $rootScope.token
+    });
 
-    var promise = $http(
-      {
-        method:'POST',
+    var promise = $http({
+        method: 'POST',
         url: apiPath + 'ditto',
         data: dittoParams,
-        headers: { 'Content-Type':'application/x-www-form-urlencoded' }
-      }
-    )
-    .then( function (response) {
-      console.log('promise ditto. api response: ', response);
-        
-        if( checkLogout(response.data) === true ) {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
+      .then(function (response) {
+        console.log('promise ditto. api response: ', response);
+
+        if (checkLogout(response.data) === true) {
           logout();
         } else {
           // console.log('Ditto Response TODO2 Use shc', status, headers, config);
           var mynewkey = null;
-          if(action === 'ditto') {
+          if (action === 'ditto') {
 
-            mynewkey  = response.data.results[0].thekey;
+            mynewkey = response.data.results[0].thekey;
             var friendsWith = response.data.results[0].friendsWith;
-          } 
+          }
         }
-      var pDittoArray = Array(mynewkey, friendsWith, action);
-      // return pDittoArray;
-      return pDittoArray;
-      }
-    );
+        var pDittoArray = Array(mynewkey, friendsWith, action);
+        // return pDittoArray;
+        return pDittoArray;
+      });
 
     return promise;
 
@@ -185,34 +185,37 @@ angular.module('Services.database', ['LocalStorageModule'])
     });
 
     $http({
-      method: 'POST',
-      url: apiPath + 'friendsList',
-      data: params,
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    })
-    .success(function (data, status, headers, config) {
-      
-      if( checkLogout(data) === true ) {
-        logout();
-      } else {
-        // TODO3 - Error checking on the existance of these fields. 
-        // console.log('updateCounts return: ', data, 'TODO2 use status, headers, config: ', status, headers, config );
+        method: 'POST',
+        url: apiPath + 'friendsList',
+        data: params,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
+      .success(function (data, status, headers, config) {
 
-        return data.results;
-        
-        // 
-        localStorageService.set('friendStore', data.results );
-        console.log('gotFriends');
-      }
-      
+          if (checkLogout(data) === true) {
+            logout();
+          } else {
+            // TODO3 - Error checking on the existance of these fields. 
+            // console.log('updateCounts return: ', data, 'TODO2 use status, headers, config: ', status, headers, config );
 
-    }
-    // console.log("profile feed after showfeed",$rootScope.profileData.feed);
-    );
+            return data.results;
+
+            // 
+            localStorageService.set('friendStore', data.results);
+            console.log('gotFriends');
+          }
+
+
+        }
+        // console.log("profile feed after showfeed",$rootScope.profileData.feed);
+      );
 
     // console.log("New Alert Count: ", $rootScope.stats.alerts.total);
   };
 
+  /* TODO2 - Return this. Update to promise. 
   var updateCounts = function () {
     // console.log('!!!UpdateCounts');
 
@@ -252,7 +255,9 @@ angular.module('Services.database', ['LocalStorageModule'])
 
     // console.log("New Alert Count: ", $rootScope.stats.alerts.total);
   };
+  */
 
+  /* TODO2 - convert to promise and return this 
   var userChat = function ( userId ) {
     // userId of -1 is passed for all, wit hnewest for this user. 
     
@@ -279,13 +284,6 @@ angular.module('Services.database', ['LocalStorageModule'])
         // console.log("Chat Data: ",data.results);
         // Do something?
         
-        /* REmoved 1.22.2015 
-        if( userId === -1){
-          $rootScope.stats.feed = data.results;
-        } else {
-          $rootScope.profileData.chat = data.results;
-        }
-        */
         
         return data.results
           
@@ -309,20 +307,21 @@ angular.module('Services.database', ['LocalStorageModule'])
     
 
   };
+  */
 
-  var apiPath = (window.cordova) ? 'http://plitto.com/api/2.0/' : '/api/2.0/';
+
 
   /* 11/2/2014 */
-  var checkToken = function(token){
+  var checkToken = function (token) {
     // console.log('check the token to see if we should proceed.');
-    if(typeof token ==='undefined' || token.length === 0){
+    if (typeof token === 'undefined' || token.length === 0) {
       // TODO1 - Conditition around this, if there is a token in the querystring. $state.go("login");
       dbInit();
     }
 
   };
 
-  var promiseAddComment = function ( uid, lid, tid, itemKey, newComment, status ){
+  var promiseAddComment = function (uid, lid, tid, itemKey, newComment, status) {
     // console.log('dbFactory.addComment log: ', uid, lid, tid, itemKey, newComment, status);
     var params = $.param({
       token: $rootScope.token,
@@ -335,37 +334,39 @@ angular.module('Services.database', ['LocalStorageModule'])
     });
 
     var promise = $http({
-      method: 'POST',
-      url: apiPath + 'addComment',
-      data: params,
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    })
-    .then(function (response) {
-      
-      if( checkLogout(response.data) === true ) {
-        logout();
-      } else {
-        return response.data;
-        // Do something?
-        console.log('New comment succeeded. Do something?',
-                    data,
-                    'TODO2 use status, headers, config: ',
-                    status,
-                    headers,
-                    config
-                   );
+        method: 'POST',
+        url: apiPath + 'addComment',
+        data: params,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
+      .then(function (response) {
 
-      }
-    }
-    // console.log("profile feed after showfeed",$rootScope.profileData.feed);
-    );
-    
+          if (checkLogout(response.data) === true) {
+            logout();
+          } else {
+            return response.data;
+            // Do something?
+            console.log('New comment succeeded. Do something?',
+              data,
+              'TODO2 use status, headers, config: ',
+              status,
+              headers,
+              config
+            );
+
+          }
+        }
+        // console.log("profile feed after showfeed",$rootScope.profileData.feed);
+      );
+
     return promise;
 
   };
 
 
-  var dbInit = function ( fCallback ) {
+  var dbInit = function (fCallback) {
 
     // console.log('database.dbInit called. rootScope initialized! Mount up!');
 
@@ -377,7 +378,7 @@ angular.module('Services.database', ['LocalStorageModule'])
     };
 
     // Last Login logging
-    $rootScope.initTime = Math.round(new Date().getTime() / 1000) ;
+    $rootScope.initTime = Math.round(new Date().getTime() / 1000);
 
     // These have been used and referenced since Nov 4.
     $rootScope.token = null;
@@ -401,7 +402,7 @@ angular.module('Services.database', ['LocalStorageModule'])
     $rootScope.list = {
       listId: null,
       listName: null,
-      ditto:[],
+      ditto: [],
       shared: [],
       mine: [],
       feed: []
@@ -445,14 +446,14 @@ angular.module('Services.database', ['LocalStorageModule'])
     $rootScope.loginMessage = 'RS initialized.';
 
 
-    if(typeof fCallback === 'function'){
+    if (typeof fCallback === 'function') {
       //console.log('fCallback in init made');
       fCallback('complete');
     }
   };
 
   /* 11/12/2014 - Created */
-  var loadFeed = function (filter, startFrom){
+  var loadFeed = function (filter, startFrom) {
     console.log('TODO2 - use startfrom in loadFeed', startFrom);
     // Step 1: Load from local storage.
     $rootScope.feed.friends = localStorageService.get('feedFriends');
@@ -463,22 +464,21 @@ angular.module('Services.database', ['LocalStorageModule'])
   /* 11/12/2014 - Created 
     dbFactory.mainFeed(filter, continueFrom, filter, '', '','nav.feed.' + filter, newerOrOlder);
   */
-  var mainFeed = function (theType, continueFrom, userFilter, listFilter, sharedFilter, scopeName, newerOrOlder){
+  var mainFeed = function (theType, continueFrom, userFilter, listFilter, sharedFilter, scopeName, newerOrOlder) {
 
     // console.log('mainFeed:',theType, continueFrom);
     var continueKey = 0;
 
     // Step 0 - Prep by finding the oldest key
-    if( continueFrom === 'older' && $rootScope.feed[theType].length > 0 ){
+    if (continueFrom === 'older' && $rootScope.feed[theType].length > 0) {
       // The interface doesn't know the last key. Help it.
-      var userCt = ($rootScope.feed[theType].length - 1) ;
+      var userCt = ($rootScope.feed[theType].length - 1);
 
 
       var listCt = $rootScope.feed[theType][userCt].lists.length - 1;
-      if(typeof $rootScope.feed[theType][userCt].lists[listCt].items !== 'undefined'){
+      if (typeof $rootScope.feed[theType][userCt].lists[listCt].items !== 'undefined') {
         var thingCt = $rootScope.feed[theType][userCt].lists[listCt].items.length - 1;
-        if( typeof $rootScope.feed[theType][userCt].lists[listCt].items[thingCt].id !== 'undefined')
-        {
+        if (typeof $rootScope.feed[theType][userCt].lists[listCt].items[thingCt].id !== 'undefined') {
           continueKey = $rootScope.feed[theType][userCt].lists[listCt].items[thingCt].id;
         }
       }
@@ -487,108 +487,119 @@ angular.module('Services.database', ['LocalStorageModule'])
     // TODO3 - Create a way to load newer content.
 
     // Step 1: Make the call the the API
-    var params = $.param({theType: theType, userFilter: '', listFilter: '', myState: '', continueKey: continueKey, token: $rootScope.token , newerOrOlder: newerOrOlder });
+    var params = $.param({
+      theType: theType,
+      userFilter: '',
+      listFilter: '',
+      myState: '',
+      continueKey: continueKey,
+      token: $rootScope.token,
+      newerOrOlder: newerOrOlder
+    });
 
     $http({
-      method: 'POST',
-      url: apiPath + 'showFeed',
-      data: params,
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    })
-    .success(function (data, status, headers, config) {
-      
-      if( checkLogout(data) === true ) {
-        logout();
-      } else {
-        console.log('showFeed. TODO2 Use shc', status, headers, config, data);
-        // console.log('continue: ',oldestKey);
+        method: 'POST',
+        url: apiPath + 'showFeed',
+        data: params,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
+      .success(function (data, status, headers, config) {
 
-        console.log('database.loadFeed - showFeed data: ', data);
-
-        if( checkLogout(data) === true ) {
-          logout();
-        } else {
-          if(continueFrom === 'older' && continueKey !== 0){
-            // Append 
-            // console.log('readL older');
-            for (var rRow in data.results){
-              $rootScope.feed[theType].push(data.results[rRow]);
-            }
+          if (checkLogout(data) === true) {
+            logout();
           } else {
-            // Replace
-            $rootScope.feed[theType] = data.results;
+            console.log('showFeed. TODO2 Use shc', status, headers, config, data);
+            // console.log('continue: ',oldestKey);
+
+            console.log('database.loadFeed - showFeed data: ', data);
+
+            if (checkLogout(data) === true) {
+              logout();
+            } else {
+              if (continueFrom === 'older' && continueKey !== 0) {
+                // Append 
+                // console.log('readL older');
+                for (var rRow in data.results) {
+                  $rootScope.feed[theType].push(data.results[rRow]);
+                }
+              } else {
+                // Replace
+                $rootScope.feed[theType] = data.results;
+              }
+
+            }
+            // Update local storage TODO2
+            // eval('localStorageService.set("feed'+ (theType && theType[0].toUpperCase() + theType.slice(1) ) + '", data.results)');
+
+            // console.log('feed.Friends: ', $rootScope.feed.friends);
+            // console.log('feed.Strangers: ', $rootScope.feed.strangers);
+
           }
 
         }
-        // Update local storage TODO2
-        // eval('localStorageService.set("feed'+ (theType && theType[0].toUpperCase() + theType.slice(1) ) + '", data.results)');
+        // console.log("profile feed after showfeed",$rootScope.profileData.feed);
+      ).error(function (data, status, headers, config) {
+        console.log('database.showFeed error. ', data, status, headers, config);
 
-        // console.log('feed.Friends: ', $rootScope.feed.friends);
-        // console.log('feed.Strangers: ', $rootScope.feed.strangers);
-
-      }
-      
-    }
-    // console.log("profile feed after showfeed",$rootScope.profileData.feed);
-    ).error(function (data, status, headers, config) {
-      console.log('database.showFeed error. ', data, status, headers, config);
-      
-    });
+      });
   };
 
   /* Function to return basic (public) information about a user based on their user id. */
-  var userInfo = function (userId){
-    
+  var userInfo = function (userId) {
+
     var params = $.param({
       uid: userId,
       token: $rootScope.token
     });
-    
-    
-    
+
+
+
     $http({
-      method: 'POST',
-      url: apiPath + 'userInfo',
-      data: params,
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    })
-    .success(function (data, status, headers, config) {
-      return data;
-      
-      
-      if( checkLogout(data) === true ) {
-        logout();
-      } else {
-        
-        // console.log('TODO2 database.showfeed Use shc', data, status, headers, config);
-        // Error Handling - TODO1 - Add error handling to all calls.
-        if( typeof data.logout !== 'undefined'){
-          console.log( 'API ERROR', data );
-          if(data.logout === true){
-            console.log('showFeed.database: We should log out 364.');
-            logout();
-          }
+        method: 'POST',
+        url: apiPath + 'userInfo',
+        data: params,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
         }
-        
-        // Set user info based on these results.
-        // console.log('userInfo: ', userId, data);
-        console.log('UserInformation!!! - return this: ', data.results);
-        // return data;
-        
-        
-          
-        
-      }
-      
-    // console.log("profile feed after showfeed",$rootScope.profileData.feed);
-    })
-    .error(function(){
-      console.log('There was an error in database.showfeed/showFeed');
-      return 'error';
-    })
-    ;
+      })
+      .success(function (data, status, headers, config) {
+        return data;
+
+
+        if (checkLogout(data) === true) {
+          logout();
+        } else {
+
+          // console.log('TODO2 database.showfeed Use shc', data, status, headers, config);
+          // Error Handling - TODO1 - Add error handling to all calls.
+          if (typeof data.logout !== 'undefined') {
+            console.log('API ERROR', data);
+            if (data.logout === true) {
+              console.log('showFeed.database: We should log out 364.');
+              logout();
+            }
+          }
+
+          // Set user info based on these results.
+          // console.log('userInfo: ', userId, data);
+          console.log('UserInformation!!! - return this: ', data.results);
+          // return data;
+
+
+
+
+        }
+
+        // console.log("profile feed after showfeed",$rootScope.profileData.feed);
+      })
+      .error(function () {
+        console.log('There was an error in database.showfeed/showFeed');
+        return 'error';
+      });
   };
-  
+
   /* 10/22/2014 
     1/22/2015 - Added and made async. 
   */
@@ -604,53 +615,55 @@ angular.module('Services.database', ['LocalStorageModule'])
       token: $rootScope.token
     });
 
-  
+
 
     var promise = $http({
-      method: 'POST',
-      url: apiPath + 'showFeed',
-      data: params,
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    })
-    .then(function (response) {
-      if( checkLogout(response.data) === true ) {
-        logout();
-      } else {
-        // console.log('TODO2 database.showfeed Use shc', data, status, headers, config);
-        // Error Handling - TODO1 - Add error handling to all calls.
-        if( typeof response.data.logout !== 'undefined'){
-          console.log( 'API ERROR', data );
-          if(data.logout === true){
-            console.log('showFeed.database: We should log out 364.');
-            logout();
+        method: 'POST',
+        url: apiPath + 'showFeed',
+        data: params,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
+      .then(function (response) {
+        if (checkLogout(response.data) === true) {
+          logout();
+        } else {
+          // console.log('TODO2 database.showfeed Use shc', data, status, headers, config);
+          // Error Handling - TODO1 - Add error handling to all calls.
+          if (typeof response.data.logout !== 'undefined') {
+            console.log('API ERROR', data);
+            if (data.logout === true) {
+              console.log('showFeed.database: We should log out 364.');
+              logout();
+            }
           }
+
+          console.log('database.showFeed: ',
+            ' type: ', theType,
+            ' userFilter: ', userFilter,
+            ' listFilter: ', listFilter,
+            ' myState: ', myState,
+            ' continueKey: ', continueKey,
+            ' orOlder: ', newerOrOlder,
+            ' data: ', response.data);
+          return response.data.results;
+
+
+          if (userFilter !== '0' && userFilter !== '') {
+            // We know it's a user, so let's set local storage.
+            localStorageService.set('user' + userFilter + 'feed', response.data.results);
+          }
+
         }
 
-        console.log('database.showFeed: ', 
-                    ' type: ', theType, 
-                    ' userFilter: ', userFilter, 
-                    ' listFilter: ', listFilter, 
-                    ' myState: ', myState, 
-                    ' continueKey: ', continueKey, 
-                    ' orOlder: ', newerOrOlder, 
-                    ' data: ', response.data );        
-        return response.data.results;
-        
-        
-        if(userFilter !== '0' && userFilter !== ''){
-          // We know it's a user, so let's set local storage.
-         localStorageService.set('user' + userFilter + 'feed', response.data.results);
-        }
-        
-      }
-      
-    // console.log("profile feed after showfeed",$rootScope.profileData.feed);
-    });
+        // console.log("profile feed after showfeed",$rootScope.profileData.feed);
+      });
     return promise;
-    
-    
+
+
   };
-  
+
   /* 10/22/2014 
     1/22/2015 - Updated. This will be called individually many more times via profileCtrl to speed up calls.
   */
@@ -665,69 +678,70 @@ angular.module('Services.database', ['LocalStorageModule'])
       token: $rootScope.token
     });
 
-  // Load from local storage first.
-    if(userFilter !== '0' && userFilter !== '' &&localStorageService.get('user' + userFilter + 'feed') ) {
+    // Load from local storage first.
+    if (userFilter !== '0' && userFilter !== '' && localStorageService.get('user' + userFilter + 'feed')) {
       // We know it's a user, so let's set local storage.
-      $rootScope.profileData.feed =localStorageService.get( 'user' + userFilter + 'feed' );
+      $rootScope.profileData.feed = localStorageService.get('user' + userFilter + 'feed');
     }
 
     $http({
-      method: 'POST',
-      url: apiPath + 'showFeed',
-      data: params,
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    })
-    .success(function (data, status, headers, config) {
-      if( checkLogout(data) === true ) {
-        logout();
-      } else {
-        // console.log('TODO2 database.showfeed Use shc', data, status, headers, config);
-        // Error Handling - TODO1 - Add error handling to all calls.
-        if( typeof data.logout !== 'undefined'){
-          console.log( 'API ERROR', data );
-          if(data.logout === true){
-            console.log('showFeed.database: We should log out 364.');
-            logout();
+        method: 'POST',
+        url: apiPath + 'showFeed',
+        data: params,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
+      .success(function (data, status, headers, config) {
+        if (checkLogout(data) === true) {
+          logout();
+        } else {
+          // console.log('TODO2 database.showfeed Use shc', data, status, headers, config);
+          // Error Handling - TODO1 - Add error handling to all calls.
+          if (typeof data.logout !== 'undefined') {
+            console.log('API ERROR', data);
+            if (data.logout === true) {
+              console.log('showFeed.database: We should log out 364.');
+              logout();
+            }
           }
+
+          if (userFilter !== '0' && userFilter !== '') {
+            // We know it's a user, so let's set local storage.
+            localStorageService.set('user' + userFilter + 'feed', data.results);
+          }
+          console.log('database.showFeed: ',
+            ' type: ', theType,
+            ' userFilter: ', userFilter,
+            ' listFilter: ', listFilter,
+            ' myState: ', myState,
+            ' continueKey: ', continueKey,
+            ' orOlder: ', newerOrOlder,
+            ' data: ', data);
+          return data.results;
+
         }
 
-        if(userFilter !== '0' && userFilter !== ''){
-          // We know it's a user, so let's set local storage.
-         localStorageService.set('user' + userFilter + 'feed', data.results);
-        }
-        console.log('database.showFeed: ', 
-                    ' type: ', theType, 
-                    ' userFilter: ', userFilter, 
-                    ' listFilter: ', listFilter, 
-                    ' myState: ', myState, 
-                    ' continueKey: ', continueKey, 
-                    ' orOlder: ', newerOrOlder, 
-                    ' data: ', data );        
-        return data.results;
-        
-      }
-      
-    // console.log("profile feed after showfeed",$rootScope.profileData.feed);
-    })
-    .error(function(){
-      console.log('There was an error in database.showfeed/showFeed');
-    })
-    ;
+        // console.log("profile feed after showfeed",$rootScope.profileData.feed);
+      })
+      .error(function () {
+        console.log('There was an error in database.showfeed/showFeed');
+      });
   };
 
   /* 11.3.2014 */
   var showUser = function (userId, userName, dataScope, fbuid) {
-    cleanOtherScope('user','dbShowUser');
-    
+    cleanOtherScope('user', 'dbShowUser');
+
     // TODO2 - Handle this if it's a stranger. For now, quit.
-    if (userId === 0 || userId ==='0'){
+    if (userId === 0 || userId === '0') {
       console.log('Linking to Strangers is not currently supported');
       return;
     }
-    
+
 
     // Populate from local storage.
-    var lsTypes = new Array('ditto','feed','lists','shared');
+    var lsTypes = new Array('ditto', 'feed', 'lists', 'shared');
     /*
       for (var i in lsTypes){
         if(localStorageService.get('user' + userId + lsTypes[i])){
@@ -737,11 +751,11 @@ angular.module('Services.database', ['LocalStorageModule'])
         }
       }
     */
-                       
+
     // Start by populating from local storage.
 
     // Get something to ditto 
-    if($rootScope.user.userId !== userId){
+    if ($rootScope.user.userId !== userId) {
       showFeed('profile', userId, 'listFilter', '', '');
       $rootScope.nav.view = 'user.feed'; // Default to our relationship stats. Was user.ditto
       // TODO2 -  dbGetSome('$rootScope.profileData.ditto', userId, '', 'ditto');
@@ -753,71 +767,71 @@ angular.module('Services.database', ['LocalStorageModule'])
       $rootScope.nav.view = 'user.feed';
     }
 
-    getUserListOfLists( userId, '$rootScope.profileData.lists' );
+    getUserListOfLists(userId, '$rootScope.profileData.lists');
 
     // dbFactory.showUser(userId);
     //dbGetSome = function (theScope, userfilter, listfilter, sharedFilter)
     // Only navigate if it's not currently there.
-    if($state.current.name !== 'app.profile'){
-      $state.go('app.profile', { userId: userId });  
+    if ($state.current.name !== 'app.profile') {
+      $state.go('app.profile', {
+        userId: userId
+      });
     }
-    
+
 
     // Make sure that we have a valid title.
     headerTitle();
 
   };
-  
+
 
   /* 10/4/2014, 11/3/2014 
     1/23/2015 - converted to promise
   */
   var promiseThing = function (thingId, userFilter) {
     // Todo2 - Enable userFilter
-    
+
     // $rootScope.vars.modal.filter = 'all';
-    var thingParams = $.param(
-      {
-        token: $rootScope.token,
-        thingId: thingId
-      }
-    );
-    var promise = $http(
-      {
-        method:'POST',
+    var thingParams = $.param({
+      token: $rootScope.token,
+      thingId: thingId
+    });
+    var promise = $http({
+        method: 'POST',
         url: apiPath + 'thingDetail',
         data: thingParams,
-        headers: { 'Content-Type':'application/x-www-form-urlencoded' }
-      }
-    )
-    .then(function(response){
-      {
-        if( checkLogout(response.data) === true ) {
-          logout();
-        } else {
-          console.log()
-          // $rootScope.modal.listStore = data.results;
-          return response.data.results;
-          
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
         }
-      }
-    });
-    
+      })
+      .then(function (response) {
+        {
+          if (checkLogout(response.data) === true) {
+            logout();
+          } else {
+            console.log()
+              // $rootScope.modal.listStore = data.results;
+            return response.data.results;
+
+          }
+        }
+      });
+
     return promise;
 
   };
 
 
 
-    
+
   /* Promise Get Some - get some with a promise 
     1/22/2015 - Created 
     userFIlter - enum('strangers','friends')
   */
-  var promiseGetSome = function ( userFilter, listFilter, sharedFilter ) {
-    
-    console.log('getSomeDB  listfilter: ', listFilter ,' userfilter: ',userFilter, ' sharedFilter ', sharedFilter);
-    
+  var promiseGetSome = function (userFilter, listFilter, sharedFilter) {
+
+    console.log('getSomeDB  listfilter: ', listFilter, ' userfilter: ', userFilter, ' sharedFilter ', sharedFilter);
+
     // SharedFilter: 
     // TODO2 Can this be deleted 1/22 checkToken($rootScope.token);
 
@@ -831,38 +845,40 @@ angular.module('Services.database', ['LocalStorageModule'])
       sharedFilter: sharedFilter
 
     };
-  // Fails: dbGetSome params Object {userfilter: "", listfilter: ""} 
+    // Fails: dbGetSome params Object {userfilter: "", listfilter: ""} 
 
     var promise = $http({
-      method: 'POST',
-      url: apiPath + 'getSome',
-      data: $.param(params),
-      headers: {'Content-Type':'application/x-www-form-urlencoded'}
-    })
-    .then(function (response){
-      console.log('promise? ', response);
-      /*
-       if(userFilter !== '0' && userFilter !== ''){
-            // We know it's a user, so let's set local storage.
-           localStorageService.set('user' + userFilter + sharedFilter, data.results);
-          }
+        method: 'POST',
+        url: apiPath + 'getSome',
+        data: $.param(params),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
+      .then(function (response) {
+        console.log('promise? ', response);
+        /*
+         if(userFilter !== '0' && userFilter !== ''){
+              // We know it's a user, so let's set local storage.
+             localStorageService.set('user' + userFilter + sharedFilter, data.results);
+            }
 
-          if(listFilter !== '0' && listFilter !== '')
-          {
-            // We know it's a user, so let's set local storage.
-           localStorageService.set('list' + listFilter + sharedFilter, data.results);
-          }
-        */
-      return response.data.results;
-    });
-    
+            if(listFilter !== '0' && listFilter !== '')
+            {
+              // We know it's a user, so let's set local storage.
+             localStorageService.set('list' + listFilter + sharedFilter, data.results);
+            }
+          */
+        return response.data.results;
+      });
+
     //  console.log('dbGetSome params',params);
     return promise;
-          
+
   };
 
 
-  var headerTitle = function() {
+  var headerTitle = function () {
     console.log('Load Header');
     // $rootScope.headerTitle = "";
     $rootScope.headerTitle = 'This';
@@ -870,114 +886,114 @@ angular.module('Services.database', ['LocalStorageModule'])
   };
 
   /* Created 11/2/2014 */
-  var fbTokenLogin = function(fbToken){
+  var fbTokenLogin = function (fbToken) {
     // The user has a valid Facebook token for plitto, and now wants to log into Plitto
     // Send the token to Plitto, which handles all Facebook communication from the PHP layer.
-    var loginParams = $.param( { fbToken: fbToken } );
+    var loginParams = $.param({
+      fbToken: fbToken
+    });
     $rootScope.loginMessage = 'Facebook Login in Progress';
     //console.log( "<h3>6. dbFactory.fbTokenLogin: " + fbToken + "</h3>");
 
     // $rootScope.loginMessage = loginParams;
 
     $http({
-      method:'POST',
-      url: apiPath + 'fbToken',
-      data: loginParams ,
-      headers: {'Content-Type':'application/x-www-form-urlencoded'}
-    })
-    .success(
-      function (data, status,headers,config) {
-        
-        if( checkLogout(data) === true ) {
-          logout();
-        } else {
-          console.log('TODO2 Use shc', status, headers, config);
+        method: 'POST',
+        url: apiPath + 'fbToken',
+        data: loginParams,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
+      .success(
+        function (data, status, headers, config) {
 
-          // Initialize the rootScope.
-          dbInit();
+          if (checkLogout(data) === true) {
+            logout();
+          } else {
+            console.log('TODO2 Use shc', status, headers, config);
 
-          // $rootScope.$broadcast("getLoginStatus", {value:'value'});
-          // $rootScope.$broadcast('getLoginStatus', { fbresponse: null});
-          $rootScope.loginMessage = 'Plitto FB Login Complete';
-          // console.log('database.fbTokenLogin response: TODO1 - DO NOT CALL TWICE ',data);
+            // Initialize the rootScope.
+            dbInit();
 
-          // console.log('response from fbToken: ',data);
-          // data.me.puid is the plitto userid. That should be there.
-          if(data.me && data.me.puid && /^\+?(0|[1-9]\d*)$/.test(data.me.puid)){
-            console.log('puid is valid');
-            // $rootScope.loginMessage = '<h3>8. PUID valid: ' + data.me.token + '. Redirect to app.home</h3>';
-            $rootScope.loginMessage = 'Plitto User Information Received. Open App.';
+            // $rootScope.$broadcast("getLoginStatus", {value:'value'});
+            // $rootScope.$broadcast('getLoginStatus', { fbresponse: null});
+            $rootScope.loginMessage = 'Plitto FB Login Complete';
+            // console.log('database.fbTokenLogin response: TODO1 - DO NOT CALL TWICE ',data);
 
-            // Get the current time:
-            var d = new Date();
-            var theTime = d.getTime();
+            // console.log('response from fbToken: ',data);
+            // data.me.puid is the plitto userid. That should be there.
+            if (data.me && data.me.puid && /^\+?(0|[1-9]\d*)$/.test(data.me.puid)) {
+              console.log('puid is valid');
+              // $rootScope.loginMessage = '<h3>8. PUID valid: ' + data.me.token + '. Redirect to app.home</h3>';
+              $rootScope.loginMessage = 'Plitto User Information Received. Open App.';
 
-            // Set the stores. This is the only place where the User info is created. Otherwise, it's in local storage.
-            $rootScope.user = {
-              userId: data.me.puid,
-              userName: data.me.username,
-              fbuid: data.me.fbuid,
-              unreadNotifications: 10,
-              listCount: 10,
-              thingCount: 10,
-              lastRefresh: theTime
-            };
+              // Get the current time:
+              var d = new Date();
+              var theTime = d.getTime();
 
-            headerTitle();
+              // Set the stores. This is the only place where the User info is created. Otherwise, it's in local storage.
+              $rootScope.user = {
+                userId: data.me.puid,
+                userName: data.me.username,
+                fbuid: data.me.fbuid,
+                unreadNotifications: 10,
+                listCount: 10,
+                thingCount: 10,
+                lastRefresh: theTime
+              };
 
-           localStorageService.set('user', $rootScope.user );
+              headerTitle();
 
-            // Make the root token and the Local Storage
-           $rootScope.token = data.me.token;
-           localStorageService.set('token', data.me.token);
+              localStorageService.set('user', $rootScope.user);
 
-            updateCounts();
+              // Make the root token and the Local Storage
+              $rootScope.token = data.me.token;
+              localStorageService.set('token', data.me.token);
 
-            // Make the root token and the Local Storage
-            $rootScope.friendStore = data.friends;
-           localStorageService.set('friendStore', data.friends);
+              updateCounts();
 
-            // Populate the initial "Ditto Some" view
-            $rootScope.bite = data.getSome;
-           localStorageService.set('bite', data.getSome);
+              // Make the root token and the Local Storage
+              $rootScope.friendStore = data.friends;
+              localStorageService.set('friendStore', data.friends);
 
-            // FINALLY! - Load the interface
-            // $state.go('app.home'); // TODO1 - This needs to be reflected in the URL.
-            $rootScope.$broadcast('broadcast',
-              {
+              // Populate the initial "Ditto Some" view
+              $rootScope.bite = data.getSome;
+              localStorageService.set('bite', data.getSome);
+
+              // FINALLY! - Load the interface
+              // $state.go('app.home'); // TODO1 - This needs to be reflected in the URL.
+              $rootScope.$broadcast('broadcast', {
                 command: 'state',
                 path: 'app.home',
                 debug: 'dbFactory.fbTokenLogin - Go Home.'
-              }
-            );
+              });
 
-          } else {
-            console.log('TODO1 There was an error. Log it.', data);
-            // $state.go('app.login'); // TODO1 - This needs to be reflected in the URL. 11/2014 - THIS MIGHT WORK> NEEDS TO BE TESTED>
-            $rootScope.$broadcast('broadcast',
-              {
+            } else {
+              console.log('TODO1 There was an error. Log it.', data);
+              // $state.go('app.login'); // TODO1 - This needs to be reflected in the URL. 11/2014 - THIS MIGHT WORK> NEEDS TO BE TESTED>
+              $rootScope.$broadcast('broadcast', {
                 command: 'state',
                 path: 'login',
                 debug: 'Login unsuccessful. Go back to login'
-              }
-            );
-            
-            dbInit();
+              });
+
+              dbInit();
+            }
+
           }
 
+
+
         }
-
-        
-
-      }
-    );
+      );
   };
 
   /* Gets their Plitto Friends, and adds it to the local store. 9/3/2014
       // 10/21/2014 This will only be called on a refresh, which isn't built yet.
   */
   var fbPlittoFriends = function (server) {
-    console.log('TODO2 Use fbPlittoFriends.server', server );
+    console.log('TODO2 Use fbPlittoFriends.server', server);
     // Make the API call to get this user's friends.
     // console.log('rs server',$rootScope.server);
 
@@ -996,45 +1012,47 @@ angular.module('Services.database', ['LocalStorageModule'])
     // FriendsData could be null. What happens then?
 
     // Load from local storage, if it's there, then update it.
-    $rootScope.friendStore =localStorageService.get('friendStore');
+    $rootScope.friendStore = localStorageService.get('friendStore');
 
     // Only request their friends if they have more than 0.
-    if(friendsData.length > 0) {
+    if (friendsData.length > 0) {
 
-      var params = $.param( { fbFriends: friendsData } );
-      $http(
-        {
-          method:'POST',
-          url: apiPath+'pFriends',
+      var params = $.param({
+        fbFriends: friendsData
+      });
+      $http({
+          method: 'POST',
+          url: apiPath + 'pFriends',
           data: params,
-          headers: { 'Content-Type' : 'application/x-www-form-urlencoded' }
-        }
-      )
-      .success(
-        function (data,status,headers,config) {
-          
-          if( checkLogout(data) === true ) {
-            logout();
-          } else {
-            // console.log('TODO2 database.pFriends Use shc', status, headers, config);
-          
-            // Handle the users, lists and things.
-            // Add it to the scope, so it can be shown
-            $rootScope.friendStore = data.result;
-
-            // Update the local storage.
-            localStorageAppend('fbLogin',data.result);
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
           }
-          
-        }
-      );
+        })
+        .success(
+          function (data, status, headers, config) {
+
+            if (checkLogout(data) === true) {
+              logout();
+            } else {
+              // console.log('TODO2 database.pFriends Use shc', status, headers, config);
+
+              // Handle the users, lists and things.
+              // Add it to the scope, so it can be shown
+              $rootScope.friendStore = data.result;
+
+              // Update the local storage.
+              localStorageAppend('fbLogin', data.result);
+            }
+
+          }
+        );
     } else {
       var response = 'You should invite your friends to Plitto';
       // console.log('TODO2 use response? ',response);
     }
   };
 
-  
+
   /* 9/7/2014
     Get the list of lists for this user, and from you and your friends
     1/22/2015 - Created the promise version of this.
@@ -1044,36 +1062,36 @@ angular.module('Services.database', ['LocalStorageModule'])
     // console.log('database.getUserListOfLists: getUserListOfLists: friendId: ',friendId, ' theScope: ', theScope);
 
 
-    var params = $.param(
-      {
-        userfilter: friendId,
-        token: $rootScope.token });
+    var params = $.param({
+      userfilter: friendId,
+      token: $rootScope.token
+    });
     // console.log('listoflists params: ',params);
-    var promise = $http(
-      {
-        method:'POST',
-        url: apiPath + 'listOfLists',
-        data: params,
-        headers: {'Content-Type':'application/x-www-form-urlencoded'}
+    var promise = $http({
+      method: 'POST',
+      url: apiPath + 'listOfLists',
+      data: params,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
       }
-    ).then(function (response) {
-      if( checkLogout(response.data) === true ) {
-          logout();
-        } else {
-          // console.log('TODO3 database.listOfLists: Use shc', status, headers, config);
-          
-          // Let the controller handle this.
-          return response.data.results;
+    }).then(function (response) {
+      if (checkLogout(response.data) === true) {
+        logout();
+      } else {
+        // console.log('TODO3 database.listOfLists: Use shc', status, headers, config);
 
-          // Add / Update to local storage
-         localStorageService.set('user' + friendId + 'lists', data.results);
+        // Let the controller handle this.
+        return response.data.results;
 
-        }
+        // Add / Update to local storage
+        localStorageService.set('user' + friendId + 'lists', data.results);
+
+      }
     });
     return promise;
-    
+
   };
-  
+
   /* 9/7/2014
     Get the list of lists for this user, and from you and your friends
     1/22/2015 - This should be ready to delete on 1/24/2015
@@ -1119,42 +1137,44 @@ angular.module('Services.database', ['LocalStorageModule'])
   */
   var sharedStat = function (friendId) {
     // console.log('dbFactory.sharedState',friendId,$rootScope.friendStore);
-    var friendStore =localStorageService.get('friendStore');
+    var friendStore = localStorageService.get('friendStore');
     //This will be in local storage, and in the friendStore.
-    for(var i in friendStore) {
+    for (var i in friendStore) {
       // console.log('sharedStat loop');
-      if(parseInt(friendStore[i].id) === parseInt(friendId)) {
+      if (parseInt(friendStore[i].id) === parseInt(friendId)) {
         $rootScope.vars.modal.user.shared = friendStore[i].shared;
         $rootScope.vars.modal.user.dittoable = friendStore[i].dittoable;
         // console.log('found 32',$rootScope.vars.modal.user.shared , friendStore[i].shared);
-        { break; }
+        {
+          break;
+        }
       }
     }
   };
-  
+
 
 
 
   /* 9/3/2014 */
   var showAList = function (listNameId, listName, userFilter, focus) {
-    cleanOtherScope('list','db.showAList');
+    cleanOtherScope('list', 'db.showAList');
     // 
     // console.log('database.showAList: ',listNameId, listName , userFilter);
-    
+
     console.log('todo1 - When focus - go straight to adding to a user list and open the keyboard. Focus: ', focus);
 
-    if(focus === 'addToList'){
+    if (focus === 'addToList') {
       console.log('DEBUG FOCUS addToList');
-      $('input#newListItemField').css('border','5px solid red');
+      $('input#newListItemField').css('border', '5px solid red');
       $('input#newListItemField').focus();
     } else {
-      $('input#newListItemField').css('border','0');
+      $('input#newListItemField').css('border', '0');
     }
-    
+
     $rootScope.list = {
       listId: listNameId,
       listName: listName,
-      mine:[
+      mine: [
         {
           fbuid: $rootScope.user.fbuid,
           uid: $rootScope.user.userId,
@@ -1168,24 +1188,24 @@ angular.module('Services.database', ['LocalStorageModule'])
           ]
         }
       ],
-      ditto:[],
-      shared:[],
-      feed:[],
-      strangers:[]
+      ditto: [],
+      shared: [],
+      feed: [],
+      strangers: []
     };
 
     // Load from local storage, if it exists.
-    var viewTypes = new Array('ditto','shared','feed','strangers','mine');
+    var viewTypes = new Array('ditto', 'shared', 'feed', 'strangers', 'mine');
     // console.log('database.showAList: ls get mine: ',localStorageService.get('listId' + listNameId + 'mine'));
 
-    for(var i in viewTypes){
-      if(localStorageService.get('listId' + listNameId + viewTypes[i])){
-        if(viewTypes[i] === 'mine'){
+    for (var i in viewTypes) {
+      if (localStorageService.get('listId' + listNameId + viewTypes[i])) {
+        if (viewTypes[i] === 'mine') {
           console.log('database.showAList: TODO3 this is mine. Why do we care?');
 
         }
-        
-        $rootScope.list[viewTypes[i]] =localStorageService.get('listId' + listNameId + viewTypes[i]);
+
+        $rootScope.list[viewTypes[i]] = localStorageService.get('listId' + listNameId + viewTypes[i]);
         /* Deleted 1/21/2014 
         eval(
           '$rootScope.list.' +
@@ -1197,7 +1217,9 @@ angular.module('Services.database', ['LocalStorageModule'])
     }
 
     $rootScope.nav.listView = 'ditto';
-    $state.go('app.list', { listId: listNameId});
+    $state.go('app.list', {
+      listId: listNameId
+    });
 
     // var existing = [];
     // getMore ('list',listNameId, userFilter, existing);
@@ -1218,42 +1240,42 @@ angular.module('Services.database', ['LocalStorageModule'])
     });
 
     // console.log('getMoreparams: ',params);
-    $http(
-      {
-        method:'POST',
+    $http({
+        method: 'POST',
         url: apiPath + 'getMore',
-        data: params ,
-        headers: {'Content-Type':'application/x-www-form-urlencoded'}
-      }
-    )
-    .success(
-      function (data,status,headers,config) {
-        
-        if( checkLogout(data) === true ) {
-          logout();
-        } else {
-          
-          // console.log('database.getMore TODO3 Use shc', status, headers, config);
-          // Append the data to the proper place.
-          // console.log('data.results size',data.results,data.results.length);
+        data: params,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
+      .success(
+        function (data, status, headers, config) {
 
-          // Put it in the listStore if we know what it is
-          if( type === 'list') {
-            // TODO2 - Append rather than overwrite.
-            $rootScope.list.items = data.results;
-            // $rootScope.list.itemCount = data.results.length;
-            // There isn't a benefit for local storage here, because it
+          if (checkLogout(data) === true) {
+            logout();
+          } else {
 
-            console.log('rootScope.list built by getMore: ',$rootScope.list.items);
+            // console.log('database.getMore TODO3 Use shc', status, headers, config);
+            // Append the data to the proper place.
+            // console.log('data.results size',data.results,data.results.length);
 
-          } else if(type==='user') {
-            console.log('database.getMore TODO2 - Build the place to store user information');
+            // Put it in the listStore if we know what it is
+            if (type === 'list') {
+              // TODO2 - Append rather than overwrite.
+              $rootScope.list.items = data.results;
+              // $rootScope.list.itemCount = data.results.length;
+              // There isn't a benefit for local storage here, because it
+
+              console.log('rootScope.list built by getMore: ', $rootScope.list.items);
+
+            } else if (type === 'user') {
+              console.log('database.getMore TODO2 - Build the place to store user information');
+            }
+
           }
 
         }
-
-      }
-    );
+      );
   };
 
 
@@ -1263,16 +1285,16 @@ angular.module('Services.database', ['LocalStorageModule'])
     11/5/2014 - This is currently not used.
   */
   var getMoreAppend = function (caption, params, data, id) {
-    console.log('TODO2 Use getMoreAppend id', id );
+    console.log('TODO2 Use getMoreAppend id', id);
     // Step 1. Get the key that should be in place for the local storage.
     var thefilter = '';
     var thekey = '';
     var gma = '';
-    if($rootScope.nav.modal === true && $rootScope.nav.filter === 'user') {
+    if ($rootScope.nav.modal === true && $rootScope.nav.filter === 'user') {
       thefilter = 'modalUser';
       thekey = 'userL_' + $rootScope.nav.filterId;
-      gma =localStorageService.get(thekey);
-      if(gma && gma.length > 0) {
+      gma = localStorageService.get(thekey);
+      if (gma && gma.length > 0) {
         $rootScope.modal.listStore = gma;
       } else {
         gma = [];
@@ -1280,11 +1302,11 @@ angular.module('Services.database', ['LocalStorageModule'])
     } else if ($rootScope.nav.modal === true && $rootScope.nav.filter === 'list') {
       thefilter = 'modalList';
       thekey = 'listL_' + $rootScope.nav.filterId;
-      console.log('list local storage key: ' , thekey, data);
+      console.log('list local storage key: ', thekey, data);
 
       // Existing
-      var existingList =localStorageService.get(thekey);
-      if(existingList) {
+      var existingList = localStorageService.get(thekey);
+      if (existingList) {
         console.log('list exists');
         gma = existingList;
         $rootScope.modal.listStore = gma;
@@ -1293,8 +1315,7 @@ angular.module('Services.database', ['LocalStorageModule'])
         gma = [];
         $rootScope.modal.listStore = gma;
       }
-    }
-    else {
+    } else {
       gma = [];
     }
 
@@ -1306,8 +1327,8 @@ angular.module('Services.database', ['LocalStorageModule'])
     var shouldAppend = true;
 
     // Process the correct scope.
-    if($rootScope.nav.modal === true) {
-      if(!$rootScope.modal.listStore || $rootScope.modal.listStore.length === 0) {
+    if ($rootScope.nav.modal === true) {
+      if (!$rootScope.modal.listStore || $rootScope.modal.listStore.length === 0) {
         // It was empty, so make it this data.
         $rootScope.modal.listStore = data;
         console.log('Don\'t append because the liststore is false, or it\'s 0.', $rootScope.modal.listStore, $rootScope.modal.listStore.length);
@@ -1315,16 +1336,16 @@ angular.module('Services.database', ['LocalStorageModule'])
 
         // Update the local storage.
         // var localKey = $rootScope.nav.filter + 'L_' + $rootScope.nav.filterid;
-        if( thekey ) {
-          console.log('SET THE KEY', thekey );
-         localStorageService.set(thekey,data);
+        if (thekey) {
+          console.log('SET THE KEY', thekey);
+          localStorageService.set(thekey, data);
         }
 
       } else {
         gma = $rootScope.modal.listStore;
       }
-    }  else {
-      if($rootScope.activityStore.length === 0) {
+    } else {
+      if ($rootScope.activityStore.length === 0) {
         console.log('Don\'t append because the activity store is empty.');
         shouldAppend = false;
         $rootScope.activityStore = data;
@@ -1334,37 +1355,43 @@ angular.module('Services.database', ['LocalStorageModule'])
     }
     // console.log('gma rootscope',' shouldAppend: ',shouldAppend);
 
-    if(shouldAppend=== true) {
+    if (shouldAppend === true) {
       // console.log('move to append','gma: ',gma);
 
       // Look at the existing content to seed matches.
       var userLists = [];
-      for(var i in gma) {
-        for( var j in gma[i].lists ) {
-          userLists.push( { i: i, j: j, uid: gma[i].uid, lid: gma[i].lists[j].lid , used: false } );
+      for (var i in gma) {
+        for (var j in gma[i].lists) {
+          userLists.push({
+            i: i,
+            j: j,
+            uid: gma[i].uid,
+            lid: gma[i].lists[j].lid,
+            used: false
+          });
         }
       }
 
       // console.log('userLists:',userLists);
       // PROBLEM - One list is being added four times rather than being appended to an existing list once..
 
-      for( var l in data ) {
+      for (var l in data) {
         // Inside the user loop.
-        for( var m in data[l].lists ) {
+        for (var m in data[l].lists) {
           // Inside the list loop
 
           // Check existing for matches.
-          for( var z in userLists ) {
+          for (var z in userLists) {
             //console.log('append',parseInt(userLists[z].uid) , parseInt(data[i].uid) , parseInt(userLists[z].lid) , parseInt(data[i].lists[j].lid) );
-            if( userLists[z].uid === data[l].uid && userLists[z].lid === data[l].lists[m].lid ) {
+            if (userLists[z].uid === data[l].uid && userLists[z].lid === data[l].lists[m].lid) {
               // console.log('matched existing.',data[i].lists[j].items);
               //
               console.log('to push to', gma[userLists[z].l].lists[userLists[z].m].items);
-              console.log('add these items',data[l].lists[m].items);
+              console.log('add these items', data[l].lists[m].items);
               console.log('positions: ', l, m);
               gma[userLists[z].l].lists[userLists[z].m].items.push.apply(
                 gma[userLists[z].l].lists[userLists[z].m].items,
-                data[l].lists[m].items );
+                data[l].lists[m].items);
 
               userLists[z].used = true;
               data[l].lists[m].used = true;
@@ -1378,51 +1405,49 @@ angular.module('Services.database', ['LocalStorageModule'])
   };
 
 
-  var newList = function ( thingName, success, failure) {
-    console.log('TODO2 Use newList.failure', failure );
+  var newList = function (thingName, success, failure) {
+    console.log('TODO2 Use newList.failure', failure);
     // Query the API and make the thing, if it needs to be made.
-    var thingParams = $.param(
-      {
-        thingName: thingName,
-        token: $rootScope.token
-      }
-    );
-    $http(
-      {
-        method:'POST',
-        url:apiPath + 'thingid',
+    var thingParams = $.param({
+      thingName: thingName,
+      token: $rootScope.token
+    });
+    $http({
+        method: 'POST',
+        url: apiPath + 'thingid',
         data: thingParams,
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-      }
-    )
-    .success(
-      function (data,status,headers,config) {
-        
-        if( checkLogout(data) === true ) {
-          logout();
-        } else {
-          console.log('database.newlist TODO2 Use shc', status, headers, config);
-          var newListId = data.results[0].thingid;
-          // 
-          console.log('New List ID: ',newListId, 'thingname: ',thingName);
-
-          // Callback - On creating the new list.
-          success(newListId, thingName);
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
         }
-        
-      }
-    );
+      })
+      .success(
+        function (data, status, headers, config) {
+
+          if (checkLogout(data) === true) {
+            logout();
+          } else {
+            console.log('database.newlist TODO2 Use shc', status, headers, config);
+            var newListId = data.results[0].thingid;
+            // 
+            console.log('New List ID: ', newListId, 'thingname: ', thingName);
+
+            // Callback - On creating the new list.
+            success(newListId, thingName);
+          }
+
+        }
+      );
   };
 
   /*  11.4.2014 - Updates friends, lists, user info on app re-launch 
       1/22/2015 - This mainly checks to see if the token is valid. 
   */
-  var refreshData = function(token){
-    console.log('TODO2 Use refreshData.token', token );
+  var refreshData = function (token) {
+    console.log('TODO2 Use refreshData.token', token);
     // This function will be called when the app loads, and already has a token. It's kind of like login.
 
     // Populate profile information
-    if( localStorageService.get('user')){
+    if (localStorageService.get('user')) {
       $rootScope.user = localStorageService.get('user');
     }
 
@@ -1441,52 +1466,55 @@ angular.module('Services.database', ['LocalStorageModule'])
     */
 
     // TODO1 Now, make the HTTP calls to refresh them.
-    var checkParams = $.param({token: $rootScope.token});
-    
+    var checkParams = $.param({
+      token: $rootScope.token
+    });
+
 
     $http({
       method: 'POST',
       url: apiPath + 'checktoken',
       data: checkParams,
-      headers: {'Content-Type':'application/x-www-form-urlencoded'}
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
     }).success(
-      function (data,status,headers,config) {
-        
+      function (data, status, headers, config) {
+
         console.log('db.refreshData data: ', data);
-        
-        if( checkLogout(data) === true ) {
+
+        if (checkLogout(data) === true) {
           logout();
         } else {
           // console.log('TODO2 Use shc', status, headers, config);
-          console.log('typeof: ', data );
-          if( data.error === true) {
+          console.log('typeof: ', data);
+          if (data.error === true) {
             console.log('SOME KIND OF TOKEN ERROR');
             // Force log out, and clear local storage.
             logout();
-          }
-          else if(data.results && data.results[0].success &&  data.results[0].success === '1'){
-            console.log('Check token results: ',data, data.results[0].success);
-            
+          } else if (data.results && data.results[0].success && data.results[0].success === '1') {
+            console.log('Check token results: ', data, data.results[0].success);
+
             // Update the "me" information.
-            
-            
-            
+
+
+
             // Go to the home screen, but only if at login?.
-            
-            if($state && $state.current && $state.current.name ){
-              console.log('IRRELEVENT TEST db.refreshData 1581 passed. currentname: ',$state.current.name);
-              if( $state.current.name === 'login' || $state.current.name === 'loading' ){
+
+            if ($state && $state.current && $state.current.name) {
+              console.log('IRRELEVENT TEST db.refreshData 1581 passed. currentname: ', $state.current.name);
+              if ($state.current.name === 'login' || $state.current.name === 'loading') {
                 // dbGetSome( '$rootScope.bite' , '' , '', 'ditto');
                 console.log('todo2 remove this. db.refreshdata1627. Loads a bite. Should happen in the home controller.');
-              }  else {
-                console.log('not login or loading, but does exist.', $state.current.name );
+              } else {
+                console.log('not login or loading, but does exist.', $state.current.name);
               }
             } else {
               console.log('IRRELEVENT TEST db.refreshData 1641 failed');
             }
-            
-            
-            
+
+
+
           } else {
             console.log('invalid token. Db1488');
             // ', data.results[0].success, data.results[0].success === '1');
@@ -1494,15 +1522,15 @@ angular.module('Services.database', ['LocalStorageModule'])
 
         }
 
-        
+
       }
     );
 
   };
-  
-  
+
+
   /* Populate a list with all the different views, if they're there. */
-  var loadList = function(listNameId, listName, userIdFilter, type, sharedFilter, oldestKey){
+  var loadList = function (listNameId, listName, userIdFilter, type, sharedFilter, oldestKey) {
     // console.log('database.loadList - rs.list before: ',$rootScope.list);
     var params = $.param({
       id: listNameId,
@@ -1513,64 +1541,61 @@ angular.module('Services.database', ['LocalStorageModule'])
       sharedFilter: sharedFilter
 
     });
-    $http(
-      {
-        method: 'POST',
-        url: apiPath + 'loadList',
-        data: params,
-        headers: {'Content-Type':'application/x-www-form-urlencoded'}
+    $http({
+      method: 'POST',
+      url: apiPath + 'loadList',
+      data: params,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
       }
-    ).success(
-      function(data, status, headers, config){
-        
+    }).success(
+      function (data, status, headers, config) {
+
         // console.log('loadList: ', data.results, data.results.length);
         // console.log('test ditto results', type, data.results['ditto'], data.results[type]);
         // console.log('database.loadlist: TODO3 Use shc', status, headers, config);
-        
-        if( checkLogout(data) === true ) {
+
+        if (checkLogout(data) === true) {
           logout();
         } else {
-          
-          var viewTypes = new Array('ditto','shared','feed','strangers','mine');
+
+          var viewTypes = new Array('ditto', 'shared', 'feed', 'strangers', 'mine');
           // console.log( 'loadlist view types: ' , viewTypes, 'type: ', typeof (data.results[type].length));
-          
+
           /* Must not be all, and  */
           if (
-//             (type !== 'all' && data.results.length === 0) ||
+            //             (type !== 'all' && data.results.length === 0) ||
             type !== 'all'
-          )
-          {
-            console.log('database.loadlist 1231 type: ',type,'empty?: ', data.results[type],  data.results[type].length);
-            
+          ) {
+            console.log('database.loadlist 1231 type: ', type, 'empty?: ', data.results[type], data.results[type].length);
+
             /* Log legit no rows */
-            if(data.results[type].length === 0 ){
-              $rootScope.list[type] = zeroRecords();  
+            if (data.results[type].length === 0) {
+              $rootScope.list[type] = zeroRecords();
             } else {
               $rootScope.list[type] = data.results[type];
-             localStorageService.set('listId' + listNameId + type, data.results[type]);  
+              localStorageService.set('listId' + listNameId + type, data.results[type]);
             }
-            
+
             // eval('$rootScope.list.' + type + ' = "empty";');
-            
-            
-          }
-          else if (type === 'all') {
-            for(var i in viewTypes){
+
+
+          } else if (type === 'all') {
+            for (var i in viewTypes) {
               // console.log('i: ',i, type[i]);
 
               // Build each type, but only clear the store if the request type was "all"
               // console.log('database.loadList Type response: ', typeof data.results[ viewTypes[i] ], viewTypes[i], data.results[ viewTypes[i] ], ' typeof: ',typeof (data.results[ viewTypes[i] ].rowcount) );
-                
-              console.log('DEBUG1179: ', viewTypes[i], typeof (data.results[ viewTypes[i] ].rowcount) );
-              
-              
-              if( !data.results[ viewTypes[i] ].length )
-                // Clean out the store if there were no results
+
+              console.log('DEBUG1179: ', viewTypes[i], typeof (data.results[viewTypes[i]].rowcount));
+
+
+              if (!data.results[viewTypes[i]].length)
+              // Clean out the store if there were no results
               {
                 console.log('database.loadlist 1250 SHOW!!! type: ', viewTypes[i], data.results[viewTypes[i]]);
-                if(viewTypes[i] !== 'mine')
-                {
-                  $rootScope.list[ viewTypes[i] ] = [];
+                if (viewTypes[i] !== 'mine') {
+                  $rootScope.list[viewTypes[i]] = [];
                 } else {
                   // Create an empty list so my item can be added.
                   $rootScope.list.mine = [
@@ -1588,23 +1613,22 @@ angular.module('Services.database', ['LocalStorageModule'])
                     }
                   ];
                 }
-              }
-              else {
-                console.log('loadList ignore section:', viewTypes[i], data.results[ viewTypes[i]]);
+              } else {
+                console.log('loadList ignore section:', viewTypes[i], data.results[viewTypes[i]]);
                 // console.log('database.loadList - make type: ',viewTypes[i]);
                 // Build the view
                 $rootScope.list[viewTypes[i]] = data.results[viewTypes[i]];
                 // Add this item to local storega.
-               localStorageService.set('listId' +
-                     listNameId +
-                     viewTypes[i],
-                     data.results[viewTypes[i]]);
-                      
+                localStorageService.set('listId' +
+                  listNameId +
+                  viewTypes[i],
+                  data.results[viewTypes[i]]);
+
               }
 
-              if(localStorageService.get('listId' + listNameId + 'ditto')){
+              if (localStorageService.get('listId' + listNameId + 'ditto')) {
                 eval('$rootScope.list.' +
-                     viewTypes[i] + '=localStorageService.get("listId" + listNameId +"' +  viewTypes[i] + '");');
+                  viewTypes[i] + '=localStorageService.get("listId" + listNameId +"' + viewTypes[i] + '");');
               }
             }
           } else {
@@ -1616,7 +1640,7 @@ angular.module('Services.database', ['LocalStorageModule'])
             // eval("localStorageService.set('listId' + listNameId +'" +  sharedFilter + "' , data.results." + sharedFilter + ");");
           }
 
-        // console.log('type: ',type,' listNameId: ', listNameId, ' listName: ', listName, ' userIdFilter: ', userIdFilter, 'Success? rs.list: ',$rootScope.list);
+          // console.log('type: ',type,' listNameId: ', listNameId, ' listName: ', listName, ' userIdFilter: ', userIdFilter, 'Success? rs.list: ',$rootScope.list);
 
         }
 
@@ -1625,7 +1649,7 @@ angular.module('Services.database', ['LocalStorageModule'])
     );
   };
 
-  
+
   /* Async loading of a list 1/23/2015 
     Inputs:
       listNameId - the int for the the list.
@@ -1633,11 +1657,11 @@ angular.module('Services.database', ['LocalStorageModule'])
       userIdFilter - Filter for a specific user. '' for friends, 'strangers' for strangers
       $type = Array("ditto","shared","mine", "feed", "strangers");
   */
-  var promiseList = function(listNameId, userIdFilter, viewType, sharedFilter, oldestKey){
+  var promiseList = function (listNameId, userIdFilter, viewType, sharedFilter, oldestKey) {
     //  
-    console.log('dbFactory.promiseList | listNameId, userIdFilter, viewType, sharedFilter, oldestKey',listNameId, userIdFilter, viewType, sharedFilter, oldestKey);
-   
-    
+    console.log('dbFactory.promiseList | listNameId, userIdFilter, viewType, sharedFilter, oldestKey', listNameId, userIdFilter, viewType, sharedFilter, oldestKey);
+
+
     var params = $.param({
       id: listNameId,
       type: viewType,
@@ -1647,265 +1671,262 @@ angular.module('Services.database', ['LocalStorageModule'])
       sharedFilter: sharedFilter
     });
 
-    var promise = $http(
-      {
-        method:'POST',
+    var promise = $http({
+        method: 'POST',
         url: apiPath + 'loadList',
         data: params,
-        headers: { 'Content-Type':'application/x-www-form-urlencoded' }
-      }
-    )
-    .then( function (response) {
-       
-        if( checkLogout(response.data) === true ) {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
+      .then(function (response) {
+
+        if (checkLogout(response.data) === true) {
           logout();
         } else {
           console.log('res', response.data);
-          console.log('database.loadlist 1231 viewType: ',viewType,'empty?: ', response.data.results[viewType],  response.data.results[viewType].length);
+          console.log('database.loadlist 1231 viewType: ', viewType, 'empty?: ', response.data.results[viewType], response.data.results[viewType].length);
 
           /* Log legit no rows */
-          if(response.data.results[viewType].length === 0 ){
+          if (response.data.results[viewType].length === 0) {
             console.log('no rows');
-            localStorageService.set('listId' + listNameId + viewType, []);  
+            localStorageService.set('listId' + listNameId + viewType, []);
             return [];
           } else {
             return response.data;
-            localStorageService.set('listId' + listNameId + viewType, response.data.results[viewType]);  
+            localStorageService.set('listId' + listNameId + viewType, response.data.results[viewType]);
           }
 
         }
-      }
-    );
+      });
 
     return promise;
 
   };
-  
-  
+
+
   // Add to a list. 1/23/2015 - Convert this to promise
   var addToList = function (addToListObj) {
-    var addToListParams = $.param(
-      {
-        thingName: addToListObj.thingName,
-        listnameid: addToListObj.lid,
-        token: $rootScope.token
-      }
-    );
+    var addToListParams = $.param({
+      thingName: addToListObj.thingName,
+      listnameid: addToListObj.lid,
+      token: $rootScope.token
+    });
     // console.log('dbFactory.addToList | ',addToListParams);
-    $http(
-      {
-        method:'POST',
+    $http({
+        method: 'POST',
         url: apiPath + 'addToList',
-        data: addToListParams ,
-        headers: {'Content-Type':'application/x-www-form-urlencoded'}
-      }
-    )
-    .success(
-      function (data,status,headers,config) {
+        data: addToListParams,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
+      .success(
+        function (data, status, headers, config) {
 
-        if( checkLogout(data) === true ) {
-          logout();
-        } else {
-          console.log('Database.addToList:TODO3 Use shc', status, headers, config);
-          //
-          // console.log("addtolistdata: ",data);
-          // console.log('detailed',data.results[0].thekey);
-          // Add it to the RootScope.
-          // console.log('added a new item: ',data)
-          var item = data.results[0];
+          if (checkLogout(data) === true) {
+            logout();
+          } else {
+            console.log('Database.addToList:TODO3 Use shc', status, headers, config);
+            //
+            // console.log("addtolistdata: ",data);
+            // console.log('detailed',data.results[0].thekey);
+            // Add it to the RootScope.
+            // console.log('added a new item: ',data)
+            var item = data.results[0];
 
-          var myNewItem = {
-            mykey: item.thekey,
-            tid: item.thingid,
-            thingname: item.thingname,
-            added: 'now',
-            dittokey: 0,
-            dittouser: null,
-            dittousername: null
-          };
-
-          // Placeholder for existing list.
-
-          var myThingAlready = -1;
-
-          console.log('Existing List: ', $rootScope.list.mine);
-          if(!$rootScope.list.mine.length){
-            console.log('DEBUG1032no length');
-          }
-          if($rootScope.list.mine.length === 0){
-            console.log('DEBUG1035 ZERO');
-          }
-          // Add my list if it's not already there.
-          if(!$rootScope.list.mine.length || $rootScope.list.mine.length === 0) {
-            console.log('make my list');
-            // Make my list.
-            var myList = {
-              uid: $rootScope.user.userId,
-              fbuid: $rootScope.user.fbuid,
-              username: $rootScope.user.userName,
-              lists: [ 
-                { 
-                  lid: addToListObj.lid, 
-                  listname: $rootScope.list.listName,
-                  items: [ myNewItem ] 
-                } 
-              ]
+            var myNewItem = {
+              mykey: item.thekey,
+              tid: item.thingid,
+              thingname: item.thingname,
+              added: 'now',
+              dittokey: 0,
+              dittouser: null,
+              dittousername: null
             };
 
-            // Make my list first 
-            $rootScope.list.mine[0] = myList;
-            
-            console.log('my list: ', $rootScope.list.mine);
+            // Placeholder for existing list.
 
-          } else {
-            console.log(' This should exist: ',$rootScope.list.mine);
-          }
-          
-          
-          var i = 0;
-          // console.log( 'database.addToList: what is in this new list? ', $rootScope.list, $rootScope.list.mine );
+            var myThingAlready = -1;
 
-          // We need to look in my own list to see if the item is already there. If so, just activate it.
-          for(i in $rootScope.list.mine[0].lists[0].items){
-            if($rootScope.list.mine[0].lists[0].items[i].tid === item.thingid){
-              myThingAlready = i;
+            console.log('Existing List: ', $rootScope.list.mine);
+            if (!$rootScope.list.mine.length) {
+              console.log('DEBUG1032no length');
             }
-          }
-          // console.log('didList',didList, 'myListPosition', myListPosition, 'myThingAlready', myThingAlready);
+            if ($rootScope.list.mine.length === 0) {
+              console.log('DEBUG1035 ZERO');
+            }
+            // Add my list if it's not already there.
+            if (!$rootScope.list.mine.length || $rootScope.list.mine.length === 0) {
+              console.log('make my list');
+              // Make my list.
+              var myList = {
+                uid: $rootScope.user.userId,
+                fbuid: $rootScope.user.fbuid,
+                username: $rootScope.user.userName,
+                lists: [
+                  {
+                    lid: addToListObj.lid,
+                    listname: $rootScope.list.listName,
+                    items: [myNewItem]
+                }
+              ]
+              };
+
+              // Make my list first 
+              $rootScope.list.mine[0] = myList;
+
+              console.log('my list: ', $rootScope.list.mine);
+
+            } else {
+              console.log(' This should exist: ', $rootScope.list.mine);
+            }
 
 
-        // If my list doesn't exist yet, create it.
+            var i = 0;
+            // console.log( 'database.addToList: what is in this new list? ', $rootScope.list, $rootScope.list.mine );
 
-          console.log('my existing list: ', $rootScope.list.mine[0], $rootScope.list.mine[0].lists[0]);
+            // We need to look in my own list to see if the item is already there. If so, just activate it.
+            for (i in $rootScope.list.mine[0].lists[0].items) {
+              if ($rootScope.list.mine[0].lists[0].items[i].tid === item.thingid) {
+                myThingAlready = i;
+              }
+            }
+            // console.log('didList',didList, 'myListPosition', myListPosition, 'myThingAlready', myThingAlready);
 
-          // Add my item to my list, but only if it's not already there.
-          if(myThingAlready === -1) {
-            // console.log($rootScope.modal.listStore[0]);
 
-            // console.log('RootStore before I build', $rootScope.list.items);
-            $rootScope.list.mine[0].lists[0].items.unshift(myNewItem);
-          } else {
-            // Move my old item to the top of your list & remove the old one.
-            $rootScope.list.mine[0].lists[0].items.splice(myThingAlready, 1);
-            // Insert the new one with "now"
-            $rootScope.list.mine[0].lists[0].items.unshift(myNewItem);
+            // If my list doesn't exist yet, create it.
+
+            console.log('my existing list: ', $rootScope.list.mine[0], $rootScope.list.mine[0].lists[0]);
+
+            // Add my item to my list, but only if it's not already there.
+            if (myThingAlready === -1) {
+              // console.log($rootScope.modal.listStore[0]);
+
+              // console.log('RootStore before I build', $rootScope.list.items);
+              $rootScope.list.mine[0].lists[0].items.unshift(myNewItem);
+            } else {
+              // Move my old item to the top of your list & remove the old one.
+              $rootScope.list.mine[0].lists[0].items.splice(myThingAlready, 1);
+              // Insert the new one with "now"
+              $rootScope.list.mine[0].lists[0].items.unshift(myNewItem);
+            }
+
           }
 
         }
-        
-      }
-    );
+      );
   };
-  
+
   // Add to a list. 1/23/2015 - Convert this to promise
   var promiseAddToList = function (addToListObj) {
-    var addToListParams = $.param(
-      {
-        thingName: addToListObj.thingName,
-        listnameid: addToListObj.lid,
-        token: $rootScope.token
-      }
-    );
+    var addToListParams = $.param({
+      thingName: addToListObj.thingName,
+      listnameid: addToListObj.lid,
+      token: $rootScope.token
+    });
     // console.log('dbFactory.addToList | ',addToListParams);
-    var promise = $http(
-      {
-        method:'POST',
+    var promise = $http({
+        method: 'POST',
         url: apiPath + 'addToList',
-        data: addToListParams ,
-        headers: {'Content-Type':'application/x-www-form-urlencoded'}
-      }
-    )
-    .then(
-      function (response) {
-
-        if( checkLogout(response.data) === true ) {
-          logout();
-        } else {
-         
-          var item = response.data.results[0];
-
-          var myNewItem = {
-            mykey: item.thekey,
-            tid: item.thingid,
-            thingname: item.thingname,
-            added: 'now',
-            dittokey: 0,
-            dittouser: null,
-            dittousername: null
-          };
-          
-          return myNewItem;
-          
+        data: addToListParams,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
         }
-        
-      }
-    );
+      })
+      .then(
+        function (response) {
+
+          if (checkLogout(response.data) === true) {
+            logout();
+          } else {
+
+            var item = response.data.results[0];
+
+            var myNewItem = {
+              mykey: item.thekey,
+              tid: item.thingid,
+              thingname: item.thingname,
+              added: 'now',
+              dittokey: 0,
+              dittouser: null,
+              dittousername: null
+            };
+
+            return myNewItem;
+
+          }
+
+        }
+      );
     return promise;
   };
-  
+
   // Promise Thing Info - Load a list info for when a user creates a list.
   var promiseThingName = function (thingId) {
-    var params = $.param(
-      {
-        token: $rootScope.token,
-        thingId: thingId
-      }
-    );
+    var params = $.param({
+      token: $rootScope.token,
+      thingId: thingId
+    });
     // console.log('dbFactory.addToList | ',addToListParams);
-    var promise = $http(
-      {
-        method:'POST',
+    var promise = $http({
+        method: 'POST',
         url: apiPath + 'thingName',
-        data: params ,
-        headers: {'Content-Type':'application/x-www-form-urlencoded'}
-      }
-    )
-    .then(
-      function (response) {
-
-        if( checkLogout(response.data) === true ) {
-          logout();
-        } else {
-         
-          return response.data;
-          
+        data: params,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
         }
-        
-      }
-    );
+      })
+      .then(
+        function (response) {
+
+          if (checkLogout(response.data) === true) {
+            logout();
+          } else {
+
+            return response.data;
+
+          }
+
+        }
+      );
     return promise;
   };
-  
-  
-  
+
+
+
   /* 10/3/2014 - Search 
     1/23/2015 - Converted to Promise
   */
   var promiseSearch = function (searchTerm, searchFilter) {
-    var searchParams = $.param({token: $rootScope.token, search: searchTerm , searchFilter: searchFilter });
+    var searchParams = $.param({
+      token: $rootScope.token,
+      search: searchTerm,
+      searchFilter: searchFilter
+    });
 
-    var promise = $http(
-      {
-        method:'POST',
+    var promise = $http({
+        method: 'POST',
         url: apiPath + 'search',
-        data: searchParams ,
-        headers: {'Content-Type':'application/x-www-form-urlencoded'}
-      }
-    )
-    .then(
-      function (response) {
-        
-        if( checkLogout(response.data) === true ) {
-          logout();
-        } else {
-          return response.data;
-
+        data: searchParams,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
         }
-        
-        
-      // For the user and the list, change the increments of dittoable and in common.
-      }
-    );
+      })
+      .then(
+        function (response) {
+
+          if (checkLogout(response.data) === true) {
+            logout();
+          } else {
+            return response.data;
+
+          }
+
+
+          // For the user and the list, change the increments of dittoable and in common.
+        }
+      );
     return promise
   };
 
@@ -1914,9 +1935,10 @@ angular.module('Services.database', ['LocalStorageModule'])
     plittoFBApiCall: plittoFBApiCall,
     /* removed 1/23/2015 dbGetSome: dbGetSome, */
     /* removed 1/23/2015     dbDitto: dbDitto, */
-    
+
     // getUserListOfLists: getUserListOfLists, /* Replaced on 1/23/2015 */
-    sharedStat: sharedStat, /* 9/7/2014 */
+    sharedStat: sharedStat,
+    /* 9/7/2014 */
     // , modalReset: modalReset
     showAList: showAList,
     getMore: getMore,
@@ -1930,132 +1952,147 @@ angular.module('Services.database', ['LocalStorageModule'])
     loadList: loadList,
     fbTokenLogin: fbTokenLogin,
     refreshData: refreshData,
-    dbInit: dbInit, /* Initializes the rootscope */
+    dbInit: dbInit,
+    /* Initializes the rootscope */
     /* Removed 1/23/2015 mainFeed: mainFeed, // Updates the main feed */
-    loadFeed: loadFeed, /* Loads in the feed from local storage */
-    
-    userChat: userChat, /* Returns the chat queue for a user. */
-    updateCounts: updateCounts, /* updates the notification, Friend, etc numbers. */
-    logout: logout, /* This is redundant, and also exists in controllers.js. That should change TODO2 */
-    friendsList: friendsList, /* Let a user reloat their friend store. Long facebook logins made this needed. 1/21/2015 */
-    cleanOtherScope: cleanOtherScope, /* Keep RootScope clean. */
-    userInfo: userInfo, /* Get user info for the profile page for reloading in it */
-    
-    
-    promiseAddComment: promiseAddComment, /* Adds a comment to the item 1/23/2015 - Changed to promise */
-    promiseThing: promiseThing, /* modified to promise 1/23/2015 */
-    promiseSearch: promiseSearch, /* Added 1/23/2015 */
-    promiseDitto: promiseDitto, /* Replace the one above. 1/22/2015 */
-    promiseGetSome: promiseGetSome, /* Async get some */
-    promiseFeed: promiseFeed, /* Async Feed */
-    promiseListOfLists: promiseListOfLists, /* Async lol */
-    promiseList: promiseList, /* 1/23/2015 - Async list */
-    promiseAddToList: promiseAddToList, /* 1/23/2015 - Async add to list */
+    loadFeed: loadFeed,
+    /* Loads in the feed from local storage */
+
+    /* userChat: userChat, Returns the chat queue for a user. TODO2 - Return this as a promise. */
+    /* updateCounts: updateCounts, TODO2 - Convert to promise and return. updates the notification, Friend, etc numbers. */
+    logout: logout,
+    /* This is redundant, and also exists in controllers.js. That should change TODO2 */
+    friendsList: friendsList,
+    /* Let a user reloat their friend store. Long facebook logins made this needed. 1/21/2015 */
+    cleanOtherScope: cleanOtherScope,
+    /* Keep RootScope clean. */
+    userInfo: userInfo,
+    /* Get user info for the profile page for reloading in it */
+
+
+    promiseAddComment: promiseAddComment,
+    /* Adds a comment to the item 1/23/2015 - Changed to promise */
+    promiseThing: promiseThing,
+    /* modified to promise 1/23/2015 */
+    promiseSearch: promiseSearch,
+    /* Added 1/23/2015 */
+    promiseDitto: promiseDitto,
+    /* Replace the one above. 1/22/2015 */
+    promiseGetSome: promiseGetSome,
+    /* Async get some */
+    promiseFeed: promiseFeed,
+    /* Async Feed */
+    promiseListOfLists: promiseListOfLists,
+    /* Async lol */
+    promiseList: promiseList,
+    /* 1/23/2015 - Async list */
+    promiseAddToList: promiseAddToList,
+    /* 1/23/2015 - Async add to list */
     promiseThingName: promiseThingName /* 1/23/2015 - Async get info about a thing */
   };
-  
+
 }]);
 
 
 
-  /* 10/3/2014 - Search - Removed 1/23/2015
-  var search = function (searchTerm, searchFilter) {
-    var searchParams = $.param({token: $rootScope.token, search: searchTerm , searchFilter: searchFilter });
+/* 10/3/2014 - Search - Removed 1/23/2015
+var search = function (searchTerm, searchFilter) {
+  var searchParams = $.param({token: $rootScope.token, search: searchTerm , searchFilter: searchFilter });
 
-    $http(
-      {
-        method:'POST',
-        url: apiPath + 'search',
-        data: searchParams ,
-        headers: {'Content-Type':'application/x-www-form-urlencoded'}
+  $http(
+    {
+      method:'POST',
+      url: apiPath + 'search',
+      data: searchParams ,
+      headers: {'Content-Type':'application/x-www-form-urlencoded'}
+    }
+  )
+  .success(
+    function (data,status,headers,config) {
+      
+      if( checkLogout(data) === true ) {
+        logout();
+      } else {
+        console.log('TODO2 Use shc', status, headers, config);
+        $rootScope.searchResults = data.results;
+        console.log('data.results', data.results);
+
       }
-    )
+      
+      
+    // For the user and the list, change the increments of dittoable and in common.
+    }
+  );
+};
+*/
+
+
+/* Get Some - things to ditto 
+  9/23/2014 - Created 
+  1/24/2015 - Removed
+  
+var dbGetSome = function ( userFilter, listFilter, sharedFilter) {
+  // 
+  console.log('getSomeDB  listfilter: ', listFilter ,' userfilter: ',userFilter, ' sharedFilter ', sharedFilter);
+  
+  // SharedFilter: 
+  // TODO2 Can this be deleted 1/22 checkToken($rootScope.token);
+
+  // eval (theScope + ' = []');
+
+  var params = {
+    type: 'user',
+    userFilter: userFilter,
+    listFilter: listFilter,
+    token: $rootScope.token,
+    sharedFilter: sharedFilter
+
+  };
+// Fails: dbGetSome params Object {userfilter: "", listfilter: ""} 
+
+  //  console.log('dbGetSome params',params);
+
+  $http({
+      method: 'POST',
+      url: apiPath + 'getSome',
+      data: $.param(params),
+      headers: {'Content-Type':'application/x-www-form-urlencoded'}
+    })
     .success(
       function (data,status,headers,config) {
+        return {good: 'for you', bad: 'for me'};
         
         if( checkLogout(data) === true ) {
           logout();
         } else {
-          console.log('TODO2 Use shc', status, headers, config);
-          $rootScope.searchResults = data.results;
-          console.log('data.results', data.results);
+          //             console.log('database.getSome TODO2 Use shc', status, headers, config);
+          console.log('getSome results: ', data.results);
+         
+          return data.results
 
-        }
-        
-        
-      // For the user and the list, change the increments of dittoable and in common.
-      }
-    );
-  };
-  */
-
-
-  /* Get Some - things to ditto 
-    9/23/2014 - Created 
-    1/24/2015 - Removed
-  
-  var dbGetSome = function ( userFilter, listFilter, sharedFilter) {
-    // 
-    console.log('getSomeDB  listfilter: ', listFilter ,' userfilter: ',userFilter, ' sharedFilter ', sharedFilter);
-    
-    // SharedFilter: 
-    // TODO2 Can this be deleted 1/22 checkToken($rootScope.token);
-
-    // eval (theScope + ' = []');
-
-    var params = {
-      type: 'user',
-      userFilter: userFilter,
-      listFilter: listFilter,
-      token: $rootScope.token,
-      sharedFilter: sharedFilter
-
-    };
-  // Fails: dbGetSome params Object {userfilter: "", listfilter: ""} 
-
-    //  console.log('dbGetSome params',params);
-
-    $http({
-        method: 'POST',
-        url: apiPath + 'getSome',
-        data: $.param(params),
-        headers: {'Content-Type':'application/x-www-form-urlencoded'}
-      })
-      .success(
-        function (data,status,headers,config) {
-          return {good: 'for you', bad: 'for me'};
-          
-          if( checkLogout(data) === true ) {
-            logout();
-          } else {
-            //             console.log('database.getSome TODO2 Use shc', status, headers, config);
-            console.log('getSome results: ', data.results);
-           
-            return data.results
-
-            if(userFilter !== '0' && userFilter !== ''){
-              // We know it's a user, so let's set local storage.
-             localStorageService.set('user' + userFilter + sharedFilter, data.results);
-            }
-
-            if(listFilter !== '0' && listFilter !== '')
-            {
-              // We know it's a user, so let's set local storage.
-             localStorageService.set('list' + listFilter + sharedFilter, data.results);
-            }
-
-            // Testing returning it so it can be part of the rootScope:
-            // return data.results;
-            
-            // console.log('dbFactory.getActivity data: ',data);
-
+          if(userFilter !== '0' && userFilter !== ''){
+            // We know it's a user, so let's set local storage.
+           localStorageService.set('user' + userFilter + sharedFilter, data.results);
           }
 
-        }
+          if(listFilter !== '0' && listFilter !== '')
+          {
+            // We know it's a user, so let's set local storage.
+           localStorageService.set('list' + listFilter + sharedFilter, data.results);
+          }
+
+          // Testing returning it so it can be part of the rootScope:
+          // return data.results;
           
-      );
-  };
-  */
+          // console.log('dbFactory.getActivity data: ',data);
+
+        }
+
+      }
+        
+    );
+};
+*/
 
 /*
   /* 9/4/2014 - 9/3/2014 - Handle the ditto action 

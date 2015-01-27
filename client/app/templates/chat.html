@@ -1,17 +1,17 @@
-<!-- This is disabled as of 1/23/2015 --> 
+<!-- This is disabled as of 1/23/2015 -->
 <ion-view>
   <user-nav></user-nav>
-  
+
   <ion-content class="has-header">
     <h1 class="pageTitle"><i class="icon ion-chatbox"></i> Dittos &amp; Chats</h1>
     <!--       {{stats.feed}} -->
 
-    
+
     <div class="list" ng-repeat="user in stats.feed">
-      
-      <user-list-thing store="stats.feed" source="chat" user-data="user"></user-list-thing>        
+
+      <user-list-thing store="stats.feed" source="chat" user-data="user"></user-list-thing>
     </div>
-    
+
     <!-- 
     == From user.
     <user-list-thing store="profileData.ditto" source="profile" user-data="user"></user-list-thing>  
@@ -25,6 +25,6 @@
       <div class="list card" ng-repeat="user in list.ditto">
         <user-list-thing store="list.ditto" source="list" user-data="user"></user-list-thing>
       </div>
-    --> 
+    -->
   </ion-content>
 </ion-view>

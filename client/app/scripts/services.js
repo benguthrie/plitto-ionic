@@ -5,4 +5,3 @@ angular.module('Plitto.services', [
   // 'Services.localStorage',
   'Services.oauth'
 ]);
-

@@ -1,37 +1,37 @@
-<p ng-show="!listsData.length">No lists yet. Add a list using the + button 
-  <div class="button-bar" ng-show="!listsData.length"><a class="button" ng-click="loadLists();">Reload Lists</a></div> 
+<p ng-show="!listsData.length">No lists yet. Add a list using the + button
+  <div class="button-bar" ng-show="!listsData.length"><a class="button" ng-click="loadLists();">Reload Lists</a>
+  </div>
 </p>
 
 <ion-list class="friendList">
-  <ion-item 
-      ng-repeat="list in listsData" 
-      ng-click="showList( list.lid, list.name, null, 'feed');">
+  <ion-item ng-repeat="list in listsData" ng-click="showList( list.lid, list.name, null, 'feed');">
     <div class="statTable">
       <div class="statRow">
-        
+
         <div class="groupStats">
           <div class="listName"><i class="ion-clipboard"></i> {{list.name}}</div>
           <div class="statBlock">
-            
+
             <div class=" colStat ">
-              <i 
-                 class="ionicons ion-ios7-checkmark " 
-                 style="color: green;"></i>
-              <span class="label">Shared</span><br/>
+              <i class="ionicons ion-ios7-checkmark " style="color: green;"></i>
+              <span class="label">Shared</span>
+              <br/>
               <span class="stat">{{list.shared}}</span>
             </div>
             <div class=" colStat ">
               <i class="ionicons ion-ios7-checkmark-outline dittoQ"></i>
-              <span class="label colStat">Dittoable</span><br/>
+              <span class="label colStat">Dittoable</span>
+              <br/>
               <span class="stat">{{list.dittoable}}</span>
             </div>
-            
+
             <div class=" colStat ">
               <i class="ionicons ion-ios-timer-outline"></i>
-              <span class="label colStat">Latest Add</span><br/>
+              <span class="label colStat">Latest Add</span>
+              <br/>
               <span class="stat" am-time-ago="list.mostrecent"></span>
             </div>
-            
+
             <!-- 
             <div class=" colStat ">
               
@@ -43,6 +43,6 @@
         </div>
       </div>
     </div>
-    
+
   </ion-item>
 </ion-list>

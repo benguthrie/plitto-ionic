@@ -1,85 +1,66 @@
-function QueryString () {
-  'use strict';
-  // This function is anonymous, is executed immediately and 
-  // the return value is assigned to QueryString!
-  var returnString = {};
-  var query = window.location.search.substring(1);
-  var vars = query.split('&');
-  for (var i=0;i<vars.length;i++) {
-    var pair = vars[i].split('=');
-    // If first entry with this name
-    if (typeof returnString[pair[0]] === 'undefined') {
-      returnString[pair[0]] = pair[1];
-    // If second entry with this name
-    } else if (typeof returnString[pair[0]] === 'string') {
-      var arr = [ returnString[pair[0]], pair[1] ];
-      returnString[pair[0]] = arr;
-    // If third or later entry with this name
-    } else {
-      returnString[pair[0]].push(pair[1]);
+function QueryString() {
+    'use strict';
+    // This function is anonymous, is executed immediately and 
+    // the return value is assigned to QueryString!
+    var returnString = {};
+    var query = window.location.search.substring(1);
+    var vars = query.split('&');
+    for (var i = 0; i < vars.length; i++) {
+      var pair = vars[i].split('=');
+      // If first entry with this name
+      if (typeof returnString[pair[0]] === 'undefined') {
+        returnString[pair[0]] = pair[1];
+        // If second entry with this name
+      } else if (typeof returnString[pair[0]] === 'string') {
+        var arr = [returnString[pair[0]], pair[1]];
+        returnString[pair[0]] = arr;
+        // If third or later entry with this name
+      } else {
+        returnString[pair[0]].push(pair[1]);
+      }
     }
+    return returnString;
   }
-  return returnString;
-}
-// TODO1 - Test to see of QueryString is working. 1/9/2014
+  // TODO1 - Test to see of QueryString is working. 1/9/2014
 
-function randNum( maxNum ) {
+function randNum(maxNum) {
   'use strict';
-  return Math.floor((Math.random() * maxNum) + 1 );
+  return Math.floor((Math.random() * maxNum) + 1);
 }
 
 
 /* 
-*/
-function plainJsRedirect(url){
+ */
+function plainJsRedirect(url) {
   'use strict';
   console.log('plainJsRedirect: ', url);
   // window.location.href = url;
   // window.location.assign(url);
-  setTimeout(function(){ location.href=url; } , 5000);
+  setTimeout(function () {
+    location.href = url;
+  }, 5000);
 
 }
 
-function navigationBar(){
-  var jan21 = '<ion-nav-buttons side="primary">' +
-    '<ion-nav-back-button class="button-clear">' +
-      '<i class="ion-arrow-left-c"></i>' +
-    '</ion-nav-back-button>' +
+function navigationBar() {
+  'use strict';
 
-    '<button menu-toggle="left" class="button button-icon ion-navicon"></button>' +
-  '</ion-nav-buttons>' +
+  var ionicb14 =
+    '<ion-nav-bar class="bar-stable">' +
+    '<ion-nav-back-button></ion-nav-back-button>' +
+    '<ion-nav-buttons side="left">' +
 
-  '<ion-nav-buttons side="right" class=\'userNavButtons\'>' +
-
-    '<button class="button button-icon ionicons ion-plus-circled" ng-click=" navFunc(\'addlist\');"></button> ' +
-
-    '<button class="button button-icon ion-chatbox" ng-click="navFunc(\'chat\');" >' +
-      '<span class="innerNo" ng-bind="$root.stats.alertCount"></span>' +
+    '<button menu-toggle="left" class="button button-icon icon ion-navicon"></button>' +
+    // '<ion-nav-back-button></ion-nav-back-button>' +
+    '</ion-nav-buttons>' +
+    '<ion-nav-buttons side="secondary" class="navSecond">' +
+    // '<button class="button button-icon ion-chatbox" ng-click="navFunc(\'chat\');" >' +'<span class="innerNo" ng-bind="$root.stats.alertCount"></span>' +
     '</button>' +
-
+    '<button class="button button-icon ionicons ion-plus-circled" ng-click=" navFunc(\'addlist\');"></button> ' +
     '<button class="button button-icon ion-ios7-checkmark-outline" ng-click="navFunc(\'home\'); getSome();"></button> ' +
-
-    '<button class="button button-icon ion-search" ng-click="navFunc(\'search\');"></button>' + 
-
-  '</ion-nav-buttons>';
-  
-  var ionicb14 = 
-    '<ion-nav-bar class="bar-stable">'+ 
-      '<ion-nav-back-button></ion-nav-back-button>' +
-      '<ion-nav-buttons side="primary">' +
-        
-        '<button menu-toggle="left" class="button button-icon icon ion-navicon"></button>' +
-        // '<ion-nav-back-button></ion-nav-back-button>' +
-      '</ion-nav-buttons>' +
-        '<ion-nav-buttons side="secondary" class="navSecond">' +
-          // '<button class="button button-icon ion-chatbox" ng-click="navFunc(\'chat\');" >' +'<span class="innerNo" ng-bind="$root.stats.alertCount"></span>' +
-          '</button>' +
-          '<button class="button button-icon ionicons ion-plus-circled" ng-click=" navFunc(\'addlist\');"></button> ' +
-          '<button class="button button-icon ion-ios7-checkmark-outline" ng-click="navFunc(\'home\'); getSome();"></button> ' +
-          '<button class="button button-icon ion-search" ng-click="navFunc(\'search\');"></button>' + 
-        '</ion-nav-buttons>' +
+    '<button class="button button-icon ion-search" ng-click="navFunc(\'search\');"></button>' +
+    '</ion-nav-buttons>' +
     '</ion-nav-bar>';
-  
-  return ionicb14;
 
+  return ionicb14;
 }

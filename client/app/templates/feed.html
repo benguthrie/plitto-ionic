@@ -1,53 +1,59 @@
 <ion-view>
   <user-nav></user-nav>
- <!-- <ion-nav-buttons side="left">
+  <!-- <ion-nav-buttons side="left">
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
 -->
-  
+
   <ion-content class="has-header">
     <h1 class="pageTitle"><i class="icon ion-ios7-pulse-strong"></i> Recent Activity</h1>
-    
+
     <div class="button-bar">
       <a class="button" ng-class="{'active': view ==='friends'}" ng-click="feed('friends','newer','newer');">
-        <!-- Friends Button --> 
-        <img ng-src="img/974-users@2x.png" style="margin-top:7px;margin-right:5px; height: 30px; width: 40px;"/></a>
+        <!-- Friends Button -->
+        <img ng-src="img/974-users@2x.png" style="margin-top:7px;margin-right:5px; height: 30px; width: 40px;" />
+      </a>
       <a class="button" ng-class="{'active': view ==='strangers'}" ng-click="feed('strangers','newer','newer');">
-        <!-- Strangers Button --> 
-        <img ng-src="img/769-male@3x.png" style="margin-top:7px;margin-right:5px; height: 30px; width: 25px;"/></a>
-      <!-- <a class="button" ng-class="{'active': $root.nav.listView ==='shared'}" ng-click="view('shared');">Nearby</a> --> 
+        <!-- Strangers Button -->
+        <img ng-src="img/769-male@3x.png" style="margin-top:7px;margin-right:5px; height: 30px; width: 25px;" />
+      </a>
+      <!-- <a class="button" ng-class="{'active': $root.nav.listView ==='shared'}" ng-click="view('shared');">Nearby</a> -->
     </div>
-    
-    <!-- Just their friends. --> 
-      <div ng-show="view ==='friends'" >
-        <div ng-show="!store.friends.length" class="noShow">No feed items to show</div>
-        <div ng-show="store.friends[0].loading" ><h1>LOADING</h1></div>
-        <div class="list " ng-repeat="user in store.friends" >
 
-          <user-list-thing store="store.friends" source="feed" user-data="user"></user-list-thing>
-        </div>
+    <!-- Just their friends. -->
+    <div ng-show="view ==='friends'">
+      <div ng-show="!store.friends.length" class="noShow">No feed items to show</div>
+      <div ng-show="store.friends[0].loading">
+        <h1>LOADING</h1>
       </div>
+      <div class="list " ng-repeat="user in store.friends">
 
-      <!-- TODO2 - Restore this 
+        <user-list-thing store="store.friends" source="feed" user-data="user"></user-list-thing>
+      </div>
+    </div>
+
+    <!-- TODO2 - Restore this 
       <div ng-show="view ==='friends'">
         <button ng-click="feed('friends','older','older');">Load Older</button>
       </div>
     
-    <!--strangers -->   
-    <div ng-show="view ==='strangers'" >
+    <!--strangers -->
+    <div ng-show="view ==='strangers'">
       <div ng-show="!store.strangers.length" class="noShow">No feed items to show</div>
-      <div ng-show="store.strangers[0].loading" ><h1>LOADING</h1></div>
+      <div ng-show="store.strangers[0].loading">
+        <h1>LOADING</h1>
+      </div>
       <div class="list " ng-repeat="user in store.strangers" ng-show="view ==='strangers'">
         <user-list-thing store="store.strangers" source="feed" user-data="user"></user-list-thing>
 
       </div>
     </div>
-      <!-- TODO2 - Restore this 
+    <!-- TODO2 - Restore this 
       <div ng-show="view ==='strangers' ">
         <button ng-click="feed('strangers','older','older');">Load Older</button>
       </div>
       -->
-    
-    
+
+
   </ion-content>
 </ion-view>

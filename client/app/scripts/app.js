@@ -18,67 +18,56 @@ angular.module('Plitto', [
 
 
 
-.run(function ($ionicPlatform, $rootScope, dbFactory,  OAuth, $state) {
-  
-  // Check to see if Facebook is giving us a code to use in the URL.
-  if(QueryString.code){
-    // Make the Plitto API call
-    console.log('RUN URL because we found it.', QueryString.code);
-    
-    // TODO1 - Put this backdbFactory.fbTokenLogin(QueryString.code);
-  }
-  
-  
-  
-    
+.run(function ($ionicPlatform, $rootScope, dbFactory, OAuth, $state) {
+
   $ionicPlatform.ready(function () {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
-    if(window.cordova && window.cordova.plugins.Keyboard) {
+    if (window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
     }
-    if(window.StatusBar) {
+    if (window.StatusBar) {
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
     // Get the access token from Facebook. TODO1 - 12/20 - It looks like something is intercepting it, and removing it.
-    console.log('ionicPlatform.run: access_token location: ', window.location.hash.indexOf('access_token') );
-    if ( window.location.hash.indexOf('access_token') !== -1){
-      /* What does this mean? */
+    console.log('ionicPlatform.run: access_token location: ', window.location.hash.indexOf('access_token'));
+    if (window.location.hash.indexOf('access_token') !== -1) {
+      /* What does this mean? - TODO3 Remove this? 
       console.log('ionicPlatform.run: Found the token.',
         window.location.hash,
         window.location.hash.indexOf('access_token')
       );
+      */
       // TODO2UX - Show a loading indicator
-    
+
       var hash = window.location.hash;
-      
+
       // Show loading.
       $state.go('loading');
 
-      var fbAccessToken = hash.substring( hash.indexOf('access_token=') + 'access_token='.length , hash.indexOf('&') ) ;
-      console.log('at: ', fbAccessToken);
-      
+      var fbAccessToken = hash.substring(hash.indexOf('access_token=') + 'access_token='.length, hash.indexOf('&'));
+      // DEBUG Login: console.log('at: ', fbAccessToken);
+
       $rootScope.loginMessage = 'Facebook Access Granted. Logging into Plitto now.';
-       //  + fbAccessToken
+      //  + fbAccessToken
 
       // Use this to make the call to login.
       dbFactory.fbTokenLogin(fbAccessToken);
     }
-  
-    
+
+
   });
 })
 
-.config(function ($stateProvider, $urlRouterProvider, $httpProvider ) {
-  
-  
-  $stateProvider
-    .state('login', {
-      url: '/login',
-      templateUrl: 'templates/login.html',
-      controller: 'LoginCtrl'
-    })
+.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
+
+    $stateProvider
+      .state('login', {
+        url: '/login',
+        templateUrl: 'templates/login.html',
+        controller: 'LoginCtrl'
+      })
 
     /* FOR BACK END OAUTH. PLEASE LEAVE THIS HERE
     .state('authCallback', {
@@ -97,23 +86,20 @@ angular.module('Plitto', [
     .state('app.home', {
       url: '/home',
       views: {
-        'menuContent' :{
+        'menuContent': {
           templateUrl: 'templates/home.html',
           controller: 'HomeCtrl'
         }
       }
     })
-  
-    .state('loading',
-      {
-        url:'/loading',
-        templateUrl: 'templates/loading.html',
-        controller: 'LoadingCtrl'
-      }
-    )
-  
-    .state('app.search',
-      {
+
+    .state('loading', {
+      url: '/loading',
+      templateUrl: 'templates/loading.html',
+      controller: 'LoadingCtrl'
+    })
+
+    .state('app.search', {
         url: '/search/',
         views: {
           'menuContent': {
@@ -121,10 +107,8 @@ angular.module('Plitto', [
             controller: 'SearchCtrl'
           }
         }
-      }
-    )
-    .state('app.about',
-      {
+      })
+      .state('app.about', {
         url: '/about',
         views: {
           'menuContent': {
@@ -132,10 +116,8 @@ angular.module('Plitto', [
             controller: 'DocsCtrl'
           }
         }
-      }
-    )
-    .state('app.docs',
-      {
+      })
+      .state('app.docs', {
         url: '/docs',
         views: {
           'menuContent': {
@@ -143,325 +125,304 @@ angular.module('Plitto', [
             controller: 'DocsCtrl'
           }
         }
-      }
-    )
-  
-    .state('app.feed',
-      {
-        url: '/feed',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/feed.html',
-            controller: 'FeedCtrl'
-          }
-        }
-      }
-    )
-  
-    .state('app.friends',
-      {
-        url: '/friends',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/friends.html',
-            controller: 'FriendsCtrl'
-          }
-        }
-      }
-    )
+      })
 
-  
-    .state('app.profile',
-      {
-        url: '/profile/:userId',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/profile.html',
-            controller: 'ProfileCtrl'
-          }
+    .state('app.feed', {
+      url: '/feed',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/feed.html',
+          controller: 'FeedCtrl'
         }
       }
-    )
-  
-    .state('app.chat',
-      {
-        url: '/chat',
-        views: {
-          'menuContent' :{
-            templateUrl: 'templates/chat.html',
-            controller: 'chatCtrl'
-          }
-        }
-      }
-    )
-  
-    .state('app.debug',
-      {
-        url: '/debug',
-        views: {
-          'menuContent' :{
-            templateUrl: 'templates/debug.html',
-            controller: 'DebugCtrl'
-          }
-        }
-      }
-    )
-  
-    .state('app.addlist',
-      {
-        url: '/addlist',
-        views: {
-          'menuContent' :{
-            templateUrl: 'templates/add-list.html',
-            controller: 'addListCtrl'
-          }
-        }
-      }
-    )
+    })
 
-    .state('app.lists',
-      {
-        url: '/lists',
-        views: {
-          'menuContent' :{
-            templateUrl: 'templates/lists.html',
-            controller: 'ListsCtrl'
-          }
+    .state('app.friends', {
+      url: '/friends',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/friends.html',
+          controller: 'FriendsCtrl'
         }
       }
-    )
-  
-    .state('app.thing',
-      {
-        url: '/thing/:thingId',
-        views: {
-          'menuContent' :{
-            templateUrl: 'templates/thing.html',
-            controller: 'ThingCtrl'
-          }
-        }
-      }
-    )
+    })
 
-    .state('app.list',
-      {
-        url: '/list/:listId',
-        views: {
-          'menuContent' :{
-            templateUrl: 'templates/list.html',
-            controller: 'ListCtrl'
-          }
+
+    .state('app.profile', {
+      url: '/profile/:userId',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/profile.html',
+          controller: 'ProfileCtrl'
         }
+      }
+    })
+
+    .state('app.chat', {
+      url: '/chat',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/chat.html',
+          controller: 'chatCtrl'
+        }
+      }
+    })
+
+    .state('app.debug', {
+      url: '/debug',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/debug.html',
+          controller: 'DebugCtrl'
+        }
+      }
+    })
+
+    .state('app.addlist', {
+      url: '/addlist',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/add-list.html',
+          controller: 'addListCtrl'
+        }
+      }
+    })
+
+    .state('app.lists', {
+      url: '/lists',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/lists.html',
+          controller: 'ListsCtrl'
+        }
+      }
+    })
+
+    .state('app.thing', {
+      url: '/thing/:thingId',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/thing.html',
+          controller: 'ThingCtrl'
+        }
+      }
+    })
+
+    .state('app.list', {
+      url: '/list/:listId',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/list.html',
+          controller: 'ListCtrl'
+        }
+      }
+    });
+
+    $urlRouterProvider.otherwise('/home'); // Added 12.19.2014
+
+    // if none of the above states are matched, use this as the fallback
+    // TODO1 - Do this. $urlRouterProvider.otherwise('/app/home');
+    if (QueryString.access_token || window.location.hash.indexOf('access_token') > -1) {
+      console.log('found querystring access token.', QueryString.access_token);
+
+    } else {
+
+      console.log('No access token. Let the user log in.', 'access_token: ', QueryString.access_token, 'Location hash: ', window.location.hash);
+      // $urlRouterProvider.otherwise('/app/home');
+      // console.log("REPLACeD", window.location.hash.replace("#/",""));
+
+      //http://localhost/plitto-ionic/client/app/?#/access_token=CAAAAMD0tehMBAMUwibZCHQrzYS3v6QdLKTsIlWveB7CTSV0ZByuItJP8u7tF3xaYjGBNjeT7BDRjVWA9WwwelEjMAZCiKgi9C5dDIAUfZAUwdqPQlxxDbykoslmJs8OhyNRpXEoU0o6fC2eiYMROqOLvW8C1A0NU72YBmgcWitSom8Yw0rdEQCLktU6t1xdePnNKLLq75dlANujWVRvgcsgIuZCjZAZC9IZD&expires_in=6952
+
+      // TODO1 - Put this back $urlRouterProvider.otherwise('/app/home');
+    }
+
+
+    // Handle 401 Unauthorized responses
+    $httpProvider.interceptors.push(
+      function ($q, $location) {
+        return {
+          responseError: function (rejection) {
+            if (rejection.status === 401) {
+              $location.path('/login');
+            }
+            return $q.reject(rejection);
+          }
+        };
       }
     );
-  
-  $urlRouterProvider.otherwise('/home'); // Added 12.19.2014
-  
-  // if none of the above states are matched, use this as the fallback
-// TODO1 - Do this. $urlRouterProvider.otherwise('/app/home');
-  if( QueryString.access_token || window.location.hash.indexOf('access_token') > -1  ){
-    console.log('found querystring access token.', QueryString.access_token);
-  
-  }
-  else {
-    
-    console.log('No access token. Let the user log in.', 'access_token: ', QueryString.access_token, 'Location hash: ', window.location.hash );
-    // $urlRouterProvider.otherwise('/app/home');
-    // console.log("REPLACeD", window.location.hash.replace("#/",""));
-  
-  //http://localhost/plitto-ionic/client/app/?#/access_token=CAAAAMD0tehMBAMUwibZCHQrzYS3v6QdLKTsIlWveB7CTSV0ZByuItJP8u7tF3xaYjGBNjeT7BDRjVWA9WwwelEjMAZCiKgi9C5dDIAUfZAUwdqPQlxxDbykoslmJs8OhyNRpXEoU0o6fC2eiYMROqOLvW8C1A0NU72YBmgcWitSom8Yw0rdEQCLktU6t1xdePnNKLLq75dlANujWVRvgcsgIuZCjZAZC9IZD&expires_in=6952
 
-    // TODO1 - Put this back $urlRouterProvider.otherwise('/app/home');
-  }
-  
+  })
+  .directive('userNav', function ($rootScope, dbFactory, $state) {
+    return {
+      restrict: 'E',
+      // 
+      // templateUrl: 'directives/userNav.html',
+      /* This function is required for the userNav directive to work in ionic#1.0.0-beta14 */
+      template: navigationBar(),
+      // template: '',
+      /*    template: '<ion-nav-bar>  ' + 
+            '<ion-nav-buttons side="left"> ' + 
+              '<button menu-toggle="left" class="button button-icon ion-navicon"></button> ' + 
+            ' </ion-nav-buttons> ' + 
+            '<ion-nav-buttons side="right"> ' + 
+              ' <button class="button button-icon  ionicons ion-plus-circled" ng-click=" navFunc(\'addlist\'); "></button> ' + 
+              ' <button class="button button-icon ion-chatbox" ng-click="navFunc(\'chat\');"> ' + 
+                ' <span class="innerNo" ng-bind="$root.stats.alertCount"></style></button>  ' + 
+              ' <button class="button button-icon iconDice" ng-click="navFunc(\'home\'); getSome();"></button> ' +
+              ' <button class="button button-icon ion-search" ng-click="navFunc(\'search\');" > </button> '+
+            '</ion-nav-buttons>' +
+         '</ion-nav-bar>', */
+      // template: '<ion-nav-bar><ion-nav-buttons side="left"><button menu-toggle="left" class="button button-icon icon ion-navicon"></button></ion-nav-buttons></ion-nav-bar>',
+      // scope: {}
 
-  // Handle 401 Unauthorized responses
-  $httpProvider.interceptors.push(
-    function ($q, $location) {
-      return {
-        responseError: function (rejection) {
-          if (rejection.status === 401) {
-            $location.path('/login');
+      controller: function (
+        $scope, dbFactory, $state) {
+        // Reload the navigation
+        // dbFactory.userChat(-1);
+
+        // Load the notifications
+        $scope.navFunc = function (path) {
+
+
+          // console.log('app.299 navFunc path: ', path);
+
+          // Whenever the navFunc is called, destroy the history, so no more back.
+          //        $ionicHistory.clearHistory();
+
+          if (path === 'chat') {
+            dbFactory.updateCounts();
+            // $rootScope.stats.feed = dbFactory.userChat(-1);
           }
-          return $q.reject(rejection);
-        }
-      };
-    }
-  );
-  
-}
-)
-.directive('userNav', function ($rootScope, dbFactory, $state ) {
-  return {
-    restrict: 'E',
-    // 
-    // templateUrl: 'directives/userNav.html',
-    /* This function is required for the userNav directive to work in ionic#1.0.0-beta14 */
-    template: navigationBar(),
-    // template: '',
-/*    template: '<ion-nav-bar>  ' + 
-      '<ion-nav-buttons side="left"> ' + 
-        '<button menu-toggle="left" class="button button-icon ion-navicon"></button> ' + 
-      ' </ion-nav-buttons> ' + 
-      '<ion-nav-buttons side="right"> ' + 
-        ' <button class="button button-icon  ionicons ion-plus-circled" ng-click=" navFunc(\'addlist\'); "></button> ' + 
-        ' <button class="button button-icon ion-chatbox" ng-click="navFunc(\'chat\');"> ' + 
-          ' <span class="innerNo" ng-bind="$root.stats.alertCount"></style></button>  ' + 
-        ' <button class="button button-icon iconDice" ng-click="navFunc(\'home\'); getSome();"></button> ' +
-        ' <button class="button button-icon ion-search" ng-click="navFunc(\'search\');" > </button> '+
-      '</ion-nav-buttons>' +
-   '</ion-nav-bar>', */
-   // template: '<ion-nav-bar><ion-nav-buttons side="left"><button menu-toggle="left" class="button button-icon icon ion-navicon"></button></ion-nav-buttons></ion-nav-bar>',
-    // scope: {}
-  
-    controller: function(
-      $scope, dbFactory, $state ){
-      // Reload the navigation
-      // dbFactory.userChat(-1);
-  
-      // Load the notifications
-      $scope.navFunc = function(path){
-        
-//        $ionicHistory.nextViewOptions({
-//          disableAnimate: true,
-//          disableBack: true
-//        });
-        
-        // Clear history, if possible. 
-        
 
-        console.log('app.299 navFunc path: ', path);
-        
-        // Whenever the navFunc is called, destroy the history, so no more back.
-//        $ionicHistory.clearHistory();
-  
-        if (path === 'chat') {
-          dbFactory.updateCounts();
-        } 
-        
-        $state.go('app.' + path);
-        
-        $rootScope.stats.feed = dbFactory.userChat(-1);
-        
-        /* TODO2 Remove: 
-        .then(function(response){
-          $rootScope.stats.feed = response;
-        }); */
-      };
-  
-    }
-  };
-})
-  
-.directive('userListThing', function($rootScope, dbFactory, $state) {
+          $state.go('app.' + path);
+
+          /* TODO2 Remove: 
+          .then(function(response){
+            $rootScope.stats.feed = response;
+          }); */
+        };
+
+      }
+    };
+  })
+
+.directive('userListThing', function ($rootScope, dbFactory, $state) {
   return {
     restrict: 'E',
     templateUrl: 'directives/userListThing.html',
-    
+
     scope: {
       store: '@store',
       source: '@source',
       userData: '=userData'
     },
-    controller: function($scope, dbFactory) {
+    controller: function ($scope, dbFactory) {
       /* Ditto */
-      $scope.ditto = function(mykey, uid, lid, tid, itemKey, $event ){
+      $scope.ditto = function (mykey, uid, lid, tid, itemKey, $event) {
         // Set them to updating 
         // Traverse $scope.userData, and change any items, updating them with the proper info.
-        var arrPair = Array();
-        
-        var i, j,k;
-        // If the list matches, and the thing matches, then update the ditto info.
-        
-        // Traverse this user's lists to find the existing item.
-        for(i in $scope.userData.lists){
+        var arrPair = new Array();
 
-          if(lid === $scope.userData.lists[i].lid){
-            for(j in $scope.userData.lists[i].items){
+        var i, j, k;
+        // If the list matches, and the thing matches, then update the ditto info.
+
+        // Traverse this user's lists to find the existing item.
+        for (var i in $scope.userData.lists) {
+
+          if (lid === $scope.userData.lists[i].lid) {
+            for (j in $scope.userData.lists[i].items) {
               // console.log('check 426: ',$scope.userData.lists[i].items[j].tid, tid);
-              if($scope.userData.lists[i].items[j].tid === tid){
+              if ($scope.userData.lists[i].items[j].tid === tid) {
                 $scope.userData.lists[i].items[j].mykey = 0; // TODO - This could be causing a bug.
-                if(mykey){
-                  $scope.userData.lists[i].items[j].friendsWith = '?';  
+                if (mykey) {
+                  $scope.userData.lists[i].items[j].friendsWith = '?';
                 }
                 /* Log the position in the array that will be used to update */
-                arrPair.push(  Array(i,j) );
-                
+                arrPair.push(new Array(i, j));
+
               }
-            }  
+            }
           }
         }
-        
+
 
         // Convert this to a scope return. dbFactory.dbDitto( scopeName, mykey, uid, lid, tid, itemKey, $event);
         var dbResponse = [];
-        dbFactory.promiseDitto(mykey, uid, lid, tid, itemKey, $event).then (function(d){
-          
-          for(k in arrPair){
-            if(parseInt(d[0])){
+        dbFactory.promiseDitto(mykey, uid, lid, tid, itemKey, $event).then(function (d) {
+
+          for (k in arrPair) {
+            if (parseInt(d[0])) {
               $scope.userData.lists[arrPair[k][0]].items[arrPair[k][1]].mykey = String(d[0]);
               console.log('403 myKey: ', String(d[0]));
             } else {
               $scope.userData.lists[arrPair[k][0]].items[arrPair[k][1]].mykey = null;
             }
-            
-            if(parseInt(d[1]) ){
-              $scope.userData.lists[arrPair[k][0]].items[arrPair[k][1]].friendsWith = '+' + d[1];  
+
+            if (parseInt(d[1])) {
+              $scope.userData.lists[arrPair[k][0]].items[arrPair[k][1]].friendsWith = '+' + d[1];
             } else {
-              $scope.userData.lists[arrPair[k][0]].items[arrPair[k][1]].friendsWith = '';  
+              $scope.userData.lists[arrPair[k][0]].items[arrPair[k][1]].friendsWith = '';
             }
           }
-          
+
         });
       };
-  
+
       /* User */
-      $scope.showUser = function(userId, userName, dataScope, fbuid){
-        $state.go('app.profile',{userId: userId});
+      $scope.showUser = function (userId, userName, dataScope, fbuid) {
+        $state.go('app.profile', {
+          userId: userId
+        });
         console.log('show User');
         // dbFactory.showUser(userId,userName, dataScope, fbuid);
       };
-  
+
       /* List */
-      $scope.showList = function(listId, listName, userFilter, focusTarget){
+      $scope.showList = function (listId, listName, userFilter, focusTarget) {
         console.log('showList app.js 317');
         // TODO - Fix this. dbFactory.showAList(listId, listName, userFilter, focusTarget);
-        $state.go('app.list',{listId: listId});
+        $state.go('app.list', {
+          listId: listId
+        });
       };
-  
+
       /* Thing */
-      $scope.showThing = function(thingId, thingName, userFilter){
-        $state.go('app.thing',{thingId: thingId});
+      $scope.showThing = function (thingId, thingName, userFilter) {
+        $state.go('app.thing', {
+          thingId: thingId
+        });
         // dbFactory.showThing(thingId, thingName, userFilter);
       };
-  
+
       /* Let's Chat
       letsChat(userData.uid, list.lid, item.tid, item.ik, $event, store); " */
-      $scope.letsChat = function(uid, lid, tid, itemKey, $event, store, $index){
+      $scope.letsChat = function (uid, lid, tid, itemKey, $event, store, $index) {
         console.log('letsChat app.js directive', uid, lid, tid, itemKey, $event, $index);
         // var length = eval('$rootScope.' + store + '.length');
-      
+
         console.log('letschat scope.userData', $scope.userData);
-        
+
         // Find the item in this list.
-        var i=0, j=0, abort = false;
+        var i = 0,
+          j = 0,
+          abort = false;
         loop1:
-          for(i in $scope.userData.lists ){
-            if(lid === $scope.userData.lists[i].lid){
-              var j=0;
-        loop2:
-              for(j in $scope.userData.lists[i].items ){
-                if(  $scope.userData.lists[i].items[j].ik === itemKey){
-                  break loop1;
+          for (i in $scope.userData.lists) {
+            if (lid === $scope.userData.lists[i].lid) {
+              var j = 0;
+              loop2:
+                for (j in $scope.userData.lists[i].items) {
+                  if ($scope.userData.lists[i].items[j].ik === itemKey) {
+                    break loop1;
+                  }
                 }
-              }
             }
           }
-        
-        console.log('vars: i,j',i,j);
+
+        // console.log('vars: i,j',i,j);
 
         var isActive = 1;
-        if($($event.target).hasClass('active')){
+        if ($($event.target).hasClass('active')) {
           // User is removing this from their chat queue.
           isActive = 0;
           $($event.target).removeClass('active');
@@ -469,15 +430,15 @@ angular.module('Plitto', [
           // RESTORE? eval('$rootScope.' + store + '[' + upos + '].lists[' + lpos + '].items[' + tpos + '].commentActive = null; ' );
           $scope.userData.lists[i].items[j].commentActive = null;
         } else {
-          
+
           $($event.target).addClass('active');
           $('div#comments' + uid + lid + tid).show();
           // eval('$rootScope.' + store + '[' + upos + '].lists[' + lpos + '].items[' + tpos + '].commentActive = "1"; ' 
-          $scope.userData.lists[i].items[j].commentActive = '1'; 
-          
+          $scope.userData.lists[i].items[j].commentActive = '1';
+
         }
         // Call the addComment bit to activate or deactivate the queue item
-        dbFactory.promiseAddComment ( uid, lid, tid, itemKey, '0', isActive ).then(function(d){
+        dbFactory.promiseAddComment(uid, lid, tid, itemKey, '0', isActive).then(function (d) {
           console.log('481ult added comment');
         });
         console.log('commentactive:  ',
@@ -485,67 +446,69 @@ angular.module('Plitto', [
           $scope.userData.lists[i].items[j].commentActive
         );
       };
-  
-      $scope.makeItemComment = function (newComment, uid, lid, tid, itemKey, $index){
+
+      $scope.makeItemComment = function (newComment, uid, lid, tid, itemKey, $index) {
         console.log('makeItemComment', newComment, uid, lid, tid, itemKey, $index);
         // Find the user, then the list, then use the index.
         // var length = eval('$rootScope.' + store + '.length' );
-        
-  // Get the user ID number.
+
+        // Get the user ID number.
         var upos = null;
         var lpos = null;
         var tpos = null;
-        
-        
+
+
         // Find the item in this list.
-        var i=0, j=0, abort = false;
+        var i = 0,
+          j = 0,
+          abort = false;
         loop1:
-          for(i in $scope.userData.lists ){
-            if(lid === $scope.userData.lists[i].lid){
-              var j=0;
-        loop2:
-              for(j in $scope.userData.lists[i].items ){
-                if(  $scope.userData.lists[i].items[j].ik === itemKey){
-                  break loop1;
+          for (i in $scope.userData.lists) {
+            if (lid === $scope.userData.lists[i].lid) {
+              var j = 0;
+              loop2:
+                for (j in $scope.userData.lists[i].items) {
+                  if ($scope.userData.lists[i].items[j].ik === itemKey) {
+                    break loop1;
+                  }
                 }
-              }
             }
           }
-        
-        console.log('vars: i,j',i,j);
+
+        console.log('vars: i,j', i, j);
         $scope.userData.lists[i].items[j].commentText = newComment;
-  
+
         // submit it to the database
         // 
-        dbFactory.promiseAddComment ( uid, lid, tid, itemKey, newComment, '1').then(function(d){
+        dbFactory.promiseAddComment(uid, lid, tid, itemKey, newComment, '1').then(function (d) {
           console.log('ult521 add comment');
         });
 
         // TODO1 Clear the comment field
-        
+
       };
-  
+
     }
   };
 })
 
-.directive('listOfLists', function($rootScope, dbFactory, $state ) {
+.directive('listOfLists', function ($rootScope, dbFactory, $state) {
   return {
     restrict: 'E',
     templateUrl: 'directives/listOfLists.html',
-    
+
     scope: {
       store: '@store',
       source: '@source',
       listsData: '=listsData'
     },
-    controller: function($scope, dbFactory, $state) {
+    controller: function ($scope, dbFactory, $state) {
       /* Link to List */
-      $scope.showList = function(listId, listName, userFilter, focusTarget){
+      $scope.showList = function (listId, listName, userFilter, focusTarget) {
         console.log('showList app.js 454');
         dbFactory.showAList(listId, listName, userFilter, focusTarget);
       };
-  
+
       /* Load up the lists 
        $scope.loadLists = function(){
          // user.userId is hard coded in lists, because it's always going to be this user's lists.
@@ -553,51 +516,64 @@ angular.module('Plitto', [
         };
       */
 
-      $scope.testAngularMoment = moment([2007,1,1]).fromNow();
-      
+      $scope.testAngularMoment = moment([2007, 1, 1]).fromNow();
+
     }
   };
-}).directive('chat', function($rootScope, dbFactory, $state ) {
+}).directive('chat', function ($rootScope, dbFactory, $state) {
   return {
     restrict: 'E',
     templateUrl: 'directives/chat.html',
-    
+
     scope: {
       notificationsData: '=notificationsData'
     },
-    controller: function ( $scope, dbFactory, $state ) {
+    controller: function ($scope, dbFactory, $state) {
       // Debug
-      $scope.changeFilter = function( filterNew ){
-        console.log('TEST', filterNew );
+      $scope.changeFilter = function (filterNew) {
+        console.log('TEST', filterNew);
         $scope.filterChat = filterNew;
       };
-      
-      
+
+
       // TODO2 - This should be a global.
       // This is for the logged in user
-      $scope.showUser = function(userId, userName, dataScope, fbuid){
+      $scope.showUser = function (userId, userName, dataScope, fbuid) {
         console.log('controllers.js - showUser 87');
         // dbFactory.showUser(userId,userName, dataScope, fbuid);
-        $state.go('app.profile',{userId: userId});
+        $state.go('app.profile', {
+          userId: userId
+        });
       };
-      
+
       /* Link to List */
-      $scope.showList = function(listId, listName, userFilter, focusTarget){
+      $scope.showList = function (listId, listName, userFilter, focusTarget) {
         console.log('showList app.js 493');
         dbFactory.showAList(listId, listName, userFilter, focusTarget);
       };
-      
-      
+
+
       /* Thing */
-      $scope.showThing = function(thingId, thingName, userFilter){
+      $scope.showThing = function (thingId, thingName, userFilter) {
         console.log('showThing');
         // dbFactory.showThing(thingId, thingName, userFilter);
-        $state.go('app.thing',{thingId: thingId});
+        $state.go('app.thing', {
+          thingId: thingId
+        });
       };
-      
-      
+
+
       // $scope.filterChatOptions = [ { filter: "them", selected: true }, { filter: "us", selected: false }, { filter: "me", selected: false } ];
-      $scope.filterChatOptions = [ {show: 'Them', value: 'them' } , {show: 'Us', value: 'us'}, { show: 'Me', value: 'me' } ];
+      $scope.filterChatOptions = [{
+        show: 'Them',
+        value: 'them'
+      }, {
+        show: 'Us',
+        value: 'us'
+      }, {
+        show: 'Me',
+        value: 'me'
+      }];
       $scope.filterChat = $scope.filterChatOptions[0];
     }
   };

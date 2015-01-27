@@ -1,57 +1,57 @@
 <ion-view title="Debug">
   <user-nav></user-nav>
-  
+
   <ion-nav-buttons side="left">
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
-    
+
   <ion-content class="has-header">
     <h1 class="pageTitle">Development Aids</h1>
     <h2>List</h2>
     <button ng-click="loadList('all');">All</button>
     <button ng-click="loadList('feed');">Feed</button>
-    
+
     <button ng-click="loadList('shared');">Shared</button>
     <button ng-click="loadList('strangers');">Strangers</button>
     <button ng-click="loadList('mine');">Mine</button>
     <button ng-click="loadList('ditto');">Ditto</button>
-    
+
     <h1>Debug</h1>
     <button ng-click="localStorage('set');">Local Storage: Set</button>
     <button ng-click="localStorage('get');">Local Storage: Get</button>
     <button ng-click="testString();">Test String</button>
     <button ng-click="testObj();">Test Object</button>
-    
+
     <h1>Funny Function</h1>
     <button ng-click="funny('stateName');">State Name</button>
     <button ng-click="funny('rootScope');">Full RootScope</button>
     <button ng-click="funny('clearRootscope');">Clear RootScope</button>
-    
-    <h1 >{{funnyText | json }}</h1>
-    
-    
+
+    <h1>{{funnyText | json }}</h1>
+
+
     <h1>Other</h1>
-    
+
     <button ng-click="rootScopePart('token');">Token</button>
     <button ng-click="$root.token = '';">Destroy Token</button>
     <button ng-click="$root.token = 'loading';">Loading Token</button>
     <button ng-click="$root.token = '35358a19f081483800da33f59635e86f';">Ben Token</button>
     <button ng-click="$root.token = 'd1753e10d522bd0599067436660201c4';">Emily Token</button>
     <button ng-click="thisDomain();">This Domain</button>
-    
+
     <button ng-click="logout();">Log Out</button>
-    
+
     <h1>Control Debug State</h1>
-    
+
     <button ng-click="debugCtrl(true);">Debugging On</button>
     <button ng-click="debugCtrl(false);">Debugging Off</button>
-    
+
     <h3>Output</h3>
     <div ng-bind="debugLog">Debug Log goes here</div>
-    
+
     <h3>Message</h3>
     <h3 ng-bind="$root.loginMessage"></h3>
-    
-    
+
+
   </ion-content>
 </ion-view>
