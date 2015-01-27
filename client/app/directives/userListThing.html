@@ -40,9 +40,22 @@
           ng-click="showThing(item.tid, item.thingname, userData.uid);" 
           >
 
-          <span class="thingNameText item-text-wrap">{{item.thingname}} </span>
+          <span class="thingNameText item-text-wrap"
+                ng-class="{
+                            'typedThing' : item.dittouser === null,
+                            'dittoedThing' : parseInt(item.dittouser) > 0
+                          }"
+                >{{item.thingname}} </span>
           
-          <div class="recent" am-time-ago="item.added"></div>
+          <div class="addedNote">
+            <div class="recent" am-time-ago="item.added"></div>
+            <!-- Make typed things bigger <div ng-show="item.dittouser === null"><i class="icon ion-edit"></i> Typed</div> -->
+            <div ng-show="item.dittouser !== null" class="dittoedFrom">
+              dittoed from {{item.dittousername}}
+              <img ng-src=" {{'http://graph.facebook.com/' + item.dittofbuid + '/picture?height=30&width=30'}}" />
+            </div>
+            <div ng-show="parseInt(item.dittoCount) > 0 "><i class='ion-ios7-checkmark'></i> + {{item.dittoCount}} dittoed this</div>
+          </div>
           <!-- <h6 ng-show="item.dittouser === null" class="mega-octicon octicon-pencil">_</h6> -->
           <!-- <h6 ng-show="item.dittouser !== null">dittoed from {{item.dittousername}}</h6> --> 
         

@@ -11,26 +11,29 @@
 
     <!-- User Menu Bar menu -->
       <div class="button-bar">
-        <!-- 
-        <a class="button active" ng-class="{'active': nav.view ==='user.us'}" ng-hide="profileData.userId == user.userId " ng-click="nav.view = 'user.us'; ">Us</a>
-      -->
-        <!-- 
-         <a class="button active" ng-class="{'active': nav.view ==='user.us'}" ng-hide="profileData.userId == user.userId " ng-click="nav.view = 'user.us'; "><i class="ionicons ion-ios7-checkmark dittoA"></</a> -->
-      <!-- Buttons --> 
+        <!-- Ditto Button --> 
         <a class="button" 
            ng-class="{'active': view ==='ditto'}" 
            ng-hide="userInfo.userId == $root.user.userId" 
            ng-click="getSome('ditto');">
-          <i class="ionicons ion-ios7-checkmark-outline"></i></a>
+          <i class="ionicons ion-ios7-checkmark-outline"></i>
+          <div class=" ionicons ion-refresh buttonRefresh" 
+             ng-show="view === 'ditto' "></div>
+        </a>
         
+        <!-- Profile - Shared Button --> 
         <a class="button" 
            ng-class="{'active': view ==='shared'}" 
            ng-hide="userInfo.userId == $root.user.userId" ng-click=" getSome('shared');">
           <i class="ionicons ion-ios7-checkmark dittoA"></i>
+          <div class=" ionicons ion-refresh buttonRefresh" 
+             ng-show="view === 'shared' "></div>
         </a>
 
+        <!-- Profile Feed Button --> 
         <a class="button" ng-class="{'active': view ==='feed'}" ng-click="showFeed(userInfo.userId); "><i class="ion-ios7-pulse-strong"></i></a>
         
+        <!-- Profile Lists Button --> 
         <a class="button" ng-class="{'active': view ==='lists'}" ng-click="showLists(userInfo.userId); "><i class="ion-clipboard"></i></a>
 <!-- RESTORE CHAT SOMEDAY SOON TODO1 - 2/1/2015
         <a class="button" ng-class="{'active': view ==='chat'}" 

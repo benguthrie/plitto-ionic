@@ -8,11 +8,13 @@
   background-color: #fff;
   text-align: center;
 }
+/* 1/26/2015 - removed.
 #list {
   width: 170px;
   margin: 30px auto;
   font-size: 20px;
 }
+*/
 
 img.title-image {
   float: left;
@@ -24,12 +26,23 @@ span.hint {
 }
 
 div.button-bar > a.active {
-  border-bottom: solid 3px #F49653;
-  padding-bottom: -3px;
+  border-bottom: solid 6px #F49653;
+  margin-bottom: -6px;
+  
 }
 
 ion-nav-bar.nav-bar {
   background-color: #DEDDD9 !important;
+}
+
+h4.viewContext{
+  background-color: #888;
+  color: #fff;
+  padding: 0.2em;
+  border-bottom: solid 1px #F49653;
+  border-top: solid 0.1em #F49653;
+  margin-top: 0em;
+  padding-top: 0.5em;
 }
 
 /* Buttons in the nav bar */
@@ -43,14 +56,29 @@ ion-nav-bar.nav-bar {
     /*  */
     max-height: 35px;
     padding: 0 0.2em 0 0.2em !important;
-    
+    float: left;
+    z-index: 2;
+    text-align: center;
   }
 
   a.button > div.buttonRefresh {
-    float: right;  
-    font-size: 0.8em;
-    margin-top: 0.3em;
+    float: left;
+    font-size: 0.5em;
+    vertical-align: bottom ;
+    text-align: center;
+    z-index: 1;
+    color: #888;
+    
   }
+
+  div.button-bar > a.buttonProfilePic  {
+    background-repeat: no-repeat;
+    background-size: 50px 50px;
+    
+    background-position: left;
+    
+  }
+
 /*
 span.statLabel {
   font-size: 0.7em;
@@ -403,12 +431,19 @@ div.thingTable { display: table; }
 
     /* Thing Name Formatting */
     div.thingNameRow > div.thingNameCol > span.thingNameText {
-      font-size: 1.2em;
+      
       /* Todo2 - Better Formatting on this. */
       padding: 0.7em;
-      float:inherit;
       display: block;
       margin: 0;
+    }
+
+    div.thingNameRow > div.thingNameCol > span.dittoedThing {
+      font-size: 1.0em;
+    }
+
+    div.thingNameRow > div.thingNameCol > span.typedThing {
+      font-size: 1.2em;
     }
 
   /* friends with count styling */
@@ -671,12 +706,34 @@ div.statTable > div.statRow {
       background-color: blue;
     }
 
-  div.recent {
+  /* Attribution and time */
+  div.listItem > div.thingTable > div.thingNameRow > div.thingNameCol > div.addedNote {
     font-size: 0.7em;
-
+    display: table-row;
     color: #bbb;
     font-weight: 100;
     padding-left: 1em;
+    border: 2px solid green;
+    
+  }
+
+div.listItem > div.thingTable > div.thingNameRow > div.thingNameCol > div.addedNote > div { 
+  padding-left: 1em;
+}
+
+  div.listItem > div.thingTable > div.thingNameRow > div.thingNameCol > div.addedNote > div.recent {
+    display: table-cell;
+  }
+  
+  div.listItem > div.thingTable > div.thingNameRow > div.thingNameCol > div.addedNote > div.dittoedFrom {
+    display: table-cell;
+  }
+
+  div.listItem > div.thingTable > div.thingNameRow > div.thingNameCol > div.addedNote > div.dittoedFrom > img {
+    height: 20px;
+    width: 20px;
+    opacity: 0.4;
+    display: none;
   }
 
   div.dittoCol {

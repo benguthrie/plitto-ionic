@@ -19,26 +19,39 @@
       <a 
          class="button ion-ios7-checkmark-outline" 
          ng-class="{'active': view ==='ditto'}" 
-         ng-click="setView('ditto');"></a>
+         ng-click="setView('ditto');">
+        <div class=" ionicons ion-refresh buttonRefresh" 
+             ng-show="view === 'ditto' "></div>
+      </a>
       <a 
          class="button ion-ios7-checkmark dittoA" 
          ng-class="{'active': view ==='shared'}" 
-         ng-click="setView('shared');"></a>
+         ng-click="setView('shared');">
+        <div class=" ionicons ion-refresh buttonRefresh" 
+             ng-show="view === 'shared' "></div>
+      </a>
       <a class="button ion-ios7-pulse-strong" 
          ng-class="{'active': view ==='feed'}" 
-         ng-click="setView('feed');"></a>
-      <a class="button " 
-         ng-class="{'active': view ==='mine'}" 
-         ng-click="setView('mine');">
-        <img ng-src="{{'http://graph.facebook.com/' + $root.user.fbuid + '/picture?height=30&width=30'}}">
+         ng-click="setView('feed');">
+      </a>
+      <a class="button buttonProfilePic" 
+         ng-class="  {'active': view ==='mine'}" 
+         ng-click="setView('mine');"
+         style='background-image: url("http://graph.facebook.com/{{$root.user.fbuid}}/picture?height=50&width=50");'
+         >
       </a>
       <a class="button buttonStranger" 
          ng-class="{'active': view ==='strangers'}" 
-         ng-click="setView('strangers');"></a>
+         ng-click="setView('strangers');">
+        <div class=" ionicons ion-refresh buttonRefresh" 
+             ng-show="view === 'strangers' "></div>
+        
+      </a>
     </div>
     
     
     <div ng-show="view ==='ditto' ">
+      <h4 class="viewContext">Dittoable List Items</h4>
       <div ng-show="!store.ditto.length" class="noShow">No Dittoable Items to Show</div>
       <div ng-show="store.ditto[0].loading" ><h1>LOADING</h1></div>
       <div class="list " ng-repeat="user in store.ditto">
@@ -47,6 +60,7 @@
     </div>
     
     <div ng-show="view ==='shared' ">
+      <h4 class="viewContext">Shared List Items</h4>
       <div ng-show="!store.shared.length" class="noShow" ng-click="showList">You have nothing in common with your friends in <b ng-bind="listInfo.listName"></b></div>
       <div ng-show="store.shared[0].loading" ><h1>LOADING</h1></div>
       <div class="list " ng-repeat="user in store.shared">
@@ -55,6 +69,7 @@
     </div>
     
     <div ng-show="view ==='feed' ">
+      <h4 class="viewContext">Latest List Items</h4>
       <div ng-show="!store.feed.length" class="noShow">No Recent Items</div>
       <div ng-show="store.feed[0].loading" ><h1>LOADING</h1></div>
       <div class="list " ng-repeat="user in store.feed">
@@ -63,6 +78,8 @@
     </div>
     
     <div ng-show="view ==='mine' ">
+      <!-- TODO2 - It can get hung here. store.mine.length: {{store.mine | json }} {{store.mine.length}} --> 
+      <h4 class="viewContext">Your List Items</h4>
       <div ng-show="!store.mine.length" class="noShow">You have not items yet.</div>
       <div ng-show="store.mine[0].loading" ><h1>LOADING</h1></div>
       <div class="list " ng-repeat="user in store.mine">
@@ -71,6 +88,7 @@
     </div>
     
     <div ng-show="view ==='strangers' ">
+      <h4 class="viewContext">List Items from Strangers</h4>
       <div ng-show="!store.strangers.length" class="noShow">No Strangers Have Items in This List</div>
       <div ng-show="store.strangers[0].loading" ><h1>LOADING</h1></div>
       <div class="list " ng-repeat="user in store.strangers">
