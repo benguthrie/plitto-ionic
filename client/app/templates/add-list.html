@@ -15,6 +15,7 @@
           <input type="text" name="title"
             placeholder="New List Title"
             ng-model="newList.title"
+            class="userInput"
             required/>
            
         </label>
@@ -29,7 +30,11 @@
       </form>
     </div>
     
-    <ion-list ng-repeat="list in $root.searchResults" ng-show="newList.title.length > 0">
+    <h4 class="viewContext" ng-show="!listResults.length && newList.title.length">No Existing Lists</h4>
+    <h4 class="viewContext" ng-show="!listResults.length && !newList.title.length">Existing Lists Will Show Here</h4>
+    
+    <h4 class="viewContext" ng-show="listResults.length">Existing Lists</h4>
+    <ion-list ng-repeat="list in listResults" ng-show="newList.title.length > 0">
       <ion-item class="item-icon-right" href="#/app/list/{{list.lid}}" 
           ng-click="showList(list.lid, list.listname, null, 'addToList');">
         <ion-option-button class="button-assertive">
@@ -37,7 +42,7 @@
         {{list.listname}} - ({{list.thecount}})
           <i class="icon ion-chevron-right icon-accessory"></i>
       </ion-item>
-    </ion-list>
+    </ion-list> 
     
   </ion-content>
 </ion-view>

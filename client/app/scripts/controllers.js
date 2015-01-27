@@ -640,6 +640,7 @@ angular.module('Plitto.controllers', [])
 
 .controller('addListCtrl', function($scope, $rootScope, $stateParams, dbFactory){
   $scope.newList = {title:''};
+  $scope.listResults = [];
   console.log('addListCtrl called');
   
   
@@ -651,7 +652,9 @@ angular.module('Plitto.controllers', [])
     console.log('Changed from unused oldvalue (TODO2) ' + oldValue + ' to ' + newValue);
     if(typeof newValue !== 'undefined' && newValue.length > 0){
     //   
-      dbFactory.search(newValue, 'list');
+      dbFactory.promiseSearch(newValue, 'list').then(function(d){
+        $scope.listResults = d.results;
+      });
     }
   });
   
@@ -686,15 +689,23 @@ angular.module('Plitto.controllers', [])
   
 
   /* Clear out the last search */
-  $scope.search = {term: $stateParams.term, results: []};
+  $scope.search = { term: $stateParams.term, results: []};
   
   /* Clear the Search */
-  $scope.clearSearch = function(){
+  $scope.emptyTheSearch = function($element, $attrs){
     console.log('clear Search');
     $scope.search = { term: null, results: []};
+    var elementToFocusOn = document.querySelector('input#searchField');
+    console.log('focus on: ', elementToFocusOn, $element, $attrs );
+    
+    
+    
   };
   
-
+  $scope.searchFor = function( searchTerm, searchType){
+    console.log('this could be deleted. The whole function. 1/27/2015');
+  };
+  
   /* List */
   $scope.showList = function(listId, listName, userFilter, focusTarget){
     console.log('showList controllers.js 383');
@@ -713,7 +724,7 @@ angular.module('Plitto.controllers', [])
     return $scope.search.term;
   }, function(newValue, oldValue){
     // console.log('TODO2 - This is where oldValue is used: ' + oldValue + ' to ' + newValue);
-    if(typeof newValue !== 'undefined' && newValue.length > 0){
+    if(typeof newValue !== 'undefined'){
       
       dbFactory.promiseSearch( newValue, 'general').then(function(d){  
         $scope.search.results = d.results;
@@ -962,6 +973,7 @@ angular.module('Plitto.controllers', [])
   
   
   $scope.addToList = function(newItem){
+    console.log('controllers.listCtrl.addToList(newItem)', newItem);
     /* Focus on my list */
     $scope.view = 'mine';
     

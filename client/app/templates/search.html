@@ -3,33 +3,42 @@
   
   <ion-content class="has-header">
     <div class="searchLine">
-      <div class="searchCell">
-        <form name="searchForm" ng-submit="search(search.term,'general');">
-          <label class="item item-input">
-            <span class="input-label" style="font-weight: bold; max-width: 80px;font-size: 0.9em;">Search</span>
-            <input 
-              type="text" 
-              ng-model="search.term" 
-              style="font-size: 1.2em;" 
-              placeholder="Search Here"
-              id="searchField"
-              autofocus
-            />
-          </label>
+      <form class="searchCell" name="searchForm" ng-submit="searchFor(search.term,'general');">
+        <div class="icon ion-search placeholder-icon"></div>
+        <label class="item-input" >
+         <input 
+            type="text" 
+            ng-model="search.term" 
+            style="font-size: 1.2em;" 
+            placeholder="Search Here"
+            id="searchField"
+            class="userInput"
+            autofocus
+          />
+        </label>
+        
+        <div class="clearSearch" ng-hide="!search.term.length"><button 
+             class="icon ion-close-circled clearSearch" 
+             ng-click="emptyTheSearch();"
+             >
+        </button></div>
+        
+          <!-- It's a fake button! ng-click="search(search.term, 'general');"
+          <button 
+               class="icon ion-search" 
 
+               ng-hide="!search.term.length"></button> --> 
 
-        </form>
-        </div>
-        <div class="icon ion-close-circled clearSearch" ng-click="clearSearch();"></div>
+      </form>
+        
     </div>
+    <h4 class="viewContext" ng-show="!search.results.length && search.term.length ">No Search Results</h4>
+    <h4 class="viewContext" ng-show="!search.term.length "><i class='ion-arrow-up-c'></i> Search Above</h4>
+    <h4 class="viewContext" ng-show="search.results.length && search.term.length ">Results for <b>{{search.term}}</b></h4>
     
-    <div ng-show="search.results.length === 0 && search.term.length > 0" >
-      <h2>No Results for <i ng-bind="search.term"></i></h2>
-    </div>
-    <div ng-show="search.term.length === 0" ><h2>Search To See Results</h2></div>
 <!-- Start Search Results -->     
     <div ng-repeat="section in search.results" ng-show="search.term.length > 0">
-      <h3 ng-bind="section.title"></h3>
+      <h4 class="viewContext secondary" ng-bind="section.title"></h4>
       
       <ion-list can-swipe="true" ng-show="section.type === 'thing' ">
         <div class="item" ng-repeat="item in section.results">
@@ -46,7 +55,7 @@
                   ng-click="showList(list.nameId, list.itemName, null, 'addToList');">
             <!--<ion-option-button class="button-assertive"
               ng-click="">Mine</ion-option-button> -->
-              {{list.itemName}} - {{item.itemCount}}
+              {{list.itemName}}<span ng-show="item.itemCount.length"> - {{item.itemCount}}</span>
           <i class="icon ion-chevron-right icon-accessory"></i>
         </ion-item>
       </ion-list>

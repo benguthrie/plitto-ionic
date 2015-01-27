@@ -1,3 +1,9 @@
+/* Colors
+  Light Green - #32868C
+  Orange Accent - #F49653
+
+*/
+
 .slider {
   height: 85%;
 }
@@ -31,18 +37,26 @@ div.button-bar > a.active {
   
 }
 
-ion-nav-bar.nav-bar {
-  background-color: #DEDDD9 !important;
-}
 
 h4.viewContext{
   background-color: #888;
   color: #fff;
-  padding: 0.2em;
+  padding: 0.5em 0.2em 0.5em 1em;
   border-bottom: solid 1px #F49653;
   border-top: solid 0.1em #F49653;
   margin-top: 0em;
-  padding-top: 0.5em;
+  
+}
+h4.viewContext > i {
+  margin-right: 0.5em;
+  
+  
+}
+
+h4.secondary {
+  background-color: #32868C;
+  border: 0;
+  margin: 0.5em 0 0 0;
 }
 
 /* Buttons in the nav bar */
@@ -209,12 +223,9 @@ a.buttonStranger {
   
 }
 
-
-
 .unread {
   background-color: rgba(200,255,200,0.5);
 }
-
 
 span.notificationDate {
   color: #999;
@@ -275,40 +286,13 @@ h1.pageTitle {
 h1.pageTitle > i {
   margin-right: 0.3em;
 }
-      
 
-/* Search */
-  div.searchLine > div.clearSearch {
-    
-    padding: 0.4em;
-    font-size: 2em;
-
-    color: #888;
-    
-    width: 1.5em;
-  }
-
-  div.searchLine {
-    padding-bottom: 1px;
-    border-bottom: 1px solid #ccc;
-    display: table;
-    width: 100%;
-    height: 4em;
-  }
-
-  div.searchLine > div {
-    display: table-cell;
-  }
-
-  div.searchLine > div.searchCell {
-    
-    
-  }
-
-  div.searchLine > div > form > label {
-    border: 0;
-
+/* Highlight Input Forms */
+input.userInput {
+  border: 1px solid #888;
+  padding: 0.1em;
 }
+
 
 
 /* User List Things touched after 1/19/2015 */
@@ -460,6 +444,112 @@ div.thingTable { display: table; }
     padding: 5px;
     
   }
+
+/* Add to List Form */
+label#addToList, label#searchForm {
+  background-color: #ddd;
+  padding: 0.2em;
+}
+
+label#addToList > input, label#searchForm > input {
+  background-color: #fff;
+  margin: 0;
+}
+
+label#addToList > button {
+  border: 0;
+  
+}
+
+label#addToList > button > i {
+  font-size: 1.4em;
+  margin: 0;
+  border: 0.2em solid #444;
+  background-color: #bbb;
+  padding: 0 0 0 0;
+  height: 1.8em;
+  width: 1.8em;
+  color: #444;
+  
+  display: block;
+  border-radius: 0.9em;
+  
+}
+
+/* Search Form Styling */
+
+div.searchLine {
+  display: table;
+  width: 100%;
+}
+  div.searchLine > form.searchCell {
+    display: table-row;
+  }
+
+  div.searchLine > form.searchCell > div.placeholder-icon {
+    font-size: 1.5em;
+    padding-left: 0.5em;
+    width: 0.5em;
+    
+  }
+
+  div.searchLine > form.searchCell > i, div.searchLine > form.searchCell > label, div.searchLine > form.searchCell > div {
+    display: table-cell;
+    margin: 0;
+  }
+
+div.searchLine > form.searchCell  {
+  background-color: #ddd;
+}
+div.searchLine > form.searchCell > label {
+  padding-right: 0.6em;
+}
+
+div.searchLine > form.searchCell > label > input {
+  background-color: #fff;
+  
+  z-index: 3;
+  
+}
+
+
+
+div.searchLine > form.searchCell > div.clearSearch {
+  width: 2em;
+  height: 0;
+  
+}
+
+div.searchLine > form.searchCell > div.clearSearch > button {
+  border: 0;
+  font-size: 2em;
+  vertical-align: text-top;
+  margin-top: -0.4em;
+  
+  width: 1.5em;
+  
+}
+
+
+/*
+  div.listBlock > div.listLine > div.listAddTo > i.listIconAdd {
+    font-size: 1.4em;
+    color: #ddd;
+    border: 2px solid #ddd;
+    margin: 0;
+    box-shadow: 0 2px 5px 0 rgba(200, 200, 200, 0.26);
+    border-radius: 0.9em;
+    background-color: rgba(100, 190, 100, 0.5);
+
+    display: block;
+    height: 1.3em;
+    width: 1.3em;
+    padding-top: 0.1em;  
+    padding-left: 0.178em;
+
+  }
+*/
+
 
 /* Add a list */
   div.addList {
@@ -783,19 +873,19 @@ div.listItem > div.thingTable > div.thingNameRow > div.thingNameCol > div.addedN
   }
 
   div.listBlock > div.listLine > div.listAddTo > i.listIconAdd {
-    font-size: 1.4em;
+    font-size: 1.2em;
     color: #ddd;
     border: 2px solid #ddd;
     margin: 0;
     box-shadow: 0 2px 5px 0 rgba(200, 200, 200, 0.26);
     border-radius: 0.9em;
-    background-color: rgba(100, 190, 100, 0.5);
+    background-color: rgba(200, 200, 200, 0.4);
 
     display: block;
-    height: 1.3em;
-    width: 1.3em;
-    padding-top: 0.1em;  
-    padding-left: 0.178em;
+    height: 1.8em;
+    width: 1.8em;
+    padding-top: 0.3em;  
+    padding-left: 0.3em;
 
   }
 

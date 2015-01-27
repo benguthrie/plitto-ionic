@@ -4,13 +4,17 @@
   <ion-content class="has-header">
     <h1 class="pageTitle"><i class="icon ion-clipboard"></i> {{listInfo.listName}}</h1>
     <form name="newItemForm" ng-submit="addToList(newItem.theValue);">
-      <label class="item item-input">
+      <label class="item item-input" id="addToList">
         <input 
           type="text" 
           ng-model="newItem.theValue" 
           placeholder="Add to {{listInfo.listName}}"
           id="newListItemField"
+          class="userInput"
         />
+        <button ng-click="addToList(newItem.theValue);">
+          <i class="ion-android-add"></i>
+        </button>
       </label>
       
     </form>
@@ -79,7 +83,6 @@
     
     <div ng-show="view ==='mine' ">
       <!-- TODO2 - It can get hung here. store.mine.length: {{store.mine | json }} {{store.mine.length}} --> 
-      
       <h4 class="viewContext">Your List Items</h4>
       <div ng-show="!store.mine.length" class="noShow">You have not items yet.</div>
       <div ng-show="store.mine[0].loading" ><h1>LOADING</h1></div>
