@@ -46,8 +46,9 @@ angular.module('Plitto', [
           innerObj[fullSubName] = subValue;
           query += param(innerObj) + '&';
         }
-      } else if (value !== undefined && value !== null)
+      } else if (value !== undefined && value !== null) {
         query += encodeURIComponent(name) + '=' + encodeURIComponent(value) + '&';
+      }
     }
 
     return query.length ? query.substr(0, query.length - 1) : query;
@@ -362,9 +363,9 @@ angular.module('Plitto', [
     controller: function ($scope, dbFactory) {
       /* Ditto */
       $scope.ditto = function (mykey, uid, lid, tid, itemKey, $event) {
-        console.log('app.userlistthing.ditto: mykey, uid, lid, tid, itemKey : ',mykey,':', uid,':', lid,':', tid,':', itemKey);
+        console.log('app.userlistthing.ditto: mykey, uid, lid, tid, itemKey : ', mykey, ':', uid, ':', lid, ':', tid, ':', itemKey);
         console.log('DITTO - My key? ', mykey);
-        
+
         // Set them to updating 
         // Traverse $scope.userData, and change any items, updating them with the proper info.
         var arrPair = new Array();
@@ -393,8 +394,8 @@ angular.module('Plitto', [
 
         // Convert this to a scope return. dbFactory.dbDitto( scopeName, mykey, uid, lid, tid, itemKey, $event);
         var dbResponse = [];
-        
-        
+
+
         dbFactory.promiseDitto(mykey, uid, lid, tid, itemKey, $event).then(function (d) {
           // The elements are [0] - mykey / null , [1]:[friendsWith] / undefined - [2]['ditto'/'remove']
           console.log('dittoResponse: ', d);

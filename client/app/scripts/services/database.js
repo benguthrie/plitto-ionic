@@ -69,7 +69,7 @@ angular.module('Services.database', ['LocalStorageModule'])
               var friendsWith = response.data.results[0].friendsWith;
             }
           }
-          var pDittoArray = Array(mynewkey, friendsWith, action);
+          var pDittoArray = new Array(mynewkey, friendsWith, action);
           // return pDittoArray;
           return pDittoArray;
         },
@@ -235,8 +235,8 @@ angular.module('Services.database', ['LocalStorageModule'])
             // console.log('TODO2 database.showfeed Use shc', data, status, headers, config);
             // Error Handling - TODO1 - Add error handling to all calls.
             if (typeof response.data.logout !== 'undefined') {
-              console.log('API ERROR', data);
-              if (data.logout === true) {
+              console.log('API ERROR', response.data);
+              if (response.data.logout === true) {
                 console.log('showFeed.database: We should log out 364.');
                 logout();
               }
@@ -290,7 +290,6 @@ angular.module('Services.database', ['LocalStorageModule'])
             if (checkLogout(response.data) === true) {
               logout();
             } else {
-              console.log()
                 // $rootScope.modal.listStore = data.results;
               return response.data.results;
 
@@ -425,7 +424,7 @@ angular.module('Services.database', ['LocalStorageModule'])
               $rootScope.token = response.data.me.token;
               localStorageService.set('token', response.data.me.token);
 
-              updateCounts();
+              // TODO2 Later? updateCounts();
 
               // Make the root token and the Local Storage
               localStorageService.set('friendStore', response.data.friends);
@@ -460,11 +459,13 @@ angular.module('Services.database', ['LocalStorageModule'])
 
         }
       );
+    
+    return promise;
   };
 
   /* Gets their Plitto Friends, and adds it to the local store. 9/3/2014
       // 10/21/2014 This will only be called on a refresh, which isn't built yet.
-  */
+  
   var fbPlittoFriends = function (server) {
     console.log('TODO2 Use fbPlittoFriends.server', server);
     // Make the API call to get this user's friends.
@@ -475,9 +476,10 @@ angular.module('Services.database', ['LocalStorageModule'])
     FB.api('/me/friends', function (response) {
       // console.log('my friends: ',response.data);
       // Using this, call the Plitto API to log this users friends
-      plittoFBApiCall(response.data);
+      // TODO3 - What was this? Do we use this? plittoFBApiCall(response.data);
     });
   };
+  */
 
   /* 9/7/2014
     Get the list of lists for this user, and from you and your friends
@@ -725,7 +727,7 @@ angular.module('Services.database', ['LocalStorageModule'])
           console.log('promiseSearch data error: ', response);
         }
       );
-    return promise
+    return promise;
   };
 
   return {

@@ -395,7 +395,7 @@ angular.module('Plitto.controllers', [])
       $scope.funnyText = {
         'currentTime': Date.now(),
         'state.current.name': $state.current.name
-      }
+      };
     } else if (type === 'clearRootscope') {
       $rootScope = '';
     } else {
@@ -438,10 +438,6 @@ angular.module('Plitto.controllers', [])
     $scope.debugLog = JSON.stringify([{
       item: 'this is a test item'
     }]);
-  };
-
-  $scope.rootScopePart = function (part) {
-    $scope.debugLog = JSON.stringify(eval('$rootScope.' + part));
   };
 
 })
@@ -507,7 +503,7 @@ angular.module('Plitto.controllers', [])
       console.log('ERROR controllers.ProfileCtrl 391 - invalid userId in the URL.');
     }
 
-    lsTypes = new Array('ditto', 'shared', 'feed', 'lists', 'chat');
+    var lsTypes = new Array('ditto', 'shared', 'feed', 'lists', 'chat');
 
     if (parseInt($rootScope.user.userId) === parseInt($scope.userInfo.userId)) {
       var lsTypes = new Array('feed', 'lists'); // TODO2 Put in the chat bit again. 
@@ -656,7 +652,7 @@ angular.module('Plitto.controllers', [])
 
       console.log('profileScope view after getSome: ', $scope.view);
 
-      console.log("Get Some for userid: ", $scope.userInfo.userId, filter, 'end');
+      console.log('Get Some for userid: ', $scope.userInfo.userId, filter, 'end');
       // $scope.store[ filter ] = dbFactory.showFeed('profile', $scope.userId, filter , '', '', '');
       // 
       // dbGetSome = function (theScope, userfilter, listfilter, sharedFilter)
@@ -676,7 +672,8 @@ angular.module('Plitto.controllers', [])
 
         });
 
-      };
+      }
+
       $scope.view = 'lists';
 
     };
@@ -885,7 +882,7 @@ angular.module('Plitto.controllers', [])
   if ($scope.store.friends.length === 0 || $scope.store.friends[0].loading === true) {
     if (localStorageService.get('feedFriends')) {
       $scope.store.friends = localStorageService.get('feedFriends');
-    };
+    }
 
     $scope.store.friends[0] = {
       loading: true
@@ -901,11 +898,12 @@ angular.module('Plitto.controllers', [])
 
     if (localStorageService.get('feedStrangers')) {
       $scope.store.strangers = localStorageService.get('feedStrangers');
-    };
+    }
 
     $scope.store.strangers[0] = {
       loading: true
     };
+
     dbFactory.promiseFeed('strangers', '', '', '', '', '').then(function (d) {
       $scope.store.strangers = d;
       localStorageService.set('feedStrangers', d);
@@ -954,11 +952,13 @@ angular.module('Plitto.controllers', [])
   };
 
   /* Clear any previously entered text in the 'add to list' section */
-  $scope.newItem = { theValue: null };
+  $scope.newItem = {
+    theValue: null
+  };
 
 
   // Populate the list on load.
-  var listViews = Array('ditto', 'shared', 'feed', 'mine', 'strangers');
+  var listViews = new Array('ditto', 'shared', 'feed', 'mine', 'strangers');
 
   // TODO2 - userIdFilter is ignored. It should allow for a specific user to be viewed. 
   var userIdFilter = 0; // TODO2 - Allow this to be set.
@@ -1049,14 +1049,14 @@ angular.module('Plitto.controllers', [])
     $scope.view = 'mine';
     console.log('FELIX   FELIX   FELIX   controllers.listCtrl.addToList(newItem)', newItemName);
     // Step: Make sure that there is something.
-    if( !newItemName.length ){
+    if (!newItemName.length) {
       console.log('no length for the new item. 1054');
       return;
     }
-    
+
     // Step: Clear the new item model.
     $scope.newItem.theValue = null;
-    
+
     /* Create a placeholder for while the API responds */
     var tempNum = randNum(10000);
     var tempItem = {
@@ -1075,7 +1075,7 @@ angular.module('Plitto.controllers', [])
       thingname: '...' + newItemName,
       tid: null
     };
-    
+
     /* Create My List if this is the first item in my list */
     if ($scope.store.mine.length === 0) {
       console.log('create my list', $scope.store.mine.length);
@@ -1093,20 +1093,20 @@ angular.module('Plitto.controllers', [])
       };
       // Add my new list to the store 
       $scope.store.mine.unshift(myList);
-      
+
     }
-    
+
     /* remove the existing item from my list visibly. */
-      // But only if I have existing items. 
-    if( !$scope.store.mine[0].lists[0].items.length ===0 ){
-      console.log('crisis averted! items: ', $scope.store.mine[0].lists[0].items.length)
+    // But only if I have existing items. 
+    if (!$scope.store.mine[0].lists[0].items.length === 0) {
+      console.log('crisis averted. items: ', $scope.store.mine[0].lists[0].items.length);
     } else {
       var j = $scope.store.mine[0].lists[0].items.length;
       var i = 0;
-      while ( i < j) {
-        
+      while (i < j) {
+
         // Step - It matched. Note it.
-        if ( $scope.store.mine[0].lists[0].items[i].thingname.toUpperCase() === newItemName.toUpperCase()) {
+        if ($scope.store.mine[0].lists[0].items[i].thingname.toUpperCase() === newItemName.toUpperCase()) {
           $scope.store.mine[0].lists[0].items.splice(i, 1);
           break;
         }
@@ -1114,17 +1114,17 @@ angular.module('Plitto.controllers', [])
       }
 
     }
-    
+
     /* Step - Add this item as the first item in my list */
     $scope.store.mine[0].lists[0].items.unshift(tempItem);
-    
+
     /* Step Prepare to submit to the dbFactory */
     var itemObj = {
       lid: $scope.listInfo.listId,
       thingName: newItemName
     };
-    
-    
+
+
     /* Step - Submit to the database */
     dbFactory.promiseAddToList(itemObj).then(function (d) {
       console.log('new item (response): ', newItemName, d);
@@ -1149,12 +1149,12 @@ angular.module('Plitto.controllers', [])
 
       /* Overwrite the temp item with the new item. I will be in the right spot. */
       $scope.store.mine[0].lists[0].items[i] = d;
-      
-      console.log('updatedItem: ',$scope.store.mine[0].lists[0].items[i]);
-      
+
+      console.log('updatedItem: ', $scope.store.mine[0].lists[0].items[i]);
+
     });
-    
-    
+
+
   };
   /* End List Control */
 })
