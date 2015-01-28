@@ -18,6 +18,8 @@
       </a>
     </div>
 
+    <h4 class="viewContext" ng-show="view==='friends'">Ditto Some Things From Your Friends</h4>      
+    <h4 class="viewContext" ng-show="view==='strangers'">Ditto Some Things From Strangers</h4>      
 
     <div class="list" ng-repeat="user in store.friends" ng-show="view==='friends'">
       <user-list-thing store="store.friends" source="home" user-data="user"></user-list-thing>

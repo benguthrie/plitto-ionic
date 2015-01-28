@@ -33,7 +33,8 @@
 
 
       <ion-list can-swipe="true" ng-show="section.type === 'list' ">
-        <ion-item class="item-icon-right" ng-repeat="list in section.results" ng-click="showList(list.nameId, list.itemName, null, 'addToList');">
+        <ion-item class="item-icon-right" ng-repeat="list in section.results" 
+                  ng-click="showList(list.nameId, list.itemName, null, 'addToList');">
           <i class="ion-clipboard"></i>
           <!--<ion-option-button class="button-assertive"
               ng-click="">Mine</ion-option-button> -->

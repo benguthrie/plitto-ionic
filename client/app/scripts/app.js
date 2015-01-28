@@ -14,7 +14,50 @@ angular.module('Plitto', [
   'Plitto.services',
   'angularMoment',
   'LocalStorageModule'
-])
+], function ($httpProvider) {
+  // Use x-www-form-urlencoded Content-Type
+  $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
+
+  /**
+   * The workhorse; converts an object to x-www-form-urlencoded serialization.
+   * @param {Object} obj
+   * @return {String}
+   */
+  var param = function (obj) {
+    var query = '',
+      name, value, fullSubName, subName, subValue, innerObj, i;
+
+    for (name in obj) {
+      value = obj[name];
+
+      if (value instanceof Array) {
+        for (i = 0; i < value.length; ++i) {
+          subValue = value[i];
+          fullSubName = name + '[' + i + ']';
+          innerObj = {};
+          innerObj[fullSubName] = subValue;
+          query += param(innerObj) + '&';
+        }
+      } else if (value instanceof Object) {
+        for (subName in value) {
+          subValue = value[subName];
+          fullSubName = name + '[' + subName + ']';
+          innerObj = {};
+          innerObj[fullSubName] = subValue;
+          query += param(innerObj) + '&';
+        }
+      } else if (value !== undefined && value !== null)
+        query += encodeURIComponent(name) + '=' + encodeURIComponent(value) + '&';
+    }
+
+    return query.length ? query.substr(0, query.length - 1) : query;
+  };
+
+  // Override $http service's default transformRequest
+  $httpProvider.defaults.transformRequest = [function (data) {
+    return angular.isObject(data) && String(data) !== '[object File]' ? param(data) : data;
+  }];
+})
 
 
 
@@ -319,6 +362,9 @@ angular.module('Plitto', [
     controller: function ($scope, dbFactory) {
       /* Ditto */
       $scope.ditto = function (mykey, uid, lid, tid, itemKey, $event) {
+        console.log('app.userlistthing.ditto: mykey, uid, lid, tid, itemKey : ',mykey,':', uid,':', lid,':', tid,':', itemKey);
+        console.log('DITTO - My key? ', mykey);
+        
         // Set them to updating 
         // Traverse $scope.userData, and change any items, updating them with the proper info.
         var arrPair = new Array();
@@ -345,16 +391,20 @@ angular.module('Plitto', [
           }
         }
 
-
         // Convert this to a scope return. dbFactory.dbDitto( scopeName, mykey, uid, lid, tid, itemKey, $event);
         var dbResponse = [];
+        
+        
         dbFactory.promiseDitto(mykey, uid, lid, tid, itemKey, $event).then(function (d) {
-
+          // The elements are [0] - mykey / null , [1]:[friendsWith] / undefined - [2]['ditto'/'remove']
+          console.log('dittoResponse: ', d);
           for (k in arrPair) {
             if (parseInt(d[0])) {
+              // Update my key with my new one.
               $scope.userData.lists[arrPair[k][0]].items[arrPair[k][1]].mykey = String(d[0]);
               console.log('403 myKey: ', String(d[0]));
             } else {
+              // Set my key to null, because I don't have it any more.
               $scope.userData.lists[arrPair[k][0]].items[arrPair[k][1]].mykey = null;
             }
 
@@ -364,7 +414,6 @@ angular.module('Plitto', [
               $scope.userData.lists[arrPair[k][0]].items[arrPair[k][1]].friendsWith = '';
             }
           }
-
         });
       };
 
@@ -460,8 +509,7 @@ angular.module('Plitto', [
 
         // Find the item in this list.
         var i = 0,
-          j = 0,
-          abort = false;
+          j = 0;
         loop1:
           for (i in $scope.userData.lists) {
             if (lid === $scope.userData.lists[i].lid) {
@@ -506,7 +554,10 @@ angular.module('Plitto', [
       /* Link to List */
       $scope.showList = function (listId, listName, userFilter, focusTarget) {
         console.log('showList app.js 454');
-        dbFactory.showAList(listId, listName, userFilter, focusTarget);
+        // dbFactory.showAList(listId, listName, userFilter, focusTarget);
+        $state.go('app.list', {
+          listId: listId
+        });
       };
 
       /* Load up the lists 

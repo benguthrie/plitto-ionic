@@ -84,7 +84,10 @@ angular.module('Plitto.controllers', [])
 
         // This should only happen when the app loads, and at specific times, so we'll build everything back up in dbFactory
         $rootScope.loginMessage = 'use dbFactory.refreshData to check if the token is valid.';
-        dbFactory.refreshData($rootScope.token);
+
+        dbFactory.refreshData($rootScope.token).then(function (d) {
+          console.log('controller.initCallback 88 --> refreshData response: ', d);
+        });
 
       } else if (
         window.location.hash.indexOf('access_token') !== 'undefined' &&
@@ -497,7 +500,7 @@ angular.module('Plitto.controllers', [])
         $scope.userInfo.userId = parseInt($stateParams.userId);
         // console.log('413 ', $scope.userInfo.userId);
       } else {
-        console.log('CONTROLLER.390 NO VALID USER ID');
+        console.log('CONTROLLER.390 NO VALID USER FROM CONTENT.', $stateParams.profile);
       }
 
     } else {
@@ -545,6 +548,11 @@ angular.module('Plitto.controllers', [])
           $scope.store.ditto = d;
           localStorageService.set('user' + $scope.userInfo.userId + 'ditto', d);
           console.log('update: in promise  ditto: ', d);
+          if ($scope.userInfo.userName === null && d[0].username) {
+
+            $scope.userInfo.userName = d[0].username;
+            $scope.userInfo.fbuid = d[0].fbuid;
+          }
         });
 
       } else if (lsTypes[i] === 'feed') {
@@ -552,18 +560,14 @@ angular.module('Plitto.controllers', [])
           $scope.store.feed = localStorageService.get('user' + $scope.userInfo.userId + 'feed');
         }
 
-
-        // Pull the name from local storage, if we have it.
-        if (!$scope.userInfo.userName) {
-          // console.log( typeof($scope.feed[0].username ) ) ;
-          $scope.userInfo.userName = $scope.store.feed[0].username;
-          $scope.userInfo.fbuid = $scope.store.feed[0].fbuid;
-          console.log('load feed: ', $scope.store.feed);
-        }
-
         dbFactory.promiseFeed('profile', $scope.userInfo.userId, '', '', '', '').then(function (d) {
           $scope.store.feed = d;
           localStorageService.set('user' + $scope.userInfo.userId + 'feed', d);
+          if ($scope.userInfo.userName === null && d[0].username) {
+
+            $scope.userInfo.userName = d[0].username;
+            $scope.userInfo.fbuid = d[0].fbuid;
+          }
         });
 
 
@@ -575,7 +579,14 @@ angular.module('Plitto.controllers', [])
         dbFactory.promiseListOfLists($scope.userInfo.userId).then(function (d) {
           $scope.store.lists = d;
           localStorageService.set('user' + $scope.userInfo.userId + 'lists', d);
+
+          if ($scope.userInfo.userName === null && d[0].username) {
+
+            $scope.userInfo.userName = d[0].username;
+            $scope.userInfo.fbuid = d[0].fbuid;
+          }
         });
+
 
       } else {
         console.log('TODO1 - Auto load this');
@@ -583,6 +594,17 @@ angular.module('Plitto.controllers', [])
 
     }
 
+    // Make sure that we have user information by now.
+    if (!$scope.userInfo.userName) {
+      console.log('595 - No user name', $scope.userInfo.userName);
+      dbFactory.userInfo($scope.userInfo.userId).then(function (d) {
+        console.log('user info: ', d);
+        $scope.userInfo.fbuid = d.results.fbuid;
+        $scope.userInfo.userName = d.results.userName; // Tested, and this works. 1/27/2015
+      });
+    } else {
+      console.log('597 - User name', $scope.userInfo.userName);
+    }
 
 
     // Put the user info in the title bar
@@ -713,7 +735,7 @@ angular.module('Plitto.controllers', [])
 
 })
 
-.controller('SearchCtrl', function ($scope, $rootScope, $stateParams, dbFactory) {
+.controller('SearchCtrl', function ($scope, $rootScope, $stateParams, dbFactory, $state) {
   console.log('You have entered Search');
 
 
@@ -744,7 +766,10 @@ angular.module('Plitto.controllers', [])
   /* List */
   $scope.showList = function (listId, listName, userFilter, focusTarget) {
     console.log('showList controllers.js 383');
-    dbFactory.showAList(listId, listName, userFilter);
+    // dbFactory.showAList(listId, listName, userFilter);
+    $state.go('app.list', {
+      listId: listId
+    });
   };
 
   /* Thing */
@@ -789,15 +814,20 @@ angular.module('Plitto.controllers', [])
   /* First - Load from Local Storage */
   $scope.friendStore = localStorageService.get('friendStore');
 
-  /* Second - Load from the database */
+  dbFactory.friendsList().then(function (d) {
+    console.log('dfriendsStore', d);
+    $scope.friendStore = d;
+    localStorageService.set('friendStore', d);
+  });
 
+  /* Second - Load from the api */
   $scope.reloadFriends = function () {
-    $scope.friendStore = dbFactory.friendsList();
+
   };
 
-  console.log('You have tried to control your friends ', $scope.friendStore, 'TODO2 - Is this used / needed? ');
+  // console.log('You have tried to control your friends ', $scope.friendStore, 'TODO2 - Is this used / needed? ');
   // See if we need to load our friends.
-  console.log('friendStore length: ' + $scope.friendStore.length);
+  // console.log('friendStore length: ' + $scope.friendStore.length);
 })
 
 .controller('FriendCtrl',
@@ -924,9 +954,7 @@ angular.module('Plitto.controllers', [])
   };
 
   /* Clear any previously entered text in the 'add to list' section */
-  $scope.newItem = {
-    theValue: null
-  };
+  $scope.newItem = { theValue: null };
 
 
   // Populate the list on load.
@@ -971,7 +999,6 @@ angular.module('Plitto.controllers', [])
       if ($scope.listInfo.listName === null && typeof (d.results) !== 'undefined' && typeof (d.results[d.type][0].lists[0].listname) !== 'undefined') {
         $scope.listInfo.listName = d.results[d.type][0].lists[0].listname;
       }
-
     });
   }
 
@@ -1017,14 +1044,19 @@ angular.module('Plitto.controllers', [])
 
   };
 
-
-
-
-  $scope.addToList = function (newItem) {
-    console.log('controllers.listCtrl.addToList(newItem)', newItem);
-    /* Focus on my list */
+  $scope.addToList = function (newItemName) {
+    //Step - Focus the view on your list.
     $scope.view = 'mine';
-
+    console.log('FELIX   FELIX   FELIX   controllers.listCtrl.addToList(newItem)', newItemName);
+    // Step: Make sure that there is something.
+    if( !newItemName.length ){
+      console.log('no length for the new item. 1054');
+      return;
+    }
+    
+    // Step: Clear the new item model.
+    $scope.newItem.theValue = null;
+    
     /* Create a placeholder for while the API responds */
     var tempNum = randNum(10000);
     var tempItem = {
@@ -1040,14 +1072,11 @@ angular.module('Plitto.controllers', [])
       id: tempNum,
       ik: null,
       mykey: 1,
-      thingname: '...' + newItem,
+      thingname: '...' + newItemName,
       tid: null
     };
-
-    console.log('me? ', $rootScope.user);
-
-    /* Check to make sure that my list is there, and create it */
-    console.log('my scope', $scope.store.mine);
+    
+    /* Create My List if this is the first item in my list */
     if ($scope.store.mine.length === 0) {
       console.log('create my list', $scope.store.mine.length);
       var myList = {
@@ -1062,40 +1091,49 @@ angular.module('Plitto.controllers', [])
             }
           ]
       };
+      // Add my new list to the store 
       $scope.store.mine.unshift(myList);
+      
     }
-
-    /* remove the existing item from my list. */
-    var i = 0;
-    for (i in $scope.store.mine[0].lists[0].items) {
-      if ($scope.store.mine[0].lists[0].items[i].thingname.toUpperCase() === newItem.toUpperCase()) {
-        $scope.store.mine[0].lists[0].items.splice(i, 1);
-        break;
+    
+    /* remove the existing item from my list visibly. */
+      // But only if I have existing items. 
+    if( !$scope.store.mine[0].lists[0].items.length ===0 ){
+      console.log('crisis averted! items: ', $scope.store.mine[0].lists[0].items.length)
+    } else {
+      var j = $scope.store.mine[0].lists[0].items.length;
+      var i = 0;
+      while ( i < j) {
+        
+        // Step - It matched. Note it.
+        if ( $scope.store.mine[0].lists[0].items[i].thingname.toUpperCase() === newItemName.toUpperCase()) {
+          $scope.store.mine[0].lists[0].items.splice(i, 1);
+          break;
+        }
+        i++;
       }
+
     }
-
-    /* Add the new item to the top of this list Temporarily */
+    
+    /* Step - Add this item as the first item in my list */
     $scope.store.mine[0].lists[0].items.unshift(tempItem);
-
-
-
+    
+    /* Step Prepare to submit to the dbFactory */
     var itemObj = {
       lid: $scope.listInfo.listId,
-      thingName: newItem
+      thingName: newItemName
     };
-    var newItemPos = null;
-    /* Reset the item */
-    $scope.newItem = {
-      theValue: null
-    };
-    // TODO1 - Move this to a promise. 
+    
+    
+    /* Step - Submit to the database */
     dbFactory.promiseAddToList(itemObj).then(function (d) {
-      console.log('new item: ', newItem, d);
+      console.log('new item (response): ', newItemName, d);
       /* Check to see if the item has a valid key */
       if (typeof (d.mykey) !== 'undefined') {
 
         /* Valid results from the API. Begin processing adding this item */
         /* Overwrite the temp value. We know that it will only have one entry. */
+        var newItemPos = null;
         var i = 0,
           j = 0;
         for (i in $scope.store.mine[0].lists[0].items) {
@@ -1109,14 +1147,16 @@ angular.module('Plitto.controllers', [])
         console.log('error. TODO2 - Handle this? ');
       }
 
-      /* Overwrite the temp item with the new item */
+      /* Overwrite the temp item with the new item. I will be in the right spot. */
       $scope.store.mine[0].lists[0].items[i] = d;
-
-
-
+      
+      console.log('updatedItem: ',$scope.store.mine[0].lists[0].items[i]);
+      
     });
+    
+    
   };
-
+  /* End List Control */
 })
 
 .controller('LoginCtrl', function ($scope, $window, $rootScope, $state) {

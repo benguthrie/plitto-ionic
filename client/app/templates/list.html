@@ -6,7 +6,7 @@
     <form name="newItemForm" ng-submit="addToList(newItem.theValue);">
       <label class="item item-input" id="addToList">
         <input type="text" ng-model="newItem.theValue" placeholder="Add to {{listInfo.listName}}" id="newListItemField" class="userInput" />
-        <button ng-click="addToList(newItem.theValue);">
+        <button ng-click="submit();">
           <i class="ion-android-add"></i>
         </button>
       </label>
