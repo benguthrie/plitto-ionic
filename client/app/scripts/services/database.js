@@ -464,7 +464,7 @@ angular.module('Services.database', ['LocalStorageModule'])
   };
 
   /* Gets their Plitto Friends, and adds it to the local store. 9/3/2014
-      // 10/21/2014 This will only be called on a refresh, which isn't built yet.
+      // 10/21/2014 This will only be called on a refresh, which isn't built yet. 
   
   var fbPlittoFriends = function (server) {
     console.log('TODO2 Use fbPlittoFriends.server', server);
@@ -731,7 +731,7 @@ angular.module('Services.database', ['LocalStorageModule'])
   };
 
   return {
-    fbPlittoFriends: fbPlittoFriends,
+    // fbPlittoFriends: fbPlittoFriends,
     fbTokenLogin: fbTokenLogin,
     refreshData: refreshData,
     dbInit: dbInit,
