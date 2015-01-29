@@ -10,7 +10,7 @@
 
   <ion-side-menu side="left" expose-aside-when="large">
     <header class="bar bar-header bar-stable">
-      <h1 class="appTitle"><img src="img/plitto_icon_36.png"/> Plitto</h1>
+      <h1 class="appTitle"><img src="img/prod/plitto_icon_36.png"/> Plitto</h1>
     </header>
     <ion-content class="has-header">
       <ion-list>
@@ -21,7 +21,7 @@
 
         <ion-item nav-clear menu-close href="#/app/friends">
           <i class="icon ion-ios7-people-outline"></i> Friends
-          <span class="item-note" ng-bind="$root.stats.friends">
+          <!-- <span class="item-note" ng-bind="$root.stats.friends"> --> 
             
           </span>
           <!-- TODO2 - Add once friend requests start. 
@@ -31,7 +31,7 @@
 
         <ion-item nav-clear menu-close href="#/app/lists" ng-click="loadLists(); nav.view = 'user.lists'; ">
           <i class="icon ion-clipboard"></i> My Lists
-          <span class="item-note" ng-show=" $root.stats.lists > 0 " ng-bind="$root.stats.lists"></span>
+          <!-- <span class="item-note" ng-show=" $root.stats.lists > 0 " ng-bind="$root.stats.lists"></span>--> 
         </ion-item>
 
         <!-- TODO1 - Directl link to MY FEED
@@ -46,7 +46,7 @@
 
         <ion-item nav-clear menu-close href="#/app/feed" ng-click="nav.view = 'feed'">
           <i class="icon ion-ios7-pulse-strong"></i> Recent Activity
-          <span class="item-note" ng-bind="$root.stats.feedCount"></span>
+          <!-- <span class="item-note" ng-bind="$root.stats.feedCount"></span> -->
         </ion-item>
 
         <ion-item nav-clear menu-close href="#/app/docs" ng-click="nav.view = 'docs'">

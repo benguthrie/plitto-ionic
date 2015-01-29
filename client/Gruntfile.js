@@ -77,8 +77,32 @@ module.exports = function (grunt) {
       gruntfile: {
         files: ['Gruntfile.js'],
         tasks: ['ngconstant:development', 'newer:copy:app']
+      },
+      images: {
+        files : ['img/prod/*.{png,jpg,gif}'],
+        tasks : ['newer:imagemin']
       }
-    },
+    }, /*
+
+    delete_sync : {
+      dist : {
+        cwd : 'img/prod/',
+        src : ['**'],
+        syncWith : 'img/prod/'
+      } 
+
+    },*/ // end of delete sync
+ 
+    imagemin : {
+      dynamic : {
+        files : [{
+          expand : true, // Enable dynamic expansion
+          cwd : 'img/uncompressed/', // source images (not compressed)
+          src : ['**/*.{png,jpg,gif}'], // Actual patterns to match
+          dest : 'img/prod/' // Destination of compressed files
+        }]
+      }
+    }, //end imagemin
 
     // The actual grunt server settings
     connect: {
@@ -224,15 +248,27 @@ module.exports = function (grunt) {
             '<%= yeoman.images %>/**/*.{png,jpg,jpeg,gif,webp,svg}',
             '*.html',
             'templates/**/*.html',
-            'fonts/*'
+            'directives/**/*.html',
+            'fonts/*',
+            'img/prod/*.{png,jpg,gif}'
+
           ]
-        }, {
+        }, 
+        {
           expand: true,
           cwd: '.tmp/<%= yeoman.images %>',
           dest: 'www/<%= yeoman.images %>',
           src: ['generated/*']
-        }]
+        }, 
+        {
+          expand: true,
+          cwd: 'img/prod/',
+          dest: 'www/img/prod/',
+          src: ['generated/*']
+        }
+        ]
       },
+
       styles: {
         expand: true,
         cwd: '<%= yeoman.app %>/<%= yeoman.styles %>',

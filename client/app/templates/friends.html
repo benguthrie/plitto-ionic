@@ -11,14 +11,14 @@
       </ion-item>
 
       </ion-item>
-      <ion-item ng-repeat="friend in friendStore" href="#/app/profile/{{friend.id}}" ng-click="showUser(friend.id, friend.name,'ditto', friend.fbuid);">
+      <div class="friendItem" ng-repeat="friend in friendStore" href="#/app/profile/{{friend.id}}" ng-click="showUser(friend.id, friend.name,'ditto', friend.fbuid);">
+        <div ng-bind=" friend.name " class="friendName"></div>
         <div class="statTable">
           <div class="statRow">
             <div class="friendPicture">
               <img ng-src="http://graph.facebook.com/{{friend.fbuid}}/picture" />
             </div>
             <div class="groupStats">
-              <div ng-bind=" friend.name " class="friendName"></div>
               <div class="statBlock">
 
                 <div class=" colStat ">
@@ -43,8 +43,8 @@
             </div>
           </div>
         </div>
-
-      </ion-item>
+        
+      </div>
     </ion-list>
 
   </ion-content>

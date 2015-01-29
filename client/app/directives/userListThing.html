@@ -3,7 +3,7 @@
   <!-- BEGIN User Row -->
   <a class="item item-avatar userLine" ng-click="showUser(userData.uid,userData.username,'ditto', userData.fbuid);">
 
-    <img ng-src="{{ userData.uid === '0' && 'img/769-male@3x.png' || 'http://graph.facebook.com/' + userData.fbuid + '/picture' }}" />
+    <img ng-src="{{ userData.uid === '0' && 'img/prod/769-male@3x.png' || 'http://graph.facebook.com/' + userData.fbuid + '/picture' }}" />
     <h2>{{userData.username}}</h2>
 
   </a>
@@ -119,6 +119,6 @@
   </div>
   <!-- Item End -->
 
-  <div class="endOfList"></div>
+  <div class="endOfList"> <i class='ion-arrow-down-b'></i> TAP FOR MORE (Coming Soon) <i class='ion-arrow-down-b'></i></div>
 
 </div>

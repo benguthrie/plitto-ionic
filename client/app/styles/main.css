@@ -72,14 +72,6 @@ div.right-buttons > span > button.button {
   text-align: center;
 }
 
-a.button > div.buttonRefresh {
-  float: left;
-  font-size: 0.5em;
-  vertical-align: bottom;
-  text-align: center;
-  z-index: 1;
-  color: #888;
-}
 
 div.button-bar > a.buttonProfilePic {
   background-repeat: no-repeat;
@@ -129,19 +121,7 @@ span.stat {
   overflow: hidden;
 }
 
-section.statTable > header {
-  background-color: #888;
-}
 
-section.statTable > div > div.theStat {
-  min-width: 2em;
-  text-align: right;
-}
-
-section.statTable > div > div {
-  padding: 0.3em;
-  border-bottom: 1px solid grey;
-}
 
 hr.clearBoth {
   clear: both;
@@ -200,7 +180,7 @@ img.smallUser {
 }
 
 a.buttonStranger {
-  background-image: url('../img/769-male@3x.png') !important;
+  background-image: url('../img/prod/769-male@3x.png') !important;
   background-repeat: no-repeat;
   background-size: 30px;
   background-position: center;
@@ -305,6 +285,15 @@ div.endOfList {
   background-color: #32868C;
   margin: 5px -2px 0 -2px;
   padding: 6px;
+  border-bottom-left-radius: 5px !important;
+  border-bottom-right-radius: 5px !important;
+  text-align: center;
+  color: white;
+}
+
+div.endOfList > i {
+  font-size: 1.3em;
+  margin: 0 1em 0 1em;
 }
 
 a.userLine > h2 {
@@ -667,16 +656,7 @@ div.childHeader {
   width: 100%;
   display: block;
 }
-/* Friend & List of List Styling */
 
-div.statTable {
-  display: table;
-  width: 100%;
-}
-
-div.statTable > div.statRow {
-  display: table-row;
-}
 /* list line */
 
 div.listBlock > div.listLine {
@@ -724,8 +704,21 @@ div.button-bar > a.button {
   font-size: 2em;
 }
 
-div.button-bar > a.button > div.buttonBarRefresh {
-  background-color: blue;
+
+div.button-bar > a.button > div.buttonRefresh {
+  position: absolute;
+  bottom: 0.3em;
+  right: 0.3em;
+  
+  font-size: 0.5em;
+  vertical-align: bottom;
+  
+  
+  color: rgba(150, 150, 150, 0.5);
+}
+
+div.button-bar > a.button > i {
+
 }
 /* Attribution and time */
 
@@ -817,22 +810,46 @@ div.listBlock > div.listLine > div.listAddTo > i.listIconAdd {
   padding-left: 0.3em;
 }
 
+a.item-content {
+  
+}
+
+
+/* removed 1/28/2015 
 div.statTable {
-  padding: 0;
+  display: table;
+  width: 100%;
   margin: 0;
 }
 
 div.statTable > div.statRow {
+  display: table-row;
+}
+*/
+
+div.friendItem {
+  margin: 0.5em 0.5em 1em 0.5em;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+}
+
+div.friendItem > div.statTable {
   padding: 0;
-  margin: 0;
 }
 
-div.statTable > div.statRow > div.friendPicture {
+div.friendItem > div.statTable > div.statRow {
+  display: table-row;
+}
+
+div.friendItem > div.statTable > div.statRow > div.friendPicture {
   display: table-cell;
-  width: 3em;
+  width: 5em;
+  
+}
+div.friendItem > div.statTable > div.statRow > div.friendPicture > img {
+  width: 4em;
 }
 
-div.statTable > div.statRow > div.groupStats {
+div.friendItem > div.statTable > div.statRow > div.groupStats {
   margin: 0;
   padding: 0;
   display: table-cell;
@@ -840,7 +857,7 @@ div.statTable > div.statRow > div.groupStats {
   text-align: left;
 }
 
-div.statTable > div.statRow > div.groupStats > div.listName {
+div.friendItem > div.statTable > div.statRow > div.groupStats > div.listName {
   font-size: 1.1em;
   width: inherit;
   padding: 0.3em;
@@ -848,17 +865,35 @@ div.statTable > div.statRow > div.groupStats > div.listName {
   color: white;
 }
 
-div.statTable > div.statRow > div.groupStats > div.listName > i {
+div.friendItem > div.statTable > div.statRow > div.groupStats > div.listName > i {
   font-size: 1.4em;
   margin: 0.3em;
 }
 
-div.statTable > div.statRow > div.groupStats > div.friendName {
-  background-color: blue;
-  width: inherit;
-  padding: 0.3em;
+
+div.friendItem > div.friendName {
+  
   background-color: #32868C;
+}
+
+div.friendItem > div.listName {
+  background-color: #555;
   color: white;
+}
+
+div.friendItem > div.listName > i {
+  font-size: 1.5em;
+  margin-right: 0.3em;
+}
+
+
+div.friendItem > div.friendName, div.friendItem > div.listName {
+  padding: 0.3em 0.3em 0.3em 0.7em;
+  color: white;
+  display: table-cell;
+  float: left;
+  width: 100%;
+  font-size: 1.1em;
 }
 
 div.statTable > div.statRow > div.groupStats > div.statBlock {
@@ -869,7 +904,7 @@ div.statTable > div.statRow > div.groupStats > div.statBlock {
 
 div.statTable > div.statRow > div.groupStats > div.statBlock > div.colStat > i {
   float: left;
-  font-size: 2em;
+  font-size: 1em;
   margin-right: 0.2em;
 }
 
