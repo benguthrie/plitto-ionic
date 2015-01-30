@@ -1,11 +1,11 @@
 'use strict';
 angular.module('Plitto.controllers', [])
 
-.run(function ($rootScope, dbFactory, $state, $ionicModal, $location, OAuth, pFb, localStorageService, pc) {
+.run(function ($rootScope, dbFactory, $state, $ionicModal, $location, OAuth, pFb, localStorageService, pltf) {
 
   /* disabled 1/19/2015
   var headerTitle = function() {
-    //pc.log('HeaderTitle');
+    //console.log('HeaderTitle');
     return 'Title from Function';
   };
   */
@@ -13,66 +13,67 @@ angular.module('Plitto.controllers', [])
 
   /* Control all the login and redirect functions */
   $rootScope.$on('broadcast', function (event, args) {
-    // pc.log('heard command');
+    // console.log('heard command');
 
     if (typeof args.debug === 'string') {
-      // pc.log('args.debug: '"', args.debug);
+      // console.log('args.debug: '"', args.debug);
     }
 
-    pc.log('command event: ', event, 'args: ', args, args.debug);
+    // console.log('command event: ', event, 'args: ', args, args.debug);
 
-    // pc.log("Debug message: ", args.debug);
+    // console.log("Debug message: ", args.debug);
 
     if (args.command === 'login') {
       if (args.platform === 'facebook') {
-        // pc.log('login with facebook');
+        // console.log('login with facebook');
         // 
         OAuth.login('facebook');
         // pFb.login();
       } else if (args.platform === 'facebookFinishLogin') {
-        pc.log('finsh fb login', event, args, 'tokenhash?', args.tokenHash);
+        // console.log('finsh fb login', event, args, 'tokenhash?', args.tokenHash);
         // Process the token hash. 
         var theToken = args.tokenHash.replace('#/access_token=', ''); // First character should be the beginning of the token.
         theToken = theToken.substring(0, theToken.indexOf('expires_in') - 1);
 
-        // pc.log("TOKEN TO PROCESS: ", theToken);
+        // console.log("TOKEN TO PROCESS: ", theToken);
         $rootScope.loginMessage = 'Facebook Token received. Generating Plitto Login';
         dbFactory.fbTokenLogin(theToken);
       }
     } else if (args.command === 'redirect') {
       // 
-      pc.log('args.redirect, REDIRECT controllers.47 args.path:  ', args.path);
-      pc.plainJsRedirect(args.path); /* Global function in functions.js */
+      // console.log('args.redirect, REDIRECT controllers.47 args.path:  ', args.path);
+      // 
+      pltf.plainJsRedirect(args.path); /* Global function in functions.js */
 
     }
 
     /* This is used to navigate around the app */
     else if (args.command === 'state') {
-      pc.log('controllers.js 31 $state.go, args.path: ', args.path);
+      // console.log('controllers.js 31 $state.go, args.path: ', args.path);
       // TODO1 - This is not working for the loading page.
       // TODO1 - Restore this . 
-      pc.log('controller.js58 state.go: ', args.path);
+      console.log('controller.js58 state.go: ', args.path);
       $state.go(args.path);
 
       // $state.go("app.home");
       // $state.go("app.debug");
     } else if (args.command === 'deleteFBaccess') {
-      // pc.log('Delete from FB');
+      // console.log('Delete from FB');
       pFb.deleteFBaccess();
     }
   });
 
   // TODO1 - The below should be triggered as part of the callback.
   var initCallback = function () {
-    pc.log('controller.js initCallback made.');
+    console.log('controller.js initCallback made.');
     if (!$rootScope.token || $rootScope.token === null) {
       // See if it's in the local storage.
       $rootScope.loginMessage = 'Looking for token in local storage.';
       // Check for Active Token on load
       if (localStorageService.get('token')) {
         $rootScope.loginMessage = 'Token Found';
-        pc.log('There was a token in the local storage.');
-        pc.log('BUT IS IT VALID?!?!?!? TODO1 - Only apply the token if it\'s a valid one.');
+        console.log('There was a token in the local storage.');
+        console.log('BUT IS IT VALID?!?!?!? TODO1 - Only apply the token if it\'s a valid one.');
         // Set the token.
         $rootScope.token = localStorageService.get('token');
 
@@ -80,20 +81,20 @@ angular.module('Plitto.controllers', [])
         $rootScope.loginMessage = 'use dbFactory.refreshData to check if the token is valid.';
 
         dbFactory.refreshData($rootScope.token).then(function (d) {
-          pc.log('controller.initCallback 88 --> refreshData response: ', d);
+          console.log('controller.initCallback 88 --> refreshData response: ', d);
         });
 
       } else if (
         window.location.hash.indexOf('access_token') !== 'undefined' &&
         window.location.hash.indexOf('access_token') !== -1
       ) {
-        pc.log('Access Token: Querystring? ' +
+        console.log('Access Token: Querystring? ' +
           window.location.hash.indexOf('access_token'),
           ',  QueryString.access_token '
         );
       } else {
 
-        pc.log('No token in local storage.');
+        console.log('No token in local storage.');
 
         // $location.path('/login');
         $rootScope.loginMessage = 'There is no token in local storage. Redirect to login page.';
@@ -125,10 +126,10 @@ angular.module('Plitto.controllers', [])
 
     if ($rootScope.debugOn === true) {
       if (typeof (message) === 'string') {
-        pc.log(message);
+        console.log(message);
         $rootScope.loginMessage = $rootScope.loginMessage + ' | ' + message;
       } else {
-        pc.log('message is not a string', message);
+        console.log('message is not a string', message);
       }
     }
   };
@@ -139,24 +140,15 @@ angular.module('Plitto.controllers', [])
 // REMOVED Facebook from the injectors // 13 - ionicNavBarDelegate - 14 - $ionicHistory
 .controller(
   'AppCtrl',
-  function (
-    $scope,
-    $state,
-    dbFactory,
-    $rootScope,
-    localStorageService,
-    pc
-    //     $ionicHistory 
-
-  ) {
+  function ( $scope, $state, dbFactory, $rootScope, localStorageService, pltf ) {
 
     // On load, load the correct interface, based on the token.
 
-    pc.log('AppCtrl.load: Token: ' + $rootScope.token);
+    // console.log('AppCtrl.load: Token: ' + $rootScope.token);
     // Execute the check for the token in the RootScope on load.
 
     if (typeof ($rootScope.token) === 'string' && $rootScope.token === 'loading') {
-      pc.log('initial: loading');
+      console.log('initial: loading');
       $rootScope.debug('Appctrl - 179 Rootscope is loading.');
       $state.go('loading');
     } else if (typeof ($rootScope.token) === 'string' && $rootScope.token.length > 0) {
@@ -184,14 +176,14 @@ angular.module('Plitto.controllers', [])
       //     $ionicHistory.clearHistory();
       // $location.path('/login');
     } else {
-      pc.log('initial: null?');
+      console.log('initial: null?');
       $rootScope.loginMessage = 'Checking for null token.';
       $rootScope.debug('Appctrl - 189 Rootscope is null?');
       // TODO1 When would this be done? $state.go("login");
     }
 
     $scope.deleteFBaccess = function () {
-      pc.log('deleteFBaccess in loginctrl TODO1 ');
+      console.log('deleteFBaccess in loginctrl TODO1 ');
       $rootScope.$broadcast('broadcast', {
         command: 'deleteFBaccess',
         debug: 'Delete from FB'
@@ -202,7 +194,7 @@ angular.module('Plitto.controllers', [])
     // This is for the logged in user
     $scope.showUser = function (userId, userName, dataScope, fbuid) {
 
-      pc.log('controllers.js - showUser 87');
+      console.log('controllers.js - showUser 87');
       /// dbFactory.showUser(userId,userName, dataScope, fbuid);'
       $state.go('app.profile', {
         userId: userId
@@ -223,7 +215,7 @@ angular.module('Plitto.controllers', [])
     // Global Logout Handler - TODO2 - This was added to functions.js and should be removed from here.
     $scope.logout = function () {
       // TODO: Make database service call.
-      pc.log('logout');
+      console.log('logout');
       $rootScope.debug('Appctrl - TODO2: FB Logout call.');
       // $state.go('app.login',{listId: newListId});
       // TODO1 - Restore this. Facebook.logout();
@@ -258,7 +250,7 @@ angular.module('Plitto.controllers', [])
   })
 
 .controller('ThingCtrl',
-  function ($scope, dbFactory, $stateParams, localStorageService, pc) {
+  function ($scope, dbFactory, $stateParams, localStorageService, pltf) {
     $scope.thing = {
       name: 'Loading',
       id: $stateParams.thingId,
@@ -269,13 +261,13 @@ angular.module('Plitto.controllers', [])
 
 
     if (localStorageService.get('thing' + $stateParams.thingId)) {
-      pc.log('local storage. Found thing by id/');
+      console.log('local storage. Found thing by id/');
       $scope.thing.data = localStorageService.get('thing' + $scope.thing.id);
     } else {
-      pc.log('no thing in local storage: ', $stateParams.thingId);
+      console.log('no thing in local storage: ', $stateParams.thingId);
     }
 
-    // pc.log('thingid: ', $scope.thing.id );
+    // console.log('thingid: ', $scope.thing.id );
     /* Load thing information from the Api 1/23/2015 */
     dbFactory.promiseThing($scope.thing.id, '').then(function (d) {
       $scope.thing.data = d;
@@ -287,10 +279,10 @@ angular.module('Plitto.controllers', [])
     });
 
     // Update the thing info from the api
-    pc.log('TODO1 - Load this from the database.');
+    console.log('TODO1 - Load this from the database.');
 
     // Control for thing goes here.
-    pc.log('controllers.js.thingCtrl use scope, rootscope, dbFactory', $scope);
+    console.log('controllers.js.thingCtrl use scope, rootscope, dbFactory', $scope);
 
   }
 )
@@ -302,7 +294,7 @@ angular.module('Plitto.controllers', [])
 
   /* When this screen loads, if there is a token, go home. */
   if (typeof $rootScope.token === 'string' && $rootScope.token !== 'loading') {
-    pc.log('Controllers 259 Done loading. Go home.');
+    console.log('Controllers 259 Done loading. Go home.');
     $rootScope.$broadcast('broadcast', {
       command: 'state',
       path: 'app.home',
@@ -330,7 +322,7 @@ angular.module('Plitto.controllers', [])
   };
 })
 
-.controller('HomeCtrl', function ($scope, $rootScope, dbFactory, pc) {
+.controller('HomeCtrl', function ($scope, $rootScope, dbFactory, pltf) {
   $scope.store = {
     'friends': [{
       loading: true
@@ -363,7 +355,7 @@ angular.module('Plitto.controllers', [])
     // dbGetSome = function (theScope, userfilter, listfilter, sharedFilter)
     if ($scope.view === typeFilter) {
       dbFactory.promiseGetSome(typeFilter, '', 'ditto').then(function (d) {
-        pc.log('d: ', d);
+        console.log('d: ', d);
 
         $scope.store[typeFilter] = d;
 
@@ -380,14 +372,14 @@ angular.module('Plitto.controllers', [])
 })
 
 
-.controller('DebugCtrl', function ($scope, dbFactory, $rootScope, localStorageService, $state) {
+.controller('DebugCtrl', function ($scope, dbFactory, $rootScope, localStorageService, $state, pltf) {
   $scope.localStorage = function (type) {
     if (type === 'get') {
       localStorageService.get('debugNote');
     } else if (type === 'set') {
       localStorageService.set('debugNote', 'The Current Unix Time is: ' + Date.now());
     }
-    pc.log('test debug local Storage');
+    console.log('test debug local Storage');
   };
 
   $scope.funny = function (type, $rootScope) {
@@ -399,6 +391,11 @@ angular.module('Plitto.controllers', [])
         'currentTime': Date.now(),
         'state.current.name': $state.current.name
       };
+    } else if (type === 'querystring'){
+      $scope.funnyText = 'querystring!';
+      
+      pltf.Querystring();
+      
     } else if (type === 'clearRootscope') {
       $rootScope = '';
     } else {
@@ -420,7 +417,7 @@ angular.module('Plitto.controllers', [])
   };
 
   $scope.thisDomain = function () {
-    pc.log('thisDomain: ', document.URL);
+    console.log('thisDomain: ', document.URL);
     $rootScope.loginMessage = 'domain: ' + document.URL;
   };
 
@@ -450,7 +447,7 @@ angular.module('Plitto.controllers', [])
   1/22/2015 - Request when reasonable. 
 */
 .controller('ProfileCtrl',
-  function ($scope, dbFactory, $rootScope, $stateParams, localStorageService, pc) {
+  function ($scope, dbFactory, $rootScope, $stateParams, localStorageService, pltf) {
     // Prepare Scope Variables
 
     $scope.view = 'ditto';
@@ -489,7 +486,7 @@ angular.module('Plitto.controllers', [])
 
     // load profile data if this was direct linked to.
     if (!$scope.userInfo.userId) {
-      pc.log('no userid set in profiledata. Set with one of these. ', $stateParams.userId, typeof ($stateParams.userId));
+      console.log('no userid set in profiledata. Set with one of these. ', $stateParams.userId, typeof ($stateParams.userId));
 
       // Get it from the url then.
       // Get a valid user id, and pull content for it.
@@ -497,13 +494,13 @@ angular.module('Plitto.controllers', [])
 
         // Get user information. TODO2 
         $scope.userInfo.userId = parseInt($stateParams.userId);
-        // pc.log('413 ', $scope.userInfo.userId);
+        // console.log('413 ', $scope.userInfo.userId);
       } else {
-        pc.log('CONTROLLER.390 NO VALID USER FROM CONTENT.', $stateParams.profile);
+        console.log('CONTROLLER.390 NO VALID USER FROM CONTENT.', $stateParams.profile);
       }
 
     } else {
-      pc.log('ERROR controllers.ProfileCtrl 391 - invalid userId in the URL.');
+      console.log('ERROR controllers.ProfileCtrl 391 - invalid userId in the URL.');
     }
 
     var lsTypes = new Array('ditto', 'shared', 'feed', 'lists', 'chat');
@@ -511,7 +508,7 @@ angular.module('Plitto.controllers', [])
     if (parseInt($rootScope.user.userId) === parseInt($scope.userInfo.userId)) {
       var lsTypes = new Array('feed', 'lists'); // TODO2 Put in the chat bit again. 
       $scope.view = 'feed';
-      pc.log('updated scope view ? ', $scope.view);
+      console.log('updated scope view ? ', $scope.view);
     }
 
     for (var i in lsTypes) {
@@ -526,8 +523,8 @@ angular.module('Plitto.controllers', [])
           $scope.store.shared = d;
 
           localStorageService.set('user' + $scope.userInfo.userId + 'shared', d);
-          // pc.log('update: in promise shared: ', d);
-          //pc.log('sun: ', $scope.userInfo.userName.length, ' dusername: ', d[0].username);
+          // console.log('update: in promise shared: ', d);
+          //console.log('sun: ', $scope.userInfo.userName.length, ' dusername: ', d[0].username);
 
           if ($scope.userInfo.userName === null && d[0].username) {
 
@@ -546,7 +543,7 @@ angular.module('Plitto.controllers', [])
         dbFactory.promiseGetSome($scope.userInfo.userId, '', 'ditto').then(function (d) {
           $scope.store.ditto = d;
           localStorageService.set('user' + $scope.userInfo.userId + 'ditto', d);
-          pc.log('update: in promise  ditto: ', d);
+          console.log('update: in promise  ditto: ', d);
           if ($scope.userInfo.userName === null && d[0].username) {
 
             $scope.userInfo.userName = d[0].username;
@@ -588,21 +585,21 @@ angular.module('Plitto.controllers', [])
 
 
       } else {
-        pc.log('TODO1 - Auto load this');
+        console.log('TODO1 - Auto load this');
       }
 
     }
 
     // Make sure that we have user information by now.
     if (!$scope.userInfo.userName) {
-      pc.log('595 - No user name', $scope.userInfo.userName);
+      console.log('595 - No user name', $scope.userInfo.userName);
       dbFactory.userInfo($scope.userInfo.userId).then(function (d) {
-        pc.log('user info: ', d);
+        console.log('user info: ', d);
         $scope.userInfo.fbuid = d.results.fbuid;
         $scope.userInfo.userName = d.results.userName; // Tested, and this works. 1/27/2015
       });
     } else {
-      pc.log('597 - User name', $scope.userInfo.userName);
+      console.log('597 - User name', $scope.userInfo.userName);
     }
 
 
@@ -614,7 +611,7 @@ angular.module('Plitto.controllers', [])
       // 
 
       $scope.view = 'feed';
-      pc.log('profile show feed: ', userId, ' oldest: ');
+      console.log('profile show feed: ', userId, ' oldest: ');
       // showFeed = function(theType, userFilter, listFilter, myState, oldestKey)
       // $scope.store.feed = dbFactory.showFeed('profile',userId,'','','','');
 
@@ -643,7 +640,7 @@ angular.module('Plitto.controllers', [])
         }];
         dbFactory.promiseGetSome($scope.userInfo.userId, '', filter).then(function (d) {
           $scope.store[filter] = d;
-          pc.log('update: in promise ' + filter + ' : ', d);
+          console.log('update: in promise ' + filter + ' : ', d);
           if ($scope.userInfo.userName === null && d[0].username) {
 
             $scope.userInfo.userName = d[0].username;
@@ -653,9 +650,9 @@ angular.module('Plitto.controllers', [])
       }
       $scope.view = filter;
 
-      pc.log('profileScope view after getSome: ', $scope.view);
+      console.log('profileScope view after getSome: ', $scope.view);
 
-      pc.log('Get Some for userid: ', $scope.userInfo.userId, filter, 'end');
+      console.log('Get Some for userid: ', $scope.userInfo.userId, filter, 'end');
       // $scope.store[ filter ] = dbFactory.showFeed('profile', $scope.userId, filter , '', '', '');
       // 
       // dbGetSome = function (theScope, userfilter, listfilter, sharedFilter)
@@ -665,7 +662,7 @@ angular.module('Plitto.controllers', [])
     $scope.showLists = function (userId) {
       // Only reload if it's already lists.
       if ($scope.view === 'lists' || $scope.store.lists[0].loading) {
-        pc.log('reload lists for this user in their profile..');
+        console.log('reload lists for this user in their profile..');
         // dbFactory.getUserListOfLists(userId, '$rootScope.profileData.lists');
         $scope.store.lists = [{
           loading: true
@@ -682,17 +679,17 @@ angular.module('Plitto.controllers', [])
     };
 
     $scope.makeActive = function () {
-      pc.log('make active');
+      console.log('make active');
     };
   }
 )
 
-.controller('addListCtrl', function ($scope, $rootScope, $stateParams, dbFactory, pc, $state) {
+.controller('addListCtrl', function ($scope, $rootScope, $stateParams, dbFactory, pltf, $state) {
   $scope.newList = {
     title: ''
   };
   $scope.listResults = [];
-  pc.log('addListCtrl called');
+  console.log('addListCtrl called');
 
 
 
@@ -700,11 +697,11 @@ angular.module('Plitto.controllers', [])
   $scope.$watch(function () {
     return $scope.newList.title;
   }, function (newValue, oldValue) {
-    pc.log('Changed from unused oldvalue (TODO2) ' + oldValue + ' to ' + newValue);
+    console.log('Changed from unused oldvalue (TODO2) ' + oldValue + ' to ' + newValue);
     if (typeof newValue !== 'undefined' && newValue.length > 0) {
       //   
       dbFactory.promiseSearch(newValue, 'list').then(function (d) {
-        pc.log('got content from list title search.');
+        console.log('got content from list title search.');
         $scope.listResults = d.results;
       });
     }
@@ -712,7 +709,7 @@ angular.module('Plitto.controllers', [])
 
   /* List */
   $scope.showList = function (listId, listName, userFilter, focusTarget) {
-    pc.log('showList controllers.js 361, RESTORE LINK TO LIST.');
+    console.log('showList controllers.js 361, RESTORE LINK TO LIST.');
     $state.go('app.list', {
       listId: listId,
       listName: listName
@@ -721,7 +718,7 @@ angular.module('Plitto.controllers', [])
   };
 
   $scope.createList = function () {
-    pc.log('User Clicked "Create List" with this title: ' + $scope.newList.title);
+    console.log('User Clicked "Create List" with this title: ' + $scope.newList.title);
 
     dbFactory.newList($scope.newList.title).then(function (d) {
       
@@ -730,7 +727,7 @@ angular.module('Plitto.controllers', [])
           listId: d
         });
       } else {
-        pc.log('invalid listid passed in the creation of a list.');
+        console.log('invalid listid passed in the creation of a list.');
       }
     });
 
@@ -738,8 +735,8 @@ angular.module('Plitto.controllers', [])
 
 })
 
-.controller('SearchCtrl', function ($scope, $rootScope, $stateParams, dbFactory, $state, pc) {
-  pc.log('You have entered Search');
+.controller('SearchCtrl', function ($scope, $rootScope, $stateParams, dbFactory, $state, pltf) {
+  console.log('You have entered Search');
 
 
   /* Clear out the last search */
@@ -750,25 +747,25 @@ angular.module('Plitto.controllers', [])
 
   /* Clear the Search */
   $scope.emptyTheSearch = function ($element, $attrs) {
-    pc.log('clear Search');
+    console.log('clear Search');
     $scope.search = {
       term: null,
       results: []
     };
     var elementToFocusOn = document.querySelector('input#searchField');
-    pc.log('focus on: ', elementToFocusOn, $element, $attrs);
+    console.log('focus on: ', elementToFocusOn, $element, $attrs);
 
 
 
   };
 
   $scope.searchFor = function (searchTerm, searchType) {
-    pc.log('this could be deleted. The whole function. 1/27/2015');
+    console.log('this could be deleted. The whole function. 1/27/2015');
   };
 
   /* List */
   $scope.showList = function (listId, listName, userFilter, focusTarget) {
-    pc.log('showList controllers.js 383');
+    console.log('showList controllers.js 383');
     // dbFactory.showAList(listId, listName, userFilter);
     $state.go('app.list', {
       listId: listId
@@ -785,10 +782,10 @@ angular.module('Plitto.controllers', [])
 
   // Initialize a new search.
   $scope.$watch(function () {
-    // pc.log('search watch found', $scope.search.term );
+    // console.log('search watch found', $scope.search.term );
     return $scope.search.term;
   }, function (newValue, oldValue) {
-    // pc.log('TODO2 - This is where oldValue is used: ' + oldValue + ' to ' + newValue);
+    // console.log('TODO2 - This is where oldValue is used: ' + oldValue + ' to ' + newValue);
     if (typeof newValue !== 'undefined') {
 
       dbFactory.promiseSearch(newValue, 'general').then(function (d) {
@@ -802,24 +799,24 @@ angular.module('Plitto.controllers', [])
 
 /* Controller in the Chat */
 .controller('chatCtrl', function ($scope, $rootScope, dbFactory) {
-  // pc.log("You have tried to control your friends",$rootScope.friendStore);
-  // pc.log("CHAT CONTROL INITIALIZED.");
-  // pc.log("rsnf", $rootScope.stats.feed );
+  // console.log("You have tried to control your friends",$rootScope.friendStore);
+  // console.log("CHAT CONTROL INITIALIZED.");
+  // console.log("rsnf", $rootScope.stats.feed );
   $rootScope.stats.feed = dbFactory.userChat();
-  pc.log('rsnf', $rootScope.stats.feed);
+  console.log('rsnf', $rootScope.stats.feed);
 
   /* TODO1 - Update the notification count ? */
 
 
 })
 
-.controller('FriendsCtrl', function (dbFactory, $scope, localStorageService, pc) {
+.controller('FriendsCtrl', function (dbFactory, $scope, localStorageService, pltf) {
   /* First - Load from Local Storage */
   $scope.friendStore = localStorageService.get('friendStore');
-  pc.log('Friends Ctrl initiated');
+  console.log('Friends Ctrl initiated');
 
   dbFactory.friendsList().then(function (d) {
-    pc.log('dfriendsStore', d);
+    console.log('dfriendsStore', d);
     $scope.friendStore = d;
     localStorageService.set('friendStore', d);
   });
@@ -829,22 +826,22 @@ angular.module('Plitto.controllers', [])
 
   };
 
-  // pc.log('You have tried to control your friends ', $scope.friendStore, 'TODO2 - Is this used / needed? ');
+  // console.log('You have tried to control your friends ', $scope.friendStore, 'TODO2 - Is this used / needed? ');
   // See if we need to load our friends.
-  // pc.log('friendStore length: ' + $scope.friendStore.length);
+  // console.log('friendStore length: ' + $scope.friendStore.length);
 })
 
 .controller('FriendCtrl',
-  function ($scope, $rootScope, pc) {
-    pc.log('You clicked on a friend. TODO1 - Do you need scope rootScope? ', $scope, $rootScope);
+  function ($scope, $rootScope, pltf) {
+    console.log('You clicked on a friend. TODO1 - Do you need scope rootScope? ', $scope, $rootScope);
   }
 )
 
 /* 10/21/2014 - Added RootScope to populate the list with? TODO1 - Build lists from $rootScope.lists */
-.controller('ListsCtrl', function ($scope, dbFactory, $state, $ionicActionSheet, pc, localStorageService, $rootScope) {
+.controller('ListsCtrl', function ($scope, dbFactory, $state, $ionicActionSheet, localStorageService, $rootScope, pltf) {
   // On load, load up their lists.
   $scope.listsData = localStorageService.get('user' + $rootScope.user.userId + 'lists');
-  pc.log('loaded list control');
+  console.log('loaded list control');
   // On Load; Update with new data
 
   dbFactory.promiseListOfLists($rootScope.user.userId).then(function (d) {
@@ -854,7 +851,7 @@ angular.module('Plitto.controllers', [])
 
   $scope.loadLists = function () {
     // user.userId is hard coded in lists, because it's always going to be this user's lists.
-    pc.log('ListsCtrl - loadLists');
+    console.log('ListsCtrl - loadLists');
 
     dbFactory.promiseListOfLists($rootScope.user.userId).then(function (d) {
       $scope.listsData = d;
@@ -870,7 +867,7 @@ angular.module('Plitto.controllers', [])
 
 })
 
-.controller('FeedCtrl', function ($scope, $stateParams, $rootScope, dbFactory, localStorageService, pc) {
+.controller('FeedCtrl', function ($scope, $stateParams, $rootScope, dbFactory, localStorageService, pltf) {
   // On load, open friends.
   $scope.view = 'friends';
   $scope.store = {
@@ -934,7 +931,7 @@ angular.module('Plitto.controllers', [])
   };
 })
 
-.controller('ListCtrl', function ($scope, $stateParams, $rootScope, dbFactory, localStorageService, pc) {
+.controller('ListCtrl', function ($scope, $stateParams, $rootScope, dbFactory, localStorageService, pltf) {
   $scope.view = 'ditto';
   $scope.store = {
     'ditto': [{
@@ -1002,7 +999,7 @@ angular.module('Plitto.controllers', [])
       } else {
         /* if no response, clear the results */
 //         $scope.store[d.type] = [];
-        pc.log('controllers1013 - This condition could be required for error handling.');
+        console.log('controllers1013 - This condition could be required for error handling.');
       }
 
       /* If there are results, and we need a list name, then apply the list name from the data */
@@ -1015,11 +1012,11 @@ angular.module('Plitto.controllers', [])
 
   /* If we don't have a list name at this point, it must be a new list. Force Load it. */
   if ($scope.listInfo.listName === null || $scope.listInfo.listName.length === 0) {
-    pc.log('force load the list info, and assume this user created the list');
+    console.log('force load the list info, and assume this user created the list');
     dbFactory.promiseThingName($scope.listInfo.listId).then(function (d) {
-      pc.log('d.results: ' + d.results + ' length: ' + d.results.length);
+      console.log('d.results: ' + d.results + ' length: ' + d.results.length);
       if (d.results) {
-        pc.log('valid results from d.results' + d.results[0].thingName);
+        console.log('valid results from d.results' + d.results[0].thingName);
         $scope.listInfo.listName = d.results[0].thingName;
         // Set the view to theirs, so they can add an item.
         $scope.view = 'mine';
@@ -1058,10 +1055,10 @@ angular.module('Plitto.controllers', [])
   $scope.addToList = function (newItemName) {
     //Step - Focus the view on your list.
     $scope.view = 'mine';
-    pc.log('FELIX   FELIX   FELIX   controllers.listCtrl.addToList(newItem)' + newItemName);
+    console.log('FELIX   FELIX   FELIX   controllers.listCtrl.addToList(newItem)' + newItemName);
     // Step: Make sure that there is something.
     if (!newItemName.length) {
-      pc.log('no length for the new item. 1054');
+      console.log('no length for the new item. 1054');
       return;
     }
 
@@ -1069,8 +1066,8 @@ angular.module('Plitto.controllers', [])
     $scope.newItem.theValue = null;
 
     /* Create a placeholder for while the API responds */
-    var tempNum = pc.randNum(10000);
-    pc.log('tempNum: ' + tempNum);
+    var tempNum = pltf.randNum(10000);
+    console.log('tempNum: ' + tempNum);
     var tempItem = {
       added: Date.now(),
       commentActive: null,
@@ -1090,7 +1087,7 @@ angular.module('Plitto.controllers', [])
 
     /* Create My List if this is the first item in my list */
     if ($scope.store.mine.length === 0) {
-      pc.log('create my list because my list has no length' + $scope.store.mine.length);
+      console.log('create my list because my list has no length' + $scope.store.mine.length);
       var myList = {
         fbuid: $rootScope.user.fbuid,
         uid: $rootScope.user.userId,
@@ -1107,13 +1104,13 @@ angular.module('Plitto.controllers', [])
       $scope.store.mine.unshift(myList);
 
     } else {
-      pc.log('my existing list has a length of : ' + $scope.store.mine.length);
+      console.log('my existing list has a length of : ' + $scope.store.mine.length);
     }
 
     /* remove the existing item from my list visibly. */
     // But only if I have existing items. 
     if (!$scope.store.mine[0].lists[0].items.length === 0) {
-      pc.log('crisis averted. items: ', $scope.store.mine[0].lists[0].items.length);
+      console.log('crisis averted. items: ', $scope.store.mine[0].lists[0].items.length);
     } else {
       var j = $scope.store.mine[0].lists[0].items.length;
       var i = 0;
@@ -1141,7 +1138,7 @@ angular.module('Plitto.controllers', [])
 
     /* Step - Submit to the database */
     dbFactory.promiseAddToList(itemObj).then(function (d) {
-      pc.log('new item (response): ', newItemName, d);
+      console.log('new item (response): ', newItemName, d);
       /* Check to see if the item has a valid key */
       if (typeof (d.mykey) !== 'undefined') {
 
@@ -1158,13 +1155,13 @@ angular.module('Plitto.controllers', [])
         }
 
       } else {
-        pc.log('error. TODO2 - Handle this? ');
+        console.log('error. TODO2 - Handle this? ');
       }
 
       /* Overwrite the temp item with the new item. I will be in the right spot. */
       $scope.store.mine[0].lists[0].items[i] = d;
 
-      pc.log('updatedItem: ', $scope.store.mine[0].lists[0].items[i]);
+      console.log('updatedItem: ', $scope.store.mine[0].lists[0].items[i]);
 
     });
 

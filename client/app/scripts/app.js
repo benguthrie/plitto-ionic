@@ -60,18 +60,41 @@ angular.module('Plitto', [
   }];
   })
   /* Config Defaults */
-  .constant('pc', {
+  .constant('pltf', {
     'log': function (toLog) {
 
       // turned debug off. 
-      // pc.log(toLog);
+      // 
+      console.log(toLog);
     },
     'QueryString': function () {
-      pc.log('70 NO NEED FOR THIS QUERYSTRING FUNCTION???');
+      'use strict';
+      console.log('70 NO NEED FOR THIS QUERYSTRING FUNCTION???');
+      
+      // This function is anonymous, is executed immediately and 
+      // the return value is assigned to QueryString!
+      var returnString = {};
+      var query = window.location.search.substring(1);
+      var vars = query.split('&');
+      for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        // If first entry with this name
+        if (typeof returnString[pair[0]] === 'undefined') {
+          returnString[pair[0]] = pair[1];
+          // If second entry with this name
+        } else if (typeof returnString[pair[0]] === 'string') {
+          var arr = [returnString[pair[0]], pair[1]];
+          returnString[pair[0]] = arr;
+          // If third or later entry with this name
+        } else {
+          returnString[pair[0]].push(pair[1]);
+        }
+      }
+      return returnString;
     },
     'plainJsRedirect': function (url) {
       'use strict';
-      // pc.log('plainJsRedirect: ', url);
+      // console.log('plainJsRedirect: ', url);
       // window.location.href = url;
       // window.location.assign(url);
       setTimeout(function () {
@@ -87,7 +110,16 @@ angular.module('Plitto', [
 
 
 
-.run(function ($ionicPlatform, $rootScope, dbFactory, OAuth, $state, pc) {
+.run(function ($ionicPlatform, $rootScope, dbFactory, OAuth, $state, pltf) {
+  /* Deleted 1/28/2015. Works without it. 1/29/2015 - MAYBE NOT!
+  // Check to see if Facebook is giving us a code to use in the URL.
+  if(pltf.QueryString.code){
+    // Make the Plitto API call
+    console.log('RUN URL because we found it.', pltf.QueryString.code);
+    
+    // TODO1 - Put this backdbFactory.fbTokenLogin(pltf.QueryString.code);
+  }
+  */
 
   $ionicPlatform.ready(function () {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -100,10 +132,10 @@ angular.module('Plitto', [
       StatusBar.styleDefault();
     }
     // Get the access token from Facebook. TODO1 - 12/20 - It looks like something is intercepting it, and removing it.
-    // pc.log('ionicPlatform.run: access_token location: ', window.location.hash.indexOf('access_token'));
+    // console.log('ionicPlatform.run: access_token location: ', window.location.hash.indexOf('access_token'));
     if (window.location.hash.indexOf('access_token') !== -1) {
       /* Debug 1/27/2015 REMOVED Batch 3
-      pc.log('ionicPlatform.run: Found the token.',
+      console.log('ionicPlatform.run: Found the token.',
         window.location.hash,
         window.location.hash.indexOf('access_token')
       );
@@ -115,7 +147,7 @@ angular.module('Plitto', [
       $state.go('loading');
 
       var fbAccessToken = hash.substring(hash.indexOf('access_token=') + 'access_token='.length, hash.indexOf('&'));
-      // pc.log('app118 at: ' + fbAccessToken);
+      // console.log('app118 at: ' + fbAccessToken);
 
       $rootScope.loginMessage = 'Facebook Access Granted. Logging into Plitto now.';
       //  + fbAccessToken
@@ -128,7 +160,7 @@ angular.module('Plitto', [
   });
 })
 
-.config(function ($stateProvider, $urlRouterProvider, $httpProvider, pc) {
+.config(function ($stateProvider, $urlRouterProvider, $httpProvider, pltf) {
 
 
     $stateProvider
@@ -292,23 +324,23 @@ angular.module('Plitto', [
 
     // if none of the above states are matched, use this as the fallback
     // TODO1 - Do this. $urlRouterProvider.otherwise('/app/home');
-    // pc.log('QUERYSTRING ACCESS TOKEN: ', funky.Querystring('TESTSTRING'));
-    /* Removed 1/29/2015 Ok for troubleshooting? 
-      if (pc.QueryString('access_token') || window.location.hash.indexOf('access_token') > -1) {
-        pc.log('found querystring access token.' +  pc.QueryString('access_token'));
+    // console.log('QUERYSTRING ACCESS TOKEN: ', pltf.Querystring('TESTSTRING'));
+    /* Removed 1/29/2015 Ok for troubleshooting? */
+      if (pltf.QueryString('access_token') || window.location.hash.indexOf('access_token') > -1) {
+        console.log('found querystring access token.' +  pltf.QueryString('access_token'));
 
       } else {
 
-        pc.log('No access token. Let the user log in.', 'access_token: ');
-        pc.log(pc.QueryString('access_token') + 'Location hash: ' + window.location.hash);
+        console.log('No access token. Let the user log in.', 'access_token: ');
+        console.log(pltf.QueryString('access_token') + 'Location hash: ' + window.location.hash);
         // $urlRouterProvider.otherwise('/app/home');
-        // pc.log("REPLACeD", window.location.hash.replace("#/",""));
+        // console.log("REPLACeD", window.location.hash.replace("#/",""));
 
         //http://localhost/plitto-ionic/client/app/?#/access_token=CAAAAMD0tehMBAMUwibZCHQrzYS3v6QdLKTsIlWveB7CTSV0ZByuItJP8u7tF3xaYjGBNjeT7BDRjVWA9WwwelEjMAZCiKgi9C5dDIAUfZAUwdqPQlxxDbykoslmJs8OhyNRpXEoU0o6fC2eiYMROqOLvW8C1A0NU72YBmgcWitSom8Yw0rdEQCLktU6t1xdePnNKLLq75dlANujWVRvgcsgIuZCjZAZC9IZD&expires_in=6952
 
         // TODO1 - Put this back $urlRouterProvider.otherwise('/app/home');
       }
-      */
+      
 
     // Handle 401 Unauthorized responses
     $httpProvider.interceptors.push(
@@ -325,7 +357,7 @@ angular.module('Plitto', [
     );
 
   })
-  .directive('userNav', function ($rootScope, dbFactory, $state, pc) {
+  .directive('userNav', function ($rootScope, dbFactory, $state, pltf) {
     return {
       restrict: 'E',
       // templateUrl: 'directives/userNav.html',
@@ -344,7 +376,7 @@ angular.module('Plitto', [
         '</ion-nav-bar>'
         // scope: {}
         /*
-        , controller: function ($scope, dbFactory, $state, pc) {
+        , controller: function ($scope, dbFactory, $state, pltf) {
           /
           };}
           */
@@ -352,7 +384,7 @@ angular.module('Plitto', [
     };
   })
 
-.directive('userListThing', function ($rootScope, dbFactory, $state, pc) {
+.directive('userListThing', function ($rootScope, dbFactory, $state, pltf) {
     return {
       restrict: 'E',
       templateUrl: 'directives/userListThing.html',
@@ -378,7 +410,7 @@ angular.module('Plitto', [
           for (var i in $scope.userData.lists) {
             if (lid === $scope.userData.lists[i].lid) {
               for (j in $scope.userData.lists[i].items) {
-                // pc.log('check 426: ',$scope.userData.lists[i].items[j].tid, tid);
+                // console.log('check 426: ',$scope.userData.lists[i].items[j].tid, tid);
                 if ($scope.userData.lists[i].items[j].tid === tid) {
                   $scope.userData.lists[i].items[j].mykey = 0; // TODO - This could be causing a bug.
                   if (mykey) {
@@ -445,10 +477,10 @@ angular.module('Plitto', [
         /* Let's Chat
         letsChat(userData.uid, list.lid, item.tid, item.ik, $event, $index); " */
         $scope.letsChat = function (uid, lid, tid, itemKey, $event, $index) {
-          pc.log('letsChat app.js directive', uid, lid, tid, itemKey, $event, $index);
+          // console.log('letsChat app.js directive', uid, lid, tid, itemKey, $event, $index);
           // var length = eval('$rootScope.' + store + '.length');
 
-          // pc.log('letschat scope.userData', $scope.userData);
+          // console.log('letschat scope.userData', $scope.userData);
 
           // Find the item in this list.
           var i = 0,
@@ -467,7 +499,7 @@ angular.module('Plitto', [
               }
             }
 
-          // pc.log('vars: i,j',i,j);
+          // console.log('vars: i,j',i,j);
 
           var isActive = 1;
           if ($($event.target).hasClass('active')) {
@@ -487,16 +519,16 @@ angular.module('Plitto', [
           }
           // Call the addComment bit to activate or deactivate the queue item
           dbFactory.promiseAddComment(uid, lid, tid, itemKey, '0', isActive).then(function (d) {
-            pc.log('481ult added comment');
+            console.log('481ult added comment');
           });
-          pc.log('commentactive:  ',
+          console.log('commentactive:  ',
             // eval('$rootScope.' + store + '[' + upos + '].lists[' + lpos + '].items[' + tpos + '].commentActive; '  )
             $scope.userData.lists[i].items[j].commentActive
           );
         };
 
         $scope.makeItemComment = function (newComment, uid, lid, tid, itemKey, $index) {
-          pc.log('makeItemComment', newComment, uid, lid, tid, itemKey, $index);
+          console.log('makeItemComment', newComment, uid, lid, tid, itemKey, $index);
           // Find the user, then the list, then use the index.
           // var length = eval('$rootScope.' + store + '.length' );
 
@@ -522,13 +554,13 @@ angular.module('Plitto', [
               }
             }
 
-          // pc.log('vars: i,j', i, j);
+          // console.log('vars: i,j', i, j);
           $scope.userData.lists[i].items[j].commentText = newComment;
 
           // submit it to the database
           // 
           dbFactory.promiseAddComment(uid, lid, tid, itemKey, newComment, '1').then(function (d) {
-            pc.log('ult521 add comment');
+            console.log('ult521 add comment');
           });
 
           // TODO1 Clear the comment field
@@ -537,16 +569,16 @@ angular.module('Plitto', [
 
         // moreOfThis( userData.uid, list.lid, $event, $index );
         $scope.moreOfThis = function (lid) {
-          // pc.log('app.ult.moreOfThis: ,  lid: ', lid, ' userData: ', $scope.userData, $scope.userData.lists.length);
+          // console.log('app.ult.moreOfThis: ,  lid: ', lid, ' userData: ', $scope.userData, $scope.userData.lists.length);
           // Note: A null userId is required to get content from a user and their contacts. A 0 will return strangers.
           
           // Track the final list position in userData. 
           var finalJ = null;
-          // pc.log('ud lengthL '+ $scope.userData.length);
+          // console.log('ud lengthL '+ $scope.userData.length);
           // Find this list position.
 
           for (var j = 0; j < $scope.userData.lists.length; j++) {
-           //  pc.log('app.ult.moreofthis lidTEST', $scope.userData.lists[j].lid, lid);
+           //  console.log('app.ult.moreofthis lidTEST', $scope.userData.lists[j].lid, lid);
             if ($scope.userData.lists[j].lid === lid) {
               finalJ = j;
               // console.log('j, finalj', j, finalJ);
@@ -554,13 +586,13 @@ angular.module('Plitto', [
               for (var i = 0; i < $scope.userData.lists[j].items.length; i++) {
                 // itemIds.push = $scope.userData.lists[j].items[i].ik;\
                 listTids.push($scope.userData.lists[j].items[i].tid);
-                //pc.log('app.ult.moreofthis $scope.userData.lists[j].items[i]' , $scope.userData.lists[j].items[i].ik );
+                //console.log('app.ult.moreofthis $scope.userData.lists[j].items[i]' , $scope.userData.lists[j].items[i].ik );
               }
               // Set i, j to 1000 to end the loop. 
               finalJ = j;
               i = 1000;
               j = 1000;
-              // pc.log("END THE LOOP!");
+              // console.log("END THE LOOP!");
             }
           }
           // Ask for 10 more items, for now.
@@ -581,17 +613,17 @@ angular.module('Plitto', [
               // We have results. Merge them.
               /*
               for(var i = 0; i < d.results[0].lists[0].items.length; i++){
-                // pc.log('d.results[0].lists[0].items[i]', d.results[0].lists[0].items[i]);
+                // console.log('d.results[0].lists[0].items[i]', d.results[0].lists[0].items[i]);
                 // $scope.userData.lists[finalJ].items.splice(0, 0, d.results[0].lists[0].items[i]);
                 $scope.userData.lists[finalJ].items.push(d.results[0].lists[0].items[i]);
               } */
               
               $scope.userData.lists[finalJ].items = $scope.userData.lists[finalJ].items.concat(d.results[0].lists[0].items);
               
-              // pc.log('new userdata', $scope.userData);
+              // console.log('new userdata', $scope.userData);
               
               $scope.showMore = d.isMore;
-              // pc.log('showMore: ', $scope.showMore);
+              // console.log('showMore: ', $scope.showMore);
             }
             
           });
@@ -603,7 +635,7 @@ angular.module('Plitto', [
       }
     };
   })
-  .directive('listOfLists', function ($rootScope, dbFactory, $state, localStorageService, pc) {
+  .directive('listOfLists', function ($rootScope, dbFactory, $state, localStorageService, pltf) {
     return {
       restrict: 'E',
       templateUrl: 'directives/listOfLists.html',
@@ -613,7 +645,7 @@ angular.module('Plitto', [
         source: '@source',
         listsData: '=listsData'
       },
-      controller: function ($scope, dbFactory, $state, pc) {
+      controller: function ($scope, dbFactory, $state, pltf) {
         // First, load the lists.
         // console.log('listoflists: ', $scope);
         if (localStorageService.get('user' + $rootScope.user.userId + 'lists')) {
@@ -622,7 +654,7 @@ angular.module('Plitto', [
         // Now, call for this the local user's lists to be populated.
         dbFactory.promiseListOfLists($rootScope.user.userId).then(function (d) {
           $scope.listsData = d;
-          // pc.log('my lists?', $rootScope.user.userId, d);
+          // console.log('my lists?', $rootScope.user.userId, d);
         });
 
         /* Link to List */
@@ -648,7 +680,7 @@ angular.module('Plitto', [
       controller: function ($scope, dbFactory, $state) {
         // Debug
         $scope.changeFilter = function (filterNew) {
-          pc.log('TEST', filterNew);
+          console.log('TEST', filterNew);
           $scope.filterChat = filterNew;
         };
 
@@ -656,7 +688,7 @@ angular.module('Plitto', [
         // TODO2 - This should be a global.
         // This is for the logged in user
         $scope.showUser = function (userId, userName, dataScope, fbuid) {
-          pc.log('controllers.js - showUser 87');
+          console.log('controllers.js - showUser 87');
           // dbFactory.showUser(userId,userName, dataScope, fbuid);
           $state.go('app.profile', {
             userId: userId
@@ -665,14 +697,14 @@ angular.module('Plitto', [
 
         /* Link to List */
         $scope.showList = function (listId, listName, userFilter, focusTarget) {
-          pc.log('showList app.js 493');
+          console.log('showList app.js 493');
           dbFactory.showAList(listId, listName, userFilter, focusTarget);
         };
 
 
         /* Thing */
         $scope.showThing = function (thingId, thingName, userFilter) {
-          pc.log('showThing');
+          console.log('showThing');
           // dbFactory.showThing(thingId, thingName, userFilter);
           $state.go('app.thing', {
             thingId: thingId
