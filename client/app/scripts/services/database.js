@@ -753,14 +753,42 @@ angular.module('Services.database', ['LocalStorageModule'])
           } else {
             
             var newListId = response.data.results[0].thingid;
-            pc.log('new list id created: ' + newListId);
+            console.log('new list id created: ' + newListId);
             // Callback - On creating the new list.
             return newListId;
             
           }
         },
         function(response){
-          pc.log('promise error for new list?');
+          console.log('promise error for new list?');
+        }
+      );
+    return promise;
+  };
+  
+  
+  var getMore = function(fromUserId, listId, filter, ignoreTids, moreRecords){
+    var params = {
+      fromUserId: fromUserId, // Could be a string, I suppose.
+      listId: listId, // 0 if you want all.
+      filter: filter, // Shared, dittoable, etc. For now, not built. 1/29/2015
+      ignoreTids: ignoreTids.join(), // CSV of the existing TIDs in play.
+      token: $rootScope.token,
+      moreRecords: moreRecords
+    };
+    // console.log('params: ', params);
+    var promise = $http.post(apiPath + 'getMore', params)
+      .then(
+        function ( response ) {
+          if (checkLogout( response.data ) === true) {
+            logout();
+          } else {
+            // console.log('db get more response: ', response);
+            return response.data;
+          }
+        },
+        function(response){
+          console.log('promise error for new list?');
         }
       );
     return promise;
@@ -768,6 +796,7 @@ angular.module('Services.database', ['LocalStorageModule'])
 
   return {
     // fbPlittoFriends: fbPlittoFriends,
+    getMore: getMore, /* Added 1/29/2015 */
     fbTokenLogin: fbTokenLogin,
     refreshData: refreshData,
     dbInit: dbInit,

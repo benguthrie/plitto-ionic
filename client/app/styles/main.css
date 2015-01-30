@@ -257,7 +257,13 @@ input.userInput {
 /* User / List / Thing Styling */
 
 div.userBlock > a.item,
-div.listBlock > div.item {}
+div.item > i.ion-chevron-right {
+  right: 0;
+  top: 0;
+  position: absolute;
+  padding: 1em 0.3em 1em 0.3em;
+  opacity: 0.4;
+}
 
 div.listBlock {
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
@@ -291,7 +297,14 @@ div.endOfList {
   color: white;
 }
 
-div.endOfList > i {
+
+div.endOfList > button {
+  border: 1px solid white;
+  opacity: 0.5;
+  padding-right: 2em;
+}
+
+div.endOfList > button > i {
   font-size: 1.3em;
   margin: 0 1em 0 1em;
 }
@@ -313,23 +326,6 @@ a.userLine > img {
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
-}
-/* Ditto icon - Potential; */
-
-div.dittoQ {
-  color: #000;
-}
-/* Ditto icon - Waiting for server response; */
-
-div.dittoW {
-  color: #999;
-}
-/* Ditto icon - You have this in common; */
-
-div > a.dittoA,
-div.dittoA,
-div.button-bar > a.button > i.dittoA {
-  color: green;
 }
 /* Docs */
 
@@ -397,7 +393,39 @@ div.thingNameRow > div.thingNameCol > span.typedThing {
 
 div.thingNameRow > div.thingWithCol {}
 
-div.thingNameRow > div.dittoCol {}
+div.thingNameRow > div.dittoCol {
+  
+}
+
+
+/* Ditto icon - Potential; */
+
+div.dittoQ {
+  color: #000;
+}
+/* Ditto icon - Waiting for server response; */
+
+div.dittoW {
+  color: #999;
+}
+/* Ditto icon - You have this in common; */
+
+div > a.dittoA,
+  div.dittoA,
+  div.button-bar > a.button > i.dittoA, 
+  div.thingNameRow > div.dittoCol > i.dittoA {
+  color: green;
+}
+
+div.thingNameRow > div.dittoCol > i {
+  box-shadow: 0 2px 5px 0 rgba(100, 100, 100, 0.86);
+  border-radius: 1em;
+  padding: 0;
+  margin: 0;
+  height: 0.9em;
+}
+
+
 
 div.thingNameRow > div {
   padding: 5px;
@@ -421,16 +449,18 @@ label#addToList > button {
 }
 
 label#addToList > button > i {
-  font-size: 1.4em;
-  margin: 0;
+  font-size: 1.3em;
+  margin: 0 0 0.1em 0;
   border: 0.2em solid #444;
-  background-color: #bbb;
-  padding: 0 0 0 0;
+  background-color: rgba(50,200,50,0.3);
+  padding: 0.1em 0 0 0;
   height: 1.8em;
   width: 1.8em;
   color: #444;
   display: block;
   border-radius: 0.9em;
+  
+  box-shadow: 0 2px 5px 0 rgba(100, 100, 100, 0.86);
 }
 /* Search Form Styling */
 
@@ -472,6 +502,7 @@ div.searchLine > form.searchCell > label > input {
 div.searchLine > form.searchCell > div.clearSearch {
   width: 2em;
   height: 0;
+  
 }
 
 div.searchLine > form.searchCell > div.clearSearch > button {
@@ -479,7 +510,11 @@ div.searchLine > form.searchCell > div.clearSearch > button {
   font-size: 2em;
   vertical-align: text-top;
   margin-top: -0.4em;
-  width: 1.5em;
+  width: 1.3em;
+  height: 1.3em;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.86);
+  border-radius: 1em;
+  padding: 0;
 }
 /*
   div.listBlock > div.listLine > div.listAddTo > i.listIconAdd {
@@ -920,4 +955,8 @@ div.statTable > div.statRow > div.groupStats > div.statBlock > div.colStat {
   font-size: 1.3em;
   padding: 0.2em 0.7em 0.2em 0.2em;
   overflow: hidden;
+}
+
+.plittoBar {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
 }

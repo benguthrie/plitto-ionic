@@ -169,7 +169,7 @@ angular.module('Plitto', [
     })
 
     .state('app.search', {
-        url: '/search/',
+        url: '/search',
         views: {
           'menuContent': {
             templateUrl: 'templates/search.html',
@@ -336,9 +336,11 @@ angular.module('Plitto', [
           '</ion-nav-buttons>' +
         '<ion-nav-buttons side="secondary" class="navSecond">' +
          '</button>' +
-        '<button class="button button-icon ionicons ion-plus-circled" ng-click=" navFunc(\'addlist\');"></button> ' +
-        '<button class="button button-icon ion-ios7-checkmark-outline" ng-click="navFunc(\'home\'); getSome();"></button> ' +
-        '<button class="button button-icon ion-search" ng-click="navFunc(\'search\');"></button>' +
+      
+        '<a href="#/app/addlist" class="button button-icon ion-plus-circled"" ></a>' +
+        '<a href="#/app/home" class="button button-icon ion-ios7-checkmark-outline" ></a>' +
+        '<a href="#/app/search" class="button button-icon ion-search" ></a>' +
+      
         '</ion-nav-buttons>' +
       '</ion-nav-bar>',
       // scope: {}
@@ -347,18 +349,12 @@ angular.module('Plitto', [
         // Reload the navigation
         // dbFactory.userChat(-1);
 
-        // Load the notifications
-        $scope.navFunc = function (path) {
-          pc.log('app.299 navFunc path: ', path);
-          $state.go('app.' + path);
-
-        };
 
       }
     };
   })
 
-.directive('userListThing', function ($rootScope, dbFactory, $state, pc) {
+.directive('userListThing', function ($rootScope, dbFactory, $state) {
     return {
       restrict: 'E',
       templateUrl: 'directives/userListThing.html',
@@ -368,6 +364,10 @@ angular.module('Plitto', [
         userData: '=userData'
       },
       controller: function ($scope, dbFactory) {
+        
+        /* Show More? */
+        $scope.showMore = true;
+        
         /* Ditto */
         $scope.ditto = function (mykey, uid, lid, tid, itemKey, $event) {
 
@@ -380,7 +380,7 @@ angular.module('Plitto', [
           for (var i in $scope.userData.lists) {
             if (lid === $scope.userData.lists[i].lid) {
               for (j in $scope.userData.lists[i].items) {
-                // pc.log('check 426: ',$scope.userData.lists[i].items[j].tid, tid);
+                // console.log('check 426: ',$scope.userData.lists[i].items[j].tid, tid);
                 if ($scope.userData.lists[i].items[j].tid === tid) {
                   $scope.userData.lists[i].items[j].mykey = 0; // TODO - This could be causing a bug.
                   if (mykey) {
@@ -445,12 +445,12 @@ angular.module('Plitto', [
         };
 
         /* Let's Chat
-        letsChat(userData.uid, list.lid, item.tid, item.ik, $event, store); " */
-        $scope.letsChat = function (uid, lid, tid, itemKey, $event, store, $index) {
-          pc.log('letsChat app.js directive', uid, lid, tid, itemKey, $event, $index);
+        letsChat(userData.uid, list.lid, item.tid, item.ik, $event, $index); " */
+        $scope.letsChat = function (uid, lid, tid, itemKey, $event, $index) {
+          // console.log('letsChat app.js directive', uid, lid, tid, itemKey, $event, $index);
           // var length = eval('$rootScope.' + store + '.length');
 
-          pc.log('letschat scope.userData', $scope.userData);
+          // console.log('letschat scope.userData', $scope.userData);
 
           // Find the item in this list.
           var i = 0,
@@ -469,7 +469,7 @@ angular.module('Plitto', [
               }
             }
 
-          // pc.log('vars: i,j',i,j);
+          // console.log('vars: i,j',i,j);
 
           var isActive = 1;
           if ($($event.target).hasClass('active')) {
@@ -489,16 +489,16 @@ angular.module('Plitto', [
           }
           // Call the addComment bit to activate or deactivate the queue item
           dbFactory.promiseAddComment(uid, lid, tid, itemKey, '0', isActive).then(function (d) {
-            pc.log('481ult added comment');
+            console.log('481ult added comment');
           });
-          pc.log('commentactive:  ',
+          console.log('commentactive:  ',
             // eval('$rootScope.' + store + '[' + upos + '].lists[' + lpos + '].items[' + tpos + '].commentActive; '  )
             $scope.userData.lists[i].items[j].commentActive
           );
         };
 
         $scope.makeItemComment = function (newComment, uid, lid, tid, itemKey, $index) {
-          pc.log('makeItemComment', newComment, uid, lid, tid, itemKey, $index);
+          console.log('makeItemComment', newComment, uid, lid, tid, itemKey, $index);
           // Find the user, then the list, then use the index.
           // var length = eval('$rootScope.' + store + '.length' );
 
@@ -524,17 +524,66 @@ angular.module('Plitto', [
               }
             }
 
-          // pc.log('vars: i,j', i, j);
+          // console.log('vars: i,j', i, j);
           $scope.userData.lists[i].items[j].commentText = newComment;
 
           // submit it to the database
           // 
           dbFactory.promiseAddComment(uid, lid, tid, itemKey, newComment, '1').then(function (d) {
-            pc.log('ult521 add comment');
+            console.log('ult521 add comment');
           });
 
           // TODO1 Clear the comment field
 
+        };
+
+        // moreOfThis( userData.uid, list.lid, $event, $index );
+        $scope.moreOfThis = function (lid) {
+          // console.log('app.ult.moreOfThis: ,  lid: ', lid, ' userData: ', $scope.userData, $scope.userData.lists.length);
+          // Note: A null userId is required to get content from a user and their contacts. A 0 will return strangers.
+          
+          // Track the final list position in userData. 
+          var finalJ = null;
+          // console.log('ud lengthL '+ $scope.userData.length);
+          // Find this list position.
+
+          for (var j = 0; j < $scope.userData.lists.length; j++) {
+           //  console.log('app.ult.moreofthis lidTEST', $scope.userData.lists[j].lid, lid);
+            if ($scope.userData.lists[j].lid === lid) {
+              finalJ = j;
+              // console.log('j, finalj', j, finalJ);
+              var listTids = new Array();
+              for (var i = 0; i < $scope.userData.lists[j].items.length; i++) {
+                // itemIds.push = $scope.userData.lists[j].items[i].ik;\
+                listTids.push($scope.userData.lists[j].items[i].tid);
+                //console.log('app.ult.moreofthis $scope.userData.lists[j].items[i]' , $scope.userData.lists[j].items[i].ik );
+              }
+              // Set i, j to 1000 to end the loop. 
+              finalJ = j;
+              i = 1000;
+              j = 1000;
+              // console.log("END THE LOOP!");
+            }
+          }
+          // Ask for 10 more items, for now.
+          $scope.showMore = '0';
+          
+          dbFactory.getMore($scope.userData.uid, lid, 'all', listTids, 10).then(function (d) {
+            // We only need the user's items. It will be just one user, and just this list, which we know where it is thanks to the i variable above. 
+            
+            if(!d.results.length){
+              // We ran out of more items!
+              $scope.showMore = false;
+            } else {
+              // We have results. Merge them.
+              
+              $scope.userData.lists[finalJ].items = $scope.userData.lists[finalJ].items.concat(d.results[0].lists[0].items);
+              
+              $scope.showMore = d.isMore;
+              // console.log('showMore: ', $scope.showMore);
+            }
+            
+          });
         };
 
       }
