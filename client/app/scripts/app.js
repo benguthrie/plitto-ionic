@@ -60,18 +60,41 @@ angular.module('Plitto', [
   }];
   })
   /* Config Defaults */
-  .constant('pc', {
+  .constant('pltf', {
     'log': function (toLog) {
 
       // turned debug off. 
-      // console.log(toLog);
+      // 
+      console.log(toLog);
     },
     'QueryString': function () {
-      console.log('70');
+      'use strict';
+      console.log('70 NO NEED FOR THIS QUERYSTRING FUNCTION???');
+
+      // This function is anonymous, is executed immediately and 
+      // the return value is assigned to QueryString!
+      var returnString = {};
+      var query = window.location.search.substring(1);
+      var vars = query.split('&');
+      for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        // If first entry with this name
+        if (typeof returnString[pair[0]] === 'undefined') {
+          returnString[pair[0]] = pair[1];
+          // If second entry with this name
+        } else if (typeof returnString[pair[0]] === 'string') {
+          var arr = [returnString[pair[0]], pair[1]];
+          returnString[pair[0]] = arr;
+          // If third or later entry with this name
+        } else {
+          returnString[pair[0]].push(pair[1]);
+        }
+      }
+      return returnString;
     },
     'plainJsRedirect': function (url) {
       'use strict';
-      console.log('plainJsRedirect: ', url);
+      // console.log('plainJsRedirect: ', url);
       // window.location.href = url;
       // window.location.assign(url);
       setTimeout(function () {
@@ -87,7 +110,16 @@ angular.module('Plitto', [
 
 
 
-.run(function ($ionicPlatform, $rootScope, dbFactory, OAuth, $state, pc) {
+.run(function ($ionicPlatform, $rootScope, dbFactory, OAuth, $state, pltf) {
+  /* Deleted 1/28/2015. Works without it. 1/29/2015 - MAYBE NOT!
+  // Check to see if Facebook is giving us a code to use in the URL.
+  if(pltf.QueryString.code){
+    // Make the Plitto API call
+    console.log('RUN URL because we found it.', pltf.QueryString.code);
+    
+    // TODO1 - Put this backdbFactory.fbTokenLogin(pltf.QueryString.code);
+  }
+  */
 
   $ionicPlatform.ready(function () {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -100,10 +132,10 @@ angular.module('Plitto', [
       StatusBar.styleDefault();
     }
     // Get the access token from Facebook. TODO1 - 12/20 - It looks like something is intercepting it, and removing it.
-    pc.log('ionicPlatform.run: access_token location: ', window.location.hash.indexOf('access_token'));
+    // console.log('ionicPlatform.run: access_token location: ', window.location.hash.indexOf('access_token'));
     if (window.location.hash.indexOf('access_token') !== -1) {
       /* Debug 1/27/2015 REMOVED Batch 3
-      pc.log('ionicPlatform.run: Found the token.',
+      console.log('ionicPlatform.run: Found the token.',
         window.location.hash,
         window.location.hash.indexOf('access_token')
       );
@@ -115,7 +147,7 @@ angular.module('Plitto', [
       $state.go('loading');
 
       var fbAccessToken = hash.substring(hash.indexOf('access_token=') + 'access_token='.length, hash.indexOf('&'));
-      pc.log('at: ', fbAccessToken);
+      // console.log('app118 at: ' + fbAccessToken);
 
       $rootScope.loginMessage = 'Facebook Access Granted. Logging into Plitto now.';
       //  + fbAccessToken
@@ -128,7 +160,7 @@ angular.module('Plitto', [
   });
 })
 
-.config(function ($stateProvider, $urlRouterProvider, $httpProvider, pc) {
+.config(function ($stateProvider, $urlRouterProvider, $httpProvider, pltf) {
 
 
     $stateProvider
@@ -292,16 +324,17 @@ angular.module('Plitto', [
 
     // if none of the above states are matched, use this as the fallback
     // TODO1 - Do this. $urlRouterProvider.otherwise('/app/home');
-    // pc.log('QUERYSTRING ACCESS TOKEN: ', funky.Querystring('TESTSTRING'));
-    if (pc.QueryString('access_token') || window.location.hash.indexOf('access_token') > -1) {
-      pc.log('found querystring access token.', pc.QueryString('access_token'));
+    // console.log('QUERYSTRING ACCESS TOKEN: ', pltf.Querystring('TESTSTRING'));
+    /* Removed 1/29/2015 Ok for troubleshooting? */
+    if (pltf.QueryString('access_token') || window.location.hash.indexOf('access_token') > -1) {
+      console.log('found querystring access token.' + pltf.QueryString('access_token'));
 
     } else {
 
-      pc.log('No access token. Let the user log in.', 'access_token: ');
-      pc.log(pc.QueryString('access_token') + 'Location hash: ' + window.location.hash);
+      console.log('No access token. Let the user log in.', 'access_token: ');
+      console.log(pltf.QueryString('access_token') + 'Location hash: ' + window.location.hash);
       // $urlRouterProvider.otherwise('/app/home');
-      // pc.log("REPLACeD", window.location.hash.replace("#/",""));
+      // console.log("REPLACeD", window.location.hash.replace("#/",""));
 
       //http://localhost/plitto-ionic/client/app/?#/access_token=CAAAAMD0tehMBAMUwibZCHQrzYS3v6QdLKTsIlWveB7CTSV0ZByuItJP8u7tF3xaYjGBNjeT7BDRjVWA9WwwelEjMAZCiKgi9C5dDIAUfZAUwdqPQlxxDbykoslmJs8OhyNRpXEoU0o6fC2eiYMROqOLvW8C1A0NU72YBmgcWitSom8Yw0rdEQCLktU6t1xdePnNKLLq75dlANujWVRvgcsgIuZCjZAZC9IZD&expires_in=6952
 
@@ -324,33 +357,31 @@ angular.module('Plitto', [
     );
 
   })
-  .directive('userNav', function ($rootScope, dbFactory, $state, pc) {
+  .directive('userNav', function ($rootScope, dbFactory, $state, pltf) {
     return {
       restrict: 'E',
       // templateUrl: 'directives/userNav.html',
-      template: '<ion-nav-bar class="bar-stable">' +
+      template: '<ion-nav-bar class="bar-stable plittoBar">' +
         '<ion-nav-back-button></ion-nav-back-button>' +
         '<ion-nav-buttons side="left">' +
 
-          '<button menu-toggle="left" class="button button-icon icon ion-navicon"></button>' +
-          '</ion-nav-buttons>' +
-        '<ion-nav-buttons side="secondary" class="navSecond">' +
-         '</button>' +
-      
-        '<a href="#/app/addlist" class="button button-icon ion-plus-circled"" ></a>' +
-        '<a href="#/app/home" class="button button-icon ion-ios7-checkmark-outline" ></a>' +
-        '<a href="#/app/search" class="button button-icon ion-search" ></a>' +
-      
+        '<button menu-toggle="left" class="button button-icon icon ion-navicon"></button>' +
         '</ion-nav-buttons>' +
-      '</ion-nav-bar>',
-      // scope: {}
+        '<ion-nav-buttons side="secondary" class="navSecond">' +
 
-      controller: function ($scope, dbFactory, $state, pc) {
-        // Reload the navigation
-        // dbFactory.userChat(-1);
+        '</button>' +
+        '<a href="#/app/addlist" class="button button-icon ionicons ion-plus-circled"></a> ' +
+        '<a href="#/app/home" class="button button-icon ion-ios7-checkmark-outline"></a> ' +
+        '<a href="#/app/search" class="button button-icon ion-search"></a> ' +
+        '</ion-nav-buttons>' +
+        '</ion-nav-bar>'
+        // scope: {}
+        /*
+        , controller: function ($scope, dbFactory, $state, pltf) {
+          /
+          };}
+          */
 
-
-      }
     };
   })
 
@@ -364,10 +395,10 @@ angular.module('Plitto', [
         userData: '=userData'
       },
       controller: function ($scope, dbFactory) {
-        
+
         /* Show More? */
         $scope.showMore = true;
-        
+
         /* Ditto */
         $scope.ditto = function (mykey, uid, lid, tid, itemKey, $event) {
 
@@ -541,14 +572,14 @@ angular.module('Plitto', [
         $scope.moreOfThis = function (lid) {
           // console.log('app.ult.moreOfThis: ,  lid: ', lid, ' userData: ', $scope.userData, $scope.userData.lists.length);
           // Note: A null userId is required to get content from a user and their contacts. A 0 will return strangers.
-          
+
           // Track the final list position in userData. 
           var finalJ = null;
           // console.log('ud lengthL '+ $scope.userData.length);
           // Find this list position.
 
           for (var j = 0; j < $scope.userData.lists.length; j++) {
-           //  console.log('app.ult.moreofthis lidTEST', $scope.userData.lists[j].lid, lid);
+            //  console.log('app.ult.moreofthis lidTEST', $scope.userData.lists[j].lid, lid);
             if ($scope.userData.lists[j].lid === lid) {
               finalJ = j;
               // console.log('j, finalj', j, finalJ);
@@ -567,29 +598,41 @@ angular.module('Plitto', [
           }
           // Ask for 10 more items, for now.
           $scope.showMore = '0';
-          
+
           dbFactory.getMore($scope.userData.uid, lid, 'all', listTids, 10).then(function (d) {
             // We only need the user's items. It will be just one user, and just this list, which we know where it is thanks to the i variable above. 
-            
-            if(!d.results.length){
+
+            if (!d.results.length) {
               // We ran out of more items!
               $scope.showMore = false;
             } else {
               // We have results. Merge them.
-              
+
               $scope.userData.lists[finalJ].items = $scope.userData.lists[finalJ].items.concat(d.results[0].lists[0].items);
-              
+
+              /*
+              for(var i = 0; i < d.results[0].lists[0].items.length; i++){
+                // console.log('d.results[0].lists[0].items[i]', d.results[0].lists[0].items[i]);
+                // $scope.userData.lists[finalJ].items.splice(0, 0, d.results[0].lists[0].items[i]);
+                $scope.userData.lists[finalJ].items.push(d.results[0].lists[0].items[i]);
+              } */
+
+              $scope.userData.lists[finalJ].items = $scope.userData.lists[finalJ].items.concat(d.results[0].lists[0].items);
+
+              // console.log('new userdata', $scope.userData);
+
+
               $scope.showMore = d.isMore;
               // console.log('showMore: ', $scope.showMore);
             }
-            
+
           });
         };
 
       }
     };
   })
-  .directive('listOfLists', function ($rootScope, dbFactory, $state, localStorageService, pc) {
+  .directive('listOfLists', function ($rootScope, dbFactory, $state, localStorageService, pltf) {
     return {
       restrict: 'E',
       templateUrl: 'directives/listOfLists.html',
@@ -599,16 +642,16 @@ angular.module('Plitto', [
         source: '@source',
         listsData: '=listsData'
       },
-      controller: function ($scope, dbFactory, $state, pc) {
+      controller: function ($scope, dbFactory, $state, pltf) {
         // First, load the lists.
-        console.log('listoflists: ', $scope);
+        // console.log('listoflists: ', $scope);
         if (localStorageService.get('user' + $rootScope.user.userId + 'lists')) {
           $scope.listsData = localStorageService.get('user' + $rootScope.user.userId + 'lists');
         }
         // Now, call for this the local user's lists to be populated.
         dbFactory.promiseListOfLists($rootScope.user.userId).then(function (d) {
           $scope.listsData = d;
-          console.log('my lists?', $rootScope.user.userId, d);
+          // console.log('my lists?', $rootScope.user.userId, d);
         });
 
         /* Link to List */
@@ -634,7 +677,7 @@ angular.module('Plitto', [
       controller: function ($scope, dbFactory, $state) {
         // Debug
         $scope.changeFilter = function (filterNew) {
-          pc.log('TEST', filterNew);
+          console.log('TEST', filterNew);
           $scope.filterChat = filterNew;
         };
 
@@ -642,7 +685,7 @@ angular.module('Plitto', [
         // TODO2 - This should be a global.
         // This is for the logged in user
         $scope.showUser = function (userId, userName, dataScope, fbuid) {
-          pc.log('controllers.js - showUser 87');
+          console.log('controllers.js - showUser 87');
           // dbFactory.showUser(userId,userName, dataScope, fbuid);
           $state.go('app.profile', {
             userId: userId
@@ -651,14 +694,14 @@ angular.module('Plitto', [
 
         /* Link to List */
         $scope.showList = function (listId, listName, userFilter, focusTarget) {
-          pc.log('showList app.js 493');
+          console.log('showList app.js 493');
           dbFactory.showAList(listId, listName, userFilter, focusTarget);
         };
 
 
         /* Thing */
         $scope.showThing = function (thingId, thingName, userFilter) {
-          pc.log('showThing');
+          console.log('showThing');
           // dbFactory.showThing(thingId, thingName, userFilter);
           $state.go('app.thing', {
             thingId: thingId

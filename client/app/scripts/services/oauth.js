@@ -1,11 +1,12 @@
 'use strict';
 angular.module('Services.oauth', [])
 
-.service('OAuth', function ($window, $rootScope, $state, $timeout, dbFactory) {
+.service('OAuth', function ($window, $rootScope, $state, $timeout, dbFactory, pltf) {
 
   // Need to change redirect from plitto.com if on mobile
   // otherwise we're just going to load the entire website on the phone
-  // console.log('window: ',window);
+  // 
+  console.log('window: ',window);
   var redirectUri = '';
 
   if (document.URL.indexOf('localhost') > -1) {
@@ -15,11 +16,11 @@ angular.module('Services.oauth', [])
     redirectUri = window.cordova ? 'http://plitto.com/CORDOVAWILLCLOSETHISWINDOW' : 'http://localhost/plitto-ionic/client/app/';
 
   } else {
-    console.log('localhost redirect NOT found', document.URL);
+    pc.log('localhost redirect NOT found' + document.URL);
     redirectUri = window.cordova ? 'http://plitto.com' : 'http://plitto.com/client/app/';
   }
 
-  console.log('redirect / window.cordova', redirectUri, window.cordova);
+  // pc.log('redirect / window.cordova' + redirectUri + window.cordova);
 
   // Define the auth-window as an element within the whole scope.
   var authWindow = null;
@@ -147,7 +148,8 @@ angular.module('Services.oauth', [])
 
       /* Cordova App: All Facebook Info gets routed through a window. */
       var authUrl = '';
-      console.log('oauth.js login() : window.cordova? ', window.cordova);
+      // 
+      console.log('oauth.js login() : window.cordova? ', window);
 
       if (window.cordova) {
         /* Native App Redirect to localhost */
@@ -179,7 +181,8 @@ angular.module('Services.oauth', [])
         $rootScope.loginMessage = '4. Directing to FB for web authorization';
 
         // https://www.facebook.com/v2.0/dialog/oauth?client_id={app-id}&redirect_uri={redirectUri} 
-        // console.log('go here: ', authUrl);
+        // 
+        console.log('go here: ', authUrl);
 
         // Redirect to Facebook for authorization
         $rootScope.$broadcast('broadcast', {
