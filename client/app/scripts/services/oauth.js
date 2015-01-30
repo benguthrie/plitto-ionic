@@ -15,11 +15,11 @@ angular.module('Services.oauth', [])
     redirectUri = window.cordova ? 'http://plitto.com/CORDOVAWILLCLOSETHISWINDOW' : 'http://localhost/plitto-ionic/client/app/';
 
   } else {
-    console.log('localhost redirect NOT found', document.URL);
+    pc.log('localhost redirect NOT found' + document.URL);
     redirectUri = window.cordova ? 'http://plitto.com' : 'http://plitto.com/client/app/';
   }
 
-  console.log('redirect / window.cordova', redirectUri, window.cordova);
+  // pc.log('redirect / window.cordova' + redirectUri + window.cordova);
 
   // Define the auth-window as an element within the whole scope.
   var authWindow = null;

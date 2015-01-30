@@ -34,6 +34,7 @@ angular.module('Services.database', ['LocalStorageModule'])
     }
   }
 
+  
   var promiseDitto = function (mykey, uid, lid, tid, itemKey, event) {
     //  pc.log('dbFactory.dbDitto | mykey: ', mykey,'| ownerid: ', uid, '| listid: ',lid, tid,i,j,k);
 
@@ -765,9 +766,38 @@ angular.module('Services.database', ['LocalStorageModule'])
       );
     return promise;
   };
+  
+  
+  var getMore = function(fromUserId, listId, filter, ignoreTids, moreRecords){
+    var params = {
+      fromUserId: fromUserId, // Could be a string, I suppose.
+      listId: listId, // 0 if you want all.
+      filter: filter, // Shared, dittoable, etc. For now, not built. 1/29/2015
+      ignoreTids: ignoreTids.join(), // CSV of the existing TIDs in play.
+      token: $rootScope.token,
+      moreRecords: moreRecords
+    };
+    // console.log('params: ', params);
+    var promise = $http.post(apiPath + 'getMore', params)
+      .then(
+        function ( response ) {
+          if (checkLogout( response.data ) === true) {
+            logout();
+          } else {
+            // console.log('db get more response: ', response);
+            return response.data;
+          }
+        },
+        function(response){
+          pc.log('promise error for new list?');
+        }
+      );
+    return promise;
+  };
 
   return {
     // fbPlittoFriends: fbPlittoFriends,
+    getMore: getMore, /* Added 1/29/2015 */
     fbTokenLogin: fbTokenLogin,
     refreshData: refreshData,
     dbInit: dbInit,

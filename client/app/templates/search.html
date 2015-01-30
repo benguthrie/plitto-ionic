@@ -9,8 +9,8 @@
           <input type="text" ng-model="search.term" style="font-size: 1.2em;" placeholder="Search Here" id="searchField" class="userInput" autofocus />
         </label>
 
-        <div class="clearSearch" ng-hide="!search.term.length">
-          <button class="icon ion-close-circled clearSearch" ng-click="emptyTheSearch();">
+        <div class="clearSearch" ng-hide="!search.term.length"  ng-click="emptyTheSearch();">
+          <button class="icon ion-close-circled clearSearch">
           </button>
         </div>
 
@@ -33,21 +33,22 @@
 
 
       <ion-list can-swipe="true" ng-show="section.type === 'list' ">
-        <ion-item class="item-icon-right" ng-repeat="list in section.results" 
+        <div class="item item-text-wrap" ng-repeat="list in section.results" 
                   ng-click="showList(list.nameId, list.itemName, null, 'addToList');">
           <i class="ion-clipboard"></i>
           <!--<ion-option-button class="button-assertive"
               ng-click="">Mine</ion-option-button> -->
           {{list.itemName}}<span ng-show="item.itemCount.length"> - {{item.itemCount}}</span>
-          <i class="ion-chevron-right icon-accessory"></i>
-        </ion-item>
+          <i class="ion-chevron-right" ></i>
+        </div>
       </ion-list>
 
       <ion-list can-swipe="true" ng-show="section.type === 'thing' ">
-        <div class="item" ng-repeat="item in section.results">
-          <div ng-click="showThing(item.nameId, item.itemName, 0);">
+        <div class="item item-text-wrap" ng-repeat="item in section.results" ng-click="showThing(item.nameId, item.itemName, 0);">
+          
             {{item.itemName}} - {{item.itemCount}}
-          </div>
+          
+          <i class="ion-chevron-right icon-accessory" ></i>
         </div>
       </ion-list>
 

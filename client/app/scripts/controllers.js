@@ -1007,7 +1007,7 @@ angular.module('Plitto.controllers', [])
 
       /* If there are results, and we need a list name, then apply the list name from the data */
 
-      if ($scope.listInfo.listName === null && typeof (d.results) !== 'undefined' && typeof (d.results[d.type]) !== 'undefined' && typeof (d.results[d.type][0].lists) !== 'undefined' && typeof (d.results[d.type][0].lists[0].listname) !== 'undefined') {
+      if ($scope.listInfo.listName === null && typeof (d.results) !== 'undefined' && typeof (d.results[d.type]) !== 'undefined'  && d.results[d.type].length && typeof (d.results[d.type][0].lists) !== 'undefined' && typeof (d.results[d.type][0].lists[0].listname) !== 'undefined') {
         $scope.listInfo.listName = d.results[d.type][0].lists[0].listname;
       }
     });

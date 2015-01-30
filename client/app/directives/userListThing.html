@@ -66,7 +66,7 @@
 
     <div class="commentRow" ng-hide=" userData.uid === $root.user.userId ">
       <!-- The Comment Button -->
-      <div class="commentButton" ng-click="letsChat( userData.uid, list.lid, item.tid, item.ik, $event, store, $index ); " ng-hide=" $root.user.userId === userData.uid " ng-class="{
+      <div class="commentButton" ng-click="letsChat( userData.uid, list.lid, item.tid, item.ik, $event, $index ); " ng-hide=" $root.user.userId === userData.uid " ng-class="{
           'ion-ios7-chatboxes dittoA' : item.commentActive === '1' ,
           'ion-ios7-chatboxes-outline' : item.commentActive !== '1' 
         }">
@@ -100,7 +100,7 @@
 
               <input type="textarea" class="item-text-wrap" ng-model="newComment.theValue" id="addCommentText" placeholder="Context" />
               <!-- Button to submit edit -->
-              <button type="submit" class="button" ng-click=" console.log('text: ',newComment.theValue); ">
+              <button type="submit" class="button">
                 Done
               </button>
 
@@ -119,6 +119,15 @@
   </div>
   <!-- Item End -->
 
-  <div class="endOfList"> <i class='ion-arrow-down-b'></i> TAP FOR MORE (Coming Soon) <i class='ion-arrow-down-b'></i></div>
+  <div class="endOfList">
+    <button ng-show='showMore' ng-click="moreOfThis( list.lid );">
+      <i class='ion-arrow-down-b'></i> MORE
+      <i class='ion-arrow-down-b'></i>
+    </button>
+    
+    <span ng-show='showMore === 0 '>Loading</span>
+    <span ng-show='!showMore'>You've made it to the end of this user's list</span>
+      
+  </div>
 
 </div>
