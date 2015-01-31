@@ -10,6 +10,9 @@ angular.module('Plitto.controllers', [])
   };
   */
 
+  $rootScope.$on('$destroy', function(){
+    console.log('DESTROY!!!');
+  });
 
   /* Control all the login and redirect functions */
   $rootScope.$on('broadcast', function (event, args) {
@@ -140,7 +143,7 @@ angular.module('Plitto.controllers', [])
 // REMOVED Facebook from the injectors // 13 - ionicNavBarDelegate - 14 - $ionicHistory
 .controller(
   'AppCtrl',
-  function ($scope, $state, dbFactory, $rootScope, localStorageService, pltf) {
+  function ( $scope, $state, dbFactory, $rootScope, localStorageService, pltf ) {
 
     // On load, load the correct interface, based on the token.
 
@@ -251,6 +254,7 @@ angular.module('Plitto.controllers', [])
 
 .controller('ThingCtrl',
   function ($scope, dbFactory, $stateParams, localStorageService, pltf) {
+    pltf.domSize();
     $scope.thing = {
       name: 'Loading',
       id: $stateParams.thingId,
@@ -259,6 +263,7 @@ angular.module('Plitto.controllers', [])
       }]
     };
 
+    
 
     if (localStorageService.get('thing' + $stateParams.thingId)) {
       console.log('local storage. Found thing by id/');
@@ -287,7 +292,8 @@ angular.module('Plitto.controllers', [])
   }
 )
 
-.controller('LoadingCtrl', function ($scope, $rootScope) {
+.controller('LoadingCtrl', function ($scope, $rootScope, pltf) {
+  pltf.domSize('console');
   // Control for thing goes here.
   $scope.thetoken = $rootScope.token;
   $rootScope.debug('loadingctrl loaded');
@@ -323,6 +329,7 @@ angular.module('Plitto.controllers', [])
 })
 
 .controller('HomeCtrl', function ($scope, $rootScope, dbFactory, pltf) {
+  pltf.domSize('console');
   $scope.store = {
     'friends': [{
       loading: true
@@ -373,6 +380,11 @@ angular.module('Plitto.controllers', [])
 
 
 .controller('DebugCtrl', function ($scope, dbFactory, $rootScope, localStorageService, $state, pltf) {
+  
+  
+            
+  pltf.domSize('console');
+  console.log('rootScope: ', $rootScope);
   $scope.localStorage = function (type) {
     if (type === 'get') {
       localStorageService.get('debugNote');
@@ -391,14 +403,19 @@ angular.module('Plitto.controllers', [])
         'currentTime': Date.now(),
         'state.current.name': $state.current.name
       };
-    } else if (type === 'querystring') {
+    } else if (type === 'querystring'){
       $scope.funnyText = 'querystring!';
-
+      
       pltf.Querystring();
-
+      
     } else if (type === 'clearRootscope') {
       $rootScope = '';
-    } else {
+    } else if (type === 'htmlLength'){
+      // 
+      $scope.funnyText = pltf.domSize('return');
+      console.log($(document.body).html());
+      // $scope.funnyText = '<span style="font-size: 0.3em;">' + $(document.body).html() +'</span>';
+    }else {
       $scope.funnyText = 'note ready ' + Date.now();
     }
   };
@@ -448,6 +465,7 @@ angular.module('Plitto.controllers', [])
 */
 .controller('ProfileCtrl',
   function ($scope, dbFactory, $rootScope, $stateParams, localStorageService, pltf) {
+    pltf.domSize();
     // Prepare Scope Variables
 
     $scope.view = 'ditto';
@@ -685,6 +703,7 @@ angular.module('Plitto.controllers', [])
 )
 
 .controller('addListCtrl', function ($scope, $rootScope, $stateParams, dbFactory, pltf, $state) {
+  pltf.domSize();
   $scope.newList = {
     title: ''
   };
@@ -721,7 +740,7 @@ angular.module('Plitto.controllers', [])
     console.log('User Clicked "Create List" with this title: ' + $scope.newList.title);
 
     dbFactory.newList($scope.newList.title).then(function (d) {
-
+      
       if (parseInt(d)) {
         $state.go('app.list', {
           listId: d
@@ -735,29 +754,9 @@ angular.module('Plitto.controllers', [])
 
 })
 
-.controller('SearchCtrl', function ($scope, $rootScope, $stateParams, dbFactory, $state, pltf, $timeout) {
+.controller('SearchCtrl', function ($scope, $rootScope, $stateParams, dbFactory, $state, pltf) {
   console.log('You have entered Search');
 
-  /* BEGIN -- Timeout Management */
-  var onTimeout = function () {
-    $scope.value += 1;
-    timer = $timeout(onTimeout, 5000);
-    console.log('OnTimeout');
-  };
-  /* Sets a timer for 1 second. Checks for a destroy to cancel the timer. */
-  var timer = $timeout(onTimeout, 1000);
-
-  $scope.value = 0;
-
-  var destroyListen = $scope.$on('$destroy', function () {
-    console.log('destroy753');
-    if (timer) {
-      $timeout.cancel(timer);
-      console.log('DESTROY HEARD 754');
-    } 
-  });
-  destroyListen();
-  /* END -- Timeout Management */
 
   /* Clear out the last search */
   $scope.search = {
@@ -809,6 +808,8 @@ angular.module('Plitto.controllers', [])
     if (typeof newValue !== 'undefined') {
 
       dbFactory.promiseSearch(newValue, 'general').then(function (d) {
+        pltf.domSize();
+        console.log('profileCtrl: ', $rootScope);
         $scope.search.results = d.results;
       });
 
@@ -952,6 +953,7 @@ angular.module('Plitto.controllers', [])
 })
 
 .controller('ListCtrl', function ($scope, $stateParams, $rootScope, dbFactory, localStorageService, pltf) {
+  pltf.domSize();
   $scope.view = 'ditto';
   $scope.store = {
     'ditto': [{
@@ -1018,7 +1020,7 @@ angular.module('Plitto.controllers', [])
         $scope.store[d.type] = d.results[d.type];
       } else {
         /* if no response, clear the results */
-        //         $scope.store[d.type] = [];
+//         $scope.store[d.type] = [];
         pltf.log('controllers1013 - This condition could be required for error handling.');
       }
 
@@ -1075,7 +1077,7 @@ angular.module('Plitto.controllers', [])
   $scope.addToList = function (newItemName) {
     //Step - Focus the view on your list.
     $scope.view = 'mine';
-
+    console.log('FELIX   FELIX   FELIX   controllers.listCtrl.addToList(newItem)' + newItemName);
     // Step: Make sure that there is something.
     if (!newItemName.length) {
       console.log('no length for the new item. 1054');
@@ -1188,7 +1190,6 @@ angular.module('Plitto.controllers', [])
 
   };
   /* End List Control */
-
 })
 
 .controller('LoginCtrl', function ($scope, $window, $rootScope, $state) {
