@@ -61,15 +61,24 @@ angular.module('Plitto', [
   })
   /* Config Defaults */
   .constant('pltf', {
+    'domSize': function (output) {
+      if (output === 'console') {
+        console.log('HTMLString', $(document.body).html().length);
+      } else if (output === 'return') {
+        return $(document.body).html().length;
+      }
+
+    },
     'log': function (toLog) {
 
       // turned debug off. 
       // 
+
       console.log(toLog);
     },
     'QueryString': function () {
       'use strict';
-      console.log('70 NO NEED FOR THIS QUERYSTRING FUNCTION???');
+      // console.log('70 NO NEED FOR THIS QUERYSTRING FUNCTION???');
 
       // This function is anonymous, is executed immediately and 
       // the return value is assigned to QueryString!
@@ -112,14 +121,13 @@ angular.module('Plitto', [
 
 .run(function ($ionicPlatform, $rootScope, dbFactory, OAuth, $state, pltf) {
   /* Deleted 1/28/2015. Works without it. 1/29/2015 - MAYBE NOT!
+  */
   // Check to see if Facebook is giving us a code to use in the URL.
   if(pltf.QueryString.code){
     // Make the Plitto API call
     console.log('RUN URL because we found it.', pltf.QueryString.code);
-    
     // TODO1 - Put this backdbFactory.fbTokenLogin(pltf.QueryString.code);
   }
-  */
 
   $ionicPlatform.ready(function () {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -358,6 +366,10 @@ angular.module('Plitto', [
 
   })
   .directive('userNav', function ($rootScope, dbFactory, $state, pltf) {
+
+
+
+
     return {
       restrict: 'E',
       // templateUrl: 'directives/userNav.html',
@@ -386,6 +398,8 @@ angular.module('Plitto', [
   })
 
 .directive('userListThing', function ($rootScope, dbFactory, $state) {
+
+
     return {
       restrict: 'E',
       templateUrl: 'directives/userListThing.html',
@@ -450,11 +464,14 @@ angular.module('Plitto', [
 
         /* User */
         $scope.showUser = function (userId, userName, dataScope, fbuid) {
-          $state.go('app.profile', {
-            userId: userId,
-            userName: userName
-          });
-          // dbFactory.showUser(userId,userName, dataScope, fbuid);
+          if(parseInt(userId) !== 0 ){
+            $state.go('app.profile', {
+              userId: userId,
+              userName: userName
+            });
+            // dbFactory.showUser(userId,userName, dataScope, fbuid);
+            $scope.userData = [];
+          }
         };
 
         /* List */
@@ -464,14 +481,18 @@ angular.module('Plitto', [
             listId: listId,
             listName: listName
           });
+          $scope.userData = [];
         };
 
         /* Thing */
         $scope.showThing = function (thingId, thingName, userFilter) {
+          
           $state.go('app.thing', {
             thingId: thingId,
             thingName: thingName
           });
+          $scope.userData = [];
+          
           // dbFactory.showThing(thingId, thingName, userFilter);
         };
 
@@ -576,14 +597,16 @@ angular.module('Plitto', [
           // Track the final list position in userData. 
           var finalJ = null;
           // console.log('ud lengthL '+ $scope.userData.length);
-          // Find this list position.
+          // Create something to hold items.
+          var listTids = new Array();
 
+          // Find this list position.
           for (var j = 0; j < $scope.userData.lists.length; j++) {
             //  console.log('app.ult.moreofthis lidTEST', $scope.userData.lists[j].lid, lid);
             if ($scope.userData.lists[j].lid === lid) {
               finalJ = j;
               // console.log('j, finalj', j, finalJ);
-              var listTids = new Array();
+
               for (var i = 0; i < $scope.userData.lists[j].items.length; i++) {
                 // itemIds.push = $scope.userData.lists[j].items[i].ik;\
                 listTids.push($scope.userData.lists[j].items[i].tid);
@@ -599,6 +622,7 @@ angular.module('Plitto', [
           // Ask for 10 more items, for now.
           $scope.showMore = '0';
 
+          // User Id, List Id, filter: 'all' future: ditto, shared, tids, limit 
           dbFactory.getMore($scope.userData.uid, lid, 'all', listTids, 10).then(function (d) {
             // We only need the user's items. It will be just one user, and just this list, which we know where it is thanks to the i variable above. 
 
@@ -616,8 +640,6 @@ angular.module('Plitto', [
                 // $scope.userData.lists[finalJ].items.splice(0, 0, d.results[0].lists[0].items[i]);
                 $scope.userData.lists[finalJ].items.push(d.results[0].lists[0].items[i]);
               } */
-
-              $scope.userData.lists[finalJ].items = $scope.userData.lists[finalJ].items.concat(d.results[0].lists[0].items);
 
               // console.log('new userdata', $scope.userData);
 

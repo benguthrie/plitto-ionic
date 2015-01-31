@@ -13,14 +13,19 @@ angular.module('Services.oauth', [])
 
     // TODO2 - This is used for troubleshooting app login. console.log('localhost redirect found', document.URL);
     /* It is running from localhost. If it's also running from window.cordova, then don't bother with the localhost. Else, use the localhost site. */
-    redirectUri = window.cordova ? 'http://plitto.com/CORDOVAWILLCLOSETHISWINDOW' : 'http://localhost/plitto-ionic/client/app/';
+    var localPath = 'client/app';
+    if(document.URL.indexOf(localPath) === -1){
+      // It must be 'client/www'
+      localPath = 'client/www';
+    }
+    redirectUri = window.cordova ? 'http://plitto.com/CORDOVAWILLCLOSETHISWINDOW' : 'http://localhost/plitto-ionic/' + localPath;
 
   } else {
-    pc.log('localhost redirect NOT found' + document.URL);
+    pltf.log('localhost redirect NOT found, which is ok.' + document.URL);
     redirectUri = window.cordova ? 'http://plitto.com' : 'http://plitto.com/client/app/';
   }
 
-  // pc.log('redirect / window.cordova' + redirectUri + window.cordova);
+  // pltf.log('redirect / window.cordova' + redirectUri + window.cordova);
 
   // Define the auth-window as an element within the whole scope.
   var authWindow = null;
