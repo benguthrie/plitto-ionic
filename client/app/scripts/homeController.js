@@ -1,6 +1,7 @@
+'use strict';
 angular.module('homeController', [])
 
-.controller('HomeCtrl', function ($scope, $rootScope, dbFactory, pltf) {
+.controller('HomeCtrl', function ($scope, dbFactory) {
 
   $scope.store = {
     'friends': [{
@@ -44,4 +45,4 @@ angular.module('homeController', [])
 
   };
 
-})
+});

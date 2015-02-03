@@ -1,3 +1,4 @@
+'use strict';
 angular.module('pController', [])
   .controller('pctrl', function ($scope, $stateParams, dbFactory, $rootScope, pltf, localStorageService) {
     // Prepare Scope Variables
@@ -55,10 +56,10 @@ angular.module('pController', [])
       }
       */
 
-    var lsTypes = new Array('ditto', 'shared', 'feed', 'lists', 'chat');
+    var lsTypes = ['ditto', 'shared', 'feed', 'lists', 'chat'];
 
     if (parseInt($rootScope.user.userId) === parseInt($scope.userInfo.userId)) {
-      var lsTypes = new Array('feed', 'lists'); // TODO2 Put in the chat bit again. 
+      var lsTypes = ['feed', 'lists']; // TODO2 Put in the chat bit again. 
       $scope.view = 'feed';
       // console.log('updated scope view ? ', $scope.view);
     }

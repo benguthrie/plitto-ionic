@@ -1,12 +1,11 @@
-angular.module('userDirective', [])
-
+'use strict';
 /* Profile Directive / Controller */
-.directive('user', function ($scope, $stateParams) {
+angular.module('userDirective', []).directive('user', function () {
 
   return {
     restrict: 'E',
     template: 'directives/user.html',
     controller: 'pctrl',
     controllerAs: 'ctrl'
-  }
+  };
 });

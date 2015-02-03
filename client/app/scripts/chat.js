@@ -1,5 +1,6 @@
-angular.module('chatDirective',[]).directive('chat',
-  function ($rootScope, dbFactory, $state) { 
+'use strict';
+angular.module('chatDirective', []).directive('chat',
+  function () {
     return {
       restrict: 'E',
       templateUrl: 'directives/chat.html',
@@ -14,32 +15,6 @@ angular.module('chatDirective',[]).directive('chat',
           $scope.filterChat = filterNew;
         };
 
-        // TODO2 - This should be a global.
-        // This is for the logged in user
-        $scope.showUser = function (userId, userName, dataScope, fbuid) {
-          //console.log('controllers.js - showUser 87');
-          // dbFactory.showUser(userId,userName, dataScope, fbuid);
-          $state.go('app.user', {
-            userId: userId
-          });
-        };
-
-        /* Link to List */
-        $scope.showList = function (listId, listName, userFilter, focusTarget) {
-          //console.log('showList app.js 493');
-          dbFactory.showAList(listId, listName, userFilter, focusTarget);
-        };
-
-
-        /* Thing */
-        $scope.showThing = function (thingId, thingName, userFilter) {
-          //console.log('showThing');
-          // dbFactory.showThing(thingId, thingName, userFilter);
-          $state.go('app.thing', {
-            thingId: thingId
-          });
-        };
-        
         // $scope.filterChatOptions = [ { filter: "them", selected: true }, { filter: "us", selected: false }, { filter: "me", selected: false } ];
         $scope.filterChatOptions = [{
           show: 'Them',

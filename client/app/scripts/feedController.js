@@ -1,5 +1,6 @@
+'use strict';
 angular.module('feedContrller', [])
-  .controller('FeedCtrl', function ($scope, $stateParams, $rootScope, dbFactory, localStorageService, pltf) {
+  .controller('FeedCtrl', function ($scope, $stateParams, dbFactory, localStorageService, pltf) {
 
     // On load, open friends.
     $scope.view = 'friends';

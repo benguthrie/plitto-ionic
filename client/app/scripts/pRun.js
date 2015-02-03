@@ -1,3 +1,4 @@
+'use strict';
 angular.module('pRun', [])
   .run(function ($ionicPlatform, $rootScope, dbFactory, OAuth, $state, pltf, localStorageService, $location) {
     /* Deleted 1/28/2015. Works without it. 1/29/2015 - MAYBE NOT!

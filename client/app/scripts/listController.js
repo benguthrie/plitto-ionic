@@ -1,3 +1,4 @@
+'use strict';
 angular.module('listController', [])
   .controller('ListCtrl', function ($scope, $stateParams, $rootScope, dbFactory, localStorageService, pltf) {
 
@@ -157,7 +158,7 @@ angular.module('listController', [])
 
       /* Create My List if this is the first item in my list */
       if ($scope.store.mine.length === 0) {
-        console.log('create my list because my list has no length' + $scope.store.mine.length);
+        // console.log('create my list because my list has no length' + $scope.store.mine.length);
         var myList = {
           fbuid: $rootScope.user.fbuid,
           uid: $rootScope.user.userId,

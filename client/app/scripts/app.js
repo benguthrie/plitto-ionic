@@ -19,7 +19,7 @@ angular.module('Plitto', [
   'chatDirective',
   'listOfListsDirective',
   'userNavDirective',
-  'userListThingDirective',
+  'userListThingController',
   'pController',
   'userDirective',
   'viewConfig',

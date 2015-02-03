@@ -1,5 +1,6 @@
-angular.module('userListThingDirective', [])
-  .directive('userListThing', function ($rootScope, dbFactory, $state) {
+'use strict';
+angular.module('userListThingController', [])
+  .directive('userListThing', function (dbFactory, $state) {
 
     return {
       restrict: 'E',
@@ -14,9 +15,6 @@ angular.module('userListThingDirective', [])
           // This will clear this recordset, but not the others. TODO1 = Do that!
           $scope.userData = [];
         });
-
-        /* Show More? */
-        $scope.showMore = true;
 
         /* Ditto */
         $scope.ditto = function (mykey, uid, lid, tid, itemKey, $event) {
@@ -107,10 +105,6 @@ angular.module('userListThingDirective', [])
         */
         $scope.letsChat = function (uid, lid, tid, itemKey, $event, $index) {
           //console.log('letsChat app.js directive', uid, lid, tid, itemKey, $event, $index);
-          // var length = eval('$rootScope.' + store + '.length');
-
-          //console.log('letschat scope.userData', $scope.userData);
-
           // Find the item in this list.
           var i = 0,
             j = 0,
@@ -136,26 +130,23 @@ angular.module('userListThingDirective', [])
             isActive = 0;
             $($event.target).removeClass('active');
             $('div#comments' + uid + lid + tid).hide();
-            // RESTORE? eval('$rootScope.' + store + '[' + upos + '].lists[' + lpos + '].items[' + tpos + '].commentActive = null; ' );
             $scope.userData.lists[i].items[j].commentActive = null;
           } else {
 
             $($event.target).addClass('active');
             $('div#comments' + uid + lid + tid).show();
-            // eval('$rootScope.' + store + '[' + upos + '].lists[' + lpos + '].items[' + tpos + '].commentActive = "1"; ' 
             $scope.userData.lists[i].items[j].commentActive = '1';
 
           }
           // Call the addComment bit to activate or deactivate the queue item
           dbFactory.promiseAddComment(uid, lid, tid, itemKey, '0', isActive).then(function (d) {
-            //console.log('481ult added comment');
+            // NO FEEDBACK ON ADD COMMENT? 
           });
         };
 
         $scope.makeItemComment = function (newComment, uid, lid, tid, itemKey, $index) {
           //console.log('makeItemComment', newComment, uid, lid, tid, itemKey, $index);
           // Find the user, then the list, then use the index.
-          // var length = eval('$rootScope.' + store + '.length' );
 
           // Get the user ID number.
           var upos = null;
@@ -222,8 +213,9 @@ angular.module('userListThingDirective', [])
               //console.log("END THE LOOP!");
             }
           }
-          // Ask for 10 more items, for now.
-          $scope.showMore = '0';
+          // Ask for 10 more items, for now by setting this button's value to 'loading'
+          // console.log('Scope.userdata.',$scope.userData.lists[0],'final j: ',finalJ);
+          $scope.userData.lists[finalJ].showMore = 0;
 
           // User Id, List Id, filter: 'all' future: ditto, shared, tids, limit 
           dbFactory.getMore($scope.userData.uid, lid, 'all', listTids, 10).then(function (d) {
@@ -246,8 +238,10 @@ angular.module('userListThingDirective', [])
 
               //console.log('new userdata', $scope.userData);
 
-              $scope.showMore = d.isMore;
-              //console.log('showMore: ', $scope.showMore);
+
+              $scope.userData.lists[finalJ].showMore = d.isMore;
+              //
+              // console.log('showMore: ', d.isMore);
             }
 
           });

@@ -1,7 +1,8 @@
+'use strict';
 angular.module('thingController', [])
 
 .controller('ThingCtrl',
-  function ($scope, dbFactory, $stateParams, localStorageService, pltf, $rootScope) {
+  function ($scope, dbFactory, $stateParams, localStorageService) {
 
     $scope.thing = {
       name: 'Loading',
@@ -16,6 +17,7 @@ angular.module('thingController', [])
       $scope.thing.data = localStorageService.get('thing' + $scope.thing.id);
     } else {
       // console.log('no thing in local storage: ', $stateParams.thingId);
+      
     }
 
     // console.log('thingid: ', $scope.thing.id );
@@ -30,7 +32,7 @@ angular.module('thingController', [])
     });
 
     // Update the thing info from the api
-    console.log('TODO1 - Load this from the API, automatically? .');
+    // console.log('TODO1 - Load this from the API, automatically? .');
 
     // Control for thing goes here.
     // console.log('controllers.js.thingCtrl use scope, rootscope, dbFactory', $scope);

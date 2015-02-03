@@ -120,13 +120,13 @@
   <!-- Item End -->
 
   <div class="endOfList">
-    <button ng-show='showMore === true ' ng-click="moreOfThis( list.lid );">
-      <i class='ion-arrow-down-b'></i> MORE
+    <button ng-show='list.showMore === true ' ng-click="moreOfThis( list.lid );">
+      <i class='ion-arrow-down-b'></i> MORE 
       <i class='ion-arrow-down-b'></i>
     </button>
 
-    <span ng-show='showMore === "0" '>Loading</span>
-    <span ng-show='!showMore'>You've made it to the end of this user's list</span>
+    <span ng-show=' list.showMore === "0" '>Loading</span>
+    <span ng-show='!list.showMore'>End of List</span>
 
   </div>
 

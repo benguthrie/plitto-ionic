@@ -1,3 +1,4 @@
+'use strict';
 angular.module('friendsController', [])
   .controller('FriendsCtrl', function (dbFactory, $scope, localStorageService, pltf, $rootScope) {
 

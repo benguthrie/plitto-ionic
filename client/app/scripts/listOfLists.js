@@ -1,5 +1,6 @@
+'use strict';
 angular.module('listOfListsDirective', [])
-  .directive('listOfLists', function ($rootScope, dbFactory, $state, localStorageService, pltf) {
+  .directive('listOfLists', function ($rootScope, dbFactory, $state, localStorageService) {
     return {
       restrict: 'E',
       templateUrl: 'directives/listOfLists.html',
@@ -9,7 +10,7 @@ angular.module('listOfListsDirective', [])
         source: '@source',
         listsData: '=listsData'
       },
-      controller: function ($scope, dbFactory, $state, pltf) {
+      controller: function ($scope, dbFactory, $state) {
         // First, load the lists.
         //console.log('listoflists: ', $scope);
         if (localStorageService.get('user' + $rootScope.user.userId + 'lists')) {

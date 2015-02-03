@@ -253,13 +253,13 @@ module.exports = function (grunt) {
             'img/prod/*.{png,jpg,gif}'
 
           ]
-        }, 
+        },
         {
           expand: true,
           cwd: '.tmp/<%= yeoman.images %>',
           dest: 'www/<%= yeoman.images %>',
           src: ['generated/*']
-        }, 
+        },
         {
           expand: true,
           cwd: 'img/prod/',

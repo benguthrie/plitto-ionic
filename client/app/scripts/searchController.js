@@ -1,5 +1,6 @@
+'use strict';
 angular.module('searchController', [])
-  .controller('SearchCtrl', function ($scope, $rootScope, $stateParams, dbFactory, $state, pltf) {
+  .controller('SearchCtrl', function ($scope, $stateParams, dbFactory, $state) {
 
     /* Clear out the last search */
     $scope.search = {
@@ -49,7 +50,6 @@ angular.module('searchController', [])
 
         dbFactory.promiseSearch(newValue, 'general').then(function (d) {
 
-          // console.log('profileCtrl: ', $rootScope);
           $scope.search.results = d.results;
         });
 

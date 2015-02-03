@@ -1,7 +1,7 @@
+'use strict';
 angular.module('debugController', [])
-  .controller('DebugCtrl', function ($scope, dbFactory, $rootScope, localStorageService, $state, pltf) {
+  .controller('DebugCtrl', function ($scope, dbFactory, localStorageService, $state, pltf) {
 
-    // console.log('rootScope: ', $rootScope);
     $scope.localStorage = function (type) {
       if (type === 'get') {
         localStorageService.get('debugNote');
@@ -11,7 +11,7 @@ angular.module('debugController', [])
       // console.log('test debug local Storage');
     };
 
-    $scope.funny = function (type, $rootScope) {
+    $scope.funny = function (type) {
       if (type === 'rootScope') {
         // $scope.funnyText = $rootScope.length;
         $scope.funnyText = 50;
@@ -25,13 +25,11 @@ angular.module('debugController', [])
 
         pltf.Querystring();
 
-      } else if (type === 'clearRootscope') {
-        $rootScope = '';
       } else if (type === 'htmlLength') {
         // 
         $scope.funnyText = pltf.domSize('return');
         console.log($(document.body).html());
-        // $scope.funnyText = '<span style="font-size: 0.3em;">' + $(document.body).html() +'</span>';
+
       } else {
         $scope.funnyText = 'note ready ' + Date.now();
       }
@@ -40,12 +38,11 @@ angular.module('debugController', [])
 
     $scope.thisDomain = function () {
       //  console.log('thisDomain: ', document.URL);
-      $rootScope.loginMessage = 'domain: ' + document.URL;
+      $scope.funnyText = 'domain: ' + document.URL;
     };
 
-    $scope.debugCtrl = function (state) {
-      // $rootScope.debugOn = state;
-      // $rootScope.debug('Debug now: ' + state);
+    $scope.debugCtrl = function () {
+      // Maybe there will be a global debug command? 
     };
 
     $scope.debugLog = [{

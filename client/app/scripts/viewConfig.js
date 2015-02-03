@@ -1,4 +1,5 @@
-angular.module('viewConfig',[])
+'use strict';
+angular.module('viewConfig', [])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $ionicConfigProvider, pltf) {
     $ionicConfigProvider.views.maxCache(0);
 
@@ -173,20 +174,20 @@ angular.module('viewConfig',[])
     if (pltf.QueryString('access_token') || window.location.hash.indexOf('access_token') > -1) {
       //console.log('found querystring access token.' + pltf.QueryString('access_token'));
 
-    } 
-  /* TODO2 - handle the error handling 
-  else {
-
-      //console.log('No access token. Let the user log in.', 'access_token: ');
-      //console.log(pltf.QueryString('access_token') + 'Location hash: ' + window.location.hash);
-      // $urlRouterProvider.otherwise('/app/home');
-      //console.log("REPLACeD", window.location.hash.replace("#/",""));
-
-      //http://localhost/plitto-ionic/client/app/?#/access_token=CAAAAMD0tehMBAMUwibZCHQrzYS3v6QdLKTsIlWveB7CTSV0ZByuItJP8u7tF3xaYjGBNjeT7BDRjVWA9WwwelEjMAZCiKgi9C5dDIAUfZAUwdqPQlxxDbykoslmJs8OhyNRpXEoU0o6fC2eiYMROqOLvW8C1A0NU72YBmgcWitSom8Yw0rdEQCLktU6t1xdePnNKLLq75dlANujWVRvgcsgIuZCjZAZC9IZD&expires_in=6952
-
-      // TODO1 - Put this back $urlRouterProvider.otherwise('/app/home');
     }
-    */
+    /* TODO2 - handle the error handling 
+    else {
+
+        //console.log('No access token. Let the user log in.', 'access_token: ');
+        //console.log(pltf.QueryString('access_token') + 'Location hash: ' + window.location.hash);
+        // $urlRouterProvider.otherwise('/app/home');
+        //console.log("REPLACeD", window.location.hash.replace("#/",""));
+
+        //http://localhost/plitto-ionic/client/app/?#/access_token=CAAAAMD0tehMBAMUwibZCHQrzYS3v6QdLKTsIlWveB7CTSV0ZByuItJP8u7tF3xaYjGBNjeT7BDRjVWA9WwwelEjMAZCiKgi9C5dDIAUfZAUwdqPQlxxDbykoslmJs8OhyNRpXEoU0o6fC2eiYMROqOLvW8C1A0NU72YBmgcWitSom8Yw0rdEQCLktU6t1xdePnNKLLq75dlANujWVRvgcsgIuZCjZAZC9IZD&expires_in=6952
+
+        // TODO1 - Put this back $urlRouterProvider.otherwise('/app/home');
+      }
+      */
 
 
     // Handle 401 Unauthorized responses

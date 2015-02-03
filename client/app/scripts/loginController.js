@@ -1,3 +1,4 @@
+'use strict';
 angular.module('loginController', [])
   .controller('LoginCtrl', function ($scope, $window, $rootScope, $state) {
 

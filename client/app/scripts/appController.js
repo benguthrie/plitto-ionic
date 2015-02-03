@@ -1,8 +1,9 @@
+'use strict';
 angular.module('appController', [])
   // REMOVED Facebook from the injectors // 13 - ionicNavBarDelegate - 14 - $ionicHistory
   .controller(
     'AppCtrl',
-    function ($scope, $state, dbFactory, $rootScope, localStorageService, pltf) {
+    function ($scope, $state, dbFactory, $rootScope, localStorageService) {
 
       // On load, load the correct interface, based on the token.
 
@@ -32,7 +33,7 @@ angular.module('appController', [])
         //     $ionicHistory.clearHistory();
         // $location.path('/login');
       } else {
-        console.log('initial: null?');
+        // console.log('initial: null?');
         $rootScope.loginMessage = 'Checking for null token.';
         // TODO1 When would this be done? $state.go("login");
       }
@@ -44,17 +45,6 @@ angular.module('appController', [])
           debug: 'Delete from FB'
         });
         // TODO1 Restore this: Facebook.unsubscribe();
-      };
-
-      // This is for the logged in user
-      $scope.showUser = function (userId, userName, dataScope, fbuid) {
-
-        // console.log('controllers.js - showUser 87');
-        /// dbFactory.showUser(userId,userName, dataScope, fbuid);'
-        $state.go('app.user', {
-          userId: userId
-        });
-
       };
 
       // Grab the user info here as soon as they login.
@@ -93,13 +83,6 @@ angular.module('appController', [])
       */
       };
 
-      /* 1/23/2015
-      $scope.loadLists = function(){
-        $rootScope.debug('AppCtrl You want to load lists into your profile.');
-        // dbFactory.getUserListOfLists($rootScope.vars.user.userId);
-        dbFactory.getUserListOfLists($rootScope.user.userId , '$rootScope.lists');
-      };
-       */
 
 
     })

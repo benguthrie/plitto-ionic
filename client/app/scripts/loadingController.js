@@ -1,5 +1,6 @@
+'use strict';
 angular.module('loadingController', [])
-  .controller('LoadingCtrl', function ($scope, $rootScope, pltf) {
+  .controller('LoadingCtrl', function ($scope, $rootScope) {
 
     // Control for thing goes here.
     $scope.thetoken = $rootScope.token;

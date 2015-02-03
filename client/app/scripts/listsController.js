@@ -1,7 +1,8 @@
+'use strict';
 angular.module('listsController', [])
 
 /* 10/21/2014 - Added RootScope to populate the list with? TODO1 - Build lists from $rootScope.lists */
-.controller('ListsCtrl', function ($scope, dbFactory, $state, $ionicActionSheet, localStorageService, $rootScope, pltf) {
+.controller('ListsCtrl', function ($scope, dbFactory, localStorageService, $rootScope) {
 
   // On load, load up their lists.
   $scope.listsData = localStorageService.get('user' + $rootScope.user.userId + 'lists');
