@@ -11,58 +11,61 @@ angular.module('userListThingController', [])
         userData: '=userData'
       },
       controller: function ($scope, dbFactory) {
-        $scope.$on('$destroy', function () {
-          // This will clear this recordset, but not the others. TODO1 = Do that!
-          $scope.userData = [];
-        });
 
         /* Ditto */
         $scope.ditto = function (mykey, uid, lid, tid, itemKey, $event) {
 
-          var arrPair = new Array();
-
-          var i, j, k;
-          // If the list matches, and the thing matches, then update the ditto info.
+          var arrPair = [];
 
           // Traverse this user's lists to find the existing item.
-          for (var i in $scope.userData.lists) {
-            if (lid === $scope.userData.lists[i].lid) {
-              for (j in $scope.userData.lists[i].items) {
+          for (var i = 0; i < $scope.userData.lists.length; i++) {
+            // console.log('e33', $scope.userData.lists[i], parseInt(lid), parseInt($scope.userData.lists[i].lid));
+            if (parseInt(lid) === parseInt($scope.userData.lists[i].lid)) {
+              //console.log('list matches. g35');
+              for (var j = 0; j < $scope.userData.lists[i].items.length; j++) {
                 //console.log('check 426: ',$scope.userData.lists[i].items[j].tid, tid);
-                if ($scope.userData.lists[i].items[j].tid === tid) {
-                  $scope.userData.lists[i].items[j].mykey = 0; // TODO - This could be causing a bug.
-                  if (mykey) {
-                    $scope.userData.lists[i].items[j].friendsWith = '?';
-                  }
+                if (parseInt($scope.userData.lists[i].items[j].tid) === parseInt(tid)) {
+
+                  $scope.userData.lists[i].items[j].mykey = 0;
+                  $scope.userData.lists[i].items[j].friendsWith = '?'; // This makes it go to a question mark.
+
                   /* Log the position in the array that will be used to update */
                   arrPair.push(new Array(i, j));
                 }
               }
             }
           }
-
-          // Convert this to a scope return. dbFactory.dbDitto( scopeName, mykey, uid, lid, tid, itemKey, $event);
-          var dbResponse = [];
+          /* else { 
+console.log(' list no match: ', parseInt(lid), parseInt($scope.userData.lists[i].lid));
+} * /
+          };
 
           /* The elements are [0] - mykey / null , [1]:[friendsWith] / undefined - [2]['ditto'/'remove'] */
-          dbFactory.promiseDitto(mykey, uid, lid, tid, itemKey, $event).then(function (d) {
+          dbFactory.promiseDitto(mykey, uid, lid, tid, itemKey).then(
+            function (d) {
 
-            for (k in arrPair) {
-              if (parseInt(d[0])) {
-                // Update my key with my new one.
-                $scope.userData.lists[arrPair[k][0]].items[arrPair[k][1]].mykey = String(d[0]);
-              } else {
-                // Set my key to null, because I don't have it any more.
-                $scope.userData.lists[arrPair[k][0]].items[arrPair[k][1]].mykey = null;
-              }
+              for (var k = 0; k < arrPair.length; k++) {
+                // console.log('d', d[0], d[1]);
+                // console.log('c', k, d, String(d[0]));
+                // console.log('B ', $scope.userData.lists[arrPair[k][0]]);
+                // console.log('A ', $scope.userData.lists[arrPair[k][0]].items[arrPair[k][1]]);
+                if (parseInt(d[0])) {
+                  // Apply my item's key
+                  $scope.userData.lists[arrPair[k][0]].items[arrPair[k][1]].mykey = String(d[0]);
+                } else {
+                  // Set my key to null, because I don't have it any more.
+                  $scope.userData.lists[arrPair[k][0]].items[arrPair[k][1]].mykey = null;
+                }
 
-              if (parseInt(d[1])) {
-                $scope.userData.lists[arrPair[k][0]].items[arrPair[k][1]].friendsWith = '+' + d[1];
-              } else {
-                $scope.userData.lists[arrPair[k][0]].items[arrPair[k][1]].friendsWith = '';
+                // Apply the count of my friends with this item.
+                if (parseInt(d[1])) {
+                  $scope.userData.lists[arrPair[k][0]].items[arrPair[k][1]].friendsWith = '+' + d[1];
+                } else {
+                  $scope.userData.lists[arrPair[k][0]].items[arrPair[k][1]].friendsWith = '';
+                }
               }
             }
-          });
+          );
         };
 
         /* User */
@@ -100,11 +103,11 @@ angular.module('userListThingController', [])
         };
 
         /* Let's Chat
-        letsChat(userData.uid, list.lid, item.tid, item.ik, $event, $index); " 
+        letsChat(userData.uid, list.lid, item.tid, item.ik, $event); " 
         TODO2 - Remove $index and $event.
         */
-        $scope.letsChat = function (uid, lid, tid, itemKey, $event, $index) {
-          //console.log('letsChat app.js directive', uid, lid, tid, itemKey, $event, $index);
+        $scope.letsChat = function (uid, lid, tid, itemKey, $event) {
+          //console.log('letsChat app.js directive', uid, lid, tid, itemKey, $event );
           // Find the item in this list.
           var i = 0,
             j = 0,
@@ -144,8 +147,8 @@ angular.module('userListThingController', [])
           });
         };
 
-        $scope.makeItemComment = function (newComment, uid, lid, tid, itemKey, $index) {
-          //console.log('makeItemComment', newComment, uid, lid, tid, itemKey, $index);
+        $scope.makeItemComment = function (newComment, uid, lid, tid, itemKey) {
+          //console.log('makeItemComment', newComment, uid, lid, tid, itemKey);
           // Find the user, then the list, then use the index.
 
           // Get the user ID number.
@@ -192,7 +195,7 @@ angular.module('userListThingController', [])
           var finalJ = null;
           //console.log('ud lengthL '+ $scope.userData.length);
           // Create something to hold items.
-          var listTids = new Array();
+          var listTids = [];
 
           // Find this list position.
           for (var j = 0; j < $scope.userData.lists.length; j++) {
@@ -215,7 +218,7 @@ angular.module('userListThingController', [])
           }
           // Ask for 10 more items, for now by setting this button's value to 'loading'
           // console.log('Scope.userdata.',$scope.userData.lists[0],'final j: ',finalJ);
-          $scope.userData.lists[finalJ].showMore = 0;
+          $scope.userData.lists[finalJ].showMore = '0';
 
           // User Id, List Id, filter: 'all' future: ditto, shared, tids, limit 
           dbFactory.getMore($scope.userData.uid, lid, 'all', listTids, 10).then(function (d) {
@@ -223,7 +226,7 @@ angular.module('userListThingController', [])
 
             if (!d.results.length) {
               // We ran out of more items!
-              $scope.showMore = false;
+              $scope.userData.lists[finalJ].showMore = false;
             } else {
               // We have results. Merge them.
 
@@ -248,5 +251,6 @@ angular.module('userListThingController', [])
         };
 
       }
-    };
+    }
+
   });

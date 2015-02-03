@@ -20,7 +20,7 @@ angular.module('Plitto', [
   'listOfListsDirective',
   'userNavDirective',
   'userListThingController',
-  'pController',
+  // 'pController',
   'userDirective',
   'viewConfig',
   'addListController',

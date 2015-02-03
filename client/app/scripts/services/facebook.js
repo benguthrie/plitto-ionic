@@ -90,15 +90,9 @@ angular.module('Services.pFb', [])
 
       // console.log('facebook factory unsubsubscribe');
       FB.api('/v2.2/me/permissions', 'DELETE', function (response) {
-        console.log('Facebook Unsbscribe Plitto Succeeded');
+        console.log('Facebook Unsbscribe Plitto Succeeded', response);
         $rootScope.token = null;
         dbFactory.init();
-
-        // TODO2 - Clean this up.
-        // $rootScope.session.plittoState = 'Facebook Remove Plitto Access Succeeded';
-        // $rootScope.$broadcast('fb_get_login_status');
-        // console.log('FacebookAPI: unsubscribe response: ',response);
-        // $rootScope.$broadcast('fb_plitto_access_deleted');
       });
     }
   };

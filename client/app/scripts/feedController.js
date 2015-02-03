@@ -1,6 +1,6 @@
 'use strict';
 angular.module('feedContrller', [])
-  .controller('FeedCtrl', function ($scope, $stateParams, dbFactory, localStorageService, pltf) {
+  .controller('FeedCtrl', function ($scope, dbFactory, localStorageService) {
 
     // On load, open friends.
     $scope.view = 'friends';
@@ -17,14 +17,14 @@ angular.module('feedContrller', [])
     if ($scope.store.friends.length === 0 || $scope.store.friends[0].loading === true) {
       if (localStorageService.get('feedFriends')) {
         $scope.store.friends = localStorageService.get('feedFriends');
+        console.log("LS FRIENDS!", $scope.store.friends);
       }
 
       $scope.store.friends[0] = {
         loading: true
       };
       dbFactory.promiseFeed('friends', '', '', '', '', '').then(function (d) {
-        $scope.store.friends = d;
-        localStorageService.set('feedFriends', d);
+        $scope.store[d.type] = d.results;
       });
     }
 
@@ -40,8 +40,7 @@ angular.module('feedContrller', [])
       };
 
       dbFactory.promiseFeed('strangers', '', '', '', '', '').then(function (d) {
-        $scope.store.strangers = d;
-        localStorageService.set('feedStrangers', d);
+        $scope.store[d.type] = d.results;
       });
     }
 

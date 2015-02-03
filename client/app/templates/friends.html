@@ -11,7 +11,7 @@
       </ion-item>
 
       </ion-item>
-      <div class="friendItem" ng-repeat="friend in friendStore" href="#/app/profile/{{friend.id}}" ng-click="showUser(friend.id, friend.name,'ditto', friend.fbuid);">
+      <a class="friendItem" ng-repeat="friend in friendStore" href="#/u/{{friend.id}}">
         <div ng-bind=" friend.name " class="friendName"></div>
         <div class="statTable">
           <div class="statRow">
@@ -43,8 +43,8 @@
             </div>
           </div>
         </div>
-        
-      </div>
+
+      </a>
     </ion-list>
 
   </ion-content>

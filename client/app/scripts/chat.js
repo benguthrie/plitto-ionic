@@ -8,7 +8,7 @@ angular.module('chatDirective', []).directive('chat',
       scope: {
         notificationsData: '=notificationsData'
       },
-      controller: function ($scope, dbFactory, $state) {
+      controller: function ($scope) {
         // Debug
         $scope.changeFilter = function (filterNew) {
           //console.log('TEST', filterNew);

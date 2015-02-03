@@ -2,7 +2,7 @@
 angular.module('Services.database', ['LocalStorageModule'])
 
 // This will handle storage within local databases.
-.factory('dbFactory', ['$http', '$rootScope', '$state', 'localStorageService', 'pltf', function ($http, $rootScope, $state, localStorageService, pltf) {
+.factory('dbFactory', ['$http', '$rootScope', '$state', 'localStorageService', function ($http, $rootScope, $state, localStorageService) {
   /* configure Constants */
   var apiPath = (window.cordova) ? 'http://plitto.com/api/2.0/' : '/api/2.0/';
 
@@ -35,18 +35,15 @@ angular.module('Services.database', ['LocalStorageModule'])
   }
 
 
-  var promiseDitto = function (mykey, uid, lid, tid, itemKey, event) {
+  var promiseDitto = function (mykey, uid, lid, tid, itemKey) {
     //  console.log('dbFactory.dbDitto | mykey: ', mykey,'| ownerid: ', uid, '| listid: ',lid, tid,i,j,k);
 
     // Update the action, by whether or not the first item is null or not.
     var action = 'remove';
     if (mykey === null) {
-      // My key is null, so this must be a ditto.
-      // console.log('update action ditto', mykey, parseInt(mykey));
-      action = 'ditto';
+      action = 'ditto'; // My key is null, so this must be a ditto.
     }
-
-    // console.log('Ditto Action: ', action, ' itemKey: ', itemKey);
+    //     console.log('Ditto Action: ', action, ' itemKey: ', itemKey);
 
     /* If this works, we can remove Jquery, completely? */
     var dittoParams = {
@@ -57,7 +54,7 @@ angular.module('Services.database', ['LocalStorageModule'])
 
     var promise = $http.post(apiPath + 'ditto', dittoParams)
       .then(function (response) {
-          console.log('promise ditto. api response: ', response);
+          // console.log('promise ditto. api response: ', response);
 
           if (checkLogout(response.data) === true) {
             logout();
@@ -65,18 +62,22 @@ angular.module('Services.database', ['LocalStorageModule'])
             // console.log('Ditto Response TODO2 Use shc', status, headers, config);
             var mynewkey = null;
             var friendsWith = null;
-            console.log('results key type of: ' + typeof response.data.results[0].thekey === 'undefined');
+            // console.log('results key type of: ' + typeof response.data.results[0].thekey === 'undefined');
             if (action === 'ditto') {
-
+              /*
               if (typeof response.data.results[0].thekey === 'undefined') {
                 console.log('promieDitto did not get a key.');
               }
+              -- Server side should log an error here. TODO2 
+              */
               mynewkey = response.data.results[0].thekey;
               friendsWith = response.data.results[0].friendsWith;
-            } else {
-              // the action must have been 'remove'
-
             }
+            /*DO NOTHING HERE FOR SOME REASON.
+                        else {
+                          // the action must have been 'remove'
+                          console.log('what to do when removing a ditto?');
+                        } */
           }
           var pDittoArray = new Array(mynewkey, friendsWith, action);
           // return pDittoArray;
@@ -87,7 +88,6 @@ angular.module('Services.database', ['LocalStorageModule'])
           console.log('promiseDitto data error: ', response);
         }
       );
-
     return promise;
 
   };
@@ -261,12 +261,21 @@ angular.module('Services.database', ['LocalStorageModule'])
               ' data: ', response.data);
 
 
-            if (userFilter !== '0' && userFilter !== '') {
+
+            if (theType === 'friends' || theType === 'strangers') {
+              console.log('feed' + theType[0].toUpperCase());
+              localStorageService.set('feed' + theType[0].toUpperCase() + theType.slice(1), response.data.results);
+            } else if (userFilter !== '0' && userFilter !== '') {
               // We know it's a user, so let's set local storage.
               localStorageService.set('user' + userFilter + 'feed', response.data.results);
+            } else {
+              // don't set the local storage.
             }
 
-            return response.data.results;
+            return {
+              results: response.data.results,
+              type: theType
+            };
           }
 
           // console.log("profile feed after showfeed",$rootScope.profileData.feed);
@@ -564,25 +573,11 @@ angular.module('Services.database', ['LocalStorageModule'])
             // console.log('TODO2 Use shc', status, headers, config);
             // console.log('responsedata typeof: ', response.data);
             if (response.data.results && response.data.results[0].success && response.data.results[0].success === '1') {
-              // console.log('Check token results: ', response.data, response.data.results[0].success);
 
-              /*
-              if ($state && $state.current && $state.current.name) {
-                // console.log('IRRELEVENT TEST db.refreshData 1581 passed. currentname: ', $state.current.name);
-                if ($state.current.name === 'login' || $state.current.name === 'loading') {
-                  // dbGetSome( '$rootScope.bite' , '' , '', 'ditto');
-                  // console.log('todo2 remove this. db.refreshdata1627. Loads a bite. Should happen in the home controller.');
-                } else {
-                  // console.log('not login or loading, but does exist.', $state.current.name);
-                }
-              } else {
-                // console.log('IRRELEVENT TEST db.refreshData 1641 failed');
-              }
-              */
 
               return response.data;
 
-            } 
+            }
             /* TODO2 - Error handling? 
             else {
               console.log('invalid token. Db1488');
@@ -765,7 +760,7 @@ angular.module('Services.database', ['LocalStorageModule'])
           }
         },
         function (response) {
-          console.log('promise error for new list?');
+          console.log('promise error for new list?', response);
         }
       );
     return promise;
@@ -803,7 +798,7 @@ angular.module('Services.database', ['LocalStorageModule'])
     // fbPlittoFriends: fbPlittoFriends,
     /* Added 1/29/2015 */
     getMore: getMore,
-    
+
     fbTokenLogin: fbTokenLogin,
     refreshData: refreshData,
     dbInit: dbInit,

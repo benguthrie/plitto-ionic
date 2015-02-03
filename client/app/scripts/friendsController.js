@@ -1,6 +1,6 @@
 'use strict';
 angular.module('friendsController', [])
-  .controller('FriendsCtrl', function (dbFactory, $scope, localStorageService, pltf, $rootScope) {
+  .controller('FriendsCtrl', function (dbFactory, $scope, localStorageService) {
 
     /* First - Load from Local Storage */
     $scope.friendStore = localStorageService.get('friendStore');
@@ -14,6 +14,6 @@ angular.module('friendsController', [])
 
     /* Second - Load from the api */
     $scope.reloadFriends = function () {
-      // TODO1 - From pull down? Do this as part of the sorting options.
+      // TODO2 - From pull down? Do this as part of the sorting options.
     };
   });

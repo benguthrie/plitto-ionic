@@ -1,6 +1,6 @@
 'use strict';
 angular.module('userNavDirective', [])
-  .directive('userNav', function (dbFactory, $state, pltf) {
+  .directive('userNav', function () {
     return {
       restrict: 'E',
       // // templateUrl: 'directives/userNav.html', // Not rendering.

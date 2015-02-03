@@ -26,7 +26,7 @@ angular.module('viewConfig', [])
         // Menu is required for left menu.
         'menuContent': {
           templateUrl: 'directives/user.html',
-          controller: 'pctrl'
+          controller: 'UserCtrl'
         }
       }
     })

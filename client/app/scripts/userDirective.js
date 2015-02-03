@@ -5,7 +5,7 @@ angular.module('userDirective', []).directive('user', function () {
   return {
     restrict: 'E',
     template: 'directives/user.html',
-    controller: 'pctrl',
+    controller: 'UserCtrl',
     controllerAs: 'ctrl'
   };
 });

@@ -72,7 +72,6 @@ div.right-buttons > span > button.button {
   text-align: center;
 }
 
-
 div.button-bar > a.buttonProfilePic {
   background-repeat: no-repeat;
   background-size: 50px 50px;
@@ -120,8 +119,6 @@ div.itemButtons > div.button {
 span.stat {
   overflow: hidden;
 }
-
-
 
 hr.clearBoth {
   clear: both;
@@ -297,7 +294,6 @@ div.endOfList {
   color: white;
 }
 
-
 div.endOfList > button {
   border: 1px solid white;
   opacity: 0.5;
@@ -393,11 +389,7 @@ div.thingNameRow > div.thingNameCol > span.typedThing {
 
 div.thingNameRow > div.thingWithCol {}
 
-div.thingNameRow > div.dittoCol {
-  
-}
-
-
+div.thingNameRow > div.dittoCol {}
 /* Ditto icon - Potential; */
 
 div.dittoQ {
@@ -411,9 +403,9 @@ div.dittoW {
 /* Ditto icon - You have this in common; */
 
 div > a.dittoA,
-  div.dittoA,
-  div.button-bar > a.button > i.dittoA, 
-  div.thingNameRow > div.dittoCol > i.dittoA {
+div.dittoA,
+div.button-bar > a.button > i.dittoA,
+div.thingNameRow > div.dittoCol > i.dittoA {
   color: green;
 }
 
@@ -424,8 +416,6 @@ div.thingNameRow > div.dittoCol > i {
   margin: 0;
   height: 0.9em;
 }
-
-
 
 div.thingNameRow > div {
   padding: 5px;
@@ -452,14 +442,13 @@ label#addToList > button > i {
   font-size: 1.3em;
   margin: 0 0 0.1em 0;
   border: 0.2em solid #444;
-  background-color: rgba(50,200,50,0.3);
+  background-color: rgba(50, 200, 50, 0.3);
   padding: 0.1em 0 0 0;
   height: 1.8em;
   width: 1.8em;
   color: #444;
   display: block;
   border-radius: 0.9em;
-  
   box-shadow: 0 2px 5px 0 rgba(100, 100, 100, 0.86);
 }
 /* Search Form Styling */
@@ -502,7 +491,6 @@ div.searchLine > form.searchCell > label > input {
 div.searchLine > form.searchCell > div.clearSearch {
   width: 2em;
   height: 0;
-  
 }
 
 div.searchLine > form.searchCell > div.clearSearch > button {
@@ -691,7 +679,6 @@ div.childHeader {
   width: 100%;
   display: block;
 }
-
 /* list line */
 
 div.listBlock > div.listLine {
@@ -739,22 +726,16 @@ div.button-bar > a.button {
   font-size: 2em;
 }
 
-
 div.button-bar > a.button > div.buttonRefresh {
   position: absolute;
   bottom: 0.3em;
   right: 0.3em;
-  
   font-size: 0.5em;
   vertical-align: bottom;
-  
-  
   color: rgba(150, 150, 150, 0.5);
 }
 
-div.button-bar > a.button > i {
-
-}
+div.button-bar > a.button > i {}
 /* Attribution and time */
 
 div.listItem > div.thingTable > div.thingNameRow > div.thingNameCol > div.addedNote {
@@ -845,11 +826,7 @@ div.listBlock > div.listLine > div.listAddTo > i.listIconAdd {
   padding-left: 0.3em;
 }
 
-a.item-content {
-  
-}
-
-
+a.item-content {}
 /* removed 1/28/2015 
 div.statTable {
   display: table;
@@ -862,29 +839,29 @@ div.statTable > div.statRow {
 }
 */
 
-div.friendItem {
+a.friendItem {
   margin: 0.5em 0.5em 1em 0.5em;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
 }
 
-div.friendItem > div.statTable {
+a.friendItem > div.statTable {
   padding: 0;
 }
 
-div.friendItem > div.statTable > div.statRow {
+a.friendItem > div.statTable > div.statRow {
   display: table-row;
 }
 
-div.friendItem > div.statTable > div.statRow > div.friendPicture {
+a.friendItem > div.statTable > div.statRow > div.friendPicture {
   display: table-cell;
   width: 5em;
-  
 }
-div.friendItem > div.statTable > div.statRow > div.friendPicture > img {
+
+a.friendItem > div.statTable > div.statRow > div.friendPicture > img {
   width: 4em;
 }
 
-div.friendItem > div.statTable > div.statRow > div.groupStats {
+a.friendItem > div.statTable > div.statRow > div.groupStats {
   margin: 0;
   padding: 0;
   display: table-cell;
@@ -892,7 +869,7 @@ div.friendItem > div.statTable > div.statRow > div.groupStats {
   text-align: left;
 }
 
-div.friendItem > div.statTable > div.statRow > div.groupStats > div.listName {
+a.friendItem > div.statTable > div.statRow > div.groupStats > div.listName {
   font-size: 1.1em;
   width: inherit;
   padding: 0.3em;
@@ -900,29 +877,27 @@ div.friendItem > div.statTable > div.statRow > div.groupStats > div.listName {
   color: white;
 }
 
-div.friendItem > div.statTable > div.statRow > div.groupStats > div.listName > i {
+a.friendItem > div.statTable > div.statRow > div.groupStats > div.listName > i {
   font-size: 1.4em;
   margin: 0.3em;
 }
 
-
-div.friendItem > div.friendName {
-  
+a.friendItem > div.friendName {
   background-color: #32868C;
 }
 
-div.friendItem > div.listName {
+a.friendItem > div.listName {
   background-color: #555;
   color: white;
 }
 
-div.friendItem > div.listName > i {
+a.friendItem > div.listName > i {
   font-size: 1.5em;
   margin-right: 0.3em;
 }
 
-
-div.friendItem > div.friendName, div.friendItem > div.listName {
+a.friendItem > div.friendName,
+a.friendItem > div.listName {
   padding: 0.3em 0.3em 0.3em 0.7em;
   color: white;
   display: table-cell;

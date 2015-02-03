@@ -9,14 +9,14 @@ angular.module('searchController', [])
     };
 
     /* Clear the Search */
-    $scope.emptyTheSearch = function ($element, $attrs) {
+    $scope.emptyTheSearch = function () {
       // console.log('clear Search');
       $scope.search = {
         term: null,
         results: []
       };
       var elementToFocusOn = document.querySelector('input#searchField');
-      // TODO2 - Focus on search in app on click. console.log('focus on: ', elementToFocusOn, $element, $attrs);
+      // TODO2 - Focus on search in app on click. console.log('focus on: ', elementToFocusOn);
     };
 
     $scope.searchFor = function (searchTerm, searchType) {
@@ -46,7 +46,7 @@ angular.module('searchController', [])
       return $scope.search.term;
     }, function (newValue, oldValue) {
       // console.log('TODO2 - This is where oldValue is used: ' + oldValue + ' to ' + newValue);
-      if (typeof newValue !== 'undefined') {
+      if (typeof newValue !== 'undefined' && newValue !== oldValue) {
 
         dbFactory.promiseSearch(newValue, 'general').then(function (d) {
 

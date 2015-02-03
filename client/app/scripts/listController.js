@@ -7,7 +7,7 @@ angular.module('listController', [])
     $scope.store = {
       'ditto': [{
         loading: true
-    }],
+      }],
       'shared': [{
         loading: true
     }],
