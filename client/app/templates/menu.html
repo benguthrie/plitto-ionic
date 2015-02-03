@@ -15,11 +15,11 @@
     <ion-content class="has-header">
       <ion-list>
 
-        <ion-item nav-clear menu-close href="#/app/profile/{{$root.user.userId}}" ng-click="showUser($root.user.userId, $root.user.userName, 'all', $root.user.fbuid);">
+        <ion-item nav-clear menu-close href="#/u/{{$root.user.userId}}" ng-click="showUser($root.user.userId, $root.user.userName, 'all', $root.user.fbuid);">
           <img src='http://graph.facebook.com/{{$root.user.fbuid}}/picture' class='title-image' style='padding: 0; margin-left: -15px; margin-top: -15px; margin-bottom: -30px; margin-right: 10px;'> {{user.userName}}
         </ion-item>
 
-        <ion-item nav-clear menu-close href="#/app/friends">
+        <ion-item nav-clear menu-close href="#/friends">
           <i class="icon ion-ios7-people-outline"></i> Friends
           <!-- <span class="item-note" ng-bind="$root.stats.friends"> --> 
             
@@ -29,7 +29,7 @@
 <span class="badge badge-assertive" ng-show=" $root.stats.friendRequests > 0 " ng-bind="$root.stats.friendRequests"></span>-->
         </ion-item>
 
-        <ion-item nav-clear menu-close href="#/app/lists" ng-click="loadLists(); nav.view = 'user.lists'; ">
+        <ion-item nav-clear menu-close href="#/lists" ng-click="loadLists(); nav.view = 'user.lists'; ">
           <i class="icon ion-clipboard"></i> My Lists
           <!-- <span class="item-note" ng-show=" $root.stats.lists > 0 " ng-bind="$root.stats.lists"></span>--> 
         </ion-item>
@@ -44,16 +44,16 @@
         -->
 
 
-        <ion-item nav-clear menu-close href="#/app/feed" ng-click="nav.view = 'feed'">
+        <ion-item nav-clear menu-close href="#/feed" ng-click="nav.view = 'feed'">
           <i class="icon ion-ios7-pulse-strong"></i> Recent Activity
           <!-- <span class="item-note" ng-bind="$root.stats.feedCount"></span> -->
         </ion-item>
 
-        <ion-item nav-clear menu-close href="#/app/docs" ng-click="nav.view = 'docs'">
+        <ion-item nav-clear menu-close href="#/docs" ng-click="nav.view = 'docs'">
           <i class="icon ion-help-circled"></i> Docs
         </ion-item>
 
-        <ion-item nav-clear menu-close href="#/app/about" ng-click="nav.view = 'about'">
+        <ion-item nav-clear menu-close href="#/about" ng-click="nav.view = 'about'">
           <i class="icon ion-information-circled"></i> About
         </ion-item>
 

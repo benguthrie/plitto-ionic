@@ -17,7 +17,7 @@ angular.module('Services.database', ['LocalStorageModule'])
 
   function logout() {
     // console.log('logout');
-    $rootScope.debug('Appctrl - TODO2: FB Logout call.');
+    // $rootScope.debug('Appctrl - TODO2: FB Logout call.');
     // $state.go('app.login',{listId: newListId});
     // TODO1 - Restore this. Facebook.logout();
 
@@ -541,7 +541,7 @@ angular.module('Services.database', ['LocalStorageModule'])
       1/27/2015 - Disable to see if we use this. Yep. We use it. */
 
   var refreshData = function (token) {
-    console.log('TODO2 Use refreshData.token', token);
+    // console.log('TODO2 Use refreshData.token', token);
     // This function will be called when the app loads, and already has a token. It's kind of like login.
 
     // Populate profile information
@@ -556,7 +556,7 @@ angular.module('Services.database', ['LocalStorageModule'])
 
     var promise = $http.post(apiPath + 'checktoken', params)
       .then(function (response) {
-          console.log('db.refreshData data: ', response.data);
+          // console.log('db.refreshData data: ', response.data);
 
           if (checkLogout(response.data) === true) {
             logout();
@@ -564,33 +564,37 @@ angular.module('Services.database', ['LocalStorageModule'])
             // console.log('TODO2 Use shc', status, headers, config);
             // console.log('responsedata typeof: ', response.data);
             if (response.data.results && response.data.results[0].success && response.data.results[0].success === '1') {
-              console.log('Check token results: ', response.data, response.data.results[0].success);
+              // console.log('Check token results: ', response.data, response.data.results[0].success);
 
-
+              /*
               if ($state && $state.current && $state.current.name) {
-                console.log('IRRELEVENT TEST db.refreshData 1581 passed. currentname: ', $state.current.name);
+                // console.log('IRRELEVENT TEST db.refreshData 1581 passed. currentname: ', $state.current.name);
                 if ($state.current.name === 'login' || $state.current.name === 'loading') {
                   // dbGetSome( '$rootScope.bite' , '' , '', 'ditto');
-                  console.log('todo2 remove this. db.refreshdata1627. Loads a bite. Should happen in the home controller.');
+                  // console.log('todo2 remove this. db.refreshdata1627. Loads a bite. Should happen in the home controller.');
                 } else {
-                  console.log('not login or loading, but does exist.', $state.current.name);
+                  // console.log('not login or loading, but does exist.', $state.current.name);
                 }
               } else {
-                console.log('IRRELEVENT TEST db.refreshData 1641 failed');
+                // console.log('IRRELEVENT TEST db.refreshData 1641 failed');
               }
+              */
 
               return response.data;
 
-            } else {
+            } 
+            /* TODO2 - Error handling? 
+            else {
               console.log('invalid token. Db1488');
               // ', data.results[0].success, data.results[0].success === '1');
             }
+            */
 
           }
         },
         function (response) {
           // Error handling here.
-          console.log('checkToken data error: ', response);
+          // TODO2 - Error handling for data refresh error. console.log('checkToken data error: ', response);
         });
     return promise;
 

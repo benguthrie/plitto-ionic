@@ -2,27 +2,26 @@
   "name": "Plitto",
   "version": "1.0.1",
   "dependencies": {
-    "angular-animate": "1.3.6",
-    "angular-resource": "1.3.8",
-    "angular-sanitize": "1.3.6",
     "angular-ui-router": "0.2.13",
     "jquery": "2.1.3",
     "moment": "~2.9.0",
     "angular-moment": "0.9.0",
-    "angular": "~1.3.8",
+    "angular-local-storage": "~0.1.5",
+    "angular-ui-router.stateHelper": "~1.2.1",
     "ionic": "1.0.0-beta.14",
-    "ionicons": "1.5.2",
-    "angular-local-storage": "~0.1.5"
+    "angular-resource": "~1.3.11",
+    "jshint": "~2.6.0"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.17",
-    "angular-scenario": "~1.2.17"
+    "angular-scenario": "~1.2.17",
+    "angular-ui-router.stateHelper": "~1.2.1"
   },
   "homepage": "https://github.com/benguthrie/plitto-ionic",
   "authors": [
-    "Ben Guthrie <guthrie.ben+git@gmail.com>"
+    "Ben Guthrie <guthrie.ben@gmail.com>"
   ],
-  "description": "Have great conversations",
+  "description": "Have better conversations",
   "main": "index.html",
   "keywords": [
     "chat",
@@ -45,9 +44,9 @@
   ],
   "resolutions": {
     "angular-animate": "~1.2.12",
-    "angular": "~1.2.12",
+    "angular": "1.3.6",
     "angular-sanitize": "~1.2.12",
     "angular-ui-router": "0.2.10",
-    "ionic": "1.0.0-beta.5b"
+    "ionic": "1.0.0-beta.14"
   }
 }

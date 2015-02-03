@@ -5,8 +5,7 @@ angular.module('Services.oauth', [])
 
   // Need to change redirect from plitto.com if on mobile
   // otherwise we're just going to load the entire website on the phone
-  // 
-  console.log('window: ',window);
+  //   console.log('window: ', window);
   var redirectUri = '';
 
   if (document.URL.indexOf('localhost') > -1) {
@@ -14,7 +13,7 @@ angular.module('Services.oauth', [])
     // TODO2 - This is used for troubleshooting app login. console.log('localhost redirect found', document.URL);
     /* It is running from localhost. If it's also running from window.cordova, then don't bother with the localhost. Else, use the localhost site. */
     var localPath = 'client/app';
-    if(document.URL.indexOf(localPath) === -1){
+    if (document.URL.indexOf(localPath) === -1) {
       // It must be 'client/www'
       localPath = 'client/www';
     }
@@ -57,7 +56,7 @@ angular.module('Services.oauth', [])
       // TODO1 Add some more logic to this. $state.go("login");
       // If there is an access token, we can just wait.
       if (window.location.hash.indexOf('access_token') !== -1) {
-        console.log('Found an access token.', window.location.hash);
+        // console.log('Found an access token.', window.location.hash);
         // This is the bit that stops things while 
         $rootScope.$broadcast('broadcast', {
           command: 'login',
@@ -67,7 +66,7 @@ angular.module('Services.oauth', [])
         });
         // Go back to loading?
         $state.go('loading');
-        console.log('wait');
+        // console.log('wait');
       } else {
         $rootScope.$broadcast('broadcast', {
           command: 'state',
@@ -81,15 +80,15 @@ angular.module('Services.oauth', [])
   // Function that is called with auth code and redirect home
   /* */
   var authFinished = function (fbToken) {
-    console.log('Got this code: ' + fbToken);
-    console.log('Now what? Think a post to plitto.com has to happen');
+    // console.log('Got this code: ' + fbToken);
+    // console.log('Now what? Think a post to plitto.com has to happen');
 
     // $rootScope.loginMessage = $rootScope.loginMessage + ' authFinishedCode: ' + code;
     // Turn the fbToken into the plitto login.
     dbFactory.fbTokenLogin(fbToken);
 
     // Close the auth window?
-    console.log('authFinished wants to close authWindow because the login is complete.', authWindow);
+    // console.log('authFinished wants to close authWindow because the login is complete.', authWindow);
 
     // Close the window
     authWindow.close();
@@ -99,7 +98,7 @@ angular.module('Services.oauth', [])
     var bettername = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
     var regex = new RegExp('[\\?&]' + bettername + '=([^&#]*)'),
       results = regex.exec(path);
-    console.log('getParameterByName: name: ', name, ' bettername: ', bettername, ' path: ', path);
+    // console.log('getParameterByName: name: ', name, ' bettername: ', bettername, ' path: ', path);
     return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
   }
 
@@ -153,8 +152,7 @@ angular.module('Services.oauth', [])
 
       /* Cordova App: All Facebook Info gets routed through a window. */
       var authUrl = '';
-      // 
-      console.log('oauth.js login() : window.cordova? ', window);
+      //       console.log('oauth.js login() : window.cordova? ', window);
 
       if (window.cordova) {
         /* Native App Redirect to localhost */
@@ -170,7 +168,7 @@ angular.module('Services.oauth', [])
         /* This opens the Facebook Authorization in a new window */
 
         authWindow = $window.open(authUrl, '_blank', 'location=no,toolbar=no');
-        console.log('111authWindow: open this URL: ', authUrl);
+        // console.log('111authWindow: open this URL: ', authUrl);
         authWindow.addEventListener('loadstart', loadstart);
 
       } else {
@@ -186,8 +184,7 @@ angular.module('Services.oauth', [])
         $rootScope.loginMessage = '4. Directing to FB for web authorization';
 
         // https://www.facebook.com/v2.0/dialog/oauth?client_id={app-id}&redirect_uri={redirectUri} 
-        // 
-        console.log('go here: ', authUrl);
+        // console.log('go here: ', authUrl);
 
         // Redirect to Facebook for authorization
         $rootScope.$broadcast('broadcast', {
@@ -195,7 +192,6 @@ angular.module('Services.oauth', [])
           path: authUrl,
           debug: 'oauth.js 160 - Redirect to Facebook for oauth.'
         });
-
 
         /* Check with Facebook to get this user's login status */
       }

@@ -32,7 +32,7 @@ angular.module('Services.pFb', [])
   // REMOVED 1/9/14 var apiPath = (window.cordova) ? 'http://plitto.com/api/2.0/' : '/api/2.0/';
   return {
     getLoginStatus: function () {
-      // 
+      //
       console.log('50. facebook factory getLoginStatus');
       //  return { status: 'test status'};
 
@@ -40,7 +40,7 @@ angular.module('Services.pFb', [])
       FB.getLoginStatus(function (response) {
 
         // $rootScope.session.plittoState = 'Facebook Responded 7';
-        console.log('fbFactory.getLoginStatus -> FB.getLoginStatus: This function is only called when requesting the status of the app on login, and when requesting more permissions.', response);
+        // console.log('fbFactory.getLoginStatus -> FB.getLoginStatus: This function is only called when requesting the status of the app on login, and when requesting more permissions.', response);
         // $rootScope.loginMessage = 'Facebook needs to grant permissions. Open up the window.;
 
         $rootScope.$broadcast('getLoginStatus', {
@@ -56,7 +56,7 @@ angular.module('Services.pFb', [])
         // console.log('FB.getLoginStatus | fbState: ', response.status);
 
         // $rootScope.nav.fb_get_login_status = response.status;
-        console.log('rootScope done broadcasting getLoginStatus {"fbresponse":>???}: ', response);
+        // console.log('rootScope done broadcasting getLoginStatus {"fbresponse":>???}: ', response);
       });
     },
     login: function () {
