@@ -1,14 +1,11 @@
 <ion-view>
-
   <ion-content>
-    <h1 class="pageTitle">Loading ...</h1>
-    <p>Status: </p>
-    <h3>{{$root.loginMessage}}</h3>
+
     <p>State: </p>
     <h3>{{$state.current.name}} </h3>
 
-    <div class="icon ion-looping" style="font-size: 4em; clear: both; margin-top: 1em; margin-bottom: 1em;"></div>
+    <h4 class="loading"><i class="ion-loading-a"></i>{{$root.loginNessage}}</h4>
 
     <a href='#/login'>Back to login</a>
   </ion-content>
-  </ion-modal-view>
+</ion-view>

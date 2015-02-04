@@ -1,6 +1,6 @@
 'use strict';
 angular.module('pRun', [])
-  .run(function ($ionicPlatform, $rootScope, dbFactory, OAuth, $state, pltf, localStorageService, $location) {
+  .run(function ($ionicPlatform, $rootScope, dbFactory, OAuth, $state, pltf, localStorageService, $location, pFb) {
     /* Deleted 1/28/2015. Works without it. 1/29/2015 - MAYBE NOT!
      */
     // Check to see if Facebook is giving us a code to use in the URL.
@@ -250,11 +250,11 @@ angular.module('pRun', [])
 
           // This should only happen when the app loads, and at specific times, so we'll build everything back up in dbFactory
           $rootScope.loginMessage = 'use dbFactory.refreshData to check if the token is valid.';
-
+          /*
           dbFactory.refreshData($rootScope.token).then(function (d) {
-            console.log('controller.initCallback 88 --> refreshData response: ', d);
+            // console.log('controller.initCallback 88 --> refreshData response: ', d);
           });
-
+          /*
         } else if (
           window.location.hash.indexOf('access_token') !== 'undefined' &&
           window.location.hash.indexOf('access_token') !== -1

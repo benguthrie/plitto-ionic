@@ -7,7 +7,7 @@
 
   <ion-content class="has-header">
     <h1 class="pageTitle">Development Aids</h1>
-    
+
 
     <h1>Debug</h1>
     <button ng-click="localStorage('set');">Local Storage: Set</button>
@@ -21,6 +21,10 @@
     <button ng-click="funny('clearRootscope');">Clear RootScope</button>
     <button ng-click="funny('querystring');">Querystring</button>
     <button ng-click="funny('htmlLength');">htmlLength</button>
+    <button ng-click="funny('currentTime');">Current Time</button>
+
+    <h3>Unix time: </h3>
+    <span am-time-ago="funnyTime" am-preprocess="unix"></span>
 
     <h1>{{funnyText | json }}</h1>
 

@@ -10,16 +10,16 @@ angular.module('listController', [])
       }],
       'shared': [{
         loading: true
-    }],
+      }],
       'feed': [{
         loading: true
-    }],
+      }],
       'mine': [{
         loading: true
-    }],
+      }],
       'strangers': [{
         loading: true
-    }]
+      }]
     };
 
     $scope.listInfo = {
@@ -106,6 +106,12 @@ angular.module('listController', [])
 
       /* If it is already this view, or loading, then reload this content. */
       if (theView === $scope.view || $scope.store[theView].length === 0 || $scope.store[theView][0].loading === true) {
+
+        /* Create the loading Indicator */
+        $scope.store[theView] = [{
+          loading: true
+        }];
+
         /* The the view is passed as part of the database call */
         dbFactory.promiseList($scope.listInfo.listId, userIdFilter, theView, sharedFilter, oldestKey).then(function (d) {
 
@@ -181,7 +187,7 @@ angular.module('listController', [])
 
       /* remove the existing item from my list visibly. */
       // But only if I have existing items. 
-      if (!$scope.store.mine[0].lists[0].items.length === 0) {
+      if (!$scope.store.mine[0].lists[0].items.length) {
         // console.log('crisis averted. items: ', $scope.store.mine[0].lists[0].items.length);
         // NOTE - This is how I remove my out of date items. 
       } else {

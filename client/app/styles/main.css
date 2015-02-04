@@ -22,6 +22,19 @@
 }
 */
 
+h4.loading {
+  align-content: center;
+  padding: 3em;
+  text-align: center;
+}
+
+h4.loading > i {
+  clear: both;
+  font-size: 3em;
+  margin-bottom: 0.3em;
+  width: 100%;
+}
+
 img.title-image {
   float: left;
 }
@@ -118,6 +131,8 @@ div.itemButtons > div.button {
 
 span.stat {
   overflow: hidden;
+  color: #444;
+  font-size: 1.5em;
 }
 
 hr.clearBoth {
@@ -233,6 +248,7 @@ div.dittoThing {
 span.label {
   font-size: 0.5em;
   font-weight: 100;
+  color: 444;
 }
 
 h1.pageTitle {
@@ -838,99 +854,6 @@ div.statTable > div.statRow {
   display: table-row;
 }
 */
-
-a.friendItem {
-  margin: 0.5em 0.5em 1em 0.5em;
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
-}
-
-a.friendItem > div.statTable {
-  padding: 0;
-}
-
-a.friendItem > div.statTable > div.statRow {
-  display: table-row;
-}
-
-a.friendItem > div.statTable > div.statRow > div.friendPicture {
-  display: table-cell;
-  width: 5em;
-}
-
-a.friendItem > div.statTable > div.statRow > div.friendPicture > img {
-  width: 4em;
-}
-
-a.friendItem > div.statTable > div.statRow > div.groupStats {
-  margin: 0;
-  padding: 0;
-  display: table-cell;
-  vertical-align: top;
-  text-align: left;
-}
-
-a.friendItem > div.statTable > div.statRow > div.groupStats > div.listName {
-  font-size: 1.1em;
-  width: inherit;
-  padding: 0.3em;
-  background-color: #393E3C;
-  color: white;
-}
-
-a.friendItem > div.statTable > div.statRow > div.groupStats > div.listName > i {
-  font-size: 1.4em;
-  margin: 0.3em;
-}
-
-a.friendItem > div.friendName {
-  background-color: #32868C;
-}
-
-a.friendItem > div.listName {
-  background-color: #555;
-  color: white;
-}
-
-a.friendItem > div.listName > i {
-  font-size: 1.5em;
-  margin-right: 0.3em;
-}
-
-a.friendItem > div.friendName,
-a.friendItem > div.listName {
-  padding: 0.3em 0.3em 0.3em 0.7em;
-  color: white;
-  display: table-cell;
-  float: left;
-  width: 100%;
-  font-size: 1.1em;
-}
-
-div.statTable > div.statRow > div.groupStats > div.statBlock {
-  display: table;
-  padding: 0.5em;
-}
-/* Colstat Icon */
-
-div.statTable > div.statRow > div.groupStats > div.statBlock > div.colStat > i {
-  float: left;
-  font-size: 1em;
-  margin-right: 0.2em;
-}
-
-div.statTable > div.statRow > div.groupStats > div.statBlock > div.colStat {
-  float: left;
-  text-align: center;
-  margin-right: 0.3em;
-  margin-bottom: 0.3em;
-  /* Google Material Design Clone */
-  
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
-  font-weight: 600;
-  font-size: 1.3em;
-  padding: 0.2em 0.7em 0.2em 0.2em;
-  overflow: hidden;
-}
 
 .plittoBar {
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);

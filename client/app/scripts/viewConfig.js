@@ -1,7 +1,8 @@
 'use strict';
 angular.module('viewConfig', [])
   .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $ionicConfigProvider, pltf) {
-    $ionicConfigProvider.views.maxCache(0);
+    // This sets the number of times that it stores prior pages in the dom.
+    $ionicConfigProvider.views.maxCache(1);
 
     $stateProvider.state('app.home', {
       url: '/home',

@@ -36,7 +36,11 @@
                           }">{{item.thingname}}</span>
 
           <div class="addedNote">
+
+
             <div class="recent" am-time-ago="item.added"></div>
+
+
             <!-- Make typed things bigger <div ng-show="item.dittouser === null"><i class="icon ion-edit"></i> Typed</div> -->
             <div ng-show="item.dittouser !== null" class="dittoedFrom">
               dittoed from {{item.dittousername}}
@@ -121,7 +125,7 @@
 
   <div class="endOfList">
     <button ng-show='list.showMore === true ' ng-click="moreOfThis( list.lid );">
-      <i class='ion-arrow-down-b'></i> MORE 
+      <i class='ion-arrow-down-b'></i> MORE
       <i class='ion-arrow-down-b'></i>
     </button>
 

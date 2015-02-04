@@ -1,9 +1,5 @@
 <ion-view>
   <user-nav></user-nav>
-  <!-- <ion-nav-buttons side="left">
-    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
-  </ion-nav-buttons>
--->
 
   <ion-content class="has-header">
     <h1 class="pageTitle"><i class="icon ion-ios7-pulse-strong"></i> Recent Activity</h1>
@@ -23,10 +19,10 @@
     <!-- Just their friends. -->
     <div ng-show="view ==='friends'">
       <div ng-show="!store.friends.length" class="noShow">No feed items to show</div>
-      <div ng-show="store.friends[0].loading">
-        <h1>LOADING</h1>
-      </div>
-      <div class="list " ng-repeat="user in store.friends">
+      <h4 class="loading" ng-show="store.friends[0].loading">
+        <i class="ion-loading-a"></i>Loading Newest From Friends</h4>
+
+      <div class="list " ng-repeat="user in store.friends" ng-hide="store.friends[0].loading">
 
         <user-list-thing store="store.friends" source="feed" user-data="user"></user-list-thing>
       </div>
@@ -40,10 +36,10 @@
     <!--strangers -->
     <div ng-show="view ==='strangers'">
       <div ng-show="!store.strangers.length" class="noShow">No feed items to show</div>
-      <div ng-show="store.strangers[0].loading">
-        <h1>LOADING</h1>
-      </div>
-      <div class="list " ng-repeat="user in store.strangers" ng-show="view ==='strangers'">
+      <h4 class="loading" ng-show="store.strangers[0].loading ">
+        <i class="ion-loading-a"></i>Loading Newest From Strangers</h4>
+
+      <div class="list " ng-repeat="user in store.strangers" ng-hide="store.strangers[0].loading">
         <user-list-thing store="store.strangers" source="feed" user-data="user"></user-list-thing>
 
       </div>

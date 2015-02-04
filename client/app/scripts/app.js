@@ -27,6 +27,7 @@ angular.module('Plitto', [
   'homeController',
   'friendsController',
   'chatController',
+  'debugController',
   'searchController',
   'userController',
   'thingController',

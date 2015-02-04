@@ -13,6 +13,7 @@ angular.module('listsController', [])
     $scope.listsData = d;
   });
 
+
   $scope.loadLists = function () {
     // user.userId is hard coded in lists, because it's always going to be this user's lists.
 

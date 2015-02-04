@@ -332,6 +332,7 @@ angular.module('Services.database', ['LocalStorageModule'])
   */
   var promiseGetSome = function (userFilter, listFilter, sharedFilter) {
 
+    // 
     console.log('getSomeDB  listfilter: ', listFilter, ' userfilter: ', userFilter, ' sharedFilter ', sharedFilter);
 
     // SharedFilter: 
@@ -350,7 +351,7 @@ angular.module('Services.database', ['LocalStorageModule'])
 
     var promise = $http.post(apiPath + 'getSome', params)
       .then(function (response) {
-          console.log('promise? ', response);
+          // console.log('promise? ', response);
           /*
            if(userFilter !== '0' && userFilter !== ''){
                 // We know it's a user, so let's set local storage.
@@ -363,11 +364,19 @@ angular.module('Services.database', ['LocalStorageModule'])
                localStorageService.set('list' + listFilter + sharedFilter, data.results);
               }
             */
+          if (listFilter === '' && (userFilter === 'friends' || userFilter === 'strangers')) {
+            localStorageService.set('bite' + userFilter, response.data.results);
+          }
+
           return response.data.results;
         },
         function (response) {
           // Error handling here.
           console.log('getSome data error: ', response);
+          return {
+            error: true,
+            errorTxt: response
+          };
         });
 
     //  console.log('dbGetSome params',params);
@@ -511,8 +520,7 @@ angular.module('Services.database', ['LocalStorageModule'])
   */
   var promiseListOfLists = function (userId) {
     // TODO2 - load from local storage, if it's there 
-    // 
-    console.log('database.getUserListOfLists: getUserListOfLists: userId: ' + userId);
+    // console.log('database.getUserListOfLists: getUserListOfLists: userId: ' + userId);
 
 
     var params = {
@@ -549,7 +557,7 @@ angular.module('Services.database', ['LocalStorageModule'])
       1/22/2015 - This mainly checks to see if the token is valid. 
       1/27/2015 - Disable to see if we use this. Yep. We use it. */
 
-  var refreshData = function (token) {
+  var refreshData = function () {
     // console.log('TODO2 Use refreshData.token', token);
     // This function will be called when the app loads, and already has a token. It's kind of like login.
 

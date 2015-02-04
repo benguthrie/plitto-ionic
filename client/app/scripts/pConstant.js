@@ -1,7 +1,13 @@
 'use strict';
 angular.module('pConstant', [])
+
+.constant('angularMomentConfig', {
+    timezone: 'Europe/London' // America/Chicago America/Los_Angeles America/New_York
+  })
   /* Config Defaults */
   .constant('pltf', {
+    // Returns seconds to offset the time by for moment 
+    'tz': new Date().getTimezoneOffset(),
     'domSize': function (output) {
       if (output === 'console') {
         //console.log('HTMLString', $(document.body).html().length);
@@ -18,7 +24,7 @@ angular.module('pConstant', [])
       //console.log(toLog);
     },
     'QueryString': function () {
-      'use strict';
+
       //console.log('70 NO NEED FOR THIS QUERYSTRING FUNCTION???');
 
       // This function is anonymous, is executed immediately and 
@@ -43,7 +49,7 @@ angular.module('pConstant', [])
       return returnString;
     },
     'plainJsRedirect': function (url) {
-      'use strict';
+
       //console.log('plainJsRedirect: ', url);
       // window.location.href = url;
       // window.location.assign(url);
@@ -53,7 +59,7 @@ angular.module('pConstant', [])
 
     },
     'randNum': function (maxNum) {
-      'use strict';
+
       return Math.floor((Math.random() * maxNum) + 1);
     }
   });

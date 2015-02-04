@@ -4,48 +4,45 @@
   <ion-content class="has-header">
     <h1 class="pageTitle">Friends</h1>
 
+    <ion-item ng-show="!friendStore.length" ng-click="reloadFriends();">
+      No friends in friend store. Reload?
+    </ion-item>
 
-    <ion-list class="friendList">
-      <ion-item ng-show="!friendStore.length" ng-click="reloadFriends();">
-        No friends in friend store. Reload?
-      </ion-item>
+    <a class="groupItem friendStyle" ng-repeat="friend in friendStore" href="#/u/{{friend.id}}">
+      <div ng-bind=" friend.name " class="friendName"></div>
+      <div class="statTable">
+        <div class="statRow">
+          <div class="friendPicture">
+            <img ng-src="http://graph.facebook.com/{{friend.fbuid}}/picture" />
+          </div>
+          <div class="groupStats">
+            <div class="statBlock">
 
-      </ion-item>
-      <a class="friendItem" ng-repeat="friend in friendStore" href="#/u/{{friend.id}}">
-        <div ng-bind=" friend.name " class="friendName"></div>
-        <div class="statTable">
-          <div class="statRow">
-            <div class="friendPicture">
-              <img ng-src="http://graph.facebook.com/{{friend.fbuid}}/picture" />
-            </div>
-            <div class="groupStats">
-              <div class="statBlock">
-
-                <div class=" colStat ">
-                  <i class="ionicons ion-ios7-checkmark " style="color: green;"></i>
-                  <span class="label">Shared</span>
-                  <br/>
-                  <span class="stat">{{friend.shared}}</span>
-                </div>
-                <div class=" colStat ">
-                  <i class="ionicons ion-ios7-checkmark-outline dittoQ"></i>
-                  <span class="label colStat">Dittoable</span>
-                  <br/>
-                  <span class="stat">{{friend.dittoable}}</span>
-                </div>
-                <div class=" colStat ">
-                  <i class="ionicons ion-clipboard"></i>
-                  <span class="label">Lists</span>
-                  <br/>
-                  <span class="stat">{{friend.lists}}</span>
-                </div>
+              <div class=" colStat ">
+                <i class="ionicons ion-ios7-checkmark " style="color: green;"></i>
+                <span class="label">Shared</span>
+                <br/>
+                <span class="stat">{{friend.shared}}</span>
+              </div>
+              <div class=" colStat ">
+                <i class="ionicons ion-ios7-checkmark-outline dittoQ"></i>
+                <span class="label colStat">Dittoable</span>
+                <br/>
+                <span class="stat">{{friend.dittoable}}</span>
+              </div>
+              <div class=" colStat ">
+                <i class="ionicons ion-clipboard"></i>
+                <span class="label">Lists</span>
+                <br/>
+                <span class="stat">{{friend.lists}}</span>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-      </a>
-    </ion-list>
+    </a>
+
 
   </ion-content>
 </ion-view>

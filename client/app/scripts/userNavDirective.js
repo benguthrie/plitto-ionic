@@ -4,6 +4,8 @@ angular.module('userNavDirective', [])
     return {
       restrict: 'E',
       // // templateUrl: 'directives/userNav.html', // Not rendering.
+
+
       template: '<ion-nav-bar class="bar-stable plittoBar">' +
         '<ion-nav-back-button></ion-nav-back-button>' +
         '<ion-nav-buttons side="left">' +
@@ -19,8 +21,24 @@ angular.module('userNavDirective', [])
         '</button>' +
         '</ion-nav-buttons>' +
         '</ion-nav-bar>',
+      /* */
+
+      /*
+            template: '<div class="bar bar-header">' +
+              '<div class="h1 title">Header Buttons</div>' +
+              '<button class="button icon ion-navicon></button>' +
+              '</div>',
+      
+
+      template: '<ion-nav-bar align-title="left" >' +
+        '<div class="buttons"><button class="button ionicon ion-nav">LEFT</button></div>' +
+
+
+        '</ion-nav-bar>',
+        */
+
       controller: function ($scope) {
-        $scope.domLengthNum = 0;
+        $scope.domLengthNum = null;
         $scope.domLength = function () {
           $scope.domLengthNum = $(document.body).html().length;
         };

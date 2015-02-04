@@ -30,8 +30,15 @@ angular.module('debugController', [])
         $scope.funnyText = pltf.domSize('return');
         console.log($(document.body).html());
 
+      } else if (type === 'currentTime') {
+        var d = new Date();
+        var n = d.getTimezoneOffset();
+        $scope.funnyText = 'The Time Is: ' + d + ' and timezone offset: ' + d.getTimezoneOffset();
+
+        $scope.funnyTime = moment().format();
+
       } else {
-        $scope.funnyText = 'note ready ' + Date.now();
+        $scope.funnyText = 'note ready ' + Date();
       }
     };
 

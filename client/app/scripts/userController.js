@@ -64,6 +64,7 @@ angular.module('userController', [])
       // console.log('updated scope view ? ', $scope.view);
     }
 
+    // This should be re-written to not be in a loop. TODO2
     for (var i in lsTypes) {
 
       if (lsTypes[i] === 'shared') {
@@ -105,12 +106,13 @@ angular.module('userController', [])
         });
 
       } else if (lsTypes[i] === 'feed') {
-        if (localStorageService.get('user' + $scope.userInfo.userId + 'feed')) {
-          $scope.store.feed = localStorageService.get('user' + $scope.userInfo.userId + 'feed');
-        }
+
+        $scope.store.feed = [{
+          loading: true
+        }];
 
         dbFactory.promiseFeed('profile', $scope.userInfo.userId, '', '', '', '').then(function (d) {
-          console.log('feedResponse', d.results);
+          //           console.log('feedResponse', d);
           $scope.store.feed = d.results;
 
           if ($scope.userInfo.userName === null && d.results[0].username) {
@@ -166,6 +168,14 @@ angular.module('userController', [])
       $scope.profileTitle = '<img src="http://graph.facebook.com/' + $scope.fbuid + '/picture" class="title-image"> ' + $scope.userName;
 
       $scope.showFeed = function (userId) {
+        // Reload on second tap only, or if there are no records yet.
+
+        var loadFromDb = false;
+        console.log('load showfeed? ', $scope.view === 'feed', $scope.store.feed[0].loading, typeof ($scope.store.feed[0].uid) === 'undefined')
+        if ($scope.view === 'feed' || typeof ($scope.store.feed[0].loading) !== 'undefined' || typeof ($scope.store.feed[0].uid) === 'undefined') {
+          loadFromDb = true;
+
+        }
 
         $scope.view = 'feed';
         // console.log('profile show feed: ', userId, ' oldest: ');
@@ -173,14 +183,19 @@ angular.module('userController', [])
         // $scope.store.feed = dbFactory.showFeed('profile',userId,'','','','');
 
         // Then Update
-        dbFactory.promiseFeed('profile', $scope.userInfo.userId, '', '', '', '').then(function (d) {
-          $scope.store.feed = d;
-          if ($scope.userInfo.userName === null && d[0].username) {
+        if (loadFromDb === true) {
+          $scope.store.feed = [{
+            loading: true
+            }];
+          dbFactory.promiseFeed('profile', $scope.userInfo.userId, '', '', '', '').then(function (d) {
+            $scope.store.feed = d.results;
+            if ($scope.userInfo.userName === null && d.results[0].username) {
 
-            $scope.userInfo.userName = d[0].username;
-            $scope.userInfo.fbuid = d[0].fbuid;
-          }
-        });
+              $scope.userInfo.userName = d.results[0].username;
+              $scope.userInfo.fbuid = d.results[0].fbuid;
+            }
+          });
+        }
       };
 
       $scope.userChat = function () {
@@ -216,12 +231,12 @@ angular.module('userController', [])
 
       $scope.showLists = function (userId) {
         // Only reload if it's already lists.
-        if ($scope.view === 'lists' || $scope.store.lists[0].loading) {
+        if ($scope.view === 'lists' || $scope.store.lists[0].loading || !$scope.store.lists.length) {
           // console.log('reload lists for this user in their profile..');
           // dbFactory.getUserListOfLists(userId, '$rootScope.profileData.lists');
           $scope.store.lists = [{
             loading: true
-        }];
+          }];
           dbFactory.promiseListOfLists(userId).then(function (d) {
             $scope.store.lists = d;
 

@@ -1,8 +1,9 @@
 <ion-view>
   <user-nav></user-nav>
-
   <ion-content class="has-header">
+
     <h1 class="pageTitle"><i class="ionicons ion-ios7-checkmark-outline"></i> Ditto Some Things</h1>
+    <!-- {{ store.friends }} -->
 
     <div class="button-bar">
       <a class="button" ng-class="{'active': view ==='friends'}" ng-click="getSome('friends');">
@@ -18,13 +19,22 @@
       </a>
     </div>
 
-    <h4 class="viewContext" ng-show="view==='friends'">Ditto Some Things From Your Friends</h4>      
-    <h4 class="viewContext" ng-show="view==='strangers'">Ditto Some Things From Strangers</h4>      
 
+    <h4 class="viewContext" ng-show="view==='friends'">Ditto Some Things From Your Friends</h4>
+    <h4 class="viewContext" ng-show="view==='strangers'">Ditto Some Things From Strangers</h4>
+
+    <h4 class="loading" ng-show="store.friends[0].loading && view==='friends'">
+      <i class="ion-loading-a"></i>Loading Things to Ditto from your friends<span class="timer" ng-bind="store.friends[0].loadingTime"></span></h4>
     <div class="list" ng-repeat="user in store.friends" ng-show="view==='friends'">
-      <user-list-thing store="store.friends" source="home" user-data="user"></user-list-thing>
+
+
+      <user-list-thing ng-show="store.friends.length" store="store.friends" source="home" user-data="user"></user-list-thing>
     </div>
+
+    <h4 class="loading" ng-show="store.strangers[0].loading  && view ==='strangers'">
+      <i class="ion-loading-a"></i>Loading Things to Ditto from Strangers<span class="timer" ng-bind="store.strangers[0].loadingTime"></span></h4>
     <div class="list" ng-repeat="user in store.strangers" ng-show="view==='strangers'">
+
       <user-list-thing store="store.strangers" source="home" user-data="user"></user-list-thing>
     </div>
 

@@ -1,4 +1,4 @@
-<ion-view>
+<ion-view cache-view="false">
   <user-nav></user-nav>
 
   <ion-content class="has-header">
@@ -33,9 +33,8 @@
     <div ng-show="view ==='ditto' ">
       <h4 class="viewContext">Dittoable List Items</h4>
       <div ng-show="!store.ditto.length" class="noShow">No Dittoable Items to Show</div>
-      <div ng-show="store.ditto[0].loading">
-        <h1>LOADING</h1>
-      </div>
+      <h4 class="loading" ng-show="store.ditto[0].loading">
+        <i class="ion-loading-a"></i>Loading Dittoable</h4>
       <div class="list " ng-repeat="user in store.ditto">
         <user-list-thing store="store.ditto" source="list" user-data="user"></user-list-thing>
       </div>
@@ -45,20 +44,18 @@
       <h4 class="viewContext">Shared List Items</h4>
       <div ng-show="!store.shared.length" class="noShow" ng-click="showList">You have nothing in common with your friends in <b ng-bind="listInfo.listName"></b>
       </div>
-      <div ng-show="store.shared[0].loading">
-        <h1>LOADING</h1>
-      </div>
+      <h4 class="loading" ng-show="store.shared[0].loading">
+        <i class="ion-loading-a"></i>Loading Shared</h4>
       <div class="list " ng-repeat="user in store.shared">
         <user-list-thing store="store.shared" source="list" user-data="user"></user-list-thing>
       </div>
     </div>
 
     <div ng-show="view ==='feed' ">
-      <h4 class="viewContext">Latest List Items</h4>
-      <div ng-show="!store.feed.length" class="noShow">No Recent Items</div>
-      <div ng-show="store.feed[0].loading">
-        <h1>LOADING</h1>
-      </div>
+      <h4 class="viewContext">List Activity</h4>
+      <div ng-show="!store.feed.length" class="noShow">No Activity for {{listInfo.listName}}</div>
+      <h4 class="loading" ng-show="store.feed[0].loading ">
+        <i class="ion-loading-a"></i>Activity</h4>
       <div class="list " ng-repeat="user in store.feed">
         <user-list-thing store="store.feed" source="list" user-data="user"></user-list-thing>
       </div>
@@ -67,10 +64,9 @@
     <div ng-show="view ==='mine' ">
       <!-- TODO2 - It can get hung here. store.mine.length: {{store.mine | json }} {{store.mine.length}} -->
       <h4 class="viewContext">Your List Items</h4>
-      <div ng-show="!store.mine.length" class="noShow">You have not items yet.</div>
-      <div ng-show="store.mine[0].loading">
-        <h1>LOADING</h1>
-      </div>
+      <div ng-show="!store.mine.length" class="noShow">You have not added anything to {{listInfo.listName}}. Use the form above to do that.</div>
+      <h4 class="loading" ng-show="store.mine[0].loading">
+        <i class="ion-loading-a"></i>Loading Mine</h4>
       <div class="list " ng-repeat="user in store.mine">
         <user-list-thing store="store.mine" source="list" user-data="user"></user-list-thing>
       </div>
@@ -78,10 +74,9 @@
 
     <div ng-show="view ==='strangers' ">
       <h4 class="viewContext">List Items from Strangers</h4>
-      <div ng-show="!store.strangers.length" class="noShow">No Strangers Have Items in This List</div>
-      <div ng-show="store.strangers[0].loading">
-        <h1>LOADING</h1>
-      </div>
+      <div ng-show="!store.strangers.length" class="noShow">No Strangers Have Added To {{listInfo.listName}}</div>
+      <h4 class="loading" ng-show="store.strangers[0].loading">
+        <i class="ion-loading-a"></i>Loading Strangers'</h4>
       <div class="list " ng-repeat="user in store.strangers">
         <user-list-thing store="store.strangers" source="list" user-data="user"></user-list-thing>
       </div>

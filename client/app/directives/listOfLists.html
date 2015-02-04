@@ -1,15 +1,16 @@
 <p ng-show="!listsData.length">No lists yet. Add a list using the + button
-  <div class="button-bar" ng-show="!listsData.length"><a class="button" ng-click="loadLists();">Reload Lists</a>
+  <div class="button-bar" ng-show="!listsData.length">
+    <a class="button" ng-click="loadLists();">Reload Lists</a>
   </div>
 </p>
 
-<ion-list>
-  <div class="friendItem" ng-repeat="list in listsData" ng-click="showList( list.lid, list.name, null, 'feed');">
-    
-  <div class="listName"><i class="ion-clipboard"></i> {{list.name}}</div>
-  <div class="statTable">
-    <div class="statRow">
+<a class="groupItem listStyle" ng-repeat="list in listsData" href="#/l/{{list.lid}}">
+  <!--  ng-click="showList( list.lid, list.name, null, 'feed');" -->
 
+
+  <div class="statTable">
+    <div class="listName"><i class="ion-clipboard"></i> {{list.name}}</div>
+    <div class="statRow">
       <div class="groupStats">
 
         <div class="statBlock">
@@ -31,21 +32,25 @@
             <i class="ionicons ion-ios-timer-outline"></i>
             <span class="label colStat">Latest Add</span>
             <br/>
-            <span class="stat" am-time-ago="list.mostrecent"></span>
+            <span class="timeAgo" am-time-ago="list.mostrecent"></span>
           </div>
 
-          <!-- 
+
+        </div>
+      </div>
+
+      <!-- 
+      
+      
+-->
+    </div>
+  </div>
+</a>
+
+<!-- 
           <div class=" colStat ">
 
             <span class="label">Lists</span><br/>
             <span class="stat">{{friend.lists}}</span>
           </div>
           -->
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-
-</ion-list>

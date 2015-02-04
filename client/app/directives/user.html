@@ -1,4 +1,4 @@
-<ion-view title="" align-title="left">
+<ion-view cache-view="false">
   <user-nav></user-nav>
 
   <ion-content class="has-header ">
@@ -38,7 +38,85 @@
     </div>
     <!-- End menu -->
 
-    <!-- Start US - TODO2 - Put this button back.
+    <!-- Begin Body -->
+
+
+    <!-- Start Ditto -->
+    <div class="list" ng-repeat="user in store.ditto" ng-show=" view === 'ditto' ">
+      <!-- <h1>ditto</h1> -->
+      <user-list-thing ng-show="store.ditto.length" store="store.ditto" source="profile" user-data="user"></user-list-thing>
+      <div ng-show="!store.ditto.length" class="noShow">{{ userInfo.userName}} has nothing for you to ditto.</div>
+      <h4 class="loading" ng-show="store.ditto[0].loading">
+          <i class="ion-loading-a"></i>Loading Shared</h4>
+    </div>
+    <!-- End Ditto Section 
+
+
+    <!-- Start Shared    -->
+    <div ng-show="view ==='shared' ">
+      <h4 class="viewContext">Shared Items from {{userInfo.userName}}</h4>
+      <div ng-show="!store.shared.length" class="noShow">No Recent Items</div>
+      <h4 class="loading" ng-show="store.shared[0].loading">
+        <i class="ion-loading-a"></i>Loading Shared</h4>
+
+      <div class="list " ng-repeat="user in store.shared">
+        <user-list-thing store="store.shared" source="list" user-data="user"></user-list-thing>
+      </div>
+    </div>
+    <!-- End Shared Section -->
+
+
+
+    <!-- Start the Feed -->
+
+    <div ng-show="view ==='feed' ">
+
+      <h4 class="viewContext">Activity from {{userInfo.userName}}</h4>
+      <div ng-show="!store.feed.length" class="noShow">No Recent Items</div>
+      <h4 class="loading" ng-show="store.feed[0].loading">
+        <i class="ion-loading-a"></i>Loading Activity</h4>
+
+      <div class="list " ng-repeat="user in store.feed">
+        <user-list-thing store="store.feed" source="list" user-data="user"></user-list-thing>
+      </div>
+    </div>
+    <!-- End the Feed -->
+
+
+
+
+    <!-- Start User Lists -->
+
+    <div ng-show="view ==='lists' ">
+      <h4 class="viewContext">{{userInfo.userName}}'s Lists</h4>
+      <list-of-lists store="store.lists" source="profile" lists-data="store.lists"></list-of-lists>
+      <div ng-show="!store.lists.length" class="noItems">{{ userInfo.userName}} has no lists.</div>
+      <h4 class="loading" ng-show="store.lists[0].loading">
+        <i class="ion-loading-a"></i>Loading Lists</h4>
+
+    </div>
+    <!-- End User Lists -->
+
+    <!-- Start User Chat -->
+    <div ng-show="view==='chat'">
+      <h3 class="pageTitle"><i class="ion-ios7-chatboxes-outline"></i> Our Dittos &amp; Chats</h3>
+
+      <h4 class="loading" ng-show="store.chat[0].loading">
+        <i class="ion-loading-a"></i>Loading Chat</h4>
+    </div>
+    <div ng-show="!store.chat.length" class="noItems">You and {{ userInfo.userName }} don't have any dittos or chats yet.</div>
+    <div class="list " ng-repeat="user in store.chat">
+
+      <user-list-thing store="store.chat" source="profile" user-data="user"></user-list-thing>
+    </div>
+    </div>
+    <!-- End User Chat -->
+
+  </ion-content>
+</ion-view>
+
+
+<!-- Start US - TODO2 - Put this button back.
 
     <div class="list card" ng-show="view==='us'">
       <h1>Us</h1>
@@ -87,7 +165,7 @@
 
     </div>
  -->
-    <!-- End US 
+<!-- End US 
   <p>Profile Data.ditto: {{ profileData.ditto | json }} </p>
   <p>Profile Data.shared: {{ profileData.shared | json }} </p>
   <p>Profile Data.feed: {{ profileData.feed | json }} </p>
@@ -96,97 +174,3 @@
     <p>store: {{ store | json }}</p>
     <p>ditto store: {{ store.ditto | json }}</p>     
 <h1 ng-bind="view"></h1>-->
-
-
-
-
-    <!-- Start Ditto -->
-    <div class="list" ng-repeat="user in store.ditto" ng-show=" view === 'ditto' ">
-      <!-- <h1>ditto</h1> -->
-      <user-list-thing ng-show="store.ditto.length" store="store.ditto" source="profile" user-data="user"></user-list-thing>
-      <div ng-show="!store.ditto.length" class="noShow">{{ userInfo.userName}} has nothing for you to ditto.</div>
-      <div ng-show="store.ditto[0].loading">
-        <h1>LOADING</h1>
-      </div>
-    </div>
-    <!-- End Ditto Section -->
-
-
-    <!-- Start the Feed
-  <div class="list" 
-       ng-repeat="user in store.feed" 
-       ng-show="view === 'feed'">
-    
-    <user-list-thing store="store.feed" source="profile" user-data="user"></user-list-thing>   
-    <div ng-show="!store.feed.length" class="noShow">{{ userInfo.userName}} has no recent items.</div>
-    <div ng-show="store.feed[0].loading" ><h1>LOADING</h1></div>
-  </div>-->
-
-    <div ng-show="view ==='feed' ">
-
-      <h4 class="viewContext">Newest Items from {{userInfo.userName}}</h4>
-      <div ng-show="!store.feed.length" class="noShow">No Recent Items</div>
-      <div ng-show="store.feed[0].loading">
-        <h1>LOADING</h1>
-      </div>
-      <div class="list " ng-repeat="user in store.feed">
-        <user-list-thing store="store.feed" source="list" user-data="user"></user-list-thing>
-      </div>
-    </div>
-    <!-- End the Feed -->
-
-
-    <!-- Start Shared  <div class="list " ng-repeat="user in store.shared" 
-       ng-show=" view === 'shared' ">
-    <user-list-thing store="store.shared" 
-                     source="profile" user-data="user"></user-list-thing>  
-    <div ng-show="!store.shared.length" class="noShow">{{ userInfo.userName }} has nothing shared with you.</div>
-    <user-list-thing store="store.shared" source="profile" user-data="user"></user-list-thing>
-    <div ng-show="store.shared[0].loading" ><h1>LOADING</h1></div>
-  </div>
-  -->
-    <div ng-show="view ==='shared' ">
-      <h4 class="viewContext">Shared Items from {{userInfo.userName}}</h4>
-      <div ng-show="!store.shared.length" class="noShow">No Recent Items</div>
-      <div ng-show="store.shared[0].loading">
-        <h1>LOADING</h1>
-      </div>
-      <div class="list " ng-repeat="user in store.shared">
-        <user-list-thing store="store.shared" source="list" user-data="user"></user-list-thing>
-      </div>
-    </div>
-
-
-    <!-- End Shared Section -->
-
-
-
-    <!-- Start User Lists -->
-
-    <div ng-show="view ==='lists' ">
-      <h4 class="viewContext">{{userInfo.userName}}'s Lists</h4>
-      <list-of-lists store="store.lists" source="profile" lists-data="store.lists"></list-of-lists>
-      <div ng-show="!store.lists.length" class="noItems">{{ userInfo.userName}} has no lists.</div>
-      <div ng-show="store.lists[0].loading">
-        <h1>LOADING</h1>
-      </div>
-    </div>
-    <!-- End User Lists -->
-
-    <!-- Start User Chat -->
-    <div ng-show="view==='chat'">
-      <h3 class="pageTitle"><i class="ion-ios7-chatboxes-outline"></i> Our Dittos &amp; Chats</h3>
-
-      <div ng-show="store.chat[0].loading">
-        <h1>LOADING</h1>
-      </div>
-      <div ng-show="!store.chat.length" class="noItems">You and {{ userInfo.userName }} don't have any dittos or chats yet.</div>
-      <div class="list " ng-repeat="user in store.chat">
-
-        <user-list-thing store="store.chat" source="profile" user-data="user"></user-list-thing>
-      </div>
-    </div>
-    <!-- End User Chat -->
-
-  </ion-content>
-</ion-view>

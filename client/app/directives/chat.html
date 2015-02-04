@@ -45,7 +45,7 @@
           <!-- {{ notification.content[0].fromUserId === $root.user.userId}} {{ notification.content[0].fromUserId  }} {{ notification.content[0].fromUserId  }} {{ $root.user.userId}}
 To: {{ notification.content[0].toUserId }} {{ notification.content[0].toUserName }} From:  {{ notification.content[0].fromUserId }} {{ notification.content[0].fromUserName }} Loged In: {{ $root.user.userId }}-->
           <span ng-show="notification.content[0].toUserId === $root.user.userId" class="toFrom" ng-click="showUser( notification.content[0].fromUserId , notification.content[0].fromUserName,'ditto', notification.content[0].fromFbuid);"> from {{ notification.content[0].fromUserName }}</span>
-          <span ng-show="notification.content[0].fromUserId === $root.user.userId" class="toFrom" ng-click="showUser( notification.content[0].toUserId , notification.content[0].toUserName,'ditto', notification.content[0].toFbuid);"> to {{ notification.content[0].toUserName }}</span>
+          <span ng-show="notification.content[0].fromUserId === $root.user.userId" class="toFrom" ng-click="( notification.content[0].toUserId , notification.content[0].toUserName,'ditto', notification.content[0].toFbuid);"> to {{ notification.content[0].toUserName }}</span>
 
         </div>
 

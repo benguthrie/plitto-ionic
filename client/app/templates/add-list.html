@@ -29,7 +29,7 @@
 
     <h4 class="viewContext" ng-show="listResults.length">Existing Lists ({{listResults.length}})</h4>
     <ion-list ng-repeat="list in listResults" ng-show="newList.title.length > 0">
-      <ion-item class="item-icon-right" href="#/list/{{list.lid}}" ng-click="showList(list.lid, list.listname, null, 'addToList');">
+      <ion-item class="item-icon-right" href="#/l/{{list.lid}}" ng-click="showList(list.lid, list.listname, null, 'addToList');">
         <ion-option-button class="button-assertive">
           Mine</ion-option-button>
         {{list.listname}} - ({{list.thecount}})

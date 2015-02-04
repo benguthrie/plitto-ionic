@@ -17,7 +17,6 @@ angular.module('feedContrller', [])
     if ($scope.store.friends.length === 0 || $scope.store.friends[0].loading === true) {
       if (localStorageService.get('feedFriends')) {
         $scope.store.friends = localStorageService.get('feedFriends');
-        console.log("LS FRIENDS!", $scope.store.friends);
       }
 
       $scope.store.friends[0] = {
@@ -41,6 +40,7 @@ angular.module('feedContrller', [])
 
       dbFactory.promiseFeed('strangers', '', '', '', '', '').then(function (d) {
         $scope.store[d.type] = d.results;
+
       });
     }
 
@@ -54,7 +54,7 @@ angular.module('feedContrller', [])
           loading: true
       }];
         dbFactory.promiseFeed(filter, '', '', '', '', '').then(function (d) {
-          $scope.store[filter] = d;
+          $scope.store[filter] = d.results;
         });
       }
       // Set the active view.

@@ -1,6 +1,6 @@
 'use strict';
 angular.module('userListThingController', [])
-  .directive('userListThing', function (dbFactory, $state) {
+  .directive('userListThing', function (dbFactory, $state, pltf) {
 
     return {
       restrict: 'E',
@@ -13,7 +13,7 @@ angular.module('userListThingController', [])
       controller: function ($scope, dbFactory) {
 
         /* Ditto */
-        $scope.ditto = function (mykey, uid, lid, tid, itemKey, $event) {
+        $scope.ditto = function (mykey, uid, lid, tid, itemKey) {
 
           var arrPair = [];
 
@@ -69,13 +69,14 @@ console.log(' list no match: ', parseInt(lid), parseInt($scope.userData.lists[i]
         };
 
         /* User */
-        $scope.showUser = function (userId, userName, dataScope, fbuid) {
+        $scope.showUser = function (userId, userName, fbuid) {
           if (parseInt(userId) !== 0) {
             $state.go('app.user', {
               userId: userId,
-              userName: userName
+              userName: userName,
+              fbuid: fbuid
             });
-            // dbFactory.showUser(userId,userName, dataScope, fbuid);
+
             $scope.userData = [];
           }
         };
@@ -158,8 +159,7 @@ console.log(' list no match: ', parseInt(lid), parseInt($scope.userData.lists[i]
 
 
           // Find the item in this list.
-          var i = 0,
-            j = 0;
+          var i = 0;
           loop1:
             for (i in $scope.userData.lists) {
               if (lid === $scope.userData.lists[i].lid) {
@@ -251,6 +251,6 @@ console.log(' list no match: ', parseInt(lid), parseInt($scope.userData.lists[i]
         };
 
       }
-    }
+    };
 
   });
