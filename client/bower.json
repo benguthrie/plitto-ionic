@@ -48,6 +48,6 @@
     "angular": "1.3.6",
     "angular-sanitize": "~1.2.12",
     "angular-ui-router": "0.2.10",
-    "ionic": "1.0.0-beta.14"
+    "ionic": "v1.0.0-rc.0"
   }
 }

@@ -247,7 +247,6 @@ div.dittoThing {
 
 span.label {
   font-size: 0.5em;
-  font-weight: 100;
   color: 444;
 }
 
@@ -703,7 +702,6 @@ div.listBlock > div.listLine {
   color: #fff;
   margin: 0;
   z-index: 0;
-  font-weight: 100;
   border: 0px;
   font-size: 1em;
   display: table;
@@ -755,10 +753,9 @@ div.button-bar > a.button > i {}
 /* Attribution and time */
 
 div.listItem > div.thingTable > div.thingNameRow > div.thingNameCol > div.addedNote {
-  font-size: 0.7em;
+  font-size: 0.9em;
   display: table-row;
   color: #bbb;
-  font-weight: 100;
   padding-left: 1em;
   border: 2px solid green;
 }
@@ -785,6 +782,7 @@ div.listItem > div.thingTable > div.thingNameRow > div.thingNameCol > div.addedN
 div.dittoCol {
   padding: 2em;
   font-size: 3em;
+
 }
 
 div.friendsWith {

@@ -29,7 +29,7 @@ a.groupItem > div.friendName {
 
 a.groupItem > div.statTable {
   display: table;
-  width: 100%;
+  width: 100%; 
 }
 
 a.groupItem > div.listName {

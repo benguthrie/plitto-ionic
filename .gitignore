@@ -5,7 +5,7 @@ node_modules/
 *.swp
 
 
-# Ignore Libraries - Will the build still work? 
+# Ignore Libraries - Will the build still work?
 #
 /client/app/lib
 /client/app/www
@@ -13,3 +13,7 @@ client/app/lib
 client/app/lib/
 /client/app/lib/
 lib
+/client/platforms/
+/client/www/
+/common/
+/client/node_modules/

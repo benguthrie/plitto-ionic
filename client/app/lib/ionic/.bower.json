@@ -61,6 +61,5 @@
   },
   "_source": "git://github.com/driftyco/ionic.git",
   "_target": "1.0.0-beta.14",
-  "_originalSource": "ionic",
-  "_direct": true
+  "_originalSource": "ionic"
 }
