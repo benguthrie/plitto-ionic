@@ -16,7 +16,7 @@
  * left in the DOM, and its scope is disconnected from the `$watch` cycle. When navigating to a
  * view that is already cached, its scope is reconnected, and the existing element, which was
  * left in the DOM, becomes active again. This can be disabled, or the maximum number of cached
- * views changed in {@link ionic.directive:ionicConfig}, in the view's `$state` configuration, or
+ * views changed in {@link ionic.provider:$ionicConfigProvider}, in the view's `$state` configuration, or
  * as an attribute on the view itself (see below).
  *
  * @usage
@@ -36,7 +36,7 @@
  *
  * ## View LifeCycle and Events
  *
- * Views can be cached, which means *controllers normally only load once*, which may
+ * Views can be cached, which means ***controllers normally only load once***, which may
  * affect your controller logic. To know when a view has entered or left, events
  * have been added that are emitted from the view's scope. These events also
  * contain data about the view, such as the title and whether the back button should

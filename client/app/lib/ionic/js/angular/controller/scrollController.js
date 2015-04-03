@@ -12,17 +12,33 @@ IonicModule
   '$document',
   '$ionicScrollDelegate',
   '$ionicHistory',
-function($scope, scrollViewOptions, $timeout, $window, $location, $document, $ionicScrollDelegate, $ionicHistory) {
+function($scope,
+         scrollViewOptions,
+         $timeout,
+         $window,
+         $location,
+         $document,
+         $ionicScrollDelegate,
+         $ionicHistory) {
 
   var self = this;
   // for testing
   self.__timeout = $timeout;
 
   self._scrollViewOptions = scrollViewOptions; //for testing
+  self.isNative = function() {
+    return !!scrollViewOptions.nativeScrolling;
+  };
 
   var element = self.element = scrollViewOptions.el;
   var $element = self.$element = jqLite(element);
-  var scrollView = self.scrollView = new ionic.views.Scroll(scrollViewOptions);
+  var scrollView;
+  if (self.isNative()) {
+    scrollView = self.scrollView = new ionic.views.ScrollNative(scrollViewOptions);
+  } else {
+    scrollView = self.scrollView = new ionic.views.Scroll(scrollViewOptions);
+  }
+
 
   //Attach self to element as a controller so other directives can require this controller
   //through `require: '$ionicScroll'
@@ -36,7 +52,7 @@ function($scope, scrollViewOptions, $timeout, $window, $location, $document, $io
     }
   );
 
-  if (!angular.isDefined(scrollViewOptions.bouncing)) {
+  if (!isDefined(scrollViewOptions.bouncing)) {
     ionic.Platform.ready(function() {
       if (scrollView.options) {
         scrollView.options.bouncing = true;
@@ -51,8 +67,7 @@ function($scope, scrollViewOptions, $timeout, $window, $location, $document, $io
   }
 
   var resize = angular.bind(scrollView, scrollView.resize);
-  ionic.on('resize', resize, $window);
-
+  angular.element($window).on('resize', resize);
 
   var scrollFunc = function(e) {
     var detail = (e.originalEvent || e).detail || {};
@@ -67,19 +82,10 @@ function($scope, scrollViewOptions, $timeout, $window, $location, $document, $io
 
   $scope.$on('$destroy', function() {
     deregisterInstance();
-    scrollView.__cleanup();
-    ionic.off('resize', resize, $window);
-    $window.removeEventListener('resize', resize);
-    scrollViewOptions = null;
-    self._scrollViewOptions.el = null;
-    self._scrollViewOptions = null;
+    scrollView && scrollView.__cleanup && scrollView.__cleanup();
+    angular.element($window).off('resize', resize);
     $element.off('scroll', scrollFunc);
-    $element = null;
-    self.$element = null;
-    element = null;
-    self.element = null;
-    self.scrollView = null;
-    scrollView = null;
+    scrollView = self.scrollView = scrollViewOptions = self._scrollViewOptions = scrollViewOptions.el = self._scrollViewOptions.el = $element = self.$element = element = null;
   });
 
   $timeout(function() {
@@ -87,11 +93,11 @@ function($scope, scrollViewOptions, $timeout, $window, $location, $document, $io
   });
 
   self.getScrollView = function() {
-    return self.scrollView;
+    return scrollView;
   };
 
   self.getScrollPosition = function() {
-    return self.scrollView.getValues();
+    return scrollView.getValues();
   };
 
   self.resize = function() {
@@ -101,14 +107,12 @@ function($scope, scrollViewOptions, $timeout, $window, $location, $document, $io
   };
 
   self.scrollTop = function(shouldAnimate) {
-    ionic.DomUtil.blurAll();
     self.resize().then(function() {
       scrollView.scrollTo(0, 0, !!shouldAnimate);
     });
   };
 
   self.scrollBottom = function(shouldAnimate) {
-    ionic.DomUtil.blurAll();
     self.resize().then(function() {
       var max = scrollView.getScrollMax();
       scrollView.scrollTo(max.left, max.top, !!shouldAnimate);
@@ -116,35 +120,30 @@ function($scope, scrollViewOptions, $timeout, $window, $location, $document, $io
   };
 
   self.scrollTo = function(left, top, shouldAnimate) {
-    ionic.DomUtil.blurAll();
     self.resize().then(function() {
       scrollView.scrollTo(left, top, !!shouldAnimate);
     });
   };
 
   self.zoomTo = function(zoom, shouldAnimate, originLeft, originTop) {
-    ionic.DomUtil.blurAll();
     self.resize().then(function() {
       scrollView.zoomTo(zoom, !!shouldAnimate, originLeft, originTop);
     });
   };
 
   self.zoomBy = function(zoom, shouldAnimate, originLeft, originTop) {
-    ionic.DomUtil.blurAll();
     self.resize().then(function() {
       scrollView.zoomBy(zoom, !!shouldAnimate, originLeft, originTop);
     });
   };
 
   self.scrollBy = function(left, top, shouldAnimate) {
-    ionic.DomUtil.blurAll();
     self.resize().then(function() {
       scrollView.scrollBy(left, top, !!shouldAnimate);
     });
   };
 
   self.anchorScroll = function(shouldAnimate) {
-    ionic.DomUtil.blurAll();
     self.resize().then(function() {
       var hash = $location.hash();
       var elm = hash && $document[0].getElementById(hash);
@@ -164,34 +163,25 @@ function($scope, scrollViewOptions, $timeout, $window, $location, $document, $io
     });
   };
 
+  self.freezeScroll = scrollView.freeze;
+
+  self.freezeAllScrolls = function(shouldFreeze) {
+    for (var i = 0; i < $ionicScrollDelegate._instances.length; i++) {
+      $ionicScrollDelegate._instances[i].freezeScroll(shouldFreeze);
+    }
+  };
+
 
   /**
    * @private
    */
-  self._setRefresher = function(refresherScope, refresherElement) {
-    var refresher = self.refresher = refresherElement;
+  self._setRefresher = function(refresherScope, refresherElement, refresherMethods) {
+    self.refresher = refresherElement;
     var refresherHeight = self.refresher.clientHeight || 60;
-    scrollView.activatePullToRefresh(refresherHeight, function() {
-      // activateCallback
-      refresher.classList.add('active');
-      refresherScope.$onPulling();
-    }, function() {
-        refresher.classList.remove('active');
-        refresher.classList.remove('refreshing');
-        refresher.classList.remove('refreshing-tail');
-    }, function() {
-      // startCallback
-      refresher.classList.add('refreshing');
-      refresherScope.$onRefresh();
-    }, function() {
-      // showCallback
-      refresher.classList.remove('invisible');
-    }, function() {
-      // hideCallback
-      refresher.classList.add('invisible');
-    }, function() {
-      // tailCallback
-      refresher.classList.add('refreshing-tail');
-    });
+    scrollView.activatePullToRefresh(
+      refresherHeight,
+      refresherMethods
+    );
   };
+
 }]);

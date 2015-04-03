@@ -65,8 +65,6 @@ angular.module('viewConfig', [])
       controller: 'LoginCallbackCtrl'
     })*/
 
-
-
     .state('loading', {
       url: '/loading',
       templateUrl: 'templates/loading.html',
@@ -84,23 +82,24 @@ angular.module('viewConfig', [])
     })
 
     .state('app.about', {
-        url: '/about',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/about.html',
-            controller: 'DocsCtrl'
-          }
+      url: '/about',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/about.html',
+          controller: 'DocsCtrl'
         }
-      })
-      .state('app.docs', {
-        url: '/docs',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/docs.html',
-            controller: 'DocsCtrl'
-          }
+      }
+    })
+
+    .state('app.docs', {
+      url: '/docs',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/docs.html',
+          controller: 'DocsCtrl'
         }
-      })
+      }
+    })
 
     .state('app.feed', {
       url: '/feed',
@@ -121,7 +120,6 @@ angular.module('viewConfig', [])
         }
       }
     })
-
 
     .state('app.chat', {
       url: '/chat',
@@ -161,9 +159,7 @@ angular.module('viewConfig', [])
           controller: 'ListsCtrl'
         }
       }
-    })
-
-    ;
+    });
 
     $urlRouterProvider.otherwise('/home'); // Added 12.19.2014
 

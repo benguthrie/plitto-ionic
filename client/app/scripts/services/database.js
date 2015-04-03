@@ -34,7 +34,6 @@ angular.module('Services.database', ['LocalStorageModule'])
     }
   }
 
-
   var promiseDitto = function (mykey, uid, lid, tid, itemKey) {
     //  console.log('dbFactory.dbDitto | mykey: ', mykey,'| ownerid: ', uid, '| listid: ',lid, tid,i,j,k);
 
@@ -92,7 +91,6 @@ angular.module('Services.database', ['LocalStorageModule'])
 
   };
 
-
   /* For the Friends Page. */
   var friendsList = function () {
     // console.log('!!!UpdateCounts');
@@ -120,7 +118,6 @@ angular.module('Services.database', ['LocalStorageModule'])
     return promise;
     // console.log("New Alert Count: ", $rootScope.stats.alerts.total);
   };
-
 
   /* 11/2/2014 */
   var checkToken = function (token) {
@@ -162,7 +159,6 @@ angular.module('Services.database', ['LocalStorageModule'])
       );
 
     return promise;
-
   };
 
 
@@ -175,18 +171,13 @@ angular.module('Services.database', ['LocalStorageModule'])
 
     $rootScope.debugOn = false; // Debug
     $rootScope.loginMessage = ''; // Also debug, but that's in how you use it.
-
-
     $rootScope.loginMessage = 'RS initialized.';
-
 
     if (typeof fCallback === 'function') {
       //console.log('fCallback in init made');
       fCallback('complete');
     }
   };
-
-
 
   /* Function to return basic (public) information about a user based on their user id. */
   var userInfo = function (userId) {
@@ -205,9 +196,7 @@ angular.module('Services.database', ['LocalStorageModule'])
           } else {
             console.log('UserInformation!!! - return this: ', response.data.results);
             return response.data;
-
           }
-
 
           // console.log("profile feed after showfeed",$rootScope.profileData.feed);
         },
@@ -234,8 +223,6 @@ angular.module('Services.database', ['LocalStorageModule'])
       token: $rootScope.token
     };
 
-
-
     var promise = $http.post(apiPath + 'showFeed', params)
       .then(function (response) {
           if (checkLogout(response.data) === true) {
@@ -259,8 +246,6 @@ angular.module('Services.database', ['LocalStorageModule'])
               ' continueKey: ', continueKey,
               ' orOlder: ', newerOrOlder,
               ' data: ', response.data);
-
-
 
             if (theType === 'friends' || theType === 'strangers') {
               console.log('feed' + theType[0].toUpperCase());
@@ -286,10 +271,7 @@ angular.module('Services.database', ['LocalStorageModule'])
         }
       );
     return promise;
-
-
   };
-
 
   /* 10/4/2014, 11/3/2014 
     1/23/2015 - converted to promise
@@ -310,7 +292,6 @@ angular.module('Services.database', ['LocalStorageModule'])
             } else {
               // $rootScope.modal.listStore = data.results;
               return response.data.results;
-
             }
           }
         },
@@ -322,9 +303,6 @@ angular.module('Services.database', ['LocalStorageModule'])
     return promise;
 
   };
-
-
-
 
   /* Promise Get Some - get some with a promise 
     1/22/2015 - Created 
@@ -383,7 +361,6 @@ angular.module('Services.database', ['LocalStorageModule'])
     return promise;
 
   };
-
 
   var headerTitle = function () {
     console.log('Load Header');
@@ -485,11 +462,7 @@ angular.module('Services.database', ['LocalStorageModule'])
 
               dbInit();
             }
-
           }
-
-
-
         }
       );
 
@@ -522,7 +495,6 @@ angular.module('Services.database', ['LocalStorageModule'])
     // TODO2 - load from local storage, if it's there 
     // console.log('database.getUserListOfLists: getUserListOfLists: userId: ' + userId);
 
-
     var params = {
       userfilter: userId,
       token: $rootScope.token
@@ -540,8 +512,6 @@ angular.module('Services.database', ['LocalStorageModule'])
 
             // Let the controller handle this.
             return response.data.results;
-
-
           }
         },
         function (response) {
@@ -551,7 +521,6 @@ angular.module('Services.database', ['LocalStorageModule'])
     return promise;
 
   };
-
 
   /*  11.4.2014 - Updates friends, lists, user info on app re-launch 
       1/22/2015 - This mainly checks to see if the token is valid. 
@@ -600,9 +569,6 @@ angular.module('Services.database', ['LocalStorageModule'])
           // TODO2 - Error handling for data refresh error. console.log('checkToken data error: ', response);
         });
     return promise;
-
-
-
   };
 
 
@@ -649,8 +615,6 @@ angular.module('Services.database', ['LocalStorageModule'])
     return promise;
 
   };
-
-
 
   // Add to a list. 1/23/2015 - Convert this to promise
   var promiseAddToList = function (addToListObj) {
@@ -806,7 +770,6 @@ angular.module('Services.database', ['LocalStorageModule'])
     // fbPlittoFriends: fbPlittoFriends,
     /* Added 1/29/2015 */
     getMore: getMore,
-
     fbTokenLogin: fbTokenLogin,
     refreshData: refreshData,
     dbInit: dbInit,
