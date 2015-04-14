@@ -202,6 +202,6 @@ angular.module('Services.oauth', [])
 
   // Set the API path for the mobile app, and localhost:
   // 
-  var apiPath = (window.cordova) ? 'http://plitto.com/api/2.0/' : '/api/2.0/'; // TODO2 - This is never used. OK?
+  // var apiPath = (window.cordova) ? 'http://plitto.com/api/2.0/' : '/api/2.0/'; // TODO2 - This is never used. OK?
 
 });

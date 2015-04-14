@@ -12,25 +12,25 @@
       <div class="button-bar">
         <!-- Ditto Button -->
         <a class="button" ng-class="{'active': view ==='ditto'}" ng-hide="userInfo.userId == $root.user.userId" ng-click="getSome('ditto');">
-          <i class="ionicons ion-ios7-checkmark-outline"></i>
+          <i class="ion-ios-checkmark-outline"></i>
           <div class=" ionicons ion-refresh buttonRefresh" ng-show="view === 'ditto' "></div>
         </a>
 
         <!-- Profile - Shared Button -->
         <a class="button" ng-class="{'active': view ==='shared'}" ng-hide="userInfo.userId == $root.user.userId" ng-click=" getSome('shared');">
-          <i class="ionicons ion-ios7-checkmark dittoA"></i>
+          <i class="ion-ios-checkmark dittoA"></i>
           <div class=" ionicons ion-refresh buttonRefresh" ng-show="view === 'shared' "></div>
         </a>
 
         <!-- Profile Feed Button -->
-        <a class="button" ng-class="{'active': view ==='feed'}" ng-click="showFeed(userInfo.userId); "><i class="ion-ios7-pulse-strong"></i></a>
+        <a class="button" ng-class="{'active': view ==='feed'}" ng-click="showFeed(userInfo.userId); "><i class="ion-ios-pulse-strong"></i></a>
 
         <!-- Profile Lists Button -->
         <a class="button" ng-class="{'active': view ==='lists'}" ng-click="showLists(userInfo.userId); "><i class="ion-clipboard"></i></a>
         <!-- RESTORE CHAT SOMEDAY SOON TODO1 - 2/1/2015
         <a class="button" ng-class="{'active': view ==='chat'}" 
            ng-hide="userInfo.userId == $root.user.userId" 
-           ng-click=" userChat(userInfo.userId); "><i class="ionicons ion-ios7-chatboxes-outline"></i></a>
+           ng-click=" userChat(userInfo.userId); "><i class="ion-ios-chatboxes-outline"></i></a>
 
 -->
         <!-- THIS HAS BEEN SUPERCEDED BY CHAT - Restore this <a class="button" ng-class="{'active': nav.view ==='user.milestones'}" ng-click="nav.view = 'user.milestones';">Milestones</a> -->
@@ -99,7 +99,7 @@
 
     <!-- Start User Chat -->
     <div ng-show="view==='chat'">
-      <h3 class="pageTitle"><i class="ion-ios7-chatboxes-outline"></i> Our Dittos &amp; Chats</h3>
+      <h3 class="pageTitle"><i class="ion-ios-chatboxes-outline"></i> Our Dittos &amp; Chats</h3>
 
       <h4 class="loading" ng-show="store.chat[0].loading">
         <i class="ion-loading-a"></i>Loading Chat</h4>

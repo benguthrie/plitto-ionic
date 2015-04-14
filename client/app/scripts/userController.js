@@ -59,7 +59,7 @@ angular.module('userController', [])
     var lsTypes = ['ditto', 'shared', 'feed', 'lists', 'chat'];
 
     if (parseInt($rootScope.user.userId) === parseInt($scope.userInfo.userId)) {
-      var lsTypes = ['feed', 'lists']; // TODO2 Put in the chat bit again. 
+      lsTypes = ['feed', 'lists']; // TODO2 Put in the chat bit again.
       $scope.view = 'feed';
       // console.log('updated scope view ? ', $scope.view);
     }
@@ -85,7 +85,8 @@ angular.module('userController', [])
             $scope.userInfo.userName = d[0].username;
             $scope.userInfo.fbuid = d[0].fbuid;
           }
-        });
+        }
+     );
 
 
       } else if (lsTypes[i] === 'ditto') {
@@ -169,9 +170,9 @@ angular.module('userController', [])
 
       $scope.showFeed = function (userId) {
         // Reload on second tap only, or if there are no records yet.
-
+        console.log('Do something with userId? ' + userId);
         var loadFromDb = false;
-        console.log('load showfeed? ', $scope.view === 'feed', $scope.store.feed[0].loading, typeof ($scope.store.feed[0].uid) === 'undefined')
+        console.log('load showfeed? ', $scope.view === 'feed', $scope.store.feed[0].loading, typeof ($scope.store.feed[0].uid) === 'undefined');
         if ($scope.view === 'feed' || typeof ($scope.store.feed[0].loading) !== 'undefined' || typeof ($scope.store.feed[0].uid) === 'undefined') {
           loadFromDb = true;
 
@@ -186,7 +187,7 @@ angular.module('userController', [])
         if (loadFromDb === true) {
           $scope.store.feed = [{
             loading: true
-            }];
+          }];
           dbFactory.promiseFeed('profile', $scope.userInfo.userId, '', '', '', '').then(function (d) {
             $scope.store.feed = d.results;
             if ($scope.userInfo.userName === null && d.results[0].username) {
@@ -207,7 +208,7 @@ angular.module('userController', [])
         if ($scope.view === filter) {
           $scope.store[filter] = [{
             'loading': true
-        }];
+          }];
           dbFactory.promiseGetSome($scope.userInfo.userId, '', filter).then(function (d) {
             $scope.store[filter] = d;
             // console.log('update: in promise ' + filter + ' : ', d);

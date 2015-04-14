@@ -36,8 +36,8 @@
 
       <!-- Icons -->
 
-      <div ng-show="notification.type === 'ditto' " class="ionicons ion-ios7-checkmark noteIcon"></div>
-      <div ng-show="notification.type === 'chat' " class="ionicons ion-chatbox noteIcon"></div>
+      <div ng-show="notification.type === 'ditto' " class=" ion-ios-checkmark noteIcon"></div>
+      <div ng-show="notification.type === 'chat' " class=" ion-chatbox noteIcon"></div>
 
 
       <div class="notificationContext">
@@ -49,7 +49,7 @@ To: {{ notification.content[0].toUserId }} {{ notification.content[0].toUserName
 
         </div>
 
-        <div class="dittoList item-text-wrap" ng-click="showList( notification.content[0].listid , notification.content[0].listName, notification.content[0].fromUserId, 'feed');">
+        <div class="dittoList item-text-wrap" ng-click="showList( notification.content[0].listid , notification.content[0].listName, notification.content[0].fromUserId);">
           {{ notification.content[0].listName }}</div>
 
         <div class="dittoThing item-text-wrap" ng-click="showThing( notification.content[0].thingid , notification.content[0].thingName, notification.content[0].fromUid);">

@@ -11,11 +11,11 @@
 
   <!-- BEGIN List Line -->
   <div class="item item-divider listLine">
-    <div class="listMoreUser" ng-click="showList(list.lid, list.listname, userData.uid, 'moreUser');">
+    <div class="listMoreUser" ng-click="showList(list.lid, list.listname, userData.uid );">
       <i class="listIcon ion-clipboard"></i>
       <span ng-bind="list.listname" class="item-text-wrap"></span>
     </div>
-    <div class="listAddTo" ng-click="showList(list.lid, list.listname, userData.uid, 'addToList');">
+    <div class="listAddTo" ng-click="showList(list.lid, list.listname, userData.uid);">
 
       <i class="ion-android-add listIconAdd"></i>
     </div>
@@ -46,7 +46,7 @@
               dittoed from {{item.dittousername}}
               <img ng-src=" {{'http://graph.facebook.com/' + item.dittofbuid + '/picture?height=30&width=30'}}" />
             </div>
-            <div ng-show="parseInt(item.dittoCount) > 0 "><i class='ion-ios7-checkmark'></i> + {{item.dittoCount}} dittoed this</div>
+            <div ng-show="parseInt(item.dittoCount) > 0 "><i class='ion-ios-checkmark'></i> + {{item.dittoCount}} dittoed this</div>
           </div>
           <!-- <h6 ng-show="item.dittouser === null" class="mega-octicon octicon-pencil">_</h6> -->
           <!-- <h6 ng-show="item.dittouser !== null">dittoed from {{item.dittousername}}</h6> -->
@@ -55,9 +55,9 @@
         <div class="thingWithCol" ng-bind="item.friendsWith"></div>
         <div class="dittoCol" ng-click="ditto(item.mykey, userData.uid, list.lid, item.tid, item.ik, $event, store);" ng-class="
               {
-               'ionicons ion-ios7-bolt dittoW ' : item.mykey === 0 , 
-               'ionicons ion-ios7-checkmark-outline dittoQ ' : item.mykey === null , 
-               'ionicons ion-ios7-checkmark dittoA ' : item.mykey > 0 
+               ' ion-ios-bolt dittoW ' : item.mykey === 0 ,
+               ' ion-ios-checkmark-outline dittoQ ' : item.mykey === null ,
+               ' ion-ios-checkmark dittoA ' : item.mykey > 0
               }">
 
 
@@ -71,8 +71,8 @@
     <div class="commentRow" ng-hide=" userData.uid === $root.user.userId ">
       <!-- The Comment Button -->
       <div class="commentButton" ng-click="letsChat( userData.uid, list.lid, item.tid, item.ik, $event, $index ); " ng-hide=" $root.user.userId === userData.uid " ng-class="{
-          'ion-ios7-chatboxes dittoA' : item.commentActive === '1' ,
-          'ion-ios7-chatboxes-outline' : item.commentActive !== '1' 
+          'ion-ios-chatboxes dittoA' : item.commentActive === '1' ,
+          'ion-ios-chatboxes-outline' : item.commentActive !== '1'
         }">
 
       </div>

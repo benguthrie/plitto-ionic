@@ -45,4 +45,5 @@ angular.module('userNavDirective', [])
       }
 
     };
-  });
+  }
+);

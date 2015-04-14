@@ -6,14 +6,15 @@ angular.module('Services.database', ['LocalStorageModule'])
   /* configure Constants */
   var apiPath = (window.cordova) ? 'http://plitto.com/api/2.0/' : '/api/2.0/';
 
-  /* This is for when there are no records. */
+  /* This is for when there are no records.
   function zeroRecords() {
     return {
       'msg': 'No Records',
-      'time': now()
+      'time': Date.now()
     };
     // console.log('dbFactory.zerorecords zero records: ', now());
   }
+  */
 
   function logout() {
     // console.log('logout');
@@ -54,13 +55,14 @@ angular.module('Services.database', ['LocalStorageModule'])
     var promise = $http.post(apiPath + 'ditto', dittoParams)
       .then(function (response) {
           // console.log('promise ditto. api response: ', response);
-
+          var mynewkey = null;
+          var friendsWith = null;
           if (checkLogout(response.data) === true) {
             logout();
           } else {
             // console.log('Ditto Response TODO2 Use shc', status, headers, config);
-            var mynewkey = null;
-            var friendsWith = null;
+
+
             // console.log('results key type of: ' + typeof response.data.results[0].thekey === 'undefined');
             if (action === 'ditto') {
               /*
@@ -119,7 +121,7 @@ angular.module('Services.database', ['LocalStorageModule'])
     // console.log("New Alert Count: ", $rootScope.stats.alerts.total);
   };
 
-  /* 11/2/2014 */
+  /* 11/2/2014
   var checkToken = function (token) {
     // console.log('check the token to see if we should proceed.');
     if (typeof token === 'undefined' || token.length === 0) {
@@ -128,6 +130,7 @@ angular.module('Services.database', ['LocalStorageModule'])
     }
 
   };
+  */
 
   var promiseAddComment = function (uid, lid, tid, itemKey, newComment, status) {
     // console.log('dbFactory.addComment log: ', uid, lid, tid, itemKey, newComment, status);
@@ -565,9 +568,11 @@ angular.module('Services.database', ['LocalStorageModule'])
           }
         },
         function (response) {
+          console.log('response ' + response);
           // Error handling here.
           // TODO2 - Error handling for data refresh error. console.log('checkToken data error: ', response);
-        });
+        }
+      );
     return promise;
   };
 

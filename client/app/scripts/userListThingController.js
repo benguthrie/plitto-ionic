@@ -1,6 +1,6 @@
 'use strict';
 angular.module('userListThingController', [])
-  .directive('userListThing', function (dbFactory, $state, pltf) {
+  .directive('userListThing', function (dbFactory, $state) {
 
     return {
       restrict: 'E',
@@ -43,7 +43,6 @@ console.log(' list no match: ', parseInt(lid), parseInt($scope.userData.lists[i]
           /* The elements are [0] - mykey / null , [1]:[friendsWith] / undefined - [2]['ditto'/'remove'] */
           dbFactory.promiseDitto(mykey, uid, lid, tid, itemKey).then(
             function (d) {
-
               for (var k = 0; k < arrPair.length; k++) {
                 // console.log('d', d[0], d[1]);
                 // console.log('c', k, d, String(d[0]));
@@ -82,8 +81,9 @@ console.log(' list no match: ', parseInt(lid), parseInt($scope.userData.lists[i]
         };
 
         /* List */
-        $scope.showList = function (listId, listName, userFilter, focusTarget) {
+        $scope.showList = function (listId, listName, userFilter) {
           // TODO - Fix this. dbFactory.showAList(listId, listName, userFilter, focusTarget);
+          console.log('Use userFilter later ' + userFilter);
           $state.go('app.list', {
             listId: listId,
             listName: listName
@@ -93,7 +93,7 @@ console.log(' list no match: ', parseInt(lid), parseInt($scope.userData.lists[i]
 
         /* Thing */
         $scope.showThing = function (thingId, thingName, userFilter) {
-
+          console.log('Use userFilter later ' + userFilter);
           $state.go('app.thing', {
             thingId: thingId,
             thingName: thingName
@@ -111,20 +111,20 @@ console.log(' list no match: ', parseInt(lid), parseInt($scope.userData.lists[i]
           //console.log('letsChat app.js directive', uid, lid, tid, itemKey, $event );
           // Find the item in this list.
           var i = 0,
-            j = 0,
-            abort = false;
+            j = 0;
+
           loop1:
-            for (i in $scope.userData.lists) {
-              if (lid === $scope.userData.lists[i].lid) {
-                var j = 0;
-                loop2:
-                  for (j in $scope.userData.lists[i].items) {
-                    if ($scope.userData.lists[i].items[j].ik === itemKey) {
-                      break loop1;
-                    }
-                  }
+          for (i in $scope.userData.lists) {
+            if (lid === $scope.userData.lists[i].lid) {
+              j = 0;
+              loop2:
+              for (j in $scope.userData.lists[i].items) {
+                if ($scope.userData.lists[i].items[j].ik === itemKey) {
+                  break loop1;
+                }
               }
             }
+          }
 
           //console.log('vars: i,j',i,j);
 
@@ -145,6 +145,7 @@ console.log(' list no match: ', parseInt(lid), parseInt($scope.userData.lists[i]
           // Call the addComment bit to activate or deactivate the queue item
           dbFactory.promiseAddComment(uid, lid, tid, itemKey, '0', isActive).then(function (d) {
             // NO FEEDBACK ON ADD COMMENT? 
+            console.log('Do something with d ' + d);
           });
         };
 
@@ -152,26 +153,21 @@ console.log(' list no match: ', parseInt(lid), parseInt($scope.userData.lists[i]
           //console.log('makeItemComment', newComment, uid, lid, tid, itemKey);
           // Find the user, then the list, then use the index.
 
-          // Get the user ID number.
-          var upos = null;
-          var lpos = null;
-          var tpos = null;
-
 
           // Find the item in this list.
-          var i = 0;
+          var i = 0, j = 0;
           loop1:
-            for (i in $scope.userData.lists) {
-              if (lid === $scope.userData.lists[i].lid) {
-                var j = 0;
-                loop2:
-                  for (j in $scope.userData.lists[i].items) {
-                    if ($scope.userData.lists[i].items[j].ik === itemKey) {
-                      break loop1;
-                    }
-                  }
+          for (i in $scope.userData.lists) {
+            if (lid === $scope.userData.lists[i].lid) {
+              j = 0;
+              loop2:
+              for (j in $scope.userData.lists[i].items) {
+                if ($scope.userData.lists[i].items[j].ik === itemKey) {
+                  break loop1;
+                }
               }
             }
+          }
 
           //console.log('vars: i,j', i, j);
           $scope.userData.lists[i].items[j].commentText = newComment;
@@ -180,6 +176,7 @@ console.log(' list no match: ', parseInt(lid), parseInt($scope.userData.lists[i]
           // 
           dbFactory.promiseAddComment(uid, lid, tid, itemKey, newComment, '1').then(function (d) {
             //console.log('ult521 add comment');
+            console.log('Do something with d ' + d );
           });
 
           // TODO1 Clear the comment field
