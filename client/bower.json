@@ -16,7 +16,8 @@
   "devDependencies": {
     "angular-mocks": "~1.2.17",
     "angular-scenario": "~1.2.17",
-    "angular-ui-router.stateHelper": "~1.2.1"
+    "angular-ui-router.stateHelper": "~1.2.1",
+    "ionic": "driftyco/ionic-bower#1.0.0-rc.5"
   },
   "homepage": "https://github.com/benguthrie/plitto-ionic",
   "authors": [

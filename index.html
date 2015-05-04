@@ -1,18 +1,49 @@
 <!DOCTYPE html>
 <html>
 <head>
-  
-  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.96.1/css/materialize.min.css">
+  <style>
+    body {
+      font-size: 2em;
+    }
+    li {
+      margin-bottom: 0.7em;
+      list-style: none;
+      float: left;
+      clear: both;
+    }
+    li > a {
+
+      margin-left: 1em;
+      background-color: #333;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 0.5em;
+      padding: 0.5em;
+      width: 10em;
+      display: block;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
 
-  <h1>Options:</h1>
+  <h1>Plitto:</h1>
   <ul>
-    <li><a href='http://blog.plitto.com'>Blog</a></li>
-    <li><a href='http://plitto.com/client/app/'>Public Web App</a></li>
-    <li><a href='http://localhost/plitto-ionic/client/app'>Localhost</a></li>
+    <li><a href='http://blog.plitto.com' class="z-depth-2">Blog</a></li>
+    <li><a href='http://plitto.com/client/' class="z-depth-2">Public Web App</a></li>
+    <script>
+      var host = window.location.hostname;
+
+      if(host === "localhost"){
+        document.write('<li><a href="http://localhost/plitto-ionic/client/app" class="z-depth-2">Local Live</a></li>');
+        document.write('<li><a href="http://localhost/plitto-ionic/client/www" class="z-depth-2">Local Compressed</a></li>');
+      }
+    </script>
+
+
+
   </ul>
 
-
 </body>
-</html> 
+</html>

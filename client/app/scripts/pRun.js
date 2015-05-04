@@ -13,7 +13,9 @@ angular.module('pRun', [])
     $ionicPlatform.ready(function () {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
+      console.log('What is cordova window? ' + window.cordova);
       if (window.cordova && window.cordova.plugins.Keyboard) {
+        console.log('found the window.');
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       }
       if (window.StatusBar) {

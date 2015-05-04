@@ -7,21 +7,27 @@ angular.module('Services.oauth', [])
   // otherwise we're just going to load the entire website on the phone
   //   console.log('window: ', window);
   var redirectUri = '';
-
-  if (document.URL.indexOf('localhost') > -1) {
+  var findPath = document.URL.indexOf('localhost');
+  console.log('OAuth service has loaded');
+  console.log('findPath: ' + findPath);
+  if ( findPath > -1) {
 
     // TODO2 - This is used for troubleshooting app login. console.log('localhost redirect found', document.URL);
     /* It is running from localhost. If it's also running from window.cordova, then don't bother with the localhost. Else, use the localhost site. */
-    var localPath = 'client/app';
+    // Restore ? var localPath = 'client/';
+    var localPath = 'client/test1.html';
     if (document.URL.indexOf(localPath) === -1) {
       // It must be 'client/www'
-      localPath = 'client/www';
+      localPath = 'client/test2.html';
     }
-    redirectUri = window.cordova ? 'http://plitto.com/CORDOVAWILLCLOSETHISWINDOW' : 'http://localhost/plitto-ionic/' + localPath;
+
+    // redirectUri = window.cordova ? 'http://plitto.com/CORDOVAWILLCLOSETHISWINDOW' : 'http://localhost/plitto-ionic/' + localPath;
+    redirectUri = window.cordova ? 'test3.html' : 'test4.html';
 
   } else {
     pltf.log('localhost redirect NOT found, which is ok.' + document.URL);
-    redirectUri = window.cordova ? 'http://plitto.com' : 'http://plitto.com/client/app/';
+    // redirectUri = window.cordova ? 'http://plitto.com' : 'http://plitto.com/client/';
+    redirectUri = window.cordova ? 'test5.html' : 'test6.html';
   }
 
   // pltf.log('redirect / window.cordova' + redirectUri + window.cordova);
@@ -158,7 +164,10 @@ angular.module('Services.oauth', [])
         /* Native App Redirect to localhost */
         authUrl = 'https://www.facebook.com/v2.0/dialog/oauth?' +
           'client_id=207184820755' +
-          '&redirect_uri=' + redirectUri + // This is irrelevant, because the window should close as soon as the code is received.
+
+
+          // '&redirect_uri=' + redirectUri + // This is irrelevant, because the window should close as soon as the code is received.
+          '&redirect_uri=test6.html' +  + // This is irrelevant, because the window should close as soon as the code is received.
           '&display=touch' +
           '&scope=email,user_friends' +
           '&response_type=token';
