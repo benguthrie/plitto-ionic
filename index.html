@@ -28,7 +28,7 @@
 </head>
 <body>
 
-  <h1>Plitto:</h1>
+  <h1>Plitto 5/4:</h1>
   <ul>
     <li><a href='http://blog.plitto.com' class="z-depth-2">Blog</a></li>
     <li><a href='http://plitto.com/client/' class="z-depth-2">Public Web App</a></li>
@@ -41,7 +41,21 @@
       }
     </script>
 
+    <script>
+      // Get the querystrings
+      function getParameterByName(name) {
+        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex.exec(location.search);
+        return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+      }
 
+      var authNote = getParameterByName('#access_token');
+
+      document.write('<h1>DEBUG</h1>');
+      document.write('authNote: '+ authNote);
+
+    </script>
 
   </ul>
 

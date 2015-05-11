@@ -17,3 +17,5 @@ lib
 /client/www/
 /common/
 /client/node_modules/
+/client/resources/
+/client/app copy/

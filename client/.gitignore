@@ -1,8 +1,9 @@
-docular_generated
 node_modules
 www
-.tmp
+.idea
+.temp
 .sass-cache
+app/bower_components
 coverage
 platforms
 plugins
@@ -11,5 +12,4 @@ plugins
 *.log
 *.DS_Store
 
-app/scripts/config.js
-
+app/scripts/configuration.js

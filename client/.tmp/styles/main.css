@@ -1,0 +1,804 @@
+/* Colors
+  Light Green - #32868C
+  Orange Accent - #F49653
+
+*/
+
+.slider {
+  height: 85%;
+}
+
+.slider-slide {
+  padding-top: 80px;
+  color: #000;
+  background-color: #fff;
+  text-align: center;
+}
+
+h4.loading {
+  -webkit-align-content: center;
+  align-content: center;
+  padding: 3em;
+  text-align: center;
+}
+
+h4.loading > i {
+  clear: both;
+  font-size: 3em;
+  margin-bottom: 0.3em;
+  width: 100%;
+}
+
+img.title-image {
+  float: left;
+}
+
+span.hint {
+  font-size: 0.5em;
+  color: rgba(100, 100, 100, 0.5);
+}
+
+div.button-bar > a.active {
+  border-bottom: solid 6px #F49653;
+  margin-bottom: -6px;
+}
+
+h4.viewContext {
+  background-color: #888;
+  color: #fff;
+  padding: 0.5em 0.2em 0.5em 1em;
+  border-bottom: solid 1px #F49653;
+  border-top: solid 0.1em #F49653;
+  margin-top: 0em;
+}
+
+h4.viewContext > i {
+  margin-right: 0.5em;
+}
+
+h4.secondary {
+  background-color: #32868C;
+  border: 0;
+  margin: 0.5em 0 0 0;
+}
+
+/* Buttons in the nav bar */
+
+div.right-buttons {
+  margin: 0;
+  padding: 0;
+  height: 3em;
+}
+
+div.right-buttons > span > button.button {
+  /*  */
+  max-height: 35px;
+  padding: 0 0.2em 0 0.2em !important;
+  float: left;
+  z-index: 2;
+  text-align: center;
+}
+
+div.button-bar > a.buttonProfilePic {
+  background-repeat: no-repeat;
+  background-size: 50px 50px;
+  background-position: left;
+}
+
+span.stat {
+  overflow: hidden;
+  color: #444;
+  font-size: 1.5em;
+}
+
+hr.clearBoth {
+  clear: both;
+  height: 0px;
+  border: 0px;
+}
+
+span.innerNo {
+  color: white;
+  text-shadow: 0 0 3px #B0B0B0;
+  position: relative;
+  z-index: 2;
+  top: -36px;
+  left: -17px;
+  text-align: right;
+  width: 30px;
+  margin-right: -35px;
+  font-size: 0.6em;
+}
+
+div.topicLine {
+  width: 100%;
+  padding: 0.2em;
+  color: white;
+}
+
+/* Notifications Section */
+
+.noteIcon {
+  padding: 0.2em;
+  font-size: 2em;
+  position: relative;
+  left: -25px;
+  top: 20px;
+  float: left;
+}
+
+/* The div for users to show */
+
+div.userImage {
+  float: left;
+}
+
+img.bigUser {
+  position: relative;
+  left: 0px;
+  top: 0px;
+  z-index: 1;
+}
+
+img.smallUser {
+  position: relative;
+  left: -30px;
+  top: 5px;
+  z-index: 2;
+  height: 30px;
+  width: 30px;
+}
+
+a.buttonStranger {
+  background-image: url('../img/prod/769-male@3x.png') !important;
+  background-repeat: no-repeat;
+  background-size: 30px;
+  background-position: center;
+}
+
+.unread {
+  background-color: rgba(200, 255, 200, 0.5);
+}
+
+span.notificationDate {
+  color: #999;
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  font-size: 0.8em;
+  float: right;
+  display: block;
+}
+
+div.notificationContext {
+  position: relative;
+  vertical-align: text-top !important;
+  padding-bottom: 20px;
+  padding-left: 120px;
+  margin-left: 0px;
+}
+
+div.sourceText {
+  padding: 0.1em 4em 0.1em 1em;
+  font-size: 0.8em;
+  background-color: #32868C;
+  min-width: 1s0%;
+  margin-left: -75px;
+  float: left;
+  color: white;
+}
+
+span.notificationNote {
+  font-style: italic;
+}
+
+div.dittoList {
+  padding: 30px 1em 0.3em 0em;
+  border-bottom: 1px solid #c0c0c0;
+}
+
+div.dittoThing {
+  vertical-align: text-top;
+  font-size: 1.2em;
+  padding: 0.5em;
+}
+
+span.label {
+  font-size: 0.5em;
+  color: 444;
+}
+
+h1.pageTitle {
+  padding: 10px 0 5px 10px;
+  font-size: 1.7em;
+  margin: 0;
+}
+
+h1.pageTitle > i {
+  margin-right: 0.3em;
+}
+
+/* Highlight Input Forms */
+
+input.userInput {
+  border: 1px solid #888;
+  padding: 0.1em;
+}
+
+/* User List Things touched after 1/19/2015 */
+
+/* User / List / Thing Styling */
+
+div.userBlock > a.item,
+div.item > i.ion-chevron-right {
+  right: 0;
+  top: 0;
+  position: absolute;
+  padding: 1em 0.3em 1em 0.3em;
+  opacity: 0.4;
+}
+
+div.listBlock {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  margin: 0.9em 0.5em 0.1em 0.5em;
+  /* Determines the spacing between each user/list pair. */
+  background-color: #ccc;
+  border-radius: 0.3em;
+}
+
+div.userLine,
+a.userLine {
+  padding: 0.2em 0 0.2em 2.6em;
+  min-height: 2.1em;
+  background-color: #32868C;
+  border: 0 !important;
+  border-bottom: 1px solid #32868C !important;
+  border-top-left-radius: 5px !important;
+  border-top-right-radius: 5px !important;
+  margin-left: -1px !important;
+  margin-right: -1px !important;
+}
+
+div.endOfList {
+  background-color: #32868C;
+  margin: 5px -2px 0 -2px;
+  padding: 6px;
+  border-bottom-left-radius: 5px !important;
+  border-bottom-right-radius: 5px !important;
+  text-align: center;
+  color: white;
+}
+
+div.endOfList > button {
+  border: 1px solid white;
+  opacity: 0.5;
+  padding-right: 2em;
+}
+
+div.endOfList > button > i {
+  font-size: 1.3em;
+  margin: 0 1em 0 1em;
+}
+
+a.userLine > h2 {
+  color: #fff;
+  padding: 7px;
+}
+
+a.userLine > img {
+  top: 0px !important;
+  left: 0px !important;
+  /* border-radius: 0; */
+  padding: 0;
+  margin: 0;
+  float: left;
+  border-top-left-radius: 5px !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+/* Docs */
+
+i.docIcon {
+  font-size: 4em;
+  text-align: left;
+}
+
+div.docLegend {
+  display: table;
+  border-bottom: 1px solid #bbb;
+}
+
+div.docLegend > div {
+  display: table-row;
+}
+
+div.docLegend > div > div {
+  display: table-cell;
+  vertical-align: top;
+  padding: 1em;
+  border-top: 1px solid #bbb;
+}
+
+/* Thing Name Row within Thing Name */
+
+div.thingTable {
+  display: table;
+}
+
+div.thingNameRow {
+  display: table-row;
+  width: 100%;
+}
+
+div.thingNameRow > div {
+  display: table-cell;
+}
+
+div.thingNameRow > div.thingNameCol {
+  width: inherit;
+  /* Todo2 - Better Formatting on this. */
+  padding: 0;
+  margin: 0;
+  vertical-align: top;
+}
+
+/* Thing Name Formatting */
+
+div.thingNameRow > div.thingNameCol > span.thingNameText {
+  /* Todo2 - Better Formatting on this. */
+  padding: 0.7em;
+  display: block;
+  margin: 0;
+}
+
+div.thingNameRow > div.thingNameCol > span.dittoedThing {
+  font-size: 1.0em;
+}
+
+div.thingNameRow > div.thingNameCol > span.typedThing {
+  font-size: 1.2em;
+}
+
+/* friends with count styling */
+
+
+
+
+
+/* Ditto icon - Potential; */
+
+div.dittoQ {
+  color: #000;
+}
+
+/* Ditto icon - Waiting for server response; */
+
+div.dittoW {
+  color: #999;
+}
+
+/* Ditto icon - You have this in common; */
+
+div > a.dittoA,
+div.dittoA,
+div.button-bar > a.button > i.dittoA,
+div.thingNameRow > div.dittoCol > i.dittoA {
+  color: green;
+}
+
+div.thingNameRow > div.dittoCol > i {
+  box-shadow: 0 2px 5px 0 rgba(100, 100, 100, 0.86);
+  border-radius: 1em;
+  padding: 0;
+  margin: 0;
+  height: 0.9em;
+}
+
+div.thingNameRow > div {
+  padding: 5px;
+}
+
+/* Add to List Form */
+
+label#addToList,
+label#searchForm {
+  background-color: #ddd;
+  padding: 0.2em;
+}
+
+label#addToList > input,
+label#searchForm > input {
+  background-color: #fff;
+  margin: 0;
+}
+
+label#addToList > button {
+  border: 0;
+}
+
+label#addToList > button > i {
+  font-size: 1.3em;
+  margin: 0 0 0.1em 0;
+  border: 0.2em solid #444;
+  background-color: rgba(50, 200, 50, 0.3);
+  padding: 0.1em 0 0 0;
+  height: 1.8em;
+  width: 1.8em;
+  color: #444;
+  display: block;
+  border-radius: 0.9em;
+  box-shadow: 0 2px 5px 0 rgba(100, 100, 100, 0.86);
+}
+
+/* Search Form Styling */
+
+div.searchLine {
+  display: table;
+  width: 100%;
+}
+
+div.searchLine > form.searchCell {
+  display: table-row;
+}
+
+div.searchLine > form.searchCell > div.placeholder-icon {
+  font-size: 1.5em;
+  padding-left: 0.5em;
+  width: 0.5em;
+}
+
+div.searchLine > form.searchCell > i,
+div.searchLine > form.searchCell > label,
+div.searchLine > form.searchCell > div {
+  display: table-cell;
+  margin: 0;
+}
+
+div.searchLine > form.searchCell {
+  background-color: #ddd;
+}
+
+div.searchLine > form.searchCell > label {
+  padding-right: 0.6em;
+}
+
+div.searchLine > form.searchCell > label > input {
+  background-color: #fff;
+  z-index: 3;
+}
+
+div.searchLine > form.searchCell > div.clearSearch {
+  width: 2em;
+  height: 0;
+}
+
+div.searchLine > form.searchCell > div.clearSearch > button {
+  border: 0;
+  font-size: 2em;
+  vertical-align: text-top;
+  margin-top: -0.4em;
+  width: 1.3em;
+  height: 1.3em;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.86);
+  border-radius: 1em;
+  padding: 0;
+}
+
+/* Add a list */
+
+div.addList {
+  /* DEBUT ONLY */
+  display: table;
+  width: 100%;
+  margin: 0;
+  padding-bottom: 0.3em;
+  margin-bottom: 0.5em;
+}
+
+div.addList > form {
+  display: table-row;
+  padding: 0;
+  border: 0;
+}
+
+div.addList > form > div.formText {
+  display: table-cell;
+  width: auto;
+  padding: 0;
+  margin: 0;
+}
+
+div.addList > form > label > input {
+  font-size: 1.2em;
+  border: 1px solid brown;
+  padding: 0;
+  margin: 0;
+}
+
+div.addList > form > div.formButton {
+  display: table-cell;
+  width: 4em;
+  padding: 0;
+  margin: 0;
+  vertical-align: top;
+}
+
+div.addList > form > div.formButton > button {
+  margin: 0;
+  vertical-align: top;
+}
+
+/* Side Menu */
+
+h1.appTitle {
+  font-size: 1.5em;
+  vertical-align: top;
+}
+
+h1.appTitle > img {
+  height: 30px;
+  width: 30px;
+  margin: 0 0.2em 0 0;
+}
+
+/* Comment Row within User List Thing */
+
+div.commentRow {
+  display: table-row;
+  width: 100%;
+}
+
+div.commentRow > div {
+  padding: 0.3em;
+  border-top: 1px solid #ccc;
+  display: table-cell;
+}
+
+div.commentRow > div.commentButton {
+  width: 1em;
+  font-size: 1.5em;
+}
+
+div.commentRow > div.commentInactiveButton {
+  width: inherit;
+}
+
+
+
+div.commentRow > div.commentText {
+  /* TODO2 there is an inexplicable 15px padding at the top of this seciton */
+  width: inherit;
+  /* makes it take the whole line. */
+  padding: 0;
+  margin: 0;
+}
+
+
+
+div.commentRow > div.commentText > div.commentsSection > form > label.item > button.button,
+div.commentRow > div.commentText > div.commentsSection > div > button.button {
+  float: right;
+}
+
+/* Comment Edit Button */
+
+div.commentRow > div.commentText > div.commentsSection > div > button.button {
+  margin: 0.3em;
+  padding: 0;
+  width: 3em;
+}
+
+div.commentRow > div.commentText {
+  padding: 0;
+  margin: 0;
+}
+
+/* Comment Text */
+
+div.commentRow > div.commentText > div.commentsSection > div > span {
+  padding: 12px;
+  display: block;
+  font-style: italic;
+}
+
+div.commentRow > div.commentText > div.commentsSection > div {
+  min-height: 3.2em;
+  /* Makes the text clickable anywhere on the line */
+  height: inherit;
+}
+
+
+
+/* Done Button */
+
+div.commentRow > div.commentText > div.commentsSection > form > label.item > button {
+  margin: 0;
+  float: right;
+}
+
+div.commentRow > div.commentText > div.commentsSection > form > label.item {
+  margin: 0;
+  padding: 12px;
+}
+
+/* removes the border around the text being edited. */
+
+div.commentRow > div.commentText > div.commentsSection > form > label.item > input#addCommentText {
+  margin: 0;
+  padding: 0;
+  font-size: 1.0em;
+  height: 3em;
+  width: inherit;
+}
+
+/* No Items to Show */
+
+div.noShow {
+  padding: 1em;
+  font-size: 1.4em;
+}
+
+/* Subheader for profile and list */
+
+div.childHeader {
+  background-color: #fff;
+  width: 100%;
+  display: block;
+}
+
+/* list line */
+
+div.listBlock > div.listLine {
+  background-color: #393E3C;
+  border: 0;
+  color: #fff;
+  margin: 0;
+  z-index: 0;
+  border: 0px;
+  font-size: 1em;
+  display: table;
+  width: 100%;
+  padding: 0.3em;
+  /* TODO2 - Pad the listline */
+}
+
+div.listBlock > div.listLine > div {
+  display: table-cell;
+}
+
+div.listBlock > div.listLine > div.listMoreUser {
+  width: inherit;
+  padding: 0.3em;
+  vertical-align: top;
+}
+
+/* This is the list name. */
+
+div.listBlock > div.listLine > div.listMoreUser > span {
+  margin: 0;
+  vertical-align: top;
+}
+
+/* End of list styling.
+
+
+  div.endOfList {
+    height: 10px;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+  }
+
+  /* The button bar is used on the profile and list.  */
+
+div.button-bar > a.button {
+  font-size: 2em;
+}
+
+div.button-bar > a.button > div.buttonRefresh {
+  position: absolute;
+  bottom: 0.3em;
+  right: 0.3em;
+  font-size: 0.5em;
+  vertical-align: bottom;
+  color: rgba(150, 150, 150, 0.5);
+}
+
+
+
+/* Attribution and time */
+
+div.listItem > div.thingTable > div.thingNameRow > div.thingNameCol > div.addedNote {
+  font-size: 0.9em;
+  display: table-row;
+  color: #bbb;
+  padding-left: 1em;
+  border: 2px solid green;
+}
+
+div.listItem > div.thingTable > div.thingNameRow > div.thingNameCol > div.addedNote > div {
+  padding-left: 1em;
+}
+
+div.listItem > div.thingTable > div.thingNameRow > div.thingNameCol > div.addedNote > div.recent {
+  display: table-cell;
+}
+
+div.listItem > div.thingTable > div.thingNameRow > div.thingNameCol > div.addedNote > div.dittoedFrom {
+  display: table-cell;
+}
+
+div.listItem > div.thingTable > div.thingNameRow > div.thingNameCol > div.addedNote > div.dittoedFrom > img {
+  height: 20px;
+  width: 20px;
+  opacity: 0.4;
+  display: none;
+}
+
+div.dittoCol {
+  padding: 2em;
+  font-size: 3em;
+}
+
+div.friendsWith {
+  float: left;
+  font-size: 0.8em;
+}
+
+div.letsChat > active {
+  background-color: #bcc;
+}
+
+div.listLine > i {
+  font-size: 1.8em;
+  float: left;
+  margin-right: 0.3em;
+}
+
+div.listLine > span {
+  vertical-align: middle;
+  font-size: 1.2em;
+}
+
+/* list item */
+
+div.listBlock > div.listItem {
+  margin: 0.3em 0.3em 0.6em 0.3em;
+  padding: 0;
+  border: 0;
+  border-radius: 0.3em;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+}
+
+div.listBlock > div.listLine > div.listMoreUser > i.listIcon {
+  font-size: 2em;
+  margin: 0 0.3em 0 0.3em;
+}
+
+div.listBlock > div.listLine > div.listAddTo {
+  float: right;
+  padding: 0.5em;
+  margin: 0;
+}
+
+div.listBlock > div.listLine > div.listAddTo > i.listIconAdd {
+  font-size: 1.2em;
+  color: #ddd;
+  border: 2px solid #ddd;
+  margin: 0;
+  box-shadow: 0 2px 5px 0 rgba(200, 200, 200, 0.26);
+  border-radius: 0.9em;
+  background-color: rgba(200, 200, 200, 0.4);
+  display: block;
+  height: 1.8em;
+  width: 1.8em;
+  padding-top: 0.3em;
+  padding-left: 0.3em;
+}
+
+
+
+.plittoBar {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+}

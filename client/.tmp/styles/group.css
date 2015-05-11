@@ -1,0 +1,126 @@
+a.groupItem {
+  margin: 0.5em 0.5em 1em 0.5em;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  border-radius: 0.5em;
+  display: table;
+  padding: 0;
+  text-decoration: none;
+  color: #333;
+  float: left;
+}
+
+a.friendStyle {
+  background-color: #32868C;
+  width: 22em;
+}
+
+a.listStyle {
+  background-color: #393E3C;
+  width: 22em;
+}
+
+a.groupItem > div.statTable > div.listName,
+a.groupItem > div.friendName {
+  padding: 0.3em 0.3em 0.3em 0.7em;
+  color: white;
+  width: 100%;
+  font-size: 1.1em;
+}
+
+a.groupItem > div.statTable {
+  display: table;
+  width: 100%;
+}
+
+a.groupItem > div.listName {
+  display: table-row;
+}
+
+a.groupItem > div.statTable > div.statRow {
+  display: table-row;
+}
+
+a.groupItem > div.statTable > div.statRow > div.statBlock {
+  display: table-cell;
+}
+
+a.groupItem > div.statTable > div.statRow > div.friendPicture {
+  display: table-cell;
+  background-color: #eee;
+  border-bottom-left-radius: 0.3em;
+  padding-right: 0.2em;
+}
+
+a.groupItem > div.statTable > div.statRow > div.friendPicture > img {
+  width: 4em;
+}
+
+a.groupItem > div.statTable > div.statRow > div.groupStats {
+  margin: 0;
+  padding: 0;
+  display: table-cell;
+  vertical-align: top;
+  text-align: left;
+  background-color: #eee;
+  border-bottom-right-radius: 0.3em;
+}
+
+a.groupItem > div.statTable > div.statRow > div.groupStats > div.listName {
+  font-size: 1.1em;
+  width: inherit;
+  padding: 0.3em;
+  background-color: #393E3C;
+  color: white;
+}
+
+a.groupItem > div.listName {
+  background-color: #555;
+}
+
+
+
+a.groupItem > div.listName > i {
+  font-size: 1.5em;
+  margin-right: 0.3em;
+}
+
+div.groupItem >div.statTable > div.statRow > div.groupStats > div.statBlock {
+  display: table;
+  padding: 0.5em;
+}
+
+/* COLSTATICON */
+
+div.statTable > div.statRow > div.groupStats > div.statBlock > div.colStat {
+  float: left;
+  text-align: center;
+  margin: 0.1em 0.2em 0.2em 0.2em;
+  background-color: #fff;
+  /*  Google Material Design Clone*/
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  font-weight: 600;
+  font-size: 1.3em;
+  padding: 0.2em 0.1em 0.3em 0.1em;
+  width: 4em;
+  height: 3em;
+}
+
+div.groupItem > div.statTable > div.statRow > div.groupStats > div.statBlock > div.colStat > i {
+  float: left;
+  font-size: 1em;
+  margin-right: 0.2em;
+  color: #888;
+}
+
+div.statTable > div.statRow > div.groupStats > div.statBlock > div.colStat > span.stat {
+  height: 1em;
+  display: block;
+  width: 3em;
+}
+
+div.statTable > div.statRow > div.groupStats > div.statBlock > div.colStat > span.timeAgo {
+  height: 1em;
+  text-overflow: clip;
+  display: block;
+  font-size: 0.5em;
+}
