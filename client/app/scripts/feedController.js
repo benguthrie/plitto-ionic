@@ -48,6 +48,7 @@ angular.module('feedContrller', [])
     // dbFactory.mainFeed('friends', '', '', '', '', 'feed.friends',''); // Should only evaluate when navigating to "feed"
 
     $scope.feed = function (filter, continueFrom, newerOrOlder) {
+      console.log('newOrOlder and continueFrom just to use it' + newerOrOlder + continueFrom);
       if (filter === $scope.view) {
         /* Refresh */
         $scope.store[filter] = [{

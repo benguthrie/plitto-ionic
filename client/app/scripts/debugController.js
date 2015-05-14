@@ -28,17 +28,19 @@ angular.module('debugController', [])
       } else if (type === 'htmlLength') {
         // 
         $scope.funnyText = pltf.domSize('return');
-        console.log($(document.body).html());
+        // console.log($(document.body).html());
 
       } else if (type === 'currentTime') {
         var d = new Date();
         var n = d.getTimezoneOffset();
+        console.log('n just to use it ' + n);
         $scope.funnyText = 'The Time Is: ' + d + ' and timezone offset: ' + d.getTimezoneOffset();
 
-        $scope.funnyTime = moment().format();
+        // $scope.funnyTime = moment().format();
 
       } else {
-        $scope.funnyText = 'note ready ' + Date();
+        // $scope.funnyText = 'note ready ' + Date();
+        console.log('note ready');
       }
     };
 

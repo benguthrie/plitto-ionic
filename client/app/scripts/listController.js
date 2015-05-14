@@ -87,7 +87,7 @@ angular.module('listController', [])
       dbFactory.promiseThingName($scope.listInfo.listId).then(function (d) {
         console.log('d.results: ' + d.results + ' length: ' + d.results.length);
         if (d.results) {
-          console.log('valid results from d.results' + d.results[0].thingName);
+          // console.log('valid results from d.results' + d.results[0].thingName);
           $scope.listInfo.listName = d.results[0].thingName;
           // Set the view to theirs, so they can add an item.
           $scope.view = 'mine';
@@ -219,13 +219,14 @@ angular.module('listController', [])
       dbFactory.promiseAddToList(itemObj).then(function (d) {
         // console.log('new item (response): ', newItemName, d);
         /* Check to see if the item has a valid key */
+        var i = 0;
+        // there was a var j, but it wasn't used.
         if (typeof (d.mykey) !== 'undefined') {
 
           /* Valid results from the API. Begin processing adding this item */
           /* Overwrite the temp value. We know that it will only have one entry. */
           var newItemPos = null;
-          var i = 0,
-            j = 0;
+
           for (i in $scope.store.mine[0].lists[0].items) {
             if ($scope.store.mine[0].lists[0].items[i].id === tempNum) {
               newItemPos = i;

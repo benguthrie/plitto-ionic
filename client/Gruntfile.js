@@ -23,6 +23,7 @@ module.exports = function (grunt) {
       app: 'app',
       scripts: 'scripts',
       styles: 'styles',
+      templates: 'templates',
       images: 'images',
       test: 'test',
       dist: 'www'
@@ -224,7 +225,9 @@ module.exports = function (grunt) {
             '<%= yeoman.images %>/**/*.{png,jpg,jpeg,gif,webp,svg}',
             '*.html',
             'templates/**/*.html',
-            'fonts/*'
+            'directives/**/*.html',      
+            'fonts/*',
+            'img/prod/*.{png,jpg,gif}'
           ]
         }, {
           expand: true,

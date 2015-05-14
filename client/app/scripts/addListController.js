@@ -26,10 +26,12 @@ angular.module('addListController', [])
     // List Link
     $scope.showList = function (listId, listName, userFilter) {
       // console.log('showList controllers.js 361, RESTORE LINK TO LIST.');
+
       // TODO2 - Use focusTarget?
       $state.go('app.list', {
         listId: listId,
-        listName: listName
+        listName: listName,
+        userFilter: userFilter
       });
       // dbFactory.showAList(listId, listName, userFilter, focusTarget);
     };

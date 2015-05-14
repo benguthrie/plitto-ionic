@@ -6,11 +6,13 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
+//'config',
+// 'Plitto.controllers',
+// 'pController',
 angular.module('Plitto', [
   'ionic',
-  //'config',
+
   'ngResource',
-  // 'Plitto.controllers',
   'Plitto.services',
   'angularMoment',
   'LocalStorageModule',
@@ -20,7 +22,7 @@ angular.module('Plitto', [
   'listOfListsDirective',
   'userNavDirective',
   'userListThingController',
-  // 'pController',
+
   'userDirective',
   'viewConfig',
   'addListController',

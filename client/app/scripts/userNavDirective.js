@@ -40,10 +40,10 @@ angular.module('userNavDirective', [])
       controller: function ($scope) {
         $scope.domLengthNum = null;
         $scope.domLength = function () {
-          $scope.domLengthNum = $(document.body).html().length;
+          // $scope.domLengthNum = $(document.body).html().length;
+          $scope.domLengthNum = 'no jquery';
         };
       }
 
     };
-  }
-);
+  });

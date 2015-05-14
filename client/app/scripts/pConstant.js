@@ -12,7 +12,8 @@ angular.module('pConstant', [])
       if (output === 'console') {
         //console.log('HTMLString', $(document.body).html().length);
       } else if (output === 'return') {
-        return $(document.body).html().length;
+        // return $(document.body).html().length;
+        return 'html length removed';
       }
 
     },

@@ -1,75 +1,60 @@
 #!/usr/bin/env node
-/*
-var fs = require('fs');
-var path = require('path');
-var jshint = require('jshint').JSHINT;
-// var async = require('async');
 
+/*
+ * Lint all JavaScript files in the listed directories for errors.  If errors
+ * are found, stop the build proccess until they are corrected.
+ */
+
+var fs = require("fs");
+var path = require("path");
+var jshint = require("jshint").JSHINT;
+
+var filesWithErrorsCount = 0;
+
+// All directories that contain JavaScript in the www path of your project you want linted
 var foldersToProcess = [
-  'js'
+    "scripts"
 ];
 
 foldersToProcess.forEach(function(folder) {
-  processFiles("www/" + folder);  // Generate Output
-
+    filesWithErrorsCount += processFiles("www/" + folder);
 });
 
+if(filesWithErrorsCount > 0) {
+    console.log("There were " + filesWithErrorsCount + " files with errors");
+    process.exit(1);
+}
+
 function processFiles(dir, callback) {
-  var errorCount = 0;
-  fs.readdir(dir, function(err, list) {
-    if (err) {
-      console.log('processFiles err: ' + err);
-      return;
-    }
-    async.eachSeries(list, function(file, innercallback) {
-      file = dir + '/' + file;
-      fs.stat(file, function(err, stat) {
-        if(!stat.isDirectory()) {
-          if(path.extname(file) === '.js') {
-            lintFile(file, function(hasError) {
-              if(hasError) {
-                errorCount++;
-              }
-              innercallback();
-            });
-          } else {
-            innercallback();
-          }
-        } else {
-          innercallback();
+    var errorCount = 0;
+    var fileList = fs.readdirSync(dir);
+    fileList.forEach(function(file) {
+        file = dir + "/" + file;
+        var fileStat = fs.statSync(file);
+        if(!fileStat.isDirectory()) {
+            if(path.extname(file) === ".js" && file.indexOf(".min.js") === -1) {
+                errorCount += lintFile(file);
+            }
         }
-      });
-    }, function(error) {
-      if(errorCount > 0) {
-        process.exit(1);
-      }
     });
-  });
+    return errorCount;
 }
 
-function lintFile(file, callback) {
-
-  // console.log('Linting ' + file);
-  fs.readFile(file, function(err, data) {
-    if(err) {
-      console.log('Error: ' + err);
-      return;
-    }
-    if(jshint(data.toString())) {
-      console.log('File ' + file + ' has no errors.');
-      console.log('-----------------------------------------');
-      callback(false);
+function lintFile(file) {
+    console.log("Linting " + file);
+    var fileData = fs.readFileSync(file);
+    if(jshint(fileData.toString())) {
+        console.log("File " + file + " has no errors.");
+        console.log("-----------------------------------------");
+        return 0;
     } else {
-      console.log('Errors in file ' + file);
-      var out = jshint.data(),
-      errors = out.errors;
-      for(var j = 0; j < errors.length; j++) {
-          console.log(errors[j].line + ':' + errors[j].character + ' -> ' + errors[j].reason + ' -> ' +
-errors[j].evidence);
-      }
-      console.log('-----------------------------------------');
-      callback(true);
+        console.log("Errors in file " + file);
+        var out = jshint.data(),
+        errors = out.errors;
+        for(var j = 0; j < errors.length; j++) {
+            console.log(errors[j].line + ":" + errors[j].character + " -> " + errors[j].reason + " -> " + errors[j].evidence);
+        }
+        console.log("-----------------------------------------");
+        return 1;
     }
-  });
 }
-*/

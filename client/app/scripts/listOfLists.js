@@ -26,7 +26,9 @@ angular.module('listOfListsDirective', [])
         $scope.showList = function (listId, listName, userFilter, focusTarget) {
           $state.go('app.list', {
             listId: listId,
-            listName: listName
+            listName: listName,
+            userFilter: userFilter,
+            focusTarget: focusTarget
           });
 
           // dbFactory.showAList(listId, listName, userFilter, focusTarget);
